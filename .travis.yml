@@ -1,0 +1,20 @@
+language: cpp
+services:
+  - docker
+
+script: |
+  docker run --rm -it -v ${TRAVIS_BUILD_DIR}:/AnalysisTree kreisl/rootcpp17 /bin/bash -c '
+  set -e # exit on failure
+  set -x # trace for debug
+  source /opt/rh/devtoolset-8/enable
+  source build_root/bin/thisroot.sh
+  cd AnalysisTree
+  mkdir build
+  cd build
+  cmake ../ -DCMAKE_BUILD_TYPE=Debug
+  make
+  ctest'
+
+branches:
+  only:
+  - master
