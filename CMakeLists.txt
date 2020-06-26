@@ -32,8 +32,13 @@ include_directories(${CMAKE_SOURCE_DIR} core)
 
 add_subdirectory(core)
 add_subdirectory(infra)
-add_subdirectory(test)
 add_subdirectory(examples)
+
+IF (CMAKE_BUILD_TYPE MATCHES Debug)
+    include(GoogleTest)
+    enable_testing()
+    add_subdirectory(test)
+ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(

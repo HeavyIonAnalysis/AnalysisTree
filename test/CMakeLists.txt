@@ -1,3 +1,4 @@
+
 # Download and unpack googletest at configure time
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists-GTest.txt.in googletest-download/CMakeLists.txt)
 execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
@@ -16,8 +17,6 @@ endif()
 # Prevent overriding the parent project's compiler/linker
 # settings on Windows
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-include(GoogleTest)
-
 
 # Add googletest directly to our build. This defines
 # the gtest and gtest_main targets.
@@ -34,8 +33,5 @@ endif()
 
 add_executable(tests test_runner.cxx)
 target_link_libraries(tests gtest AnalysisTreeInfra ${ROOT_LIBRARIES})
-#add_test(NAME TestAnalysisTree COMMAND TestRunner WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-#gtest_add_tests(TARGET TestRunner)
-
 gtest_discover_tests(tests TEST_PREFIX new:)
-#gtest_discover_tests(TestRunner)
+#add_test(test tests)
