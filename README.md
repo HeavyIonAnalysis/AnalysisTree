@@ -1,4 +1,5 @@
 # AnalysisTree
+[![Build Status](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree.svg?branch=master)](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree)
 
 ## General information
 
