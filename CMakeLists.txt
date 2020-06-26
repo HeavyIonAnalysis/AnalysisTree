@@ -53,7 +53,7 @@ set(${PROJECT_NAME}_INCLUDE_DIR "include")
 set(${PROJECT_NAME}_LIBRARY_DIR "lib")
 
 configure_package_config_file(
-        ${PROJECT_NAME}Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake
+        cmake/${PROJECT_NAME}Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake
         INSTALL_DESTINATION ${ConfigPackageLocation}
         PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR ${PROJECT_NAME}_LIBRARY_DIR
 )

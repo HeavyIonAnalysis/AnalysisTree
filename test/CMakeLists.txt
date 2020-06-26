@@ -16,6 +16,8 @@ endif()
 # Prevent overriding the parent project's compiler/linker
 # settings on Windows
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+include(GoogleTest)
+
 
 # Add googletest directly to our build. This defines
 # the gtest and gtest_main targets.
@@ -30,6 +32,10 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
     include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
-add_executable(TestRunner test_runner.cxx)
-target_link_libraries(TestRunner gtest AnalysisTreeInfra ${ROOT_LIBRARIES})
-add_test(NAME TestAnalysisTree COMMAND TestRunner WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+add_executable(tests test_runner.cxx)
+target_link_libraries(tests gtest AnalysisTreeInfra ${ROOT_LIBRARIES})
+#add_test(NAME TestAnalysisTree COMMAND TestRunner WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+#gtest_add_tests(TARGET TestRunner)
+
+gtest_discover_tests(tests TEST_PREFIX new:)
+#gtest_discover_tests(TestRunner)
