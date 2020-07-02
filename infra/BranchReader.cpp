@@ -68,6 +68,9 @@ void BranchReader::FillValues() {
         double value = std::visit([var, i_channel](auto &&arg) { return var.GetValue(arg->GetChannel(i_channel)); }, data_);
         values_.at(i_var).emplace_back(value);
       }
+      else{
+        throw std::runtime_error("Trying to fill variable with more than 1 branch");
+      }
       i_var++;
     }//variables
   }  //channels

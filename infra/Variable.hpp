@@ -49,6 +49,7 @@ class Variable {
     for (const auto &f : fields_) {
       branch_names_.emplace_back(f.GetBranchName());
     }
+    std::sort(branch_names_.begin(), branch_names_.end());
     auto ip = std::unique(branch_names_.begin(), branch_names_.end());
     branch_names_.resize(std::distance(branch_names_.begin(), ip));
   };
