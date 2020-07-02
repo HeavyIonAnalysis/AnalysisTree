@@ -31,7 +31,7 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
     include_directories("${gtest_SOURCE_DIR}/include")
 endif()
 
-add_executable(tests test_runner.cxx)
+add_executable(tests test_runner.cpp)
 target_link_libraries(tests gtest AnalysisTreeInfra ${ROOT_LIBRARIES})
 gtest_discover_tests(tests TEST_PREFIX new:)
 #add_test(test tests)

@@ -5,8 +5,8 @@
 
 #include <cmath>
 
-#include "Container.hpp"
 #include "Constants.hpp"
+#include "Container.hpp"
 
 namespace AnalysisTree {
 
@@ -14,10 +14,10 @@ class Module : public Container {
 
  public:
   Module() = default;
-  Module(const Module& otherModule) = default;
-  Module(Module&& otherModule) = default;
-  Module& operator=(Module&&) = default;
-  Module& operator=(const Module& part) = default;
+  Module(const Module &otherModule) = default;
+  Module(Module &&otherModule) = default;
+  Module &operator=(Module &&) = default;
+  Module &operator=(const Module &part) = default;
 
   explicit Module(Integer_t id) : Container(id) {}
 
@@ -30,27 +30,25 @@ class Module : public Container {
   ShortInt_t GetNumber() const { return number_; }
   void SetNumber(ShortInt_t number) { number_ = number; }
 
-  friend bool operator==(const Module& that, const Module& other) {
-    if(&that == &other) {
+  friend bool operator==(const Module &that, const Module &other) {
+    if (&that == &other) {
       return true;
     }
-    if((Container&) that != (Container&) other) {
+    if ((Container &) that != (Container &) other) {
       return false;
     }
-    return
-      that.number_ == other.number_ &&
-        that.signal_ == other.signal_;
+    return that.number_ == other.number_ && that.signal_ == other.signal_;
   }
 
   template<typename T>
   T GetField(Integer_t iField) const {
-    if(iField >= 0)
+    if (iField >= 0)
       return Container::GetField<T>(iField);
     else {
       switch (iField) {
-        case ModuleFields::kId     : return GetId();
-        case ModuleFields::kSignal : return GetSignal();
-        default : throw std::out_of_range("Module::GetField - Index " + std::to_string(iField) + " is not found");
+        case ModuleFields::kId: return GetId();
+        case ModuleFields::kSignal: return GetSignal();
+        default: throw std::out_of_range("Module::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }
   }
@@ -60,22 +58,20 @@ class Module : public Container {
   }
 
  protected:
-
   Floating_t signal_{0.f};
   ShortInt_t number_{UndefValueShort};
 
-//  ClassDefOverride(AnalysisTree::Base::Module, 1)
-
+  //  ClassDefOverride(AnalysisTree::Base::Module, 1)
 };
 
 class ModulePosition : public IndexedObject {
 
  public:
   ModulePosition() = default;
-  ModulePosition(const ModulePosition& otherModulePosition) = default;
-  ModulePosition(ModulePosition&& otherModulePosition) = default;
-  ModulePosition& operator=(ModulePosition&&) = default;
-  ModulePosition& operator=(const ModulePosition& part) = default;
+  ModulePosition(const ModulePosition &otherModulePosition) = default;
+  ModulePosition(ModulePosition &&otherModulePosition) = default;
+  ModulePosition &operator=(ModulePosition &&) = default;
+  ModulePosition &operator=(const ModulePosition &part) = default;
 
   explicit ModulePosition(Integer_t id) : IndexedObject(id) {}
   ModulePosition(Integer_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
@@ -84,7 +80,7 @@ class ModulePosition : public IndexedObject {
     return TVector3(x_, y_, z_);
   }
 
-  void SetPosition(const TVector3& position) {
+  void SetPosition(const TVector3 &position) {
     x_ = position.X();
     y_ = position.Y();
     z_ = position.Z();
@@ -110,8 +106,7 @@ class ModulePosition : public IndexedObject {
   Floating_t x_{UndefValueFloat};
   Floating_t y_{UndefValueFloat};
   Floating_t z_{UndefValueFloat};
-
 };
-}
+}// namespace AnalysisTree
 
 #endif

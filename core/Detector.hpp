@@ -5,14 +5,14 @@
 #include <memory>
 //#include "ROOT/RVec.hxx"
 
-#include "IndexedObject.hpp"
-#include "Track.hpp"
-#include "Particle.hpp"
-#include "Hit.hpp"
-#include "Module.hpp"
 #include "Configuration.hpp"
 #include "Container.hpp"
+#include "Hit.hpp"
+#include "IndexedObject.hpp"
 #include "Matching.hpp"
+#include "Module.hpp"
+#include "Particle.hpp"
+#include "Track.hpp"
 
 namespace AnalysisTree {
 /**
@@ -36,7 +36,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
   }
 
   T *AddChannel() {
-    channels_->push_back( T(channels_->size()) );
+    channels_->push_back(T(channels_->size()));
     return &(channels_->back());
   }
 
@@ -44,24 +44,20 @@ class Detector : public IndexedObject, protected IndexAccessor {
     if (channels_ != nullptr) channels_->clear();
   }
 
-  T& GetChannel(size_t number) // needed in converter to modify tracks id. //TODO maybe rename?
+  T &GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
   {
-    if (number < GetNumberOfChannels()){
+    if (number < GetNumberOfChannels()) {
       return channels_->at(number);
-    }
-    else {
-      throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) +
-                               " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
+    } else {
+      throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
   }
-  
-  const T& GetChannel(size_t number) const {
-    if (number < GetNumberOfChannels()){
+
+  const T &GetChannel(size_t number) const {
+    if (number < GetNumberOfChannels()) {
       return channels_->at(number);
-    }
-    else {
-      throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) +
-        " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
+    } else {
+      throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
   }
 
@@ -71,27 +67,26 @@ class Detector : public IndexedObject, protected IndexAccessor {
     }
 
     if ((IndexedObject &) that != (IndexedObject &) other) {
-      return false;                                                                                                
+      return false;
     }
 
     return std::equal(that.channels_->begin(), that.channels_->end(), other.channels_->begin());
   }
-  
-  const std::vector <T> *GetChannels() const {return channels_;}
+
+  const std::vector<T> *GetChannels() const { return channels_; }
 
   void Reserve(size_t n) { channels_->reserve(n); }
   void Resize(size_t n) { channels_->resize(n); }
 
   void Print() const {
-    for (const auto& channel : *channels_) {
+    for (const auto &channel : *channels_) {
       channel.Print();
     }
   }
-  
-  
+
  protected:
-  std::vector <T> *channels_{new std::vector <T>};
-//   ClassDefOverride(AnalysisTree::Detector<T>, 1);
+  std::vector<T> *channels_{new std::vector<T>};
+  //   ClassDefOverride(AnalysisTree::Detector<T>, 1);
 };
 
 using TrackDetector = Detector<Track>;
@@ -100,6 +95,6 @@ using ModulePositions = Detector<ModulePosition>;
 using HitDetector = Detector<Hit>;
 using Particles = Detector<Particle>;
 
-} // AnalysisTree
+}// namespace AnalysisTree
 
-#endif //ANALYSISTREE_GENERICCHANNELDETECTOR_H
+#endif//ANALYSISTREE_GENERICCHANNELDETECTOR_H

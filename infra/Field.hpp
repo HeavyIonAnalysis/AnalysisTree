@@ -6,45 +6,43 @@
 #include <string>
 #include <utility>
 
-#include "Constants.hpp"
 #include "Configuration.hpp"
+#include "Constants.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
-class Field
-{
+class Field {
  public:
   Field() = default;
   Field(const Field &) = default;
   Field(Field &&) = default;
-  Field& operator=(Field&&) = default;
-  Field& operator= (const Field &) = default;
+  Field &operator=(Field &&) = default;
+  Field &operator=(const Field &) = default;
   ~Field() = default;
 
-  Field(std::string name) : field_(std::move(name)) {};
+  Field(std::string name) : field_(std::move(name)){};
 
-  Field(std::string branch, std::string field) :
-    branch_(std::move(branch)),
-    field_(std::move(field)) {};
+  Field(std::string branch, std::string field) : branch_(std::move(branch)),
+                                                 field_(std::move(field)){};
 
-  friend bool operator==(const AnalysisTree::Field& that, const AnalysisTree::Field& other);
-  friend bool operator > (const Field &that, const Field &other);
-  friend bool operator < (const Field &that, const Field &other);
+  friend bool operator==(const AnalysisTree::Field &that, const AnalysisTree::Field &other);
+  friend bool operator>(const Field &that, const Field &other);
+  friend bool operator<(const Field &that, const Field &other);
 
-  void Init(const Configuration& conf) {
-    const auto& branch_conf = conf.GetBranchConfig(branch_);
+  void Init(const Configuration &conf) {
+    const auto &branch_conf = conf.GetBranchConfig(branch_);
     branch_id_ = branch_conf.GetId();
     branch_type_ = branch_conf.GetType();
     field_id_ = branch_conf.GetFieldId(field_);
     field_type_ = branch_conf.GetFieldType(field_);
-    if( field_id_ == UndefValueInt ){
+    if (field_id_ == UndefValueInt) {
       std::cout << "WARNING!! Field::Init - " << field_ << " is not found in branch " << branch_ << std::endl;
     }
     is_init_ = true;
   }
 
-  const std::string& GetName() const { return field_; }
-  const std::string& GetBranchName() const { return branch_; }
+  const std::string &GetName() const { return field_; }
+  const std::string &GetBranchName() const { return branch_; }
 
   short GetBranchId() const { return branch_id_; }
   short GetFieldId() const { return field_id_; }
@@ -53,8 +51,8 @@ class Field
   Types GetFieldType() const { return field_type_; }
 
   template<class T>
-  double GetValue(const T& object) const {
-    if(!is_init_){
+  double GetValue(const T &object) const {
+    if (!is_init_) {
       throw std::runtime_error("Field::Fill - Field " + field_ + " is not initialized");
     }
     if (field_type_ == AnalysisTree::Types::kFloat)
@@ -81,6 +79,6 @@ class Field
   bool is_init_{false};
 };
 
-}
+}// namespace AnalysisTree
 
-#endif //ANALYSISTREE_INFRA_FIELD_H_
+#endif//ANALYSISTREE_INFRA_FIELD_H_

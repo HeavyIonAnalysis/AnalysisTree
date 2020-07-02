@@ -3,12 +3,10 @@
 //
 #include "IndexedObject.hpp"
 
-
-
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 void IndexAccessor::InitIndexedObject(IndexedObject *indexedObject, Integer_t newID) {
   indexedObject->id_ = newID;
 }
 
-}
+}// namespace AnalysisTree
