@@ -5,25 +5,24 @@
 #ifndef ANALYSISTREE_BASEEVENTHEADER_H
 #define ANALYSISTREE_BASEEVENTHEADER_H
 
-#include "Container.hpp"
 #include "Constants.hpp"
-#include <array>
+#include "Container.hpp"
 #include <TVector3.h>
+#include <array>
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 /**
  * A class for a generic track with determined pos
  */
 class EventHeader : public Container {
  public:
-
   EventHeader() = default;
-  explicit EventHeader(Integer_t id) : Container(id) {};
+  explicit EventHeader(Integer_t id) : Container(id){};
   EventHeader(const EventHeader &eh) = default;
   EventHeader(EventHeader &&eh) = default;
-  EventHeader& operator=(EventHeader &&eh) = default;
-  EventHeader& operator=(const EventHeader &eh) = default;
+  EventHeader &operator=(EventHeader &&eh) = default;
+  EventHeader &operator=(const EventHeader &eh) = default;
 
   /**
    * @return 3d-pos of a track
@@ -39,22 +38,20 @@ class EventHeader : public Container {
   }
 
   template<typename T>
-  T GetField(Integer_t iField) const
-  {
+  T GetField(Integer_t iField) const {
     if (iField >= 0)
       return Container::GetField<T>(iField);
-    else{
-      switch (iField)
-      {
-        case EventHeaderFields::kVertexX : return GetVertexX();
-        case EventHeaderFields::kVertexY : return GetVertexY();
-        case EventHeaderFields::kVertexZ : return GetVertexZ();
-        default : throw std::out_of_range("EventHeader::GetField - Index " + std::to_string(iField) + " is not found");
+    else {
+      switch (iField) {
+        case EventHeaderFields::kVertexX: return GetVertexX();
+        case EventHeaderFields::kVertexY: return GetVertexY();
+        case EventHeaderFields::kVertexZ: return GetVertexZ();
+        default: throw std::out_of_range("EventHeader::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }
     return UndefValueFloat;
   }
-  
+
   inline Floating_t GetVertexX() const {
     return vtx_pos_[Exyz::kX];
   }
@@ -74,19 +71,17 @@ class EventHeader : public Container {
     EventHeader::vtx_pos_[Exyz::kZ] = z;
   }
 
-  static constexpr size_t GetNumberOfChannels() { return 1; } // needed in order to have EventHeader similar to Detector
-  const EventHeader& GetChannel(int i) const {
-    if(i!=0){
+  static constexpr size_t GetNumberOfChannels() { return 1; }// needed in order to have EventHeader similar to Detector
+  const EventHeader &GetChannel(int i) const {
+    if (i != 0) {
       throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
     }
     return *this;
-  }  // needed in order to have EventHeader similar to Detector
+  }// needed in order to have EventHeader similar to Detector
 
  protected:
-
-  std::array <Floating_t, 3> vtx_pos_{ {UndefValueFloat,UndefValueFloat, UndefValueFloat} };
-
+  std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};
 };
 
-}
-#endif //ANALYSISTREE_BASEEVENTHEADER_H
+}// namespace AnalysisTree
+#endif//ANALYSISTREE_BASEEVENTHEADER_H

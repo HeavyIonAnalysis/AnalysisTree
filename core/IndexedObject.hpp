@@ -5,8 +5,8 @@
 #ifndef ANALYSISTREE_INDEXEDOBJECT_H
 #define ANALYSISTREE_INDEXEDOBJECT_H
 
-#include <TObject.h>
 #include "Constants.hpp"
+#include <TObject.h>
 
 namespace AnalysisTree {
 
@@ -30,8 +30,7 @@ class IndexAccessor {
  */
 class IndexedObject {
  public:
-
-  IndexedObject() = default; //, id_(-1)  {}
+  IndexedObject() = default;//, id_(-1)  {}
 
   /**
    * Object ID is defined at the object creation and mustn't change
@@ -47,8 +46,8 @@ class IndexedObject {
    */
   IndexedObject(const IndexedObject &indexedObject) = default;
   IndexedObject(IndexedObject &&indexedObject) = default;
-  IndexedObject& operator=(IndexedObject&&) = default;
-  IndexedObject& operator= (const IndexedObject &indexedObject) = default;
+  IndexedObject &operator=(IndexedObject &&) = default;
+  IndexedObject &operator=(const IndexedObject &indexedObject) = default;
   virtual ~IndexedObject() = default;
 
   inline Integer_t GetId() const {
@@ -64,7 +63,7 @@ class IndexedObject {
   }
 
   friend bool operator!=(const IndexedObject &that, const IndexedObject &other) {
-    return ! (that == other);
+    return !(that == other);
   }
 
  private:
@@ -72,11 +71,9 @@ class IndexedObject {
 
   Integer_t id_{-1};
 
- ClassDef(AnalysisTree::IndexedObject, 1)
-
+  ClassDef(AnalysisTree::IndexedObject, 1)
 };
 
+}// namespace AnalysisTree
 
-}
-
-#endif //ANALYSISTREE_INDEXEDOBJECT_H
+#endif//ANALYSISTREE_INDEXEDOBJECT_H

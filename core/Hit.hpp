@@ -17,8 +17,8 @@ class Hit : public Container {
   Hit() = default;
   Hit(const Hit &otherHit) = default;
   Hit(Hit &&otherHit) = default;
-  Hit& operator=(Hit&&) = default;
-  Hit& operator= (const Hit &part) = default;
+  Hit &operator=(Hit &&) = default;
+  Hit &operator=(const Hit &part) = default;
 
   explicit Hit(Integer_t id) : Container(id) {}
 
@@ -40,46 +40,39 @@ class Hit : public Container {
     z_ = z;
   }
 
-  void SetSignal(Double_t signal)
-  {
+  void SetSignal(Double_t signal) {
     signal_ = signal;
   }
 
   Floating_t GetX() const { return x_; }
   Floating_t GetY() const { return y_; }
   Floating_t GetZ() const { return z_; }
-  Floating_t GetPhi() const { return atan2(y_,x_); }
+  Floating_t GetPhi() const { return atan2(y_, x_); }
 
   friend bool operator==(const Hit &that, const Hit &other) {
     if (&that == &other) {
       return true;
     }
 
-    if ( (Container &) that != (Container &) other) {
+    if ((Container &) that != (Container &) other) {
       return false;
     }
 
-    return
-      that.x_ == other.x_ &&
-        that.y_ == other.y_ &&
-        that.z_ == other.z_ &&
-        that.signal_ == other.signal_  ;
+    return that.x_ == other.x_ && that.y_ == other.y_ && that.z_ == other.z_ && that.signal_ == other.signal_;
   }
 
   template<typename T>
-  T GetField(Integer_t iField) const
-  {
+  T GetField(Integer_t iField) const {
     if (iField >= 0)
       return Container::GetField<T>(iField);
-    else{
-      switch (iField)
-      {
-        case HitFields::kX : return GetX();
-        case HitFields::kY : return GetY();
-        case HitFields::kZ : return GetZ();
-        case HitFields::kPhi : return GetPhi();
-        case HitFields::kSignal : return GetSignal();
-        default : throw std::out_of_range("Hit::GetField - Index " + std::to_string(iField) + " is not found");
+    else {
+      switch (iField) {
+        case HitFields::kX: return GetX();
+        case HitFields::kY: return GetY();
+        case HitFields::kZ: return GetZ();
+        case HitFields::kPhi: return GetPhi();
+        case HitFields::kSignal: return GetSignal();
+        default: throw std::out_of_range("Hit::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }
   }
@@ -94,9 +87,8 @@ class Hit : public Container {
   Floating_t z_{UndefValueFloat};
   Floating_t signal_{UndefValueFloat};
 
-//  ClassDefOverride(AnalysisTree::Base::Hit, 1)
-
+  //  ClassDefOverride(AnalysisTree::Base::Hit, 1)
 };
 
-} // AnalysisTree
-#endif //ANALYSISTREE_SRC_HIT_H_
+}// namespace AnalysisTree
+#endif//ANALYSISTREE_SRC_HIT_H_

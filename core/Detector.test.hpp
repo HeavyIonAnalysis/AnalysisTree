@@ -4,9 +4,9 @@
 #include "Constants.hpp"
 #include "Detector.hpp"
 
-#include <gtest/gtest.h>
 #include <TFile.h>
 #include <TTree.h>
+#include <gtest/gtest.h>
 #include <vector>
 
 namespace {
@@ -52,7 +52,6 @@ TEST(Test_AnalysisTreeCore, Test_WriteHit) {
   EXPECT_EQ(*newHit, *hit);
 }
 
-
 TEST(Test_AnalysisTreeCore, Test_WriteChannelizedDetector) {
 
   TVector3 hitPosition(1., 1., 1.);
@@ -79,9 +78,6 @@ TEST(Test_AnalysisTreeCore, Test_WriteChannelizedDetector) {
   EXPECT_EQ(*newTestDetector, *testChannelizedDetector);
 }
 
-}
+}// namespace
 
-
-
-
-#endif //ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
+#endif//ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_

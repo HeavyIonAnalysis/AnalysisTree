@@ -1,3 +1,3 @@
 #include "SimpleCut.hpp"
 
-ClassImp (AnalysisTree::SimpleCut)
+ClassImp(AnalysisTree::SimpleCut)

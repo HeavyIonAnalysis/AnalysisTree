@@ -7,8 +7,8 @@
 
 #include <core/Track.hpp>
 
-#include <infra/SimpleCut.hpp>
 #include <infra/Cuts.hpp>
+#include <infra/SimpleCut.hpp>
 
 namespace {
 
@@ -19,10 +19,10 @@ TEST(Test_AnalysisTreeInfra, Test_RangeCut) {
   AnalysisTree::BranchConfig VtxTracksBranch("VtxTracks", AnalysisTree::DetType::kTrack);
   VtxTracksBranch.AddField<float>("chi2");
 
-  auto* track = new AnalysisTree::Track();
+  auto *track = new AnalysisTree::Track();
   track->Init(VtxTracksBranch);
   track->SetMomentum(0.5, 0.4, 4.);
-  track->SetField( float(2.4),  VtxTracksBranch.GetFieldId("chi2") );
+  track->SetField(float(2.4), VtxTracksBranch.GetFieldId("chi2"));
 
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
@@ -51,11 +51,11 @@ TEST(Test_AnalysisTreeInfra, Test_EqualCut) {
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
-  auto* track = new AnalysisTree::Track();
+  auto *track = new AnalysisTree::Track();
   track->Init(VtxTracksBranch);
   track->SetMomentum(0.5, 0.4, 4.);
-  track->SetField( 3,  VtxTracksBranch.GetFieldId("nhits") );
-  track->SetField( true,  VtxTracksBranch.GetFieldId("is_good") );
+  track->SetField(3, VtxTracksBranch.GetFieldId("nhits"));
+  track->SetField(true, VtxTracksBranch.GetFieldId("is_good"));
 
   AnalysisTree::Cuts cut_true1("cut1", {{{"VtxTracks", "nhits"}, 3}});
   cut_true1.Init(conf);
@@ -88,19 +88,19 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
-  auto* track = new AnalysisTree::Track();
+  auto *track = new AnalysisTree::Track();
   track->Init(VtxTracksBranch);
   track->SetMomentum(0.5, 0.4, 4.);
-  track->SetField( float(0.7),  VtxTracksBranch.GetFieldId("dcax") );
-  track->SetField( float(1.1),  VtxTracksBranch.GetFieldId("dcay") );
-  track->SetField( int(15),  VtxTracksBranch.GetFieldId("Nhits_vtpc1") );
-  track->SetField( int(10),  VtxTracksBranch.GetFieldId("Nhits_vtpc2") );
-  track->SetField( int(40),  VtxTracksBranch.GetFieldId("Nhits_mtpc") );
+  track->SetField(float(0.7), VtxTracksBranch.GetFieldId("dcax"));
+  track->SetField(float(1.1), VtxTracksBranch.GetFieldId("dcay"));
+  track->SetField(int(15), VtxTracksBranch.GetFieldId("Nhits_vtpc1"));
+  track->SetField(int(10), VtxTracksBranch.GetFieldId("Nhits_vtpc2"));
+  track->SetField(int(40), VtxTracksBranch.GetFieldId("Nhits_mtpc"));
 
-  AnalysisTree::SimpleCut testCutDcaXY_true({{"VtxTracks","dcax"}, {"VtxTracks","dcay"}},
-        [](std::vector<double>& dca) { return dca[0]*dca[0] + dca[1]*dca[1] < 2; } );
-  AnalysisTree::SimpleCut testCutDcaXY_false({{"VtxTracks","dcax"}, {"VtxTracks","dcay"}},
-        [](std::vector<double>& dca) { return dca[0]*dca[0] + dca[1]*dca[1] < 1; } );
+  AnalysisTree::SimpleCut testCutDcaXY_true({{"VtxTracks", "dcax"}, {"VtxTracks", "dcay"}},
+                                            [](std::vector<double> &dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 2; });
+  AnalysisTree::SimpleCut testCutDcaXY_false({{"VtxTracks", "dcax"}, {"VtxTracks", "dcay"}},
+                                             [](std::vector<double> &dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 1; });
 
   AnalysisTree::Cuts dca_true("dca_true", {testCutDcaXY_true});
   dca_true.Init(conf);
@@ -109,8 +109,8 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   dca_false.Init(conf);
 
   AnalysisTree::SimpleCut testCutNhits_true(
-    { {"VtxTracks", "Nhits_vtpc1"}, {"VtxTracks", "Nhits_vtpc2"}, {"VtxTracks", "Nhits_mtpc"}},
-  [](std::vector<double>& nhits) { return nhits[0]+nhits[1] > 15 && nhits[0]+nhits[1]+nhits[2] > 30; } );
+      {{"VtxTracks", "Nhits_vtpc1"}, {"VtxTracks", "Nhits_vtpc2"}, {"VtxTracks", "Nhits_mtpc"}},
+      [](std::vector<double> &nhits) { return nhits[0] + nhits[1] > 15 && nhits[0] + nhits[1] + nhits[2] > 30; });
 
   AnalysisTree::Cuts Nhits_true("Nhits_true", {testCutNhits_true});
   Nhits_true.Init(conf);
@@ -118,7 +118,6 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   ASSERT_TRUE(dca_true.Apply(*track));
   ASSERT_FALSE(dca_false.Apply(*track));
   ASSERT_TRUE(Nhits_true.Apply(*track));
-
 }
 
 //TEST(Test_AnalysisTreeInfra, Test_WriteCut) {
@@ -140,7 +139,4 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
 //  f->Close();
 //}
 
-
-
-}
-
+}// namespace
