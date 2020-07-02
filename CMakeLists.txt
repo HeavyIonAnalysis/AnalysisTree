@@ -22,13 +22,10 @@ message(STATUS "Using CXX flags for ${CMAKE_BUILD_TYPE}: ${CMAKE_CXX_FLAGS_${CMA
 find_package(ROOT REQUIRED)
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 
-if (ROOT_FOUND)
-    message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
-    include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
-    include(${ROOT_USE_FILE})
-endif (ROOT_FOUND)
+message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
+include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
+include(${ROOT_USE_FILE})
 
-include_directories(${CMAKE_SOURCE_DIR} core)
 
 add_subdirectory(core)
 add_subdirectory(infra)

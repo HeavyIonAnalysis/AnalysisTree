@@ -6,9 +6,11 @@ set(SOURCES
   FillTask.cpp
   TreeReader.cpp
   TaskManager.cpp
-  VarManager.cpp
-  BranchReader.cpp
 )
+
+if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
+    list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp")
+endif()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
