@@ -30,7 +30,7 @@ class SimpleCut {
   */
   SimpleCut(const Variable &var, float min, float max, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
-    lambda_ = [max, min](std::vector<double> &var) { return var[0] <= max && var[0] >= min; };
+    lambda_ = [max, min](std::vector<double> &vars) { return vars[0] <= max && vars[0] >= min; };
   }
   /**
   * Constructor for integers and bool fields for cut: field == value
@@ -39,7 +39,7 @@ class SimpleCut {
   */
   SimpleCut(const Variable &var, int value, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
-    lambda_ = [value](std::vector<double> &var) { return var[0] <= value + SmallNumber && var[0] >= value - SmallNumber; };
+    lambda_ = [value](std::vector<double> &vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
   }
   /**
   * Constructor for generic cut: bool f(var1, var2, ..., varn)
