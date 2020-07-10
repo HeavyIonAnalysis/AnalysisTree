@@ -43,9 +43,9 @@ void TaskManager::Run(long long nEvents) {
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     in_tree_->GetEntry(iEvent);
-    if ((iEvent + 1) % 100 == 0) {
-      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
-    }
+//    if ((iEvent + 1) % 100 == 0) {
+//      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
+//    }
     for (auto *task : tasks_) {
       task->Exec();
     }
