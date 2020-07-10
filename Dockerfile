@@ -9,8 +9,11 @@ SHELL [ "/usr/bin/scl", "enable", "devtoolset-8"]
 RUN wget -qO- "https://cmake.org/files/v3.17/cmake-3.17.0-Linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
 # install root
 RUN wget -q https://root.cern/download/root_v6.20.04.source.tar.gz -O /tmp/root.tar.gz && \
-	tar -zxf /tmp/root.tar.gz && \
-	mkdir build_root && \
-	cd build_root && \
+	tar -C /tmp -zxf /tmp/root.tar.gz && \
+	mkdir /tmp/build_root && \
+	cd /tmp/build_root && \
 	cmake ../root-6.20.04 -Dcxx17=ON -DMathMore=ON -Dbuiltin_gsl=ON && \
-	make -j4
+	make install -j4  && \
+	rm -r /tmp/* && \
+	which root
+
