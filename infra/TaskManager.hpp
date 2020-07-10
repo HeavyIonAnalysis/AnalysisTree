@@ -47,6 +47,10 @@ class TaskManager {
     out_file_name_ = std::move(name);
   }
 
+  void SetOutTreeName(std::string name) {
+    out_tree_name_ = std::move(name);
+  }
+
   void SetEventCuts(Cuts *cuts) { event_cuts_ = cuts; }
 
   void AddBranchCut(Cuts *cuts) {
