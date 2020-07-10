@@ -24,17 +24,7 @@ namespace AnalysisTree {
 class TaskManager {
 
  public:
-  TaskManager() = delete;
-  //  TaskManager(const std::string& filelist, const std::string& in_tree) :
-  //    in_tree_(MakeChain(filelist, in_tree)),
-  //    in_config_(GetObjectFromFileList<Configuration>(filelist, in_config_name_))
-  //  {
-  //    try{
-  //      data_header_ = GetObjectFromFileList<DataHeader>(filelist, data_header_name_);
-  //    }
-  //    catch(std::runtime_error&) {}
-  //  }
-
+  TaskManager() = default;
   TaskManager(const std::vector<std::string> &filelists,
               const std::vector<std::string> &in_trees) : in_tree_(AnalysisTree::MakeChain(filelists, in_trees)),
                                                           in_config_(GetObjectFromFileList<Configuration>(filelists[0], in_config_name_)) {

@@ -11,8 +11,9 @@ void TaskManager::Init() {
     for (const auto &branch : task->GetInputBranchNames())
       branch_names.emplace_back(branch);
   }
-  branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
-
+  if(in_tree_ && in_config_){
+    branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
+  }
   if (!out_file_name_.empty()) {
     out_file_ = TFile::Open(out_file_name_.c_str(), "RECREATE");
     out_file_->cd();
