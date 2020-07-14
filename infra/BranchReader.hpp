@@ -2,14 +2,18 @@
 #define ANALYSISTREEQA_SRC_BRANCHREADER_H_
 
 #include <utility>
+#include <string>
+#include <vector>
 #include <variant>// NOTE
 
-#include "Cuts.hpp"
 #include "Detector.hpp"
 #include "EventHeader.hpp"
-#include "Variable.hpp"
+#include "Constants.hpp"
 
 namespace AnalysisTree {
+
+class Variable;
+class Cuts;
 
 #if USEBOOST
 using BranchPointer = boost::variant<TrackDetector *, Particles *, ModuleDetector *, HitDetector *, EventHeader *>;
@@ -21,10 +25,10 @@ class BranchReader {
 
  public:
   BranchReader() = default;
-  BranchReader(std::string name, void *data, DetType type, Cuts *cuts = nullptr);
+  BranchReader(std::string  name, void *data, DetType type, Cuts *cuts = nullptr);
 
   void FillValues();
-  void AddVariable(const Variable &var) { vars_.emplace_back(var); }
+  void AddVariable(const Variable &var);
 
   const std::string &GetName() const { return name_; }
   DetType GetType() const { return type_; }

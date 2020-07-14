@@ -1,4 +1,5 @@
 #include "VarManager.hpp"
+#include "Cuts.hpp"
 
 namespace AnalysisTree {
 
@@ -90,5 +91,14 @@ void VarManager::FillBranchNames() {
   std::sort(in_branches_.begin(), in_branches_.end());
   auto ip1 = std::unique(in_branches_.begin(), in_branches_.end());
   in_branches_.resize(std::distance(in_branches_.begin(), ip1));
+}
+
+const BranchReader& VarManager::GetBranch(const std::string& name) {
+  for (const auto &branch : branches_) {
+    if (branch.GetName() == name) {
+      return branch;
+    }
+  }
+  throw std::runtime_error("Branch " + name + " is not found");
 }
 }// namespace AnalysisTree

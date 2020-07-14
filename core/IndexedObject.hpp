@@ -1,7 +1,3 @@
-//
-// Created by eugene on 10/3/18.
-//
-
 #ifndef ANALYSISTREE_INDEXEDOBJECT_H
 #define ANALYSISTREE_INDEXEDOBJECT_H
 

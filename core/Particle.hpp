@@ -25,11 +25,7 @@ class Particle : public Track {
     mass_ = mass;
   }
 
-  void SetPid(PdgCode_t pid) {
-    pid_ = pid;
-    if (mass_ == -1000.f)
-      mass_ = GetMassByPdgId(pid);
-  }
+  void SetPid(PdgCode_t pid);
 
   Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
   Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }

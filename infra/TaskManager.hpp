@@ -1,25 +1,20 @@
 #ifndef ANALYSISTREE_INFRA_TASKMANAGER_H_
 #define ANALYSISTREE_INFRA_TASKMANAGER_H_
 
-#include <cstdlib>
-#include <memory>
 #include <string>
-#include <utility>
 #include <vector>
-
-#include "TChain.h"
-#include "TFile.h"
-#include "TTree.h"
-
-#include "Detector.hpp"
-#include "EventHeader.hpp"
-#include "Track.hpp"
 
 #include "Cuts.hpp"
 #include "FillTask.hpp"
 #include "TreeReader.hpp"
 
+class TTree;
+class TFile;
+class TChain;
+
 namespace AnalysisTree {
+
+class Configuration;
 
 class TaskManager {
 

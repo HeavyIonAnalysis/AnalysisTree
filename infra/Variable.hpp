@@ -1,16 +1,10 @@
 #ifndef ANALYSISTREE_SRC_VARIABLE_H_
 #define ANALYSISTREE_SRC_VARIABLE_H_
 
-#include <algorithm>
-#include <cassert>
 #include <functional>
-#include <iostream>
-#include <set>
 #include <string>
-#include <utility>
+#include <cassert>
 
-#include "Configuration.hpp"
-#include "Constants.hpp"
 #include "Field.hpp"
 
 namespace AnalysisTree {
@@ -57,6 +51,7 @@ class Variable {
   /**
 * To be removed soon. Only for backward compatibility
 */
+  [[deprecated("To be removed soon...")]]
   Variable(std::string name, const std::string &branch, const std::vector<std::string> &fields,
            std::function<double(std::vector<double> &)> lambda) : name_(std::move(name)),
                                                                   branch_names_({branch}),
@@ -70,12 +65,7 @@ class Variable {
   friend bool operator>(const Variable &that, const Variable &other);
   friend bool operator<(const Variable &that, const Variable &other);
 
-  void Init(const Configuration &conf) {
-    for (auto &field : fields_) {
-      field.Init(conf);
-    }
-    is_init_ = true;
-  }
+  void Init(const Configuration &conf);
 
   const std::string &GetName() const { return name_; }
 

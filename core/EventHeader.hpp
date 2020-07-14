@@ -1,11 +1,6 @@
-//
-// Created by eugene on 10/4/18.
-//
-
 #ifndef ANALYSISTREE_BASEEVENTHEADER_H
 #define ANALYSISTREE_BASEEVENTHEADER_H
 
-#include "Constants.hpp"
 #include "Container.hpp"
 #include <TVector3.h>
 #include <array>

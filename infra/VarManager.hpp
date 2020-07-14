@@ -1,13 +1,12 @@
 #ifndef ANALYSISTREEQA_SRC_VARMANAGER_H_
 #define ANALYSISTREEQA_SRC_VARMANAGER_H_
 
-#include <utility>
-
 #include "vector"
 
 #include "BranchReader.hpp"
 #include "FillTask.hpp"
 #include "Variable.hpp"
+#include "Matching.hpp"
 
 namespace AnalysisTree {
 
@@ -33,14 +32,7 @@ class VarManager : public FillTask {
   }
 
   std::vector<BranchReader> &Branches() { return branches_; }
-  const BranchReader &GetBranch(const std::string &name) {
-    for (const auto &branch : branches_) {
-      if (branch.GetName() == name) {
-        return branch;
-      }
-    }
-    throw std::runtime_error("Branch " + name + " is not found");
-  }
+  const BranchReader &GetBranch(const std::string &name);
 
   const std::vector<BranchReader> &GetBranches() const { return branches_; }
 

@@ -3,9 +3,6 @@
 
 #include <TVector3.h>
 
-#include <cmath>
-
-#include "Constants.hpp"
 #include "Container.hpp"
 
 namespace AnalysisTree {
@@ -30,15 +27,7 @@ class Module : public Container {
   ShortInt_t GetNumber() const { return number_; }
   void SetNumber(ShortInt_t number) { number_ = number; }
 
-  friend bool operator==(const Module &that, const Module &other) {
-    if (&that == &other) {
-      return true;
-    }
-    if ((Container &) that != (Container &) other) {
-      return false;
-    }
-    return that.number_ == other.number_ && that.signal_ == other.signal_;
-  }
+  friend bool operator==(const Module &that, const Module &other);
 
   template<typename T>
   T GetField(Integer_t iField) const {
@@ -53,9 +42,7 @@ class Module : public Container {
     }
   }
 
-  void Print() const {
-    std::cout << "  number = " << number_ << "  signal = " << signal_ << std::endl;
-  }
+  void Print() const;
 
  protected:
   Floating_t signal_{0.f};

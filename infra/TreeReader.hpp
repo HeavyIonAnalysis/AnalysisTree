@@ -8,6 +8,7 @@
 #include "TFile.h"
 #include "TTree.h"
 
+#include "Matching.hpp"
 #include "Configuration.hpp"
 #include "Detector.hpp"
 #include "EventHeader.hpp"

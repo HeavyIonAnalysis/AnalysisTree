@@ -1,4 +1,7 @@
+
 #include "BranchReader.hpp"
+#include "Variable.hpp"
+#include "Cuts.hpp"
 
 namespace AnalysisTree {
 
@@ -75,5 +78,7 @@ void BranchReader::FillValues() {
     }//variables
   }  //channels
 }
+
+void BranchReader::AddVariable(const Variable& var) { vars_.emplace_back(var); }
 
 }// namespace AnalysisTree

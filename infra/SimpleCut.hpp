@@ -2,9 +2,7 @@
 #define ANALYSISTREE_SIMPLECUT_H
 
 #include <functional>
-#include <iostream>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include "Constants.hpp"
@@ -61,9 +59,7 @@ class SimpleCut {
     return lambda_(variables);
   }
 
-  void Print() const {
-    std::cout << title_ << std::endl;
-  }
+  void Print() const;
 
   std::vector<Variable> &Variables() { return vars_; }
   const std::vector<Variable> &GetVariables() const { return vars_; }
