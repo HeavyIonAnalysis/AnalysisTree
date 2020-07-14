@@ -1,6 +1,7 @@
 #include "Variable.hpp"
 
 #include <iostream>
+#include <algorithm>
 
 #include "Configuration.hpp"
 
@@ -50,6 +51,17 @@ void Variable::Init(const Configuration& conf) {
     field.Init(conf);
   }
   is_init_ = true;
+}
+
+Variable::Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda) : name_(std::move(name)),
+                                                                                                                      fields_(std::move(fields)),
+                                                                                                                      lambda_(std::move(lambda)) {
+  for (const auto &f : fields_) {
+    branch_names_.emplace_back(f.GetBranchName());
+  }
+  std::sort(branch_names_.begin(), branch_names_.end());
+  auto ip = std::unique(branch_names_.begin(), branch_names_.end());
+  branch_names_.resize(std::distance(branch_names_.begin(), ip));
 }
 
 }// namespace AnalysisTree

@@ -37,16 +37,7 @@ class Variable {
 * @param fields vector of Fields
 * @param lambda function to calculate variable
 */
-  Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double> &)> lambda) : name_(std::move(name)),
-                                                                                                               fields_(std::move(fields)),
-                                                                                                               lambda_(std::move(lambda)) {
-    for (const auto &f : fields_) {
-      branch_names_.emplace_back(f.GetBranchName());
-    }
-    std::sort(branch_names_.begin(), branch_names_.end());
-    auto ip = std::unique(branch_names_.begin(), branch_names_.end());
-    branch_names_.resize(std::distance(branch_names_.begin(), ip));
-  };
+  Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double> &)> lambda);;
 
   /**
 * To be removed soon. Only for backward compatibility
