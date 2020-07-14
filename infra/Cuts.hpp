@@ -1,19 +1,17 @@
 #ifndef ANALYSISTREE_CUTS_H
 #define ANALYSISTREE_CUTS_H
 
-#include <iostream>
 #include <string>
-#include <utility>
 #include <vector>
 
-#include "BranchConfig.hpp"
-#include "Configuration.hpp"
 #include "Constants.hpp"
 #include "SimpleCut.hpp"
 
 // Logical AND is applied for all Cuts in the vector
 
 namespace AnalysisTree {
+
+class Configuration;
 
 class Cuts {
 
@@ -32,8 +30,7 @@ class Cuts {
   template<typename T>
   bool Apply(const T &ob) const {
     if (!is_init_) {
-      std::cout << "Cuts::Apply - cut is not initialized!!" << std::endl;
-      exit(EXIT_FAILURE);
+      throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
     }
     for (const auto &cut : cuts_) {
       if (!cut.Apply(ob))
@@ -45,24 +42,12 @@ class Cuts {
   void AddCut(const SimpleCut &cut) { cuts_.push_back(cut); }
   void AddCuts(const std::vector<SimpleCut> &cuts) { cuts_ = cuts; }
 
-  void Init(const Configuration &conf) {
-    for (auto &cut : cuts_) {
-      for (auto &var : cut.Variables()) {
-        var.Init(conf);
-      }
-    }
-    is_init_ = true;
-  }
+  void Init(const Configuration &conf);
 
   void SetName(const std::string &name) { name_ = name; }
   const std::string &GetBranchName() const { return cuts_[0].GetVariables()[0].GetBranchName(); }//TODO fix this
 
-  void Print() const {
-    std::cout << "Cut " << name_ << " defined as:" << std::endl;
-    for (const auto &cut : cuts_) {
-      cut.Print();
-    }
-  }
+  void Print() const;
   int GetBranchId() const { return branch_id_; }
   const std::string &GetName() const { return name_; }
 

@@ -2,14 +2,13 @@
 #ifndef ANALYSISTREE_INFRA_FIELD_H_
 #define ANALYSISTREE_INFRA_FIELD_H_
 
-#include <iostream>
 #include <string>
-#include <utility>
 
-#include "Configuration.hpp"
 #include "Constants.hpp"
 
 namespace AnalysisTree {
+
+class Configuration;
 
 class Field {
  public:
@@ -29,17 +28,7 @@ class Field {
   friend bool operator>(const Field &that, const Field &other);
   friend bool operator<(const Field &that, const Field &other);
 
-  void Init(const Configuration &conf) {
-    const auto &branch_conf = conf.GetBranchConfig(branch_);
-    branch_id_ = branch_conf.GetId();
-    branch_type_ = branch_conf.GetType();
-    field_id_ = branch_conf.GetFieldId(field_);
-    field_type_ = branch_conf.GetFieldType(field_);
-    if (field_id_ == UndefValueInt) {
-      std::cout << "WARNING!! Field::Init - " << field_ << " is not found in branch " << branch_ << std::endl;
-    }
-    is_init_ = true;
-  }
+  void Init(const Configuration &conf);
 
   const std::string &GetName() const { return field_; }
   const std::string &GetBranchName() const { return branch_; }

@@ -1,9 +1,6 @@
 #ifndef ANALYSISTREE_SRC_HIT_H_
 #define ANALYSISTREE_SRC_HIT_H_
 
-#include <cmath>
-
-#include <RtypesCore.h>
 #include <TVector3.h>
 
 #include "Constants.hpp"
@@ -26,7 +23,7 @@ class Hit : public Container {
     return TVector3(x_, y_, z_);
   }
 
-  Double_t GetSignal() const { return signal_; }
+  Floating_t GetSignal() const { return signal_; }
 
   void SetPosition(const TVector3 &position) {
     x_ = position.X();
@@ -47,19 +44,9 @@ class Hit : public Container {
   Floating_t GetX() const { return x_; }
   Floating_t GetY() const { return y_; }
   Floating_t GetZ() const { return z_; }
-  Floating_t GetPhi() const { return atan2(y_, x_); }
+  Floating_t GetPhi() const;
 
-  friend bool operator==(const Hit &that, const Hit &other) {
-    if (&that == &other) {
-      return true;
-    }
-
-    if ((Container &) that != (Container &) other) {
-      return false;
-    }
-
-    return that.x_ == other.x_ && that.y_ == other.y_ && that.z_ == other.z_ && that.signal_ == other.signal_;
-  }
+  friend bool operator==(const Hit &that, const Hit &other);
 
   template<typename T>
   T GetField(Integer_t iField) const {
@@ -77,9 +64,7 @@ class Hit : public Container {
     }
   }
 
-  void Print() const {
-    std::cout << "  x = " << x_ << "  y = " << y_ << "  z = " << z_ << "  phi = " << GetPhi() << "  signal = " << signal_ << std::endl;
-  }
+  void Print() const;
 
  protected:
   Floating_t x_{UndefValueFloat};

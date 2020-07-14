@@ -1,5 +1,9 @@
 #include "TaskManager.hpp"
 
+#include "TTree.h"
+#include "TFile.h"
+#include "TChain.h"
+
 namespace AnalysisTree {
 
 void TaskManager::Init() {

@@ -1,5 +1,9 @@
 #include "Variable.hpp"
 
+#include <iostream>
+
+#include "Configuration.hpp"
+
 namespace AnalysisTree {
 
 void Variable::Print() const {
@@ -39,6 +43,13 @@ bool operator<(const AnalysisTree::Variable &that, const AnalysisTree::Variable 
     field_other += field.GetName();
   }
   return field_that + that.name_ < field_other + other.name_;
+}
+
+void Variable::Init(const Configuration& conf) {
+  for (auto &field : fields_) {
+    field.Init(conf);
+  }
+  is_init_ = true;
 }
 
 }// namespace AnalysisTree

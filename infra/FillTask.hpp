@@ -2,12 +2,15 @@
 #define ANALYSISTREE_FILLTASK_H_
 
 #include "Configuration.hpp"
-#include "DataHeader.hpp"
 
-#include "TChain.h"
-#include "TTree.h"
+
+class TChain;
+class TTree;
 
 namespace AnalysisTree {
+
+class Configuration;
+class DataHeader;
 
 class FillTask {
 
@@ -19,9 +22,7 @@ class FillTask {
   virtual void Exec() = 0;
   virtual void Finish() = 0;
 
-  void SetInChain(TChain *in_chain) {
-    in_chain_ = in_chain;
-  }
+  void SetInChain(TChain *in_chain);
 
   void SetInConfiguration(Configuration *config) {
     config_ = config;

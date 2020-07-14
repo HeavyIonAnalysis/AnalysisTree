@@ -1,15 +1,9 @@
 #ifndef ANALYSISTREE_GENERICCHANNELDETECTOR_H
 #define ANALYSISTREE_GENERICCHANNELDETECTOR_H
 
-#include <iostream>
-#include <memory>
-//#include "ROOT/RVec.hxx"
-
-#include "Configuration.hpp"
-#include "Container.hpp"
-#include "Hit.hpp"
 #include "IndexedObject.hpp"
-#include "Matching.hpp"
+
+#include "Hit.hpp"
 #include "Module.hpp"
 #include "Particle.hpp"
 #include "Track.hpp"
@@ -86,7 +80,6 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
  protected:
   std::vector<T> *channels_{new std::vector<T>};
-  //   ClassDefOverride(AnalysisTree::Detector<T>, 1);
 };
 
 using TrackDetector = Detector<Track>;

@@ -1,14 +1,11 @@
-
 #ifndef ANALYSISTREE_BASECONTAINER_H
 #define ANALYSISTREE_BASECONTAINER_H
 
-#include <memory>
-
-#include "BranchConfig.hpp"
-#include "Constants.hpp"
 #include "IndexedObject.hpp"
 
 namespace AnalysisTree {
+
+class BranchConfig;
 
 template<typename T>
 class Vector {
@@ -56,11 +53,7 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   template<typename T>
   T GetField(Integer_t iField) const { return Vector<T>::GetField(iField); }
 
-  void Init(const BranchConfig &branch) {
-    Vector<float>::Resize(branch.GetSize<float>());
-    Vector<int>::Resize(branch.GetSize<int>());
-    Vector<bool>::Resize(branch.GetSize<bool>());
-  }
+  void Init(const BranchConfig &branch);
 };
 
 }// namespace AnalysisTree

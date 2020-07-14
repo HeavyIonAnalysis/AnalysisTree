@@ -1,9 +1,7 @@
 #ifndef ANALYSISTREE_MATCHING_H
 #define ANALYSISTREE_MATCHING_H
 
-#include <iostream>
 #include <map>
-
 #include "Constants.hpp"
 
 namespace AnalysisTree {
@@ -23,25 +21,9 @@ class Matching {
     match_inverted_.insert(std::pair<ShortInt_t, ShortInt_t>(id2, id1));
   }
 
-  ShortInt_t GetMatchDirect(ShortInt_t id) const {
-    auto search = match_.find(id);
-    if (search != match_.end()) {
-      return search->second;
-    } else {
-      //        std::cout << "Matching::GetMatchDirect - Not found\n";
-      return UndefValueShort;
-    }
-  }
+  ShortInt_t GetMatchDirect(ShortInt_t id) const;
 
-  ShortInt_t GetMatchInverted(ShortInt_t id) const {
-    auto search = match_inverted_.find(id);
-    if (search != match_inverted_.end()) {
-      return search->second;
-    } else {
-      //        std::cout << "Matching::GetMatchInverted - Not found\n";
-      return UndefValueShort;
-    }
-  }
+  ShortInt_t GetMatchInverted(ShortInt_t id) const;
 
   ShortInt_t GetMatch(ShortInt_t id, bool is_inverted = false) const {
     return is_inverted ? GetMatchInverted(id) : GetMatchDirect(id);
