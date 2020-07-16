@@ -23,6 +23,7 @@ void TaskManager::Init() {
     out_file_->cd();
     if (!out_tree_name_.empty()) {
       out_tree_ = new TTree(out_tree_name_.c_str(), "Analysis Tree");
+      out_config_ = new Configuration;
     }
   }
 
