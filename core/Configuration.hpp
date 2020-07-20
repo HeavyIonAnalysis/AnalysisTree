@@ -10,6 +10,7 @@
 
 #include "BranchConfig.hpp"
 #include "Constants.hpp"
+#include "Matching.hpp"
 
 namespace AnalysisTree {
 
@@ -49,9 +50,12 @@ class Configuration : public TObject {
   const std::string &GetMatchName(const std::string &br1, const std::string &br2) const;
   std::pair<std::string, bool> GetMatchInfo(const std::string &br1, const std::string &br2) const;
 
+  [[deprecated("Please use AddMatch(Matching* m)")]]
   void AddMatch(const std::string &br1, const std::string &br2, const std::string &name) {
     matches_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
   }
+
+  void AddMatch(Matching* match);
 
   const std::map<std::array<std::string, 2>, std::string> &GetMatches() const { return matches_; }
 

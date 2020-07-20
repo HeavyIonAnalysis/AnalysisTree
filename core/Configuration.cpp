@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "Configuration.hpp"
 
 namespace AnalysisTree{
@@ -55,6 +57,16 @@ std::pair<std::string, bool> Configuration::GetMatchInfo(const std::string& br1,
       throw std::runtime_error("Configuration::GetMatchInfo - Not found for branches " + br1 + " and " + br2);
     }
   }
+}
+
+void Configuration::AddMatch(Matching* match) {
+  assert(match);
+
+  const std::string br1 = GetBranchConfig(match->GetBranch1Id()).GetName();
+  const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
+  const std::string name = br1 + "2" + br2;
+
+  matches_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
 }
 
 }

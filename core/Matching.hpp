@@ -34,6 +34,9 @@ class Matching {
     match_inverted_.clear();
   }
 
+  ShortInt_t GetBranch1Id() const { return branch1_id_; }
+  ShortInt_t GetBranch2Id() const { return branch2_id_; }
+
  protected:
   ShortInt_t branch1_id_{UndefValueShort};
   ShortInt_t branch2_id_{UndefValueShort};
