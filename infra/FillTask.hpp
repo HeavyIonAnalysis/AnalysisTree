@@ -42,6 +42,8 @@ class FillTask {
   void SetInputBranchNames(const std::vector<std::string> &br) { in_branches_ = br; }
   void SetOutputBranchName(const std::string &br) { out_branch_ = br; }
 
+  const std::string& GetOutputBranchName() const { return out_branch_; }
+
   const std::vector<std::string> &GetInputBranchNames() const { return in_branches_; }
 
  protected:
