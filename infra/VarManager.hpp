@@ -10,6 +10,18 @@
 
 namespace AnalysisTree {
 
+template<size_t N>
+class VarManagerEntry{
+ public:
+  VarManagerEntry() = default;
+
+ private:
+  std::vector<std::array<Variable, N>> vars_{};
+  std::vector<std::array<double, N>> values_{};
+  Cuts* cuts_{nullptr};
+};
+
+
 class VarManager : public FillTask {
 
  public:
@@ -48,7 +60,7 @@ class VarManager : public FillTask {
   std::map<std::string, Cuts *> cuts_map_{};
 
   std::map<int, int> unique_map_{};
-  std::vector<std::pair<int, int>> var_indexes_{};
+  std::vector<std::pair<int, int>> var_indexes_{}; ///< index of branch and a variable in this branch
 };
 
 }// namespace AnalysisTree

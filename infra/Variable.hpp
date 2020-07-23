@@ -37,7 +37,7 @@ class Variable {
 * @param fields vector of Fields
 * @param lambda function to calculate variable
 */
-  Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double> &)> lambda);;
+  Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double> &)> lambda);
 
   /**
 * To be removed soon. Only for backward compatibility
@@ -59,23 +59,25 @@ class Variable {
   void Init(const Configuration &conf);
 
   const std::string &GetName() const { return name_; }
-
   const std::string &GetBranchName(int id = 0) const { return fields_.at(id).GetBranchName(); }
-  short GetBranchId(int id = 0) const { return fields_.at(id).GetBranchId(); }
-  DetType GetBranchType(int id = 0) const { return fields_.at(id).GetBranchType(); }
 
-  const std::string &GetFieldName(int id = 0) const { return fields_.at(id).GetName(); }
-  short GetFieldId(int id = 0) const { return fields_.at(id).GetFieldId(); }
-  Types GetFieldType(int id = 0) const { return fields_.at(id).GetFieldType(); }
+  const std::vector<Field>& GetFields() const { return fields_; }
 
-  short GetId() const { return id_; }
-  short GetSize() const { return size_; }
-  void SetSize(size_t size) { size_ = size; }
-
-  size_t GetNumberOfFields() const { return fields_.size(); }
-
-  void SetId(short id) { id_ = id; }
-  void SetName(std::string name) { name_ = std::move(name); }
+//  short GetBranchId(int id = 0) const { return fields_.at(id).GetBranchId(); }
+//  DetType GetBranchType(int id = 0) const { return fields_.at(id).GetBranchType(); }
+//
+//  const std::string &GetFieldName(int id = 0) const { return fields_.at(id).GetName(); }
+//  short GetFieldId(int id = 0) const { return fields_.at(id).GetFieldId(); }
+//  Types GetFieldType(int id = 0) const { return fields_.at(id).GetFieldType(); }
+//
+//  short GetId() const { return id_; }
+//  short GetSize() const { return size_; }
+//  void SetSize(size_t size) { size_ = size; }
+//
+//  size_t GetNumberOfFields() const { return fields_.size(); }
+//
+//  void SetId(short id) { id_ = id; }
+//  void SetName(std::string name) { name_ = std::move(name); }
 
   double GetValue(std::vector<double> &vars) const {
     return lambda_(vars);
