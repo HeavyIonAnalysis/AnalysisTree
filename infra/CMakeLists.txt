@@ -6,6 +6,7 @@ set(SOURCES
   FillTask.cpp
   TreeReader.cpp
   TaskManager.cpp
+  PlainTreeFiller.cpp
 )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
