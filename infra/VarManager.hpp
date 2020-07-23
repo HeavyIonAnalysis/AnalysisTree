@@ -14,13 +14,25 @@ template<size_t N>
 class VarManagerEntry{
  public:
   VarManagerEntry() = default;
+  VarManagerEntry<1>(const Variable& var, Cuts* cuts=nullptr) {
+    vars_[0] = var;
+    cuts_ = cuts;
+  }
+
+  VarManagerEntry<2>(const Variable& var1, const Variable& var2, Cuts* cuts=nullptr) {
+    vars_[0] = var1;
+    vars_[1] = var2;
+    cuts_ = cuts;
+  }
 
  private:
-  std::vector<std::array<Variable, N>> vars_{};
+  std::array<Variable, N> vars_{};
   std::vector<std::array<double, N>> values_{};
   Cuts* cuts_{nullptr};
 };
 
+typedef VarManagerEntry<1> SingleVariable;
+typedef VarManagerEntry<2> Correlation;
 
 class VarManager : public FillTask {
 
@@ -55,6 +67,10 @@ class VarManager : public FillTask {
   void CreateMapUnique(const std::vector<Variable> &vars);
 
   std::vector<Variable> vars_{};
+
+  std::vector<SingleVariable> svars_{};
+  std::vector<Correlation> corrs_{};
+
   std::vector<BranchReader> branches_{};
   std::vector<Matching *> matching_{};
   std::map<std::string, Cuts *> cuts_map_{};
