@@ -27,6 +27,10 @@ void TaskManager::Init() {
     }
   }
 
+  if(event_cuts_){
+    event_cuts_->Init(*in_config_);
+  }
+
   for (auto *task : tasks_) {
     task->SetInChain(in_tree_);
     task->SetInConfiguration(in_config_);
@@ -48,6 +52,13 @@ void TaskManager::Run(long long nEvents) {
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     in_tree_->GetEntry(iEvent);
+
+    if(event_cuts_){
+      bool is_good_event = event_cuts_->Apply( *((EventHeader*)(branches_map_.find(event_cuts_->GetBranchName())->second)) );
+      if(!is_good_event){
+        continue;
+      }
+    }
 //    if ((iEvent + 1) % 100 == 0) {
 //      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
 //    }
