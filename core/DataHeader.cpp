@@ -1,7 +1,5 @@
 #include "DataHeader.hpp"
 
-#include <cmath>
-
 namespace AnalysisTree{
 
 void DataHeader::Print() const {

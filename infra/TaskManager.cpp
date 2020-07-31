@@ -1,9 +1,5 @@
 #include "TaskManager.hpp"
 
-#include "TTree.h"
-#include "TFile.h"
-#include "TChain.h"
-
 namespace AnalysisTree {
 
 void TaskManager::Init() {
@@ -32,6 +28,7 @@ void TaskManager::Init() {
     task->SetInConfiguration(in_config_);
     task->SetDataHeader(data_header_);
     task->SetOutTree(out_tree_);
+    task->SetOutFile(out_file_);
     task->SetOutConfiguration(out_config_);
     task->Init(branches_map_);
   }

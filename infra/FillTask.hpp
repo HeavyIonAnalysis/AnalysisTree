@@ -3,9 +3,9 @@
 
 #include "Configuration.hpp"
 
-
 class TChain;
 class TTree;
+class TFile;
 
 namespace AnalysisTree {
 
@@ -46,11 +46,13 @@ class FillTask {
 
   const std::vector<std::string> &GetInputBranchNames() const { return in_branches_; }
 
+  void SetOutFile(TFile* f) { out_file_ = f; }
  protected:
   TChain *in_chain_{nullptr};
   Configuration *config_{nullptr};
   DataHeader *data_header_{nullptr};
 
+  TFile* out_file_{nullptr};
   TTree *out_tree_{nullptr};
   Configuration *out_config_{nullptr};
 

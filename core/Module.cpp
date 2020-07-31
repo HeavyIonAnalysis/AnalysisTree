@@ -1,7 +1,5 @@
 #include "Module.hpp"
 
-#include <iostream>
-
 namespace AnalysisTree{
 
 bool operator==(const AnalysisTree::Module& that, const AnalysisTree::Module& other) {

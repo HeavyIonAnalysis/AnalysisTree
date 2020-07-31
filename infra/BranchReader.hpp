@@ -9,6 +9,7 @@
 #include "Detector.hpp"
 #include "EventHeader.hpp"
 #include "Constants.hpp"
+#include "Variable.hpp"
 
 namespace AnalysisTree {
 
@@ -27,29 +28,29 @@ class BranchReader {
   BranchReader() = default;
   BranchReader(std::string  name, void *data, DetType type, Cuts *cuts = nullptr);
 
-  void FillValues();
-  void AddVariable(const Variable &var);
-
   const std::string &GetName() const { return name_; }
   DetType GetType() const { return type_; }
   const Cuts *GetCut() const { return cuts_; }
 
-  const std::vector<Variable> &GetVariables() const { return vars_; }
-  std::vector<Variable> &Variables() { return vars_; }
-
-  const std::vector<double> &GetValues(int i_var) const { return values_.at(i_var); }
-
- protected:
   size_t GetNumberOfChannels();
   bool ApplyCut(int i_channel);
-  void ClearAndReserveOutput(int n_channels);
+
+  double GetValue(Variable var, int i_channel){
+    return std::visit([var, i_channel](auto &&arg) { return var.GetValue(arg->GetChannel(i_channel)); }, data_);
+  }
+
+  const BranchPointer& GetData() const {
+    return data_;
+  }
+
+  int GetId() const { return id_; }
+
+ protected:
 
   std::string name_{""};
   BranchPointer data_{};
-  std::vector<Variable> vars_{};
   Cuts *cuts_{nullptr};
-
-  std::vector<std::vector<double>> values_{};
+  int id_{-1};
   DetType type_{DetType(-1)};
 };
 

@@ -44,7 +44,6 @@ class EventHeader : public Container {
         default: throw std::out_of_range("EventHeader::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }
-    return UndefValueFloat;
   }
 
   inline Floating_t GetVertexX() const {

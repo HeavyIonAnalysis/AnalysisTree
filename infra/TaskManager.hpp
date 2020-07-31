@@ -22,7 +22,7 @@ class TaskManager {
   TaskManager() = default;
   TaskManager(const std::vector<std::string> &filelists,
               const std::vector<std::string> &in_trees) : in_tree_(AnalysisTree::MakeChain(filelists, in_trees)),
-                                                          in_config_(GetObjectFromFileList<Configuration>(filelists[0], in_config_name_)) {
+                                                          in_config_(GetConfigurationFromFileList(filelists, in_config_name_)) {
     try {
       data_header_ = GetObjectFromFileList<DataHeader>(filelists[0], data_header_name_);
     } catch (std::runtime_error &error) {

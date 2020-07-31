@@ -1,10 +1,8 @@
 #include <iostream>
-#include <string>
 
 #include "TChain.h"
 
 #include "core/DataHeader.hpp"
-#include "core/Detector.hpp"
 #include "core/EventHeader.hpp"
 #include "infra/TreeReader.hpp"
 
