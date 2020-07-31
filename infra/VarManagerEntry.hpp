@@ -32,10 +32,11 @@ class VarManagerEntry {
   void AddBranchPointer(BranchReader* branch) { branches_.emplace_back(branch); }
   void SetMatching(Matching* matching) { matching_ = matching; }
   void SetIsInvertedMatching(bool is_inverted_matching) { is_inverted_matching_ = is_inverted_matching; }
+  void FillBranchNames();
+
 
  private:
 
-  void FillBranchNames();
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(BranchReader* br1, BranchReader* br2);

@@ -67,7 +67,7 @@ void VarManagerEntry::FillValues() {
     FillFromTwoBranches();
   }
   else {
-    throw std::runtime_error("branches_.size() is more than 2 or 0");
+    throw std::runtime_error("VarManagerEntry::FillValues - branches_.size() is more than 2 or 0");
   }
 }
 
@@ -89,7 +89,6 @@ void VarManagerEntry::Init(const AnalysisTree::Configuration& conf) {
   for (auto &var : vars_) {
     var.Init(conf);
   }
-  FillBranchNames();
 }
 
 }

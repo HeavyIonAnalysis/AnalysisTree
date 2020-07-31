@@ -32,10 +32,10 @@ class VarManager : public FillTask {
   const BranchReader &GetBranch(const std::string &name);
 
   const std::vector<BranchReader> &GetBranches() const { return branches_; }
+  void FillBranchNames();
 
  private:
 
-  void FillBranchNames();
 
   std::vector<VarManagerEntry> vars_{};
 

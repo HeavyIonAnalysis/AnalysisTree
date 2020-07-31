@@ -1,15 +1,18 @@
 #include "TaskManager.hpp"
 
+#include <chrono>
+
 namespace AnalysisTree {
 
 void TaskManager::Init() {
 
   std::cout << "AnalysisTree::Manager::Init" << std::endl;
+  auto start = std::chrono::system_clock::now();
 
-  std::vector<std::string> branch_names{};
+  std::set<std::string> branch_names{};
   for (auto *task : tasks_) {
-    for (const auto &branch : task->GetInputBranchNames())
-      branch_names.emplace_back(branch);
+    auto br = task->GetInputBranchNames();
+    branch_names.insert(br.begin(), br.end());
   }
   if(in_tree_ && in_config_){
     branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
@@ -36,11 +39,17 @@ void TaskManager::Init() {
     out_config_->Print();
     out_config_->Write("Configuration");
   }
+
+  auto end = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed_seconds = end - start;
+  std::cout << "Init elapsed time: " << elapsed_seconds.count() << " s\n";
 }
 
 void TaskManager::Run(long long nEvents) {
 
   std::cout << "AnalysisTree::Manager::Run" << std::endl;
+  auto start = std::chrono::system_clock::now();
+
   nEvents = nEvents < 0 ? in_tree_->GetEntries() : nEvents;
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
@@ -55,6 +64,10 @@ void TaskManager::Run(long long nEvents) {
       out_tree_->Fill();
     }
   }// Event loop
+
+  auto end = std::chrono::system_clock::now();
+  std::chrono::duration<double> elapsed_seconds = end - start;
+  std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count()/nEvents <<  "s\n";
 }
 
 void TaskManager::Finish() {

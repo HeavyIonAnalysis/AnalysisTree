@@ -3,12 +3,11 @@
 namespace AnalysisTree {
 
 void VarManager::Init(std::map<std::string, void *> &pointers_map) {
-  assert(!vars_.empty());
+
   for (auto &var : vars_) {
     var.Init(*config_);
   }
 
-  FillBranchNames();
   branches_.reserve(in_branches_.size());
 
   for (const auto &branch : in_branches_) {
@@ -65,6 +64,7 @@ const BranchReader& VarManager::GetBranch(const std::string& name) {
 
 void VarManager::FillBranchNames() {
   for (auto &var : vars_) {
+    var.FillBranchNames();
     const auto& br = var.GetBranches();
     in_branches_.insert(in_branches_.end(), br.begin(), br.end());
   }
