@@ -7,42 +7,16 @@
 #include "FillTask.hpp"
 #include "Variable.hpp"
 #include "Matching.hpp"
+#include "VarManagerEntry.hpp"
 
 namespace AnalysisTree {
-
-template<size_t N>
-class VarManagerEntry{
- public:
-  VarManagerEntry() = default;
-  VarManagerEntry<1>(const Variable& var, Cuts* cuts=nullptr) {
-    vars_[0] = var;
-    cuts_ = cuts;
-  }
-
-  VarManagerEntry<2>(const Variable& var1, const Variable& var2, Cuts* cuts=nullptr) {
-    vars_[0] = var1;
-    vars_[1] = var2;
-    cuts_ = cuts;
-  }
-
- private:
-  std::array<Variable, N> vars_{};
-  std::vector<std::array<double, N>> values_{};
-  Cuts* cuts_{nullptr};
-};
-
-typedef VarManagerEntry<1> SingleVariable;
-typedef VarManagerEntry<2> Correlation;
 
 class VarManager : public FillTask {
 
  public:
   VarManager() = default;
-  explicit VarManager(const std::vector<Variable> &vars) {
-    CopyUniqueVars(vars);
-    FillBranchNames();
-    FillOutputIndexes(vars);
-  }
+
+  size_t AddEntry(const VarManagerEntry& vars) { vars_.emplace_back(vars); return vars_.size()-1; }
 
   void Init(std::map<std::string, void *> &pointers_map) override;
   void Exec() override;
@@ -50,9 +24,8 @@ class VarManager : public FillTask {
 
   void SetCutsMap(std::map<std::string, Cuts *> map) { cuts_map_ = std::move(map); }
 
-  const std::vector<double> &GetValues(int i_var) const {
-    const auto &indexes = var_indexes_.at(i_var);
-    return branches_.at(indexes.first).GetValues(indexes.second);
+  const std::vector<std::vector<double>> &GetValues(int i_var) const {
+    return vars_.at(i_var).GetValues();
   }
 
   std::vector<BranchReader> &Branches() { return branches_; }
@@ -61,15 +34,10 @@ class VarManager : public FillTask {
   const std::vector<BranchReader> &GetBranches() const { return branches_; }
 
  private:
-  void FillOutputIndexes(const std::vector<Variable> &vars);
-  void CopyUniqueVars(const std::vector<Variable> &vars);
+
   void FillBranchNames();
-  void CreateMapUnique(const std::vector<Variable> &vars);
 
-  std::vector<Variable> vars_{};
-
-  std::vector<SingleVariable> svars_{};
-  std::vector<Correlation> corrs_{};
+  std::vector<VarManagerEntry> vars_{};
 
   std::vector<BranchReader> branches_{};
   std::vector<Matching *> matching_{};

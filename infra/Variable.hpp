@@ -4,6 +4,7 @@
 #include <functional>
 #include <string>
 #include <cassert>
+#include <set>
 
 #include "Field.hpp"
 
@@ -18,19 +19,18 @@ class Variable {
   Variable &operator=(const Variable &) = default;
   ~Variable() = default;
 
-  Variable(std::string name) : name_(std::move(name)) {
-    fields_.emplace_back(Field(name_));
-  };
+//  Variable(std::string name) : name_(std::move(name)) {
+//    fields_.emplace_back(Field(name_));
+//  };
 
-  Variable(std::string name, std::string branch, std::string field, short size = 1) : name_(std::move(name)),
-                                                                                      branch_names_({branch}),
-                                                                                      size_(size) {
-    fields_.emplace_back(Field(std::move(branch), std::move(field)));
-  };
+  explicit Variable(const Field& field, short size = 1) :
+    name_(field.GetName()),
+    fields_({field}),
+    branch_names_({field.GetBranchName()}),
+    size_(size) {};
 
-  Variable(std::string branch, std::string field) : name_(branch + "_" + field), branch_names_({branch}) {
-    fields_.emplace_back(Field(std::move(branch), std::move(field)));
-  };
+  Variable(const std::string& branch, const std::string& field, short size = 1) : Variable({branch, field}, size) {}
+
 
   /**
 * Generic constructor for complicated variables
@@ -39,19 +39,6 @@ class Variable {
 */
   Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double> &)> lambda);
 
-  /**
-* To be removed soon. Only for backward compatibility
-*/
-  [[deprecated("To be removed soon...")]]
-  Variable(std::string name, const std::string &branch, const std::vector<std::string> &fields,
-           std::function<double(std::vector<double> &)> lambda) : name_(std::move(name)),
-                                                                  branch_names_({branch}),
-                                                                  lambda_(std::move(lambda)) {
-    for (const auto &field : fields) {
-      fields_.emplace_back(Field(branch, field));
-    }
-  };
-
   friend bool operator==(const AnalysisTree::Variable &that, const AnalysisTree::Variable &other);
   friend bool operator>(const Variable &that, const Variable &other);
   friend bool operator<(const Variable &that, const Variable &other);
@@ -59,32 +46,11 @@ class Variable {
   void Init(const Configuration &conf);
 
   const std::string &GetName() const { return name_; }
-  const std::string &GetBranchName(int id = 0) const { return fields_.at(id).GetBranchName(); }
 
   const std::vector<Field>& GetFields() const { return fields_; }
 
-//  short GetBranchId(int id = 0) const { return fields_.at(id).GetBranchId(); }
-//  DetType GetBranchType(int id = 0) const { return fields_.at(id).GetBranchType(); }
-//
-//  const std::string &GetFieldName(int id = 0) const { return fields_.at(id).GetName(); }
-//  short GetFieldId(int id = 0) const { return fields_.at(id).GetFieldId(); }
-//  Types GetFieldType(int id = 0) const { return fields_.at(id).GetFieldType(); }
-//
-//  short GetId() const { return id_; }
-//  short GetSize() const { return size_; }
-//  void SetSize(size_t size) { size_ = size; }
-//
-//  size_t GetNumberOfFields() const { return fields_.size(); }
-//
-//  void SetId(short id) { id_ = id; }
-//  void SetName(std::string name) { name_ = std::move(name); }
-
-  double GetValue(std::vector<double> &vars) const {
-    return lambda_(vars);
-  }
-
   size_t GetNumberOfBranches() const { return branch_names_.size(); }
-  std::vector<std::string> GetBranches() const { return branch_names_; }
+  std::set<std::string> GetBranches() const { return branch_names_; }
 
   template<class T>
   double GetValue(const T &object) const {
@@ -98,14 +64,14 @@ class Variable {
   }
 
   template<class A, class B>
-  double GetValue(const A &a, const B &b) {
-    assert(branch_names_.size() == 2);
+  double GetValue(const A &a, int a_id, const B &b, int b_id) const {
+//    assert(branch_names_.size() == 2);
     std::vector<double> vars{};
     vars.reserve(fields_.size());
     for (const auto &field : fields_) {
-      if (field.GetBranchId() == a.GetId())
+      if (field.GetBranchId() == a_id)
         vars.emplace_back(field.GetValue(a));
-      else if (field.GetBranchId() == b.GetId())
+      else if (field.GetBranchId() == b_id)
         vars.emplace_back(field.GetValue(b));
       else {
         throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
@@ -119,7 +85,7 @@ class Variable {
  private:
   std::string name_{""};
   std::vector<Field> fields_{};
-  std::vector<std::string> branch_names_{};
+  std::set<std::string> branch_names_{};
   std::function<double(std::vector<double> &)> lambda_{[](std::vector<double> &var) { return var.at(0); }};//!
 
   short size_{1};
