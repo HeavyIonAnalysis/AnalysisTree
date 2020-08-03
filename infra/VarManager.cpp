@@ -17,7 +17,7 @@ void VarManager::Init(std::map<std::string, void *> &pointers_map) {
   }
 
   for (auto &var : vars_) {
-    var.Init(*config_);
+    var.Init(*config_, pointers_map);
     for (const auto& br : var.GetBranches()) {
       var.AddBranchPointer(GetBranch(br));
     }

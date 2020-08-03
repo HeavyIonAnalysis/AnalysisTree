@@ -22,7 +22,7 @@ class VarManagerEntry {
     cuts_(cuts)
   {};
 
-  void Init(const Configuration& conf);
+  void Init(const Configuration& conf, std::map<std::string, void *> &pointers_map);
 
   void FillValues();
 

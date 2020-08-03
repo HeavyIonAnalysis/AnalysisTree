@@ -1,5 +1,7 @@
 #include "VarManagerEntry.hpp"
 
+#include "Configuration.hpp"
+
 namespace AnalysisTree{
 
 void VarManagerEntry::FillFromOneBranch(){
@@ -111,7 +113,7 @@ void VarManagerEntry::FillBranchNames() {
   }
 }
 
-void VarManagerEntry::Init(const AnalysisTree::Configuration& conf) {
+void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, std::map<std::string, void *> &pointers_map) {
   if(cuts_){
     cuts_->Init(conf);
   }
@@ -119,27 +121,15 @@ void VarManagerEntry::Init(const AnalysisTree::Configuration& conf) {
     var.Init(conf);
   }
 
-  if(branches_.size() > 1) {
+  auto branches = GetBranches();
+  if(branches.size() > 1) {
+    if(conf.GetBranchConfig(*(branches.begin()++)).GetType() != DetType::kEventHeader) {
+      auto match_info = conf.GetMatchInfo(*branches.begin(), *std::next(branches.begin(), 1));
+      SetIsInvertedMatching(match_info.second);
+      SetMatching((Matching*) pointers_map.find(match_info.first)->second);
 
+    }
   }
-
-//  auto branches = GetBranches();
-//  if(branches.size() > 1) {
-//    if(conf.GetBranchConfig(*(branches.begin()++)).GetType() != DetType::kEventHeader) {
-//      try {
-//        const auto& match = conf.GetMatchName(*branches.begin(), *(branches.begin()++));
-//        SetMatching((Matching*) pointers_map.find(match)->second);
-//      }
-//      catch(const std::runtime_error& e) {
-//        try {
-//          const auto& match = conf.GetMatchName(*(branches.begin()++), *branches.begin());
-//          SetIsInvertedMatching(true);
-//          SetMatching((Matching*) pointers_map.find(match)->second);
-//        }
-//        catch(const std::runtime_error& e) {}
-//      }
-//    }
-//  }
 
 }
 
