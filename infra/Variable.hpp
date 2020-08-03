@@ -45,16 +45,15 @@ class Variable {
 
   void Init(const Configuration &conf);
 
-  const std::string &GetName() const { return name_; }
+  [[nodiscard]] const std::string &GetName() const { return name_; }
+  [[nodiscard]] const std::vector<Field>& GetFields() const { return fields_; }
 
-  const std::vector<Field>& GetFields() const { return fields_; }
-
-  size_t GetNumberOfBranches() const { return branch_names_.size(); }
-  std::set<std::string> GetBranches() const { return branch_names_; }
+  [[nodiscard]] size_t GetNumberOfBranches() const { return branch_names_.size(); }
+  [[nodiscard]] std::set<std::string> GetBranches() const { return branch_names_; }
 
   template<class T>
   double GetValue(const T &object) const {
-    assert(branch_names_.size() == 1);
+    assert(branch_ids_.size() == 1);
     std::vector<double> vars{};
     vars.reserve(fields_.size());
     for (const auto &field : fields_) {
@@ -65,7 +64,7 @@ class Variable {
 
   template<class A, class B>
   double GetValue(const A &a, int a_id, const B &b, int b_id) const {
-//    assert(branch_names_.size() == 2);
+//    assert(branch_ids_.size() == 2);
     std::vector<double> vars{};
     vars.reserve(fields_.size());
     for (const auto &field : fields_) {
@@ -83,9 +82,11 @@ class Variable {
   void Print() const;
 
  private:
-  std::string name_{""};
+  std::string name_;
   std::vector<Field> fields_{};
   std::set<std::string> branch_names_{};
+  std::set<short> branch_ids_{};
+
   std::function<double(std::vector<double> &)> lambda_{[](std::vector<double> &var) { return var.at(0); }};//!
 
   short size_{1};

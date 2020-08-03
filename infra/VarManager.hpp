@@ -22,29 +22,24 @@ class VarManager : public FillTask {
   void Exec() override;
   void Finish() override{};
 
-  void SetCutsMap(std::map<std::string, Cuts *> map) { cuts_map_ = std::move(map); }
+  void SetCutsMap(std::map<std::string, Cuts*> map) { cuts_map_ = std::move(map); }
 
-  const std::vector<std::vector<double>> &GetValues(int i_var) const {
+  [[nodiscard]] const std::vector<std::vector<double>> &GetValues(int i_var) const {
     return vars_.at(i_var).GetValues();
   }
 
   std::vector<BranchReader> &Branches() { return branches_; }
-  const BranchReader &GetBranch(const std::string &name);
+  BranchReader* GetBranch(const std::string &name);
 
-  const std::vector<BranchReader> &GetBranches() const { return branches_; }
+  [[nodiscard]] const std::vector<BranchReader> &GetBranches() const { return branches_; }
   void FillBranchNames();
 
  private:
-
-
   std::vector<VarManagerEntry> vars_{};
 
   std::vector<BranchReader> branches_{};
   std::vector<Matching *> matching_{};
   std::map<std::string, Cuts *> cuts_map_{};
-
-  std::map<int, int> unique_map_{};
-  std::vector<std::pair<int, int>> var_indexes_{}; ///< index of branch and a variable in this branch
 };
 
 }// namespace AnalysisTree

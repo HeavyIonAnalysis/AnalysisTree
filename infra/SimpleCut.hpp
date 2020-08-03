@@ -78,13 +78,13 @@ class SimpleCut {
   void Print() const;
 
   std::vector<Variable> &Variables() { return vars_; }
-  const std::vector<Variable> &GetVariables() const { return vars_; }
-  const std::set<std::string>& GetBranches() const { return branch_names_; }
+  [[nodiscard]] const std::vector<Variable> &GetVariables() const { return vars_; }
+  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
  protected:
 
   void FillBranchNames();
 
-  std::string title_{""};
+  std::string title_;
   std::vector<Variable> vars_{};
   std::set<std::string> branch_names_{};
   std::function<bool(std::vector<double> &)> lambda_;///< function used to evaluate the cut.

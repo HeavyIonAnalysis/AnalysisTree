@@ -28,25 +28,18 @@ class FillTask {
     config_ = config;
   }
 
-  void SetOutTree(TTree *out_tree) {
-    out_tree_ = out_tree;
-  }
-
-  void SetOutConfiguration(Configuration *config) {
-    out_config_ = config;
-  }
-  void SetDataHeader(DataHeader *data_header) {
-    data_header_ = data_header;
-  }
-
+  void SetOutTree(TTree *out_tree) { out_tree_ = out_tree; }
+  void SetOutConfiguration(Configuration *config) { out_config_ = config; }
+  void SetDataHeader(DataHeader *data_header) { data_header_ = data_header; }
+  void SetOutFile(TFile* f) { out_file_ = f; }
   void SetInputBranchNames(const std::vector<std::string> &br) { in_branches_ = br; }
   void SetOutputBranchName(const std::string &br) { out_branch_ = br; }
 
-  const std::string& GetOutputBranchName() const { return out_branch_; }
+  [[nodiscard]] const std::string& GetOutputBranchName() const { return out_branch_; }
 
-  const std::vector<std::string> &GetInputBranchNames() const { return in_branches_; }
+  [[nodiscard]] const std::vector<std::string> &GetInputBranchNames() const { return in_branches_; }
 
-  void SetOutFile(TFile* f) { out_file_ = f; }
+
  protected:
   TChain *in_chain_{nullptr};
   Configuration *config_{nullptr};

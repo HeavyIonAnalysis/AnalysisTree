@@ -10,13 +10,9 @@ void Cuts::Init(const AnalysisTree::Configuration& conf) {
     }
   }
 
-  for (const auto &v : cuts_) {
-    const auto& br = v.GetBranches();
-    branch_names_.insert(br.begin(), br.end());
+  for(const auto& branch : branch_names_){
+    branch_ids_.insert(conf.GetBranchConfig(branch).GetId());
   }
-//  std::sort(branch_names_.begin(), branch_names_.end());
-//  auto ip = std::unique(branch_names_.begin(), branch_names_.end());
-//  branch_names_.resize(std::distance(branch_names_.begin(), ip));
 
   is_init_ = true;
 }

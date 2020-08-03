@@ -34,17 +34,20 @@ class VarManagerEntry {
   void SetIsInvertedMatching(bool is_inverted_matching) { is_inverted_matching_ = is_inverted_matching; }
   void FillBranchNames();
 
-
  private:
 
+  void FillVarEntry(const std::vector<int>& ch);
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(BranchReader* br1, BranchReader* br2);
 
   std::vector<Variable> vars_{};
+
   Cuts* cuts_{nullptr}; ///< non-owning
+
   std::set<std::string> branch_names_{};
   std::vector<BranchReader*> branches_{}; ///< non-owning pointers
+
   Matching* matching_{nullptr}; ///< non-owning
   bool is_inverted_matching_{false};
 

@@ -30,14 +30,14 @@ class Field {
 
   void Init(const Configuration &conf);
 
-  const std::string &GetName() const { return field_; }
-  const std::string &GetBranchName() const { return branch_; }
+  [[nodiscard]] const std::string &GetName() const { return field_; }
+  [[nodiscard]] const std::string &GetBranchName() const { return branch_; }
 
-  short GetBranchId() const { return branch_id_; }
-  short GetFieldId() const { return field_id_; }
+  [[nodiscard]] short GetBranchId() const { return branch_id_; }
+  [[nodiscard]] short GetFieldId() const { return field_id_; }
 
-  DetType GetBranchType() const { return branch_type_; }
-  Types GetFieldType() const { return field_type_; }
+  [[nodiscard]] DetType GetBranchType() const { return branch_type_; }
+  [[nodiscard]] Types GetFieldType() const { return field_type_; }
 
   template<class T>
   double GetValue(const T &object) const {
@@ -56,8 +56,8 @@ class Field {
   void Print() const;
 
  private:
-  std::string branch_{""};
-  std::string field_{""};
+  std::string branch_;
+  std::string field_;
 
   short field_id_{};
   Types field_type_{};

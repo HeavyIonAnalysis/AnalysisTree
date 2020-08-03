@@ -17,16 +17,20 @@ class Configuration;
 class Cuts {
 
  public:
-  Cuts() = default;
+  Cuts() = delete;
   Cuts(const Cuts &cut) = default;
   Cuts(Cuts &&cut) = default;
   Cuts &operator=(Cuts &&) = default;
   Cuts &operator=(const Cuts &cut) = default;
   virtual ~Cuts() = default;
 
-  explicit Cuts(std::string name) : name_(std::move(name)){};
   Cuts(std::string name, std::vector<SimpleCut> cuts) : name_(std::move(name)),
-                                                        cuts_(std::move(cuts)){};
+                                                        cuts_(std::move(cuts)){
+    for (const auto &v : cuts_) {
+      const auto& br = v.GetBranches();
+      branch_names_.insert(br.begin(), br.end());
+    }
+  };
 
   template<class T>
   bool Apply(const T &ob) const {
@@ -52,30 +56,24 @@ class Cuts {
     return true;
   }
 
-  void AddCut(const SimpleCut &cut) { cuts_.push_back(cut); }
-  void AddCuts(const std::vector<SimpleCut> &cuts) { cuts_ = cuts; }
-
   void Init(const Configuration &conf);
-
-//  void SetName(const std::string &name) { name_ = name; }
-  const std::set<std::string> &GetBranches() const { return branch_names_; }
-  [[deprecated]]
-  const std::string &GetBranchName() const { assert(branch_names_.size()==1); return *branch_names_.begin(); }
-
   void Print() const;
+
+  [[nodiscard]] const std::set<std::string> &GetBranches() const { return branch_names_; }
   [[deprecated]]
-  int GetBranchId() const { return branch_id_; }
-  const std::string &GetName() const { return name_; }
+  [[nodiscard]] const std::string &GetBranchName() const { assert(branch_names_.size()==1); return *branch_names_.begin(); }
+
+  [[nodiscard]] std::set<short> GetBranchIds() const { return branch_ids_; }
+  [[nodiscard]] const std::string &GetName() const { return name_; }
 
   std::vector<SimpleCut> &GetCuts() { return cuts_; }
 
  protected:
-  std::string name_{""};
-//  std::vector<std::string> branch_names_{};
+  std::string name_;
   std::set<std::string> branch_names_{};
+  std::set<short> branch_ids_{};
   std::vector<SimpleCut> cuts_{};
 
-  int branch_id_{-1};
   bool is_init_{false};
 
   ClassDef(AnalysisTree::Cuts, 1)

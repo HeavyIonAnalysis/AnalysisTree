@@ -4,12 +4,7 @@ namespace AnalysisTree {
 
 void VarManager::Init(std::map<std::string, void *> &pointers_map) {
 
-  for (auto &var : vars_) {
-    var.Init(*config_);
-  }
-
   branches_.reserve(in_branches_.size());
-
   for (const auto &branch : in_branches_) {
     const auto type = config_->GetBranchConfig(branch).GetType();
     auto *ptr = pointers_map.find(branch)->second;
@@ -22,29 +17,11 @@ void VarManager::Init(std::map<std::string, void *> &pointers_map) {
   }
 
   for (auto &var : vars_) {
-    const auto& branches = var.GetBranches();
-    if(branches.size() == 2) {
-      try {
-        const auto& match = config_->GetMatchName(*branches.begin(), *(branches.begin()++));
-        var.SetMatching((Matching*) pointers_map.find(match)->second);
-      }
-      catch(const std::runtime_error& e) {
-        try {
-          const auto& match = config_->GetMatchName(*(branches.begin()++), *branches.begin());
-          var.SetIsInvertedMatching(true);
-          var.SetMatching((Matching*) pointers_map.find(match)->second);
-        }
-        catch(const std::runtime_error& e) {}
-      }
+    var.Init(*config_);
+    for (const auto& br : var.GetBranches()) {
+      var.AddBranchPointer(GetBranch(br));
     }
-    for (const auto& br : branches) {
-      for (auto &branch : branches_) {
-        if(br == branch.GetName()) {
-          var.AddBranchPointer(&branch);
-        }
-      }
-    }
-  }
+  } // vars
 }
 
 void VarManager::Exec() {
@@ -53,10 +30,10 @@ void VarManager::Exec() {
   }
 }
 
-const BranchReader& VarManager::GetBranch(const std::string& name) {
-  for (const auto &branch : branches_) {
+BranchReader* VarManager::GetBranch(const std::string& name) {
+  for (auto &branch : branches_) {
     if (branch.GetName() == name) {
-      return branch;
+      return &branch;
     }
   }
   throw std::runtime_error("Branch " + name + " is not found");
