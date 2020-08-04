@@ -99,7 +99,7 @@ static inline Configuration *GetConfigurationFromFileList(const std::vector<std:
 }
 
 static inline std::map<std::string, void *> GetPointersToBranches(TChain *t, const Configuration &config,
-                                                                  std::vector<std::string> names = {}) {
+                                                                  std::set<std::string> names = {}) {
 
   std::cout << "GetPointersToBranches" << std::endl;
   std::map<std::string, void *> ret;
@@ -107,12 +107,8 @@ static inline std::map<std::string, void *> GetPointersToBranches(TChain *t, con
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto &branch : config.GetBranchConfigs()) {
       std::cout << branch.GetName() << std::endl;
-      names.emplace_back(branch.GetName());
+      names.insert(branch.GetName());
     }
-  } else {// only unique names
-    std::sort(names.begin(), names.end());
-    auto it = std::unique(names.begin(), names.end());
-    names.resize(std::distance(names.begin(), it));
   }
 
   for (const auto &branch : names) {// Init all pointers to branches

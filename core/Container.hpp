@@ -25,7 +25,7 @@ class Vector {
   }
 
   virtual void SetField(T value, Integer_t iField) { field_.at(iField) = value; }//NOTE
-  virtual T GetField(Integer_t iField) const { return field_.at(iField); }
+  [[nodiscard]] virtual T GetField(Integer_t iField) const { return field_.at(iField); }
 
   void Resize(int size) {
     field_.resize(size);
