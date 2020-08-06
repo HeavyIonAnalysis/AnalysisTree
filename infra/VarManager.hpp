@@ -12,11 +12,12 @@
 namespace AnalysisTree {
 
 class VarManager : public FillTask {
+  typedef std::vector<std::vector<double>> array2D;
 
  public:
   VarManager() = default;
 
-  size_t AddEntry(const VarManagerEntry& vars);
+  std::pair<int, std::vector<int>>  AddEntry(const VarManagerEntry& vars);
 
   void Init(std::map<std::string, void *> &pointers_map) override;
   void Exec() override;
@@ -24,14 +25,12 @@ class VarManager : public FillTask {
 
   void SetCutsMap(std::map<std::string, Cuts*> map) { cuts_map_ = std::move(map); }
 
-  [[nodiscard]] const std::vector<std::vector<double>> &GetValues(int i_var) const {
-    return vars_.at(i_var).GetValues();
-  }
+  [[nodiscard]] const array2D &GetValues(int i_var) const { return vars_.at(i_var).GetValues(); }
+  [[nodiscard]] const std::vector<BranchReader> &GetBranches() const { return branches_; }
 
   std::vector<BranchReader> &Branches() { return branches_; }
   BranchReader* GetBranch(const std::string &name);
 
-  [[nodiscard]] const std::vector<BranchReader> &GetBranches() const { return branches_; }
   void FillBranchNames();
 
  private:

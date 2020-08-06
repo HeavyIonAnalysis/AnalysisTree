@@ -31,5 +31,12 @@ bool operator==(const Cuts &that, const Cuts &other) {
   return that.name_ == other.name_ && that.cuts_ == other.cuts_;
 }
 
+bool Cuts::Equal(const Cuts *that, const Cuts *other){
+  if( that == nullptr && other == nullptr ) { return true; }
+  if( that && other) { return *that == *other; }
+  return false;
+}
+
+
 
 }

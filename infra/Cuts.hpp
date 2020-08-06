@@ -69,6 +69,7 @@ class Cuts {
   std::vector<SimpleCut> &GetCuts() { return cuts_; }
 
   friend bool operator==(const Cuts &that, const Cuts &other);
+  static bool Equal(const Cuts *that, const Cuts *other);
 
  protected:
   std::string name_;

@@ -17,18 +17,23 @@ class VarManagerEntry {
  public:
   VarManagerEntry() = default;
 
-  explicit VarManagerEntry(std::vector<Variable>  vars, Cuts* cuts=nullptr) :
+  explicit VarManagerEntry(std::vector<Variable> vars, Cuts* cuts=nullptr) :
     vars_(std::move(vars)),
     cuts_(cuts)
-  {};
+  {
+    FillBranchNames();
+  };
 
   void Init(const Configuration& conf, std::map<std::string, void *> &pointers_map);
-
   void FillValues();
 
-  const array2D& GetValues() const {return values_;}
+  size_t AddVariable(const Variable& var);
 
-  const std::set<std::string>& GetBranches() const { return branch_names_; }
+  [[nodiscard]] const array2D& GetValues() const {return values_;}
+  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
+  [[nodiscard]] const Cuts* GetCuts() const { return cuts_;}
+  [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_;}
+
   void AddBranchPointer(BranchReader* branch) { branches_.emplace_back(branch); }
   void SetMatching(Matching* matching) { matching_ = matching; }
   void SetIsInvertedMatching(bool is_inverted_matching) { is_inverted_matching_ = is_inverted_matching; }
@@ -36,7 +41,7 @@ class VarManagerEntry {
 
  private:
 
-  void FillVarEntry(const std::vector<int>& ch);
+//  void FillVarEntry(const std::vector<int>& ch);
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(BranchReader* br1, BranchReader* br2);
@@ -51,7 +56,7 @@ class VarManagerEntry {
   Matching* matching_{nullptr}; ///< non-owning
   bool is_inverted_matching_{false};
 
-  array2D values_{};
+  array2D values_{};  ///< channels<variables>
 };
 
 

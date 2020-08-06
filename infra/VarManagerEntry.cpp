@@ -46,9 +46,8 @@ void VarManagerEntry::FillFromTwoBranches(){
     if (!br1->ApplyCut(ch1)) continue;
     if (!br2->ApplyCut(ch2)) continue;
 
-    auto cut_func = [this, ch1, ch2](auto &&arg1, auto &&arg2) { return cuts_->Apply(arg1->GetChannel(ch1), arg1->GetId(),
-                                                                               arg2->GetChannel(ch2), arg2->GetId()); };
-
+    auto cut_func = [this, ch1, ch2](auto &&arg1, auto &&arg2) {
+                                    return cuts_->Apply(arg1->GetChannel(ch1), arg1->GetId(), arg2->GetChannel(ch2), arg2->GetId()); };
     if (cuts_ && !std::visit(cut_func, br1->GetData(), br2->GetData())) continue;
 
     std::vector<double> temp_vars(vars_.size());
@@ -60,46 +59,7 @@ void VarManagerEntry::FillFromTwoBranches(){
     }//variables
     values_.emplace_back(temp_vars);
   }
-
 }
-
-//bool VarManagerEntry::ApplyEntryCuts(std::vector<int> channels){
-//  if(cuts_){
-//    if(cuts_->GetBranchIds().size() == 1){
-//      BranchReader* br = branches_.at(0);
-//      return std::visit([this, i_channel](auto &&arg) { return cuts_->Apply(arg->GetChannel(i_channel)); }, br->GetData());
-//    }
-//    else if(cuts_->GetBranchIds().size() == 2){
-//
-//    }
-//    else{
-//      throw std::runtime_error("Error");
-//    }
-//  }
-//  return true;
-//}
-
-
-void VarManagerEntry::FillVarEntry(const std::vector<int>& ch) {
-//
-//  auto cut_func = [this, ch](auto &&arg1, auto &&arg2) { return cuts_->Apply(arg1->GetChannel(ch[0]), arg1->GetId(),
-//                                                                             arg2->GetChannel(ch[1]), arg2->GetId()); };
-//  BranchReader* br1 = branches_.at(0);
-//  BranchReader* br2 = branches_.at(1);
-//
-//  if (cuts_ && !std::visit(cut_func, br1->GetData(), br2->GetData())) return;
-//
-//  std::vector<double> temp_vars(vars_.size());
-//  short i_var{};
-//  for (const auto &var : vars_) {
-//    auto func = [var, ch](auto &&arg1, auto &&arg2) {return var.GetValue(arg1->GetChannel(ch[0]), arg1->GetId(), arg2->GetChannel(ch[1]), arg2->GetId()); };
-//    temp_vars[i_var] = std::visit(func, br1->GetData(), br2->GetData());
-//    i_var++;
-//  }//variables
-//  values_.emplace_back(temp_vars);
-
-}
-
 
 void VarManagerEntry::FillValues() {
   values_.clear();
@@ -135,7 +95,6 @@ void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, std::map<std
 
   auto branches = GetBranches();
   if(branches.size() > 1) {
-
     auto det1_type = conf.GetBranchConfig(*branches.begin()).GetType();
     auto det2_type = conf.GetBranchConfig(*std::next(branches.begin(), 1)).GetType();
 
@@ -148,5 +107,52 @@ void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, std::map<std
   }
 
 }
+
+size_t VarManagerEntry::AddVariable(const Variable& var) {
+  auto it = std::find(vars_.begin(), vars_.end(), var);
+  if(it == vars_.end()){ // add new variable
+    vars_.emplace_back(var);
+    return vars_.size()-1;
+  }
+  else{
+    return std::distance(vars_.begin(), it);  // index of existing
+  }
+}
+
+//bool VarManagerEntry::ApplyEntryCuts(std::vector<int> channels){
+//  if(cuts_){
+//    if(cuts_->GetBranchIds().size() == 1){
+//      BranchReader* br = branches_.at(0);
+//      return std::visit([this, i_channel](auto &&arg) { return cuts_->Apply(arg->GetChannel(i_channel)); }, br->GetData());
+//    }
+//    else if(cuts_->GetBranchIds().size() == 2){
+//
+//    }
+//    else{
+//      throw std::runtime_error("Error");
+//    }
+//  }
+//  return true;
+//}
+
+
+//void VarManagerEntry::FillVarEntry(const std::vector<int>& ch) {
+//
+//  auto cut_func = [this, ch](auto &&arg1, auto &&arg2) { return cuts_->Apply(arg1->GetChannel(ch[0]), arg1->GetId(),
+//                                                                             arg2->GetChannel(ch[1]), arg2->GetId()); };
+//  BranchReader* br1 = branches_.at(0);
+//  BranchReader* br2 = branches_.at(1);
+//
+//  if (cuts_ && !std::visit(cut_func, br1->GetData(), br2->GetData())) return;
+//
+//  std::vector<double> temp_vars(vars_.size());
+//  short i_var{};
+//  for (const auto &var : vars_) {
+//    auto func = [var, ch](auto &&arg1, auto &&arg2) {return var.GetValue(arg1->GetChannel(ch[0]), arg1->GetId(), arg2->GetChannel(ch[1]), arg2->GetId()); };
+//    temp_vars[i_var] = std::visit(func, br1->GetData(), br2->GetData());
+//    i_var++;
+//  }//variables
+//  values_.emplace_back(temp_vars);
+//}
 
 }
