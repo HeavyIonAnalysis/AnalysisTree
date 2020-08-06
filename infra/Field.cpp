@@ -16,18 +16,18 @@ void Field::Print() const {
   }
 }
 
-bool operator==(const AnalysisTree::Field &that, const AnalysisTree::Field &other) {
+bool operator==(const Field &that, const Field &other) {
   if (&that == &other) {
     return true;
   }
-  return that.branch_ == other.branch_ && that.field_ == other.field_ && that.branch_id_ == other.branch_id_ && that.field_id_ == other.field_id_ && that.branch_type_ == other.branch_type_;
+  return that.branch_ == other.branch_ && that.field_ == other.field_;
 }
 
-bool operator>(const AnalysisTree::Field &that, const AnalysisTree::Field &other) {
+bool operator>(const Field &that, const Field &other) {
   return that.branch_ + that.field_ > other.branch_ + other.field_;
 }
 
-bool operator<(const AnalysisTree::Field &that, const AnalysisTree::Field &other) {
+bool operator<(const Field &that, const Field &other) {
   return that.branch_ + that.field_ < other.branch_ + other.field_;
 }
 

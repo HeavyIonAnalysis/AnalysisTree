@@ -16,7 +16,7 @@ class VarManager : public FillTask {
  public:
   VarManager() = default;
 
-  size_t AddEntry(const VarManagerEntry& vars) { vars_.emplace_back(vars); return vars_.size()-1; }
+  size_t AddEntry(const VarManagerEntry& vars);
 
   void Init(std::map<std::string, void *> &pointers_map) override;
   void Exec() override;

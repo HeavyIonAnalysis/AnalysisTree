@@ -68,6 +68,8 @@ class Cuts {
 
   std::vector<SimpleCut> &GetCuts() { return cuts_; }
 
+  friend bool operator==(const Cuts &that, const Cuts &other);
+
  protected:
   std::string name_;
   std::set<std::string> branch_names_{};

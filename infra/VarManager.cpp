@@ -50,4 +50,9 @@ void VarManager::FillBranchNames() {
   in_branches_.resize(std::distance(in_branches_.begin(), ip));
 }
 
+size_t VarManager::AddEntry(const VarManagerEntry& vars) {
+  vars_.emplace_back(vars);
+  return vars_.size()-1;
+}
+
 }// namespace AnalysisTree

@@ -24,4 +24,12 @@ void Cuts::Print() const {
   }
 }
 
+bool operator==(const Cuts &that, const Cuts &other) {
+  if (&that == &other) {
+    return true;
+  }
+  return that.name_ == other.name_ && that.cuts_ == other.cuts_;
+}
+
+
 }

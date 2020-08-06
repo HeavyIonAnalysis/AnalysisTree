@@ -5,6 +5,7 @@
 #include <string>
 #include <cassert>
 #include <set>
+#include <utility>
 
 #include "Field.hpp"
 
@@ -19,9 +20,9 @@ class Variable {
   Variable &operator=(const Variable &) = default;
   ~Variable() = default;
 
-//  Variable(std::string name) : name_(std::move(name)) {
-//    fields_.emplace_back(Field(name_));
-//  };
+  Variable(std::string name) : name_(std::move(name)) {
+    fields_.emplace_back(Field(name_));
+  };
 
   explicit Variable(const Field& field, short size = 1) :
     name_(field.GetName()),
@@ -39,7 +40,7 @@ class Variable {
 */
   Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double> &)> lambda);
 
-  friend bool operator==(const AnalysisTree::Variable &that, const AnalysisTree::Variable &other);
+  friend bool operator==(const Variable &that, const Variable &other);
   friend bool operator>(const Variable &that, const Variable &other);
   friend bool operator<(const Variable &that, const Variable &other);
 
@@ -78,6 +79,12 @@ class Variable {
     }
     return lambda_(vars);
   }
+
+  void SetSize(short size) { size_ = size; }
+  [[nodiscard]] short GetSize() const { return size_; }
+  void SetId(short id) { id_ = id; }
+
+  void SetName(std::string name) { name_ = std::move(name); }
 
   void Print() const;
 

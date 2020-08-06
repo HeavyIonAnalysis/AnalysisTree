@@ -24,7 +24,7 @@ class Field {
   Field(std::string branch, std::string field) : branch_(std::move(branch)),
                                                  field_(std::move(field)){};
 
-  friend bool operator==(const AnalysisTree::Field &that, const AnalysisTree::Field &other);
+  friend bool operator==(const Field &that, const Field &other);
   friend bool operator>(const Field &that, const Field &other);
   friend bool operator<(const Field &that, const Field &other);
 
@@ -44,11 +44,11 @@ class Field {
     if (!is_init_) {
       throw std::runtime_error("Field::Fill - Field " + field_ + " is not initialized");
     }
-    if (field_type_ == AnalysisTree::Types::kFloat)
+    if (field_type_ == Types::kFloat)
       return object.template GetField<float>(field_id_);
-    else if (field_type_ == AnalysisTree::Types::kInteger)
+    else if (field_type_ == Types::kInteger)
       return object.template GetField<int>(field_id_);
-    else if (field_type_ == AnalysisTree::Types::kBool)
+    else if (field_type_ == Types::kBool)
       return object.template GetField<bool>(field_id_);
     return UndefValueFloat;
   }
