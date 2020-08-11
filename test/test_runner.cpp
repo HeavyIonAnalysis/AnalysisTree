@@ -5,6 +5,10 @@
 #include <core/IndexedObject.test.hpp>
 #include <core/Module.test.hpp>
 #include <core/Track.test.hpp>
+#include <core/BranchConfig.test.hpp>
+#include <core/Container.test.hpp>
+#include <core/Configuration.test.hpp>
+#include <core/Matching.test.hpp>
 
 #include <infra/Cuts.test.hpp>
 

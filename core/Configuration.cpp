@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "Configuration.hpp"
+#include "Matching.hpp"
 
 namespace AnalysisTree{
 
