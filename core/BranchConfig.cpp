@@ -13,7 +13,7 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("eta", TrackFields::kEta);
     VectorConfig<float>::AddField("p", TrackFields::kP);
   }
-  if (type_ == DetType::kParticle) {
+  else if (type_ == DetType::kParticle) {
     VectorConfig<float>::AddField("px", ParticleFields::kPx);
     VectorConfig<float>::AddField("py", ParticleFields::kPy);
     VectorConfig<float>::AddField("pz", ParticleFields::kPz);
@@ -25,18 +25,18 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity);
     VectorConfig<int>::AddField("pid", ParticleFields::kPid);
   }
-  if (type_ == DetType::kHit) {
+  else if (type_ == DetType::kHit) {
     VectorConfig<float>::AddField("x", HitFields::kX);
     VectorConfig<float>::AddField("y", HitFields::kY);
     VectorConfig<float>::AddField("z", HitFields::kZ);
     VectorConfig<float>::AddField("phi", HitFields::kPhi);
     VectorConfig<float>::AddField("signal", HitFields::kSignal);
   }
-  if (type_ == DetType::kModule) {
+  else if (type_ == DetType::kModule) {
     VectorConfig<int>::AddField("id", ModuleFields::kId);
     VectorConfig<float>::AddField("signal", ModuleFields::kSignal);
   }
-  if (type_ == DetType::kEventHeader) {
+  else if (type_ == DetType::kEventHeader) {
     VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX);
     VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY);
     VectorConfig<float>::AddField("vtx_z", EventHeaderFields::kVertexZ);

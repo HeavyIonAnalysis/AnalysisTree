@@ -15,7 +15,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTree, Test_TracksMomentum) {
+TEST(Test_AnalysisTreeCore, Test_TracksMomentum) {
 
   Track track(0);
 
@@ -57,17 +57,6 @@ TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
 
   config.AddBranchConfig(RecTracksBranch);
   auto *RecTracks = new AnalysisTree::TrackDetector(0);
-
-  EXPECT_EQ(RecTracksBranch.GetFieldId("dcax"), 0);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("dcay"), 1);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("nhits"), 0);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("pT"), TrackFields::kPt);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("phi"), TrackFields::kPhi);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("eta"), TrackFields::kEta);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("p"), TrackFields::kP);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("px"), TrackFields::kPx);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("py"), TrackFields::kPy);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("pz"), TrackFields::kPz);
 
   t->Branch("RecTracks", "AnalysisTree::TrackDetector", &RecTracks);
 

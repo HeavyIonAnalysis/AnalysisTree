@@ -12,8 +12,8 @@ class Vector {
  public:
   Vector() = default;
   Vector(const Vector &) = default;
-  Vector(Vector &&) = default;
-  Vector &operator=(Vector &&) = default;
+  Vector(Vector &&)  noexcept = default;
+  Vector &operator=(Vector &&)  noexcept = default;
   Vector &operator=(const Vector &) = default;
   virtual ~Vector() = default;
 
@@ -51,7 +51,9 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   template<typename T>
   void SetField(T value, Integer_t iField) { Vector<T>::SetField(value, iField); }
   template<typename T>
-  T GetField(Integer_t iField) const { return Vector<T>::GetField(iField); }
+  [[nodiscard]] T GetField(Integer_t iField) const { return Vector<T>::GetField(iField); }
+  template<typename T>
+  [[nodiscard]] size_t GetSize() const { return Vector<T>::field_.size(); }
 
   void Init(const BranchConfig &branch);
 };
