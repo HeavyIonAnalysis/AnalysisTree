@@ -17,7 +17,7 @@ class VarManager : public FillTask {
  public:
   VarManager() = default;
 
-  std::pair<int, std::vector<int>>  AddEntry(const VarManagerEntry& vars);
+  std::pair<int, std::vector<int>> AddEntry(const VarManagerEntry& vars);
 
   void Init(std::map<std::string, void *> &pointers_map) override;
   void Exec() override;
@@ -32,6 +32,9 @@ class VarManager : public FillTask {
   BranchReader* GetBranch(const std::string &name);
 
   void FillBranchNames();
+
+  [[nodiscard]] const std::vector<VarManagerEntry>& GetVarEntries() const { return vars_; }
+  [[nodiscard]] std::vector<VarManagerEntry>& VarEntries() { return vars_; }
 
  private:
   std::vector<VarManagerEntry> vars_{};

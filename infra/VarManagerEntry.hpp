@@ -30,9 +30,12 @@ class VarManagerEntry {
   size_t AddVariable(const Variable& var);
 
   [[nodiscard]] const array2D& GetValues() const {return values_;}
-  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
+  [[nodiscard]] const std::set<std::string>& GetBranchNames() const { return branch_names_; }
+  [[nodiscard]] const std::vector<BranchReader*>& GetBranches() const { return branches_; }
+  [[nodiscard]] size_t GetNumberOfBranches() const { return branch_names_.size(); }
   [[nodiscard]] const Cuts* GetCuts() const { return cuts_;}
   [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_;}
+  [[nodiscard]] std::vector<Variable>& Variables() { return vars_;}
 
   void AddBranchPointer(BranchReader* branch) { branches_.emplace_back(branch); }
   void SetMatching(Matching* matching) { matching_ = matching; }
@@ -47,7 +50,6 @@ class VarManagerEntry {
   void FillMatchingForEventHeader(BranchReader* br1, BranchReader* br2);
 
   std::vector<Variable> vars_{};
-
   Cuts* cuts_{nullptr}; ///< non-owning
 
   std::set<std::string> branch_names_{};

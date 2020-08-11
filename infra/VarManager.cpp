@@ -19,7 +19,7 @@ void VarManager::Init(std::map<std::string, void *> &pointers_map) {
 
   for (auto &var : vars_) {
     var.Init(*config_, pointers_map);
-    for (const auto& br : var.GetBranches()) {
+    for (const auto& br : var.GetBranchNames()) {
       var.AddBranchPointer(GetBranch(br));
     }
   } // vars
@@ -33,7 +33,7 @@ void VarManager::Exec() {
 
 void VarManager::FillBranchNames() {
   for (auto &var : vars_) {
-    const auto& br = var.GetBranches();
+    const auto& br = var.GetBranchNames();
     in_branches_.insert(in_branches_.end(), br.begin(), br.end());
   }
   std::sort(in_branches_.begin(), in_branches_.end());
@@ -47,7 +47,7 @@ std::pair<int, std::vector<int>> VarManager::AddEntry(const VarManagerEntry& var
 
   for(int ivar=0; ivar<vars_.size(); ++ivar){
 
-    if(vars.GetBranches() == vars_[ivar].GetBranches() && Cuts::Equal(vars.GetCuts(),vars_[ivar].GetCuts()) ){ // branch exists
+    if(vars.GetBranchNames() == vars_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(),vars_[ivar].GetCuts()) ){ // branch exists
       for(int i=0; i<vars.GetVariables().size(); ++i){
         var_ids[i] = vars_[ivar].AddVariable(vars.GetVariables()[i]);
       }

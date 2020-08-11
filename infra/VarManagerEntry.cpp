@@ -93,7 +93,7 @@ void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, std::map<std
     var.Init(conf);
   }
 
-  auto branches = GetBranches();
+  auto branches = GetBranchNames();
   if(branches.size() > 1) {
     auto det1_type = conf.GetBranchConfig(*branches.begin()).GetType();
     auto det2_type = conf.GetBranchConfig(*std::next(branches.begin(), 1)).GetType();

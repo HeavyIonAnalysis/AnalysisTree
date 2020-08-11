@@ -64,5 +64,4 @@ bool operator<(const AnalysisTree::Variable &that, const AnalysisTree::Variable 
 }
 
 
-
 }// namespace AnalysisTree
