@@ -29,6 +29,10 @@ class Matching {
     return is_inverted ? GetMatchInverted(id) : GetMatchDirect(id);
   }
 
+  const std::map<ShortInt_t, ShortInt_t>& GetMatches(bool is_inv=false) const {
+    return is_inv ? match_inverted_ : match_;
+  }
+
   void Clear() {
     match_.clear();
     match_inverted_.clear();

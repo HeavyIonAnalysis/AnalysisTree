@@ -27,9 +27,7 @@ static inline TChain *MakeChain(const std::string &filelist, const std::string &
       chain->AddFile(line.data());
     }
   }
-  if (chain == nullptr) {
-    throw std::runtime_error("AnalysisTree::MakeChain - chain is nullprt");
-  }
+
   return chain;
 }
 
@@ -41,7 +39,7 @@ static inline TChain *MakeChain(const std::vector<std::string> &filelists, const
     chain->AddFriend(MakeChain(filelists.at(i), treenames.at(i)));
   }
 
-  if (chain == nullptr) {
+  if (!chain) {
     throw std::runtime_error("AnalysisTree::MakeChain - chain is nullprt");
   }
 
@@ -106,7 +104,6 @@ static inline std::map<std::string, void *> GetPointersToBranches(TChain *t, con
 
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto &branch : config.GetBranchConfigs()) {
-      std::cout << branch.GetName() << std::endl;
       names.insert(branch.GetName());
     }
   }
@@ -114,7 +111,7 @@ static inline std::map<std::string, void *> GetPointersToBranches(TChain *t, con
   for (const auto &branch : names) {// Init all pointers to branches
     void *branch_ptr{nullptr};
     const auto &branch_config = config.GetBranchConfig(branch);
-    std::cout << branch << std::endl;
+    std::cout << "Adding branch pointer: " << branch << std::endl;
     switch (branch_config.GetType()) {
       case DetType::kTrack: {
         branch_ptr = new TrackDetector;
@@ -142,7 +139,7 @@ static inline std::map<std::string, void *> GetPointersToBranches(TChain *t, con
 
   for (const auto &match : config.GetMatches()) {// Init all pointers to matching //TODO exclude unused
     auto *matching_ptr = new Matching;
-    std::cout << match.second << std::endl;
+    std::cout << "Adding branch pointer: " << match.second << std::endl;
     ret.emplace(match.second, matching_ptr);
   }
 

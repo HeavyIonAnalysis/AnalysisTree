@@ -68,6 +68,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
   }
 
   const std::vector<T> *GetChannels() const { return channels_; }
+  std::vector<T> *Channels() { return channels_; }
 
   void Reserve(size_t n) { channels_->reserve(n); }
   void Resize(size_t n) { channels_->resize(n); }

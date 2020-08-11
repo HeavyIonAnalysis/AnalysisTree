@@ -9,6 +9,11 @@ void Cuts::Init(const AnalysisTree::Configuration& conf) {
       var.Init(conf);
     }
   }
+
+  for(const auto& branch : branch_names_){
+    branch_ids_.insert(conf.GetBranchConfig(branch).GetId());
+  }
+
   is_init_ = true;
 }
 
@@ -18,5 +23,20 @@ void Cuts::Print() const {
     cut.Print();
   }
 }
+
+bool operator==(const Cuts &that, const Cuts &other) {
+  if (&that == &other) {
+    return true;
+  }
+  return that.name_ == other.name_ && that.cuts_ == other.cuts_;
+}
+
+bool Cuts::Equal(const Cuts *that, const Cuts *other){
+  if( that == nullptr && other == nullptr ) { return true; }
+  if( that && other) { return *that == *other; }
+  return false;
+}
+
+
 
 }

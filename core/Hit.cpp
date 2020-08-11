@@ -1,8 +1,5 @@
 #include "Hit.hpp"
 
-#include <iostream>
-#include <cmath>
-
 namespace AnalysisTree{
 
 void Hit::Print() const {

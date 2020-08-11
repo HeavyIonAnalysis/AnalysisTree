@@ -30,16 +30,9 @@ void PlainTreeFiller::Init(std::map<std::string, void*>& branches) {
 }
 
 void PlainTreeFiller::Exec() {
-
-//  std::cout << in_branch_->GetNumberOfChannels() << std::endl;
-
   for(const auto& channel : *in_branch_->GetChannels() ) {
     for(auto& var : vars_){
-      switch (var.second.GetFieldType()) {
-        case Types::kFloat   : { var.first = channel.GetField<Floating_t>(var.second.GetFieldId());  break; }
-        case Types::kInteger : { var.first = channel.GetField<Integer_t>(var.second.GetFieldId());  break; }
-        case Types::kBool    : { var.first = channel.GetField<Bool_t>(var.second.GetFieldId());  break; }
-      }
+      var.first = var.second.GetValue(channel);
     }
     out_tree_->Fill();
   }

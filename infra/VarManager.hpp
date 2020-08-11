@@ -7,48 +7,41 @@
 #include "FillTask.hpp"
 #include "Variable.hpp"
 #include "Matching.hpp"
+#include "VarManagerEntry.hpp"
 
 namespace AnalysisTree {
 
 class VarManager : public FillTask {
+  typedef std::vector<std::vector<double>> array2D;
 
  public:
   VarManager() = default;
-  explicit VarManager(const std::vector<Variable> &vars) {
-    CopyUniqueVars(vars);
-    FillBranchNames();
-    FillOutputIndexes(vars);
-  }
+
+  std::pair<int, std::vector<int>> AddEntry(const VarManagerEntry& vars);
 
   void Init(std::map<std::string, void *> &pointers_map) override;
   void Exec() override;
   void Finish() override{};
 
-  void SetCutsMap(std::map<std::string, Cuts *> map) { cuts_map_ = std::move(map); }
+  void SetCutsMap(std::map<std::string, Cuts*> map) { cuts_map_ = std::move(map); }
 
-  const std::vector<double> &GetValues(int i_var) const {
-    const auto &indexes = var_indexes_.at(i_var);
-    return branches_.at(indexes.first).GetValues(indexes.second);
-  }
+  [[nodiscard]] const array2D &GetValues(int i_var) const { return vars_.at(i_var).GetValues(); }
+  [[nodiscard]] const std::vector<BranchReader> &GetBranches() const { return branches_; }
 
   std::vector<BranchReader> &Branches() { return branches_; }
-  const BranchReader &GetBranch(const std::string &name);
+  BranchReader* GetBranch(const std::string &name);
 
-  const std::vector<BranchReader> &GetBranches() const { return branches_; }
+  void FillBranchNames();
+
+  [[nodiscard]] const std::vector<VarManagerEntry>& GetVarEntries() const { return vars_; }
+  [[nodiscard]] std::vector<VarManagerEntry>& VarEntries() { return vars_; }
 
  private:
-  void FillOutputIndexes(const std::vector<Variable> &vars);
-  void CopyUniqueVars(const std::vector<Variable> &vars);
-  void FillBranchNames();
-  void CreateMapUnique(const std::vector<Variable> &vars);
+  std::vector<VarManagerEntry> vars_{};
 
-  std::vector<Variable> vars_{};
   std::vector<BranchReader> branches_{};
   std::vector<Matching *> matching_{};
   std::map<std::string, Cuts *> cuts_map_{};
-
-  std::map<int, int> unique_map_{};
-  std::vector<std::pair<int, int>> var_indexes_{};
 };
 
 }// namespace AnalysisTree

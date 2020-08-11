@@ -59,8 +59,8 @@ class TaskManager {
   TChain *in_tree_{nullptr};
   std::string data_header_name_{"DataHeader"};
   std::string in_config_name_{"Configuration"};
-  std::string out_file_name_{""};
-  std::string out_tree_name_{""};
+  std::string out_file_name_;
+  std::string out_tree_name_;
 
   AnalysisTree::Configuration *out_config_{nullptr};
   AnalysisTree::Configuration *in_config_{nullptr};

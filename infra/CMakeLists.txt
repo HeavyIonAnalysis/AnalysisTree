@@ -10,7 +10,7 @@ set(SOURCES
 )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
-    list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp")
+    list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
 endif()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
