@@ -13,6 +13,7 @@ void TaskManager::Init() {
   for (auto *task : tasks_) {
     auto br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
+
   }
   if(in_tree_ && in_config_){
     branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
@@ -24,6 +25,10 @@ void TaskManager::Init() {
       out_tree_ = new TTree(out_tree_name_.c_str(), "Analysis Tree");
       out_config_ = new Configuration;
     }
+  }
+
+  if(event_cuts_){
+    event_cuts_->Init(*in_config_);
   }
 
   for (auto *task : tasks_) {
@@ -54,6 +59,17 @@ void TaskManager::Run(long long nEvents) {
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     in_tree_->GetEntry(iEvent);
+
+    if(event_cuts_){
+      auto it = branches_map_.find(event_cuts_->GetBranchName());
+      if(it == branches_map_.end()){
+        throw std::runtime_error("EventHeader " + event_cuts_->GetBranchName() + " is not found to apply event cuts");
+      }
+      bool is_good_event = event_cuts_->Apply( *((EventHeader*)(it->second)) );
+      if(!is_good_event){
+        continue;
+      }
+    }
 //    if ((iEvent + 1) % 100 == 0) {
 //      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
 //    }
