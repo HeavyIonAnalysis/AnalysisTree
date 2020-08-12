@@ -16,7 +16,7 @@ TEST(Test_AnalysisTreeCore, Test_Configuration) {
   EXPECT_EQ(config.GetNumberOfBranches(), 0);
   EXPECT_EQ(config.GetMatches().size(), 0);
 
-  AnalysisTree::BranchConfig branch_config("RecTrack", AnalysisTree::DetType::kTrack);
+  BranchConfig branch_config("RecTrack", DetType::kTrack);
   branch_config.AddField<float>("test_f");
   branch_config.AddField<int>("test_i");
   branch_config.AddField<bool>("test_b");

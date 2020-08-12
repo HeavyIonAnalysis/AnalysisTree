@@ -19,11 +19,8 @@ class Hit : public Container {
 
   explicit Hit(Integer_t id) : Container(id) {}
 
-  TVector3 GetPosition() const {
-    return TVector3(x_, y_, z_);
-  }
+  friend bool operator==(const Hit &that, const Hit &other);
 
-  Floating_t GetSignal() const { return signal_; }
 
   void SetPosition(const TVector3 &position) {
     x_ = position.X();
@@ -41,15 +38,16 @@ class Hit : public Container {
     signal_ = signal;
   }
 
-  Floating_t GetX() const { return x_; }
-  Floating_t GetY() const { return y_; }
-  Floating_t GetZ() const { return z_; }
-  Floating_t GetPhi() const;
+  [[nodiscard]] TVector3 GetPosition() const { return TVector3(x_, y_, z_); }
+  [[nodiscard]] Floating_t GetSignal() const { return signal_; }
+  [[nodiscard]] Floating_t GetX() const { return x_; }
+  [[nodiscard]] Floating_t GetY() const { return y_; }
+  [[nodiscard]] Floating_t GetZ() const { return z_; }
+  [[nodiscard]] Floating_t GetPhi() const;
 
-  friend bool operator==(const Hit &that, const Hit &other);
 
   template<typename T>
-  T GetField(Integer_t iField) const {
+  [[nodiscard]] T GetField(Integer_t iField) const {
     if (iField >= 0)
       return Container::GetField<T>(iField);
     else {
@@ -71,8 +69,6 @@ class Hit : public Container {
   Floating_t y_{UndefValueFloat};
   Floating_t z_{UndefValueFloat};
   Floating_t signal_{UndefValueFloat};
-
-  //  ClassDefOverride(AnalysisTree::Base::Hit, 1)
 };
 
 }// namespace AnalysisTree

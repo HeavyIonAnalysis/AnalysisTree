@@ -2,10 +2,9 @@
 #define ANALYSISTREE_BASECONTAINER_H
 
 #include "IndexedObject.hpp"
+#include "BranchConfig.hpp"
 
 namespace AnalysisTree {
-
-class BranchConfig;
 
 template<typename T>
 class Vector {

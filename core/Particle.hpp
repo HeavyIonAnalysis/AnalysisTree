@@ -17,9 +17,9 @@ class Particle : public Track {
   Particle &operator=(Particle &&) = default;
   Particle &operator=(const Particle &particle) = default;
 
-  Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
-  PdgCode_t GetPid() const { return pid_; }
-  Floating_t GetMass() const { return mass_; }
+  [[nodiscard]] Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
+  [[nodiscard]] PdgCode_t GetPid() const { return pid_; }
+  [[nodiscard]] Floating_t GetMass() const { return mass_; }
 
   void SetMass(Floating_t mass) {
     mass_ = mass;
@@ -27,8 +27,8 @@ class Particle : public Track {
 
   void SetPid(PdgCode_t pid);
 
-  Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
-  Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
+  [[nodiscard]] Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
+  [[nodiscard]] Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
 
   template<typename T>
   T GetField(Integer_t iField) const {

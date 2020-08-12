@@ -9,6 +9,8 @@
 #include <core/Container.test.hpp>
 #include <core/Configuration.test.hpp>
 #include <core/Matching.test.hpp>
+#include <core/DataHeader.test.hpp>
+#include <core/Particle.test.hpp>
 
 #include <infra/Cuts.test.hpp>
 

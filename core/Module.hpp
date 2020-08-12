@@ -18,13 +18,10 @@ class Module : public Container {
 
   explicit Module(Integer_t id) : Container(id) {}
 
-  Floating_t GetSignal() const { return signal_; }
+  [[nodiscard]] Floating_t GetSignal() const { return signal_; }
+  [[nodiscard]] ShortInt_t GetNumber() const { return number_; }
 
-  void SetSignal(Floating_t signal) {
-    signal_ = signal;
-  }
-
-  ShortInt_t GetNumber() const { return number_; }
+  void SetSignal(Floating_t signal) { signal_ = signal; }
   void SetNumber(ShortInt_t number) { number_ = number; }
 
   friend bool operator==(const Module &that, const Module &other);
@@ -35,7 +32,7 @@ class Module : public Container {
       return Container::GetField<T>(iField);
     else {
       switch (iField) {
-        case ModuleFields::kId: return GetId();
+        case ModuleFields::kNumber: return GetNumber();
         case ModuleFields::kSignal: return GetSignal();
         default: throw std::out_of_range("Module::GetField - Index " + std::to_string(iField) + " is not found");
       }

@@ -33,7 +33,7 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("signal", HitFields::kSignal);
   }
   else if (type_ == DetType::kModule) {
-    VectorConfig<int>::AddField("id", ModuleFields::kId);
+    VectorConfig<int>::AddField("number", ModuleFields::kNumber);
     VectorConfig<float>::AddField("signal", ModuleFields::kSignal);
   }
   else if (type_ == DetType::kEventHeader) {

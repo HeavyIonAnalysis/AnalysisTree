@@ -15,6 +15,7 @@ TEST(Test_AnalysisTreeCore, Test_Matching) {
 
   ASSERT_EQ(matching.GetBranch1Id(), 0);
   ASSERT_EQ(matching.GetBranch2Id(), 1);
+  ASSERT_EQ(matching.GetMatches().size(), 0);
 
   matching.AddMatch(0,0);
   matching.AddMatch(1,2);

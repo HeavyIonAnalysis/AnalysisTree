@@ -64,6 +64,7 @@ enum Exyz : ShortInt_t {
   kZ
 };
 }
+
 enum class DetType : ShortInt_t {
   kHit = 0,
   kModule,
@@ -71,6 +72,7 @@ enum class DetType : ShortInt_t {
   kEventHeader,
   kParticle
 };
+
 
 enum class Types : ShortInt_t {
   kFloat = 0,
@@ -118,7 +120,7 @@ enum HitFields : ShortInt_t {
 
 namespace ModuleFields {
 enum ModuleFields : ShortInt_t {
-  kId = -1,
+  kNumber = -1,
   kSignal = -2
 };
 }

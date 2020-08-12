@@ -10,12 +10,13 @@
 
 #include <core/Configuration.hpp>
 #include <core/Detector.hpp>
+#include <core/BranchConfig.hpp>
 
 namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_TracksMomentum) {
+TEST(Test_AnalysisTreeCore, Test_Track) {
 
   Track track(0);
 
@@ -49,14 +50,14 @@ TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
 
   Configuration config;
 
-  AnalysisTree::BranchConfig RecTracksBranch("RecTrack", AnalysisTree::DetType::kTrack);
+  BranchConfig RecTracksBranch("RecTrack", DetType::kTrack);
   RecTracksBranch.AddField<float>("dcax");
   RecTracksBranch.AddField<float>("dcay");
   RecTracksBranch.AddField<float>("dcaz");
   RecTracksBranch.AddField<int>("nhits");
 
   config.AddBranchConfig(RecTracksBranch);
-  auto *RecTracks = new AnalysisTree::TrackDetector(0);
+  auto *RecTracks = new TrackDetector(0);
 
   t->Branch("RecTracks", "AnalysisTree::TrackDetector", &RecTracks);
 

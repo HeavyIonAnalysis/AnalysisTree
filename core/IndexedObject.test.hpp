@@ -5,7 +5,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteIndexedObject) {
   auto *indexedObject = new IndexedObject(1);
 
   TFile outputFile("Test_WriteIndexedObject.root", "recreate");
-  TTree *indexedObjectTree = new TTree("TestIndexedObjectTree", "");
+  auto *indexedObjectTree = new TTree("TestIndexedObjectTree", "");
   indexedObjectTree->Branch("indexedObject", &indexedObject);
 
   indexedObjectTree->Fill();

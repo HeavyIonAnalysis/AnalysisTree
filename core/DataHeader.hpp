@@ -21,27 +21,25 @@ class DataHeader : public TObject {
   DataHeader &operator=(DataHeader &&) = default;
   DataHeader &operator=(const DataHeader &) = default;
 
-  void SetSystem(std::string sys) { system_ = std::move(sys); }
-  void SetBeamMomentum(float mom, float m_target = 0.938, float m_beam = 0.938);
-
-  Floating_t GetBeamRapidity() const { return beam_y_; }
-  std::string GetSystem() const { return system_; }
-
   ModulePositions &AddDetector();
 
-  const ModulePositions &GetModulePositions(Integer_t idet) {
-    return modules_pos_.at(idet);
-  }
+  void Print() const;
 
+  void SetSystem(std::string sys) { system_ = std::move(sys); }
+  void SetBeamMomentum(float mom, float m_target = 0.938, float m_beam = 0.938);
   void SetDetectorPosition(const TVector3 &pos) {
     det_pos_.emplace_back(pos);
   }
 
-  const TVector3 &GetDetectorPosition(int i) const { return det_pos_.at(i); }
+  [[nodiscard]] Floating_t GetBeamRapidity() const { return beam_y_; }
+  [[nodiscard]] std::string GetSystem() const { return system_; }
+  [[nodiscard]] const TVector3 &GetDetectorPosition(int i) const { return det_pos_.at(i); }
 
-  void Print() const;
+  [[nodiscard]] const ModulePositions &GetModulePositions(Integer_t idet) {
+    return modules_pos_.at(idet);
+  }
 
-  Floating_t GetModulePhi(int det_id, int module_id) const {
+  [[nodiscard]] Floating_t GetModulePhi(int det_id, int module_id) const {
     return modules_pos_.at(det_id).GetChannel(module_id).GetPhi();
   }
 
@@ -49,7 +47,7 @@ class DataHeader : public TObject {
   std::vector<ModulePositions> modules_pos_;///< in a local coordinate system
   std::vector<TVector3> det_pos_{};
 
-  std::string system_{""};
+  std::string system_;
   Floating_t beam_mom_{UndefValueFloat};
   Floating_t beam_y_{UndefValueFloat};
   Floating_t sqrtsNN_{UndefValueFloat};
