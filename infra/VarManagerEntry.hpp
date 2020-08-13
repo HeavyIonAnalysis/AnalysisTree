@@ -44,10 +44,14 @@ class VarManagerEntry {
 
  private:
 
+
 //  void FillVarEntry(const std::vector<int>& ch);
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(BranchReader* br1, BranchReader* br2);
+  bool ApplyCutOnBranch(BranchReader* br, int i_channel) const;
+  bool ApplyCutOnBranches(BranchReader* br1, int ch1, BranchReader* br2, int ch2) const;
+  static double FillVariabe(const Variable& var,BranchReader* br1, int ch1, BranchReader* br2, int ch2) ;
 
   std::vector<Variable> vars_{};
   Cuts* cuts_{nullptr}; ///< non-owning

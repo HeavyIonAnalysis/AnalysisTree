@@ -9,13 +9,14 @@ set(SOURCES
   PlainTreeFiller.cpp
 )
 
-if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
+if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
 endif()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
+list(APPEND HEADERS "VariantMagic.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)

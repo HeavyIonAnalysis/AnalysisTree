@@ -20,6 +20,10 @@ TEST(Test_AnalysisTreeCore, Test_BranchConfig) {
   EXPECT_EQ(branch_config.GetFieldId("test_b"), 0);
   EXPECT_EQ(branch_config.GetFieldId("test_f"), 0);
 
+  EXPECT_EQ(branch_config.GetFieldType("test_f"), Types::kFloat);
+  EXPECT_EQ(branch_config.GetFieldType("test_i"), Types::kInteger);
+  EXPECT_EQ(branch_config.GetFieldType("test_b"), Types::kBool);
+
   EXPECT_EQ(branch_config.GetFieldId("pT"), TrackFields::kPt);
   EXPECT_EQ(branch_config.GetFieldId("phi"), TrackFields::kPhi);
   EXPECT_EQ(branch_config.GetFieldId("eta"), TrackFields::kEta);

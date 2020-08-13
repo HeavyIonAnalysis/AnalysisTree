@@ -4,12 +4,12 @@
 #include <utility>
 #include <string>
 #include <vector>
-#include <variant>// NOTE
 
 #include "Detector.hpp"
 #include "EventHeader.hpp"
 #include "Constants.hpp"
 #include "Variable.hpp"
+#include "VariantMagic.hpp"
 
 namespace AnalysisTree {
 
@@ -26,28 +26,25 @@ class BranchReader {
 
  public:
   BranchReader() = default;
-  BranchReader(std::string  name, void *data, DetType type, Cuts *cuts = nullptr);
+  BranchReader(std::string name, void *data, DetType type, Cuts *cuts = nullptr);
 
-  const std::string &GetName() const { return name_; }
-  DetType GetType() const { return type_; }
-  const Cuts *GetCut() const { return cuts_; }
+  [[nodiscard]] const std::string &GetName() const { return name_; }
+  [[nodiscard]] DetType GetType() const { return type_; }
+  [[nodiscard]] const Cuts *GetCut() const { return cuts_; }
+  [[nodiscard]] double GetValue(const Variable& var, int i_channel);
 
   size_t GetNumberOfChannels();
   bool ApplyCut(int i_channel);
 
-  double GetValue(Variable var, int i_channel){
-    return std::visit([var, i_channel](auto &&arg) { return var.GetValue(arg->GetChannel(i_channel)); }, data_);
-  }
-
-  const BranchPointer& GetData() const {
+  [[nodiscard]] const BranchPointer& GetData() const {
     return data_;
   }
 
-  int GetId() const { return id_; }
+  [[nodiscard]] int GetId() const { return id_; }
 
  protected:
 
-  std::string name_{""};
+  std::string name_;
   BranchPointer data_{};
   Cuts *cuts_{nullptr};
   int id_{-1};
