@@ -11,8 +11,8 @@ class Vector {
  public:
   Vector() = default;
   Vector(const Vector&) = default;
-  Vector(Vector&&) noexcept = default;
-  Vector& operator=(Vector&&) noexcept = default;
+  Vector(Vector&&) = default;
+  Vector& operator=(Vector&&) = default;
   Vector& operator=(const Vector&) = default;
   virtual ~Vector() = default;
 
