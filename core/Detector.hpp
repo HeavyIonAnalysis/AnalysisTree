@@ -29,7 +29,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
     return channels_->size();
   }
 
-  T *AddChannel() {
+  T* AddChannel() {
     channels_->push_back(T(channels_->size()));
     return &(channels_->back());
   }
@@ -38,7 +38,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
     if (channels_ != nullptr) channels_->clear();
   }
 
-  T &GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
+  T& GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
   {
     if (number < GetNumberOfChannels()) {
       return channels_->at(number);
@@ -47,7 +47,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
     }
   }
 
-  const T &GetChannel(size_t number) const {
+  const T& GetChannel(size_t number) const {
     if (number < GetNumberOfChannels()) {
       return channels_->at(number);
     } else {
@@ -55,32 +55,32 @@ class Detector : public IndexedObject, protected IndexAccessor {
     }
   }
 
-  friend bool operator==(const Detector &that, const Detector &other) {
+  friend bool operator==(const Detector& that, const Detector& other) {
     if (&that == &other) {
       return true;
     }
 
-    if ((IndexedObject &) that != (IndexedObject &) other) {
+    if ((IndexedObject&) that != (IndexedObject&) other) {
       return false;
     }
 
     return std::equal(that.channels_->begin(), that.channels_->end(), other.channels_->begin());
   }
 
-  const std::vector<T> *GetChannels() const { return channels_; }
-  std::vector<T> *Channels() { return channels_; }
+  const std::vector<T>* GetChannels() const { return channels_; }
+  std::vector<T>* Channels() { return channels_; }
 
   void Reserve(size_t n) { channels_->reserve(n); }
   void Resize(size_t n) { channels_->resize(n); }
 
   void Print() const {
-    for (const auto &channel : *channels_) {
+    for (const auto& channel : *channels_) {
       channel.Print();
     }
   }
 
  protected:
-  std::vector<T> *channels_{new std::vector<T>};
+  std::vector<T>* channels_{new std::vector<T>};
 };
 
 using TrackDetector = Detector<Track>;

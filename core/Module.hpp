@@ -11,10 +11,10 @@ class Module : public Container {
 
  public:
   Module() = default;
-  Module(const Module &otherModule) = default;
-  Module(Module &&otherModule) = default;
-  Module &operator=(Module &&) = default;
-  Module &operator=(const Module &part) = default;
+  Module(const Module& otherModule) = default;
+  Module(Module&& otherModule) = default;
+  Module& operator=(Module&&) = default;
+  Module& operator=(const Module& part) = default;
 
   explicit Module(Integer_t id) : Container(id) {}
 
@@ -24,7 +24,7 @@ class Module : public Container {
   void SetSignal(Floating_t signal) { signal_ = signal; }
   void SetNumber(ShortInt_t number) { number_ = number; }
 
-  friend bool operator==(const Module &that, const Module &other);
+  friend bool operator==(const Module& that, const Module& other);
 
   template<typename T>
   T GetField(Integer_t iField) const {
@@ -52,10 +52,10 @@ class ModulePosition : public IndexedObject {
 
  public:
   ModulePosition() = default;
-  ModulePosition(const ModulePosition &otherModulePosition) = default;
-  ModulePosition(ModulePosition &&otherModulePosition) = default;
-  ModulePosition &operator=(ModulePosition &&) = default;
-  ModulePosition &operator=(const ModulePosition &part) = default;
+  ModulePosition(const ModulePosition& otherModulePosition) = default;
+  ModulePosition(ModulePosition&& otherModulePosition) = default;
+  ModulePosition& operator=(ModulePosition&&) = default;
+  ModulePosition& operator=(const ModulePosition& part) = default;
 
   explicit ModulePosition(Integer_t id) : IndexedObject(id) {}
   ModulePosition(Integer_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
@@ -64,7 +64,7 @@ class ModulePosition : public IndexedObject {
     return TVector3(x_, y_, z_);
   }
 
-  void SetPosition(const TVector3 &position) {
+  void SetPosition(const TVector3& position) {
     x_ = position.X();
     y_ = position.Y();
     z_ = position.Z();

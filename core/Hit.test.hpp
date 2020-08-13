@@ -5,7 +5,7 @@
 
 #include "Hit.hpp"
 
-namespace{
+namespace {
 
 using namespace AnalysisTree;
 
@@ -36,6 +36,6 @@ TEST(Test_AnalysisTreeCore, Test_Hit) {
   EXPECT_FLOAT_EQ(hit.GetPhi(), hit.GetField<float>(HitFields::kPhi));
   EXPECT_FLOAT_EQ(hit.GetSignal(), hit.GetField<float>(HitFields::kSignal));
 }
-}
+}// namespace
 
 #endif//ANALYSISTREE_TEST_CORE_HIT_TEST_HPP_

@@ -10,12 +10,11 @@ void TaskManager::Init() {
   auto start = std::chrono::system_clock::now();
 
   std::set<std::string> branch_names{};
-  for (auto *task : tasks_) {
+  for (auto* task : tasks_) {
     auto br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
-
   }
-  if(in_tree_ && in_config_){
+  if (in_tree_ && in_config_) {
     branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
   }
   if (!out_file_name_.empty()) {
@@ -27,11 +26,11 @@ void TaskManager::Init() {
     }
   }
 
-  if(event_cuts_){
+  if (event_cuts_) {
     event_cuts_->Init(*in_config_);
   }
 
-  for (auto *task : tasks_) {
+  for (auto* task : tasks_) {
     task->SetInChain(in_tree_);
     task->SetInConfiguration(in_config_);
     task->SetDataHeader(data_header_);
@@ -60,20 +59,20 @@ void TaskManager::Run(long long nEvents) {
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     in_tree_->GetEntry(iEvent);
 
-    if(event_cuts_){
+    if (event_cuts_) {
       auto it = branches_map_.find(event_cuts_->GetBranchName());
-      if(it == branches_map_.end()){
+      if (it == branches_map_.end()) {
         throw std::runtime_error("EventHeader " + event_cuts_->GetBranchName() + " is not found to apply event cuts");
       }
-      bool is_good_event = event_cuts_->Apply( *((EventHeader*)(it->second)) );
-      if(!is_good_event){
+      bool is_good_event = event_cuts_->Apply(*((EventHeader*) (it->second)));
+      if (!is_good_event) {
         continue;
       }
     }
-//    if ((iEvent + 1) % 100 == 0) {
-//      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
-//    }
-    for (auto *task : tasks_) {
+    //    if ((iEvent + 1) % 100 == 0) {
+    //      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
+    //    }
+    for (auto* task : tasks_) {
       task->Exec();
     }
     if (out_tree_) {
@@ -83,7 +82,7 @@ void TaskManager::Run(long long nEvents) {
 
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;
-  std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count()/nEvents <<  "s\n";
+  std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count() / nEvents << "s\n";
 }
 
 void TaskManager::Finish() {
@@ -91,7 +90,7 @@ void TaskManager::Finish() {
   if (out_file_)
     out_file_->cd();
 
-  for (auto *task : tasks_) {
+  for (auto* task : tasks_) {
     task->Finish();
   }
 

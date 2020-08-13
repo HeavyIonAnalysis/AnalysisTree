@@ -12,17 +12,16 @@ class Hit : public Container {
 
  public:
   Hit() = default;
-  Hit(const Hit &otherHit) = default;
-  Hit(Hit &&otherHit) = default;
-  Hit &operator=(Hit &&) = default;
-  Hit &operator=(const Hit &part) = default;
+  Hit(const Hit& otherHit) = default;
+  Hit(Hit&& otherHit) = default;
+  Hit& operator=(Hit&&) = default;
+  Hit& operator=(const Hit& part) = default;
 
   explicit Hit(Integer_t id) : Container(id) {}
 
-  friend bool operator==(const Hit &that, const Hit &other);
+  friend bool operator==(const Hit& that, const Hit& other);
 
-
-  void SetPosition(const TVector3 &position) {
+  void SetPosition(const TVector3& position) {
     x_ = position.X();
     y_ = position.Y();
     z_ = position.Z();
@@ -44,7 +43,6 @@ class Hit : public Container {
   [[nodiscard]] Floating_t GetY() const { return y_; }
   [[nodiscard]] Floating_t GetZ() const { return z_; }
   [[nodiscard]] Floating_t GetPhi() const;
-
 
   template<typename T>
   [[nodiscard]] T GetField(Integer_t iField) const {

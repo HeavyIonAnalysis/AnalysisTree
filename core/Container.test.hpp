@@ -3,8 +3,8 @@
 
 #include <gtest/gtest.h>
 
-#include "Container.hpp"
 #include "BranchConfig.hpp"
+#include "Container.hpp"
 
 namespace {
 
@@ -38,8 +38,6 @@ TEST(Test_AnalysisTreeCore, Test_Container) {
   EXPECT_EQ(container.GetField<bool>(0), true);
 }
 
-
 }// namespace
 
-
-#endif //ANALYSISTREE_CORE_CONTAINER_TEST_HPP_
+#endif//ANALYSISTREE_CORE_CONTAINER_TEST_HPP_

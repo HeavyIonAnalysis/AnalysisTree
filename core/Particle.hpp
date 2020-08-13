@@ -10,12 +10,12 @@ class Particle : public Track {
  public:
   Particle() = default;
   explicit Particle(Integer_t id) : Track(id) {}
-  explicit Particle(const Track &track) : Track(track) {}
+  explicit Particle(const Track& track) : Track(track) {}
 
-  Particle(const Particle &particle) = default;
-  Particle(Particle &&particle) = default;
-  Particle &operator=(Particle &&) = default;
-  Particle &operator=(const Particle &particle) = default;
+  Particle(const Particle& particle) = default;
+  Particle(Particle&& particle) = default;
+  Particle& operator=(Particle&&) = default;
+  Particle& operator=(const Particle& particle) = default;
 
   [[nodiscard]] Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
   [[nodiscard]] PdgCode_t GetPid() const { return pid_; }

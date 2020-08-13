@@ -2,24 +2,23 @@
 
 ClassImp(AnalysisTree::SimpleCut)
 
-namespace AnalysisTree{
+    namespace AnalysisTree {
 
-void SimpleCut::Print() const {
-  std::cout << title_ << std::endl;
-}
-
-void SimpleCut::FillBranchNames() {
-  for (const auto &v : vars_) {
-    const auto& br = v.GetBranches();
-    branch_names_.insert(br.begin(), br.end());
+  void SimpleCut::Print() const {
+    std::cout << title_ << std::endl;
   }
-}
 
-bool operator==(const SimpleCut &that, const SimpleCut &other) {
-  if (&that == &other) {
-    return true;
+  void SimpleCut::FillBranchNames() {
+    for (const auto& v : vars_) {
+      const auto& br = v.GetBranches();
+      branch_names_.insert(br.begin(), br.end());
+    }
   }
-  return that.vars_ == other.vars_ && that.title_ == other.title_;
-}
 
+  bool operator==(const SimpleCut& that, const SimpleCut& other) {
+    if (&that == &other) {
+      return true;
+    }
+    return that.vars_ == other.vars_ && that.title_ == other.title_;
+  }
 }

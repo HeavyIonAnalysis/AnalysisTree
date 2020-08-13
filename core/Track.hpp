@@ -19,10 +19,10 @@ class Track : public Container {
   Track() = default;
 
   explicit Track(Integer_t id) : Container(id) {}
-  Track(const Track &track) = default;
-  Track(Track &&track) = default;
-  Track &operator=(Track &&) = default;
-  Track &operator=(const Track &track) = default;
+  Track(const Track& track) = default;
+  Track(Track&& track) = default;
+  Track& operator=(Track&&) = default;
+  Track& operator=(const Track& track) = default;
 
   /**
    * This is a typical semantics for the getter
@@ -48,7 +48,7 @@ class Track : public Container {
    * @return 3d-momentum of a track
    */
 
-  void SetMomentum3(const TVector3 &momentum) {
+  void SetMomentum3(const TVector3& momentum) {
     px_ = momentum.Px();
     py_ = momentum.Py();
     pz_ = momentum.Pz();
@@ -63,7 +63,7 @@ class Track : public Container {
   inline Floating_t GetP() const { return sqrt(px_ * px_ + py_ * py_ + pz_ * pz_); }
   inline TVector3 GetMomentum3() const { return TVector3(px_, py_, pz_); }
 
-  friend bool operator==(const Track &that, const Track &other);
+  friend bool operator==(const Track& that, const Track& other);
 
   Floating_t GetRapidity(PdgCode_t pid) const {
     const float mass = GetMassByPdgId(pid);

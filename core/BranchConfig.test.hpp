@@ -33,8 +33,6 @@ TEST(Test_AnalysisTreeCore, Test_BranchConfig) {
   EXPECT_EQ(branch_config.GetFieldId("pz"), TrackFields::kPz);
 }
 
-
 }// namespace
 
-
-#endif //ANALYSISTREE_CORE_BRANCHCONFIG_TEST_H_
+#endif//ANALYSISTREE_CORE_BRANCHCONFIG_TEST_H_

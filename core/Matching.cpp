@@ -1,6 +1,6 @@
 #include "Matching.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 Integer_t AnalysisTree::Matching::GetMatchInverted(AnalysisTree::Integer_t id) const {
   auto search = match_inverted_.find(id);
@@ -19,4 +19,4 @@ Integer_t Matching::GetMatchDirect(Integer_t id) const {
   }
 }
 
-}
+}// namespace AnalysisTree

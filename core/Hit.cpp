@@ -1,6 +1,6 @@
 #include "Hit.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 void Hit::Print() const {
   std::cout << "  x = " << x_ << "  y = " << y_ << "  z = " << z_ << "  phi = " << GetPhi() << "  signal = " << signal_ << std::endl;
@@ -11,7 +11,7 @@ bool operator==(const Hit& that, const Hit& other) {
     return true;
   }
 
-  if ((Container &) that != (Container &) other) {
+  if ((Container&) that != (Container&) other) {
     return false;
   }
 
@@ -20,4 +20,4 @@ bool operator==(const Hit& that, const Hit& other) {
 
 Floating_t Hit::GetPhi() const { return atan2(y_, x_); }
 
-}
+}// namespace AnalysisTree

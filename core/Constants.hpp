@@ -45,7 +45,7 @@ const std::map<int, float> MassMap = {{11, 0.000511},// e
   } else {
     //for not only print warning not to break all converters //TODO exeption
     std::cout << "WARINING! Mass of " + std::to_string(pid) + " is not known" << std::endl;
-//    throw std::runtime_error("Mass of " + std::to_string(pid) + " is not known");
+    //    throw std::runtime_error("Mass of " + std::to_string(pid) + " is not known");
     return 0.f;
   }
   //TODO wtf??
@@ -72,7 +72,6 @@ enum class DetType : ShortInt_t {
   kEventHeader,
   kParticle
 };
-
 
 enum class Types : ShortInt_t {
   kFloat = 0,

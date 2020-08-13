@@ -16,26 +16,26 @@ namespace AnalysisTree {
 class DataHeader : public TObject {
  public:
   DataHeader() = default;
-  DataHeader(const DataHeader &) = default;
-  DataHeader(DataHeader &&) = default;
-  DataHeader &operator=(DataHeader &&) = default;
-  DataHeader &operator=(const DataHeader &) = default;
+  DataHeader(const DataHeader&) = default;
+  DataHeader(DataHeader&&) = default;
+  DataHeader& operator=(DataHeader&&) = default;
+  DataHeader& operator=(const DataHeader&) = default;
 
-  ModulePositions &AddDetector();
+  ModulePositions& AddDetector();
 
   void Print() const;
 
   void SetSystem(std::string sys) { system_ = std::move(sys); }
   void SetBeamMomentum(float mom, float m_target = 0.938, float m_beam = 0.938);
-  void SetDetectorPosition(const TVector3 &pos) {
+  void SetDetectorPosition(const TVector3& pos) {
     det_pos_.emplace_back(pos);
   }
 
   [[nodiscard]] Floating_t GetBeamRapidity() const { return beam_y_; }
   [[nodiscard]] std::string GetSystem() const { return system_; }
-  [[nodiscard]] const TVector3 &GetDetectorPosition(int i) const { return det_pos_.at(i); }
+  [[nodiscard]] const TVector3& GetDetectorPosition(int i) const { return det_pos_.at(i); }
 
-  [[nodiscard]] const ModulePositions &GetModulePositions(Integer_t idet) {
+  [[nodiscard]] const ModulePositions& GetModulePositions(Integer_t idet) {
     return modules_pos_.at(idet);
   }
 

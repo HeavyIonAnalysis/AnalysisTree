@@ -14,10 +14,10 @@ class EventHeader : public Container {
  public:
   EventHeader() = default;
   explicit EventHeader(Integer_t id) : Container(id){};
-  EventHeader(const EventHeader &eh) = default;
-  EventHeader(EventHeader &&eh) = default;
-  EventHeader &operator=(EventHeader &&eh) = default;
-  EventHeader &operator=(const EventHeader &eh) = default;
+  EventHeader(const EventHeader& eh) = default;
+  EventHeader(EventHeader&& eh) = default;
+  EventHeader& operator=(EventHeader&& eh) = default;
+  EventHeader& operator=(const EventHeader& eh) = default;
 
   /**
    * @return 3D-position of the vertex
@@ -26,7 +26,7 @@ class EventHeader : public Container {
     return TVector3(vtx_pos_[Exyz::kX], vtx_pos_[Exyz::kY], vtx_pos_[Exyz::kZ]);
   }
 
-  void SetVertexPosition3(const TVector3 &pos) {
+  void SetVertexPosition3(const TVector3& pos) {
     vtx_pos_[Exyz::kX] = pos.Px();
     vtx_pos_[Exyz::kY] = pos.Py();
     vtx_pos_[Exyz::kZ] = pos.Pz();
@@ -51,7 +51,7 @@ class EventHeader : public Container {
   [[nodiscard]] inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }
 
   static constexpr size_t GetNumberOfChannels() { return 1; }// needed in order to have EventHeader similar to Detector
-  [[nodiscard]] const EventHeader &GetChannel(int i) const {
+  [[nodiscard]] const EventHeader& GetChannel(int i) const {
     if (i == 0) {
       return *this;
     }

@@ -16,23 +16,23 @@ void Field::Print() const {
   }
 }
 
-bool operator==(const Field &that, const Field &other) {
+bool operator==(const Field& that, const Field& other) {
   if (&that == &other) {
     return true;
   }
   return that.branch_ == other.branch_ && that.field_ == other.field_;
 }
 
-bool operator>(const Field &that, const Field &other) {
+bool operator>(const Field& that, const Field& other) {
   return that.branch_ + that.field_ > other.branch_ + other.field_;
 }
 
-bool operator<(const Field &that, const Field &other) {
+bool operator<(const Field& that, const Field& other) {
   return that.branch_ + that.field_ < other.branch_ + other.field_;
 }
 
 void Field::Init(const Configuration& conf) {
-  const auto &branch_conf = conf.GetBranchConfig(branch_);
+  const auto& branch_conf = conf.GetBranchConfig(branch_);
   branch_id_ = branch_conf.GetId();
   branch_type_ = branch_conf.GetType();
   field_id_ = branch_conf.GetFieldId(field_);

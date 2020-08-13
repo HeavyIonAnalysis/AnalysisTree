@@ -5,7 +5,7 @@
 
 namespace AnalysisTree {
 
-void IndexAccessor::InitIndexedObject(IndexedObject *indexedObject, Integer_t newID) {
+void IndexAccessor::InitIndexedObject(IndexedObject* indexedObject, Integer_t newID) {
   indexedObject->id_ = newID;
 }
 

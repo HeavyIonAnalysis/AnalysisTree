@@ -23,19 +23,19 @@ void PlainTreeFiller::Init(std::map<std::string, void*>& branches) {
 
   out_tree_ = new TTree(tree_name_.c_str(), "Plain TTree from AnalysisTree");
 
-  for(auto& var : vars_){
+  for (auto& var : vars_) {
     var.second.Init(*config_);
-    out_tree_->Branch(var.second.GetName().c_str(), &var.first,  Form("%s/F", var.second.GetName().c_str()));
+    out_tree_->Branch(var.second.GetName().c_str(), &var.first, Form("%s/F", var.second.GetName().c_str()));
   }
 }
 
 void PlainTreeFiller::Exec() {
-  for(const auto& channel : *in_branch_->GetChannels() ) {
-    for(auto& var : vars_){
+  for (const auto& channel : *in_branch_->GetChannels()) {
+    for (auto& var : vars_) {
       var.first = var.second.GetValue(channel);
     }
     out_tree_->Fill();
   }
 }
 
-}
+}// namespace AnalysisTree

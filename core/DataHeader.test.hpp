@@ -15,11 +15,8 @@ TEST(Test_AnalysisTreeCore, Test_DataHeader) {
   dh.SetBeamMomentum(10.);
 
   EXPECT_FLOAT_EQ(dh.GetBeamRapidity(), 1.530965);
-
 }
-
 
 }// namespace
 
-
-#endif //ANALYSISTREE_CORE_DATAHEADER_TEST_HPP_
+#endif//ANALYSISTREE_CORE_DATAHEADER_TEST_HPP_

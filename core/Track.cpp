@@ -7,12 +7,12 @@ void Track::Print() const {
             << "  phi = " << GetPhi() << "  pT = " << GetPt() << "  eta = " << GetEta() << std::endl;
 }
 
-bool operator==(const Track &that, const Track &other) {
+bool operator==(const Track& that, const Track& other) {
   if (&that == &other) {
     return true;
   }
 
-  if ((Container &) that != (Container &) other) {
+  if ((Container&) that != (Container&) other) {
     return false;
   }
 

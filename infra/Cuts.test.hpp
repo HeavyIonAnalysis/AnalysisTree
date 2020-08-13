@@ -19,7 +19,7 @@ TEST(Test_AnalysisTreeInfra, Test_RangeCut) {
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
   VtxTracksBranch.AddField<float>("chi2");
 
-  auto *track = new Track();
+  auto* track = new Track();
   track->Init(VtxTracksBranch);
   track->SetMomentum(0.5, 0.4, 4.);
   track->SetField(float(2.4), VtxTracksBranch.GetFieldId("chi2"));
@@ -51,7 +51,7 @@ TEST(Test_AnalysisTreeInfra, Test_EqualCut) {
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
-  auto *track = new Track();
+  auto* track = new Track();
   track->Init(VtxTracksBranch);
   track->SetMomentum(0.5, 0.4, 4.);
   track->SetField(3, VtxTracksBranch.GetFieldId("nhits"));
@@ -88,7 +88,7 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
-  auto *track = new Track();
+  auto* track = new Track();
   track->Init(VtxTracksBranch);
   track->SetMomentum(0.5, 0.4, 4.);
   track->SetField(float(0.7), VtxTracksBranch.GetFieldId("dcax"));
@@ -98,9 +98,9 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   track->SetField(int(40), VtxTracksBranch.GetFieldId("Nhits_mtpc"));
 
   SimpleCut testCutDcaXY_true({{"VtxTracks", "dcax"}, {"VtxTracks", "dcay"}},
-                                            [](std::vector<double> &dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 2; });
+                              [](std::vector<double>& dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 2; });
   SimpleCut testCutDcaXY_false({{"VtxTracks", "dcax"}, {"VtxTracks", "dcay"}},
-                                             [](std::vector<double> &dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 1; });
+                               [](std::vector<double>& dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 1; });
 
   Cuts dca_true("dca_true", {testCutDcaXY_true});
   dca_true.Init(conf);
@@ -110,7 +110,7 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
 
   SimpleCut testCutNhits_true(
       {{"VtxTracks", "Nhits_vtpc1"}, {"VtxTracks", "Nhits_vtpc2"}, {"VtxTracks", "Nhits_mtpc"}},
-      [](std::vector<double> &nhits) { return nhits[0] + nhits[1] > 15 && nhits[0] + nhits[1] + nhits[2] > 30; });
+      [](std::vector<double>& nhits) { return nhits[0] + nhits[1] > 15 && nhits[0] + nhits[1] + nhits[2] > 30; });
 
   Cuts Nhits_true("Nhits_true", {testCutNhits_true});
   Nhits_true.Init(conf);

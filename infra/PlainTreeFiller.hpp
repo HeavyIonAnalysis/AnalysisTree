@@ -3,19 +3,18 @@
 
 #include <utility>
 
-#include "Variable.hpp"
-#include "FillTask.hpp"
 #include "Detector.hpp"
+#include "FillTask.hpp"
+#include "Variable.hpp"
 
 namespace AnalysisTree {
 
 class PlainTreeFiller : public FillTask {
 
  public:
-
   PlainTreeFiller() = default;
   explicit PlainTreeFiller(const std::vector<Variable>& vars) {
-    for(const auto& var : vars){
+    for (const auto& var : vars) {
       vars_.emplace_back(std::make_pair(0.f, var));
     }
   };
@@ -27,9 +26,9 @@ class PlainTreeFiller : public FillTask {
     out_tree_->Write();
   }
 
-  void SetVariables(const std::vector <Variable>& vars){
+  void SetVariables(const std::vector<Variable>& vars) {
     vars_.reserve(vars.size());
-    for(const auto& var : vars){
+    for (const auto& var : vars) {
       vars_.emplace_back(std::make_pair(0.f, var));
     }
   }
@@ -41,7 +40,6 @@ class PlainTreeFiller : public FillTask {
   std::string tree_name_{"PlainTree"};
 };
 
-}
+}// namespace AnalysisTree
 
-
-#endif //ANALYSISTREE_PLAINTREEFILLER_H_
+#endif//ANALYSISTREE_PLAINTREEFILLER_H_

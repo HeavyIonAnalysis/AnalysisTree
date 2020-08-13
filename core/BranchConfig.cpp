@@ -12,8 +12,7 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("phi", TrackFields::kPhi);
     VectorConfig<float>::AddField("eta", TrackFields::kEta);
     VectorConfig<float>::AddField("p", TrackFields::kP);
-  }
-  else if (type_ == DetType::kParticle) {
+  } else if (type_ == DetType::kParticle) {
     VectorConfig<float>::AddField("px", ParticleFields::kPx);
     VectorConfig<float>::AddField("py", ParticleFields::kPy);
     VectorConfig<float>::AddField("pz", ParticleFields::kPz);
@@ -24,19 +23,16 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("p", ParticleFields::kP);
     VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity);
     VectorConfig<int>::AddField("pid", ParticleFields::kPid);
-  }
-  else if (type_ == DetType::kHit) {
+  } else if (type_ == DetType::kHit) {
     VectorConfig<float>::AddField("x", HitFields::kX);
     VectorConfig<float>::AddField("y", HitFields::kY);
     VectorConfig<float>::AddField("z", HitFields::kZ);
     VectorConfig<float>::AddField("phi", HitFields::kPhi);
     VectorConfig<float>::AddField("signal", HitFields::kSignal);
-  }
-  else if (type_ == DetType::kModule) {
+  } else if (type_ == DetType::kModule) {
     VectorConfig<int>::AddField("number", ModuleFields::kNumber);
     VectorConfig<float>::AddField("signal", ModuleFields::kSignal);
-  }
-  else if (type_ == DetType::kEventHeader) {
+  } else if (type_ == DetType::kEventHeader) {
     VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX);
     VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY);
     VectorConfig<float>::AddField("vtx_z", EventHeaderFields::kVertexZ);
@@ -73,15 +69,15 @@ void BranchConfig::Print() const {
   std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;
 
   std::cout << "  floating fields:" << std::endl;
-  for (const auto &entry : VectorConfig<float>::GetMap())
+  for (const auto& entry : VectorConfig<float>::GetMap())
     std::cout << "   " << entry.first << " (id=" << entry.second << ")" << std::endl;
 
   std::cout << "  integer fields:" << std::endl;
-  for (const auto &entry : VectorConfig<int>::GetMap())
+  for (const auto& entry : VectorConfig<int>::GetMap())
     std::cout << "   " << entry.first << " (id=" << entry.second << ")" << std::endl;
 
   std::cout << "  boolean fields:" << std::endl;
-  for (const auto &entry : VectorConfig<bool>::GetMap())
+  for (const auto& entry : VectorConfig<bool>::GetMap())
     std::cout << "   " << entry.first << " (id=" << entry.second << ")" << std::endl;
 }
-}
+}// namespace AnalysisTree

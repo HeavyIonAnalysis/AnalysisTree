@@ -1,8 +1,8 @@
 #ifndef ANALYSISTREE_BASECONTAINER_H
 #define ANALYSISTREE_BASECONTAINER_H
 
-#include "IndexedObject.hpp"
 #include "BranchConfig.hpp"
+#include "IndexedObject.hpp"
 
 namespace AnalysisTree {
 
@@ -10,13 +10,13 @@ template<typename T>
 class Vector {
  public:
   Vector() = default;
-  Vector(const Vector &) = default;
-  Vector(Vector &&)  noexcept = default;
-  Vector &operator=(Vector &&)  noexcept = default;
-  Vector &operator=(const Vector &) = default;
+  Vector(const Vector&) = default;
+  Vector(Vector&&) noexcept = default;
+  Vector& operator=(Vector&&) noexcept = default;
+  Vector& operator=(const Vector&) = default;
   virtual ~Vector() = default;
 
-  friend bool operator==(const Vector &that, const Vector &other) {
+  friend bool operator==(const Vector& that, const Vector& other) {
     if (&that == &other) {
       return true;
     }
@@ -42,10 +42,10 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   Container() = default;
 
   explicit Container(Integer_t id) : IndexedObject(id) {}
-  Container(const Container &container) = default;
-  Container(Container &&container) = default;
-  Container &operator=(Container &&) = default;
-  Container &operator=(const Container &part) = default;
+  Container(const Container& container) = default;
+  Container(Container&& container) = default;
+  Container& operator=(Container&&) = default;
+  Container& operator=(const Container& part) = default;
 
   template<typename T>
   void SetField(T value, Integer_t iField) { Vector<T>::SetField(value, iField); }
@@ -54,7 +54,7 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   template<typename T>
   [[nodiscard]] size_t GetSize() const { return Vector<T>::field_.size(); }
 
-  void Init(const BranchConfig &branch);
+  void Init(const BranchConfig& branch);
 };
 
 }// namespace AnalysisTree

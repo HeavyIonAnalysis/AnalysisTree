@@ -2,7 +2,7 @@
 
 #include "BranchConfig.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 void Container::Init(const AnalysisTree::BranchConfig& branch) {
   Vector<float>::Resize(branch.GetSize<float>());
@@ -10,4 +10,4 @@ void Container::Init(const AnalysisTree::BranchConfig& branch) {
   Vector<bool>::Resize(branch.GetSize<bool>());
 }
 
-}
+}// namespace AnalysisTree

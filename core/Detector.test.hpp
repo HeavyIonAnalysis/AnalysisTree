@@ -8,39 +8,43 @@
 #include <TTree.h>
 #include <gtest/gtest.h>
 
-#include <vector>
 #include <random>
+#include <vector>
 
 namespace {
 
 using namespace AnalysisTree;
 
 template<class T>
-DetType GetDetectorType(){}
-template <> DetType GetDetectorType<Particle>() { return DetType::kParticle;}
-template <> DetType GetDetectorType<Track>() { return DetType::kTrack;}
-template <> DetType GetDetectorType<Hit>() { return DetType::kHit;}
-template <> DetType GetDetectorType<Module>() { return DetType::kModule;}
+DetType GetDetectorType() {}
+template<>
+DetType GetDetectorType<Particle>() { return DetType::kParticle; }
+template<>
+DetType GetDetectorType<Track>() { return DetType::kTrack; }
+template<>
+DetType GetDetectorType<Hit>() { return DetType::kHit; }
+template<>
+DetType GetDetectorType<Module>() { return DetType::kModule; }
 
-template <class T>
+template<class T>
 class TestDetector : public Detector<T> {
 
  public:
   TestDetector() = default;
   ~TestDetector() override = default;
 
-  void Init(){
+  void Init() {
     config_ = BranchConfig("TestDetector", GetDetectorType<T>());
     config_.AddField<float>("test_f");
     config_.AddField<int>("test_i");
     config_.AddField<bool>("test_b");
   }
 
-  virtual void FillBaseInfo(T*) {};
+  virtual void FillBaseInfo(T*){};
 
-  void FillDetector(size_t n_channels){
+  void FillDetector(size_t n_channels) {
     this->ClearChannels();
-    for(size_t i_channel=0; i_channel<n_channels; ++i_channel) {
+    for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
       auto* ch = this->AddChannel();
       ch->Init(config_);
 
@@ -56,14 +60,14 @@ class TestDetector : public Detector<T> {
     }
   }
 
-  void WriteToFile(size_t n_events){
+  void WriteToFile(size_t n_events) {
 
     TFile out_file("Test_WriteDetector.root", "recreate");
-    auto *out_tree = new TTree("TestDetector", "");
+    auto* out_tree = new TTree("TestDetector", "");
     Detector<T>* pointer = this;
     out_tree->Branch("detector", &pointer);
 
-    for(size_t i_event=0; i_event<n_events; ++i_event) {
+    for (size_t i_event = 0; i_event < n_events; ++i_event) {
       FillDetector(10);
       out_tree->Fill();
     }
@@ -75,7 +79,7 @@ class TestDetector : public Detector<T> {
   BranchConfig config_;
 };
 
-class TestHitDetector : public TestDetector<Hit>{
+class TestHitDetector : public TestDetector<Hit> {
  public:
   TestHitDetector() = default;
   ~TestHitDetector() override = default;
@@ -91,7 +95,6 @@ class TestHitDetector : public TestDetector<Hit>{
     hit->SetPosition({x, y, z});
   };
 };
-
 
 TEST(Test_AnalysisTreeCore, Test_WriteDetector) {
 
@@ -119,11 +122,11 @@ TEST(Test_AnalysisTreeCore, Test_ChannelizedDetector) {
 TEST(Test_AnalysisTreeCore, Test_WriteHit) {
   TVector3 hitPosition(1, 1, 1);
 
-  auto *hit = new Hit(1);
+  auto* hit = new Hit(1);
   hit->SetPosition(hitPosition);
 
   TFile outputFile("Test_WriteHit.root", "recreate");
-  TTree *hitTree = new TTree("TestHitTree", "");
+  TTree* hitTree = new TTree("TestHitTree", "");
   hitTree->Branch("hit", &hit);
 
   hitTree->Fill();
@@ -131,9 +134,9 @@ TEST(Test_AnalysisTreeCore, Test_WriteHit) {
   hitTree->Write();
   outputFile.Close();
 
-  Hit *newHit = nullptr;
+  Hit* newHit = nullptr;
   TFile inputFile("Test_WriteHit.root", "infra");
-  hitTree = (TTree *) inputFile.Get("TestHitTree");
+  hitTree = (TTree*) inputFile.Get("TestHitTree");
   hitTree->SetBranchAddress("hit", &newHit);
   hitTree->GetEntry(0L);
 
@@ -144,12 +147,12 @@ TEST(Test_AnalysisTreeCore, Test_WriteChannelizedDetector) {
 
   TVector3 hitPosition(1., 1., 1.);
 
-  auto *module_detector = new HitDetector;
+  auto* module_detector = new HitDetector;
   auto hitCh = module_detector->AddChannel();
   hitCh->SetPosition(hitPosition);
 
   TFile outputFile("Test_WriteChDet.root", "recreate");
-  TTree *chDetTree = new TTree("TestHitTree", "");
+  TTree* chDetTree = new TTree("TestHitTree", "");
   chDetTree->Branch("module_detector", &module_detector);
 
   chDetTree->Fill();
@@ -157,9 +160,9 @@ TEST(Test_AnalysisTreeCore, Test_WriteChannelizedDetector) {
   chDetTree->Write();
   outputFile.Close();
 
-  HitDetector *newTestDetector = nullptr;
+  HitDetector* newTestDetector = nullptr;
   TFile inputFile("Test_WriteChDet.root", "infra");
-  chDetTree = (TTree *) inputFile.Get("TestHitTree");
+  chDetTree = (TTree*) inputFile.Get("TestHitTree");
   chDetTree->SetBranchAddress("module_detector", &newTestDetector);
   chDetTree->GetEntry(0L);
 

@@ -16,22 +16,22 @@ template<typename T>
 class VectorConfig {
  public:
   VectorConfig() = default;
-  VectorConfig(const VectorConfig &) = default;
-  VectorConfig(VectorConfig &&)  noexcept = default;
-  VectorConfig &operator=(VectorConfig &&)  noexcept = default;
-  VectorConfig &operator=(const VectorConfig &) = default;
+  VectorConfig(const VectorConfig&) = default;
+  VectorConfig(VectorConfig&&) noexcept = default;
+  VectorConfig& operator=(VectorConfig&&) noexcept = default;
+  VectorConfig& operator=(const VectorConfig&) = default;
   virtual ~VectorConfig() = default;
 
-  virtual void AddField(const std::string &name) { map_.insert(std::make_pair(name, size_++)); }
-  void AddField(const std::string &name, ShortInt_t id) { map_.insert(std::make_pair(name, id)); }
+  virtual void AddField(const std::string& name) { map_.insert(std::make_pair(name, size_++)); }
+  void AddField(const std::string& name, ShortInt_t id) { map_.insert(std::make_pair(name, id)); }
 
-  virtual void AddFields(const std::vector<std::string> &names) {
-    for (const auto &name : names) {
+  virtual void AddFields(const std::vector<std::string>& names) {
+    for (const auto& name : names) {
       map_.insert(std::pair<std::string, ShortInt_t>(name, size_++));
     }
   }
 
-  [[nodiscard]] ShortInt_t GetId(const std::string &sField) const {
+  [[nodiscard]] ShortInt_t GetId(const std::string& sField) const {
     auto search = map_.find(sField);
     if (search != map_.end()) {
       return search->second;
@@ -40,7 +40,7 @@ class VectorConfig {
     }
   }
 
-  [[nodiscard]] virtual const std::map<std::string, ShortInt_t> &GetMap() const { return map_; }
+  [[nodiscard]] virtual const std::map<std::string, ShortInt_t>& GetMap() const { return map_; }
   [[nodiscard]] virtual ShortInt_t GetSize() const { return size_; }
 
  protected:
@@ -52,29 +52,29 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
  public:
   BranchConfig() = default;
-  BranchConfig(const BranchConfig &) = default;
-  BranchConfig(BranchConfig &&) = default;
-  BranchConfig &operator=(BranchConfig &&) = default;
-  BranchConfig &operator=(const BranchConfig &) = default;
+  BranchConfig(const BranchConfig&) = default;
+  BranchConfig(BranchConfig&&) = default;
+  BranchConfig& operator=(BranchConfig&&) = default;
+  BranchConfig& operator=(const BranchConfig&) = default;
   ~BranchConfig() override = default;
 
   explicit BranchConfig(std::string name, DetType type);
 
   void Print() const;
 
-  [[nodiscard]] Types GetFieldType(const std::string &sField) const;
-  [[nodiscard]] ShortInt_t GetFieldId(const std::string &sField) const;
+  [[nodiscard]] Types GetFieldType(const std::string& sField) const;
+  [[nodiscard]] ShortInt_t GetFieldId(const std::string& sField) const;
 
-// Setters
+  // Setters
   void SetId(ShortInt_t id) { id_ = id; }
   template<typename T>
-  void AddField(const std::string &name) { VectorConfig<T>::AddField(name); }
+  void AddField(const std::string& name) { VectorConfig<T>::AddField(name); }
   template<typename T>
-  void AddFields(const std::vector<std::string> &names) { VectorConfig<T>::AddFields(names); }
+  void AddFields(const std::vector<std::string>& names) { VectorConfig<T>::AddFields(names); }
 
   // Getters
   template<typename T>
-  [[nodiscard]] const std::map<std::string, ShortInt_t> &GetMap() const { return VectorConfig<T>::GetMap(); }
+  [[nodiscard]] const std::map<std::string, ShortInt_t>& GetMap() const { return VectorConfig<T>::GetMap(); }
   template<typename T>
   [[nodiscard]] ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 

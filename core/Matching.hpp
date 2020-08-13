@@ -1,8 +1,8 @@
 #ifndef ANALYSISTREE_MATCHING_H
 #define ANALYSISTREE_MATCHING_H
 
-#include <map>
 #include "Constants.hpp"
+#include <map>
 
 namespace AnalysisTree {
 
@@ -27,7 +27,7 @@ class Matching {
     return is_inverted ? GetMatchInverted(id) : GetMatchDirect(id);
   }
 
-  [[nodiscard]] const std::map<Integer_t, Integer_t>& GetMatches(bool is_inv=false) const {
+  [[nodiscard]] const std::map<Integer_t, Integer_t>& GetMatches(bool is_inv = false) const {
     return is_inv ? match_inverted_ : match_;
   }
 

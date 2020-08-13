@@ -1,6 +1,6 @@
 #include "DataHeader.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 void DataHeader::Print() const {
   std::cout << "AnalysisTree::DataHeader::Print()" << std::endl;
@@ -9,7 +9,7 @@ void DataHeader::Print() const {
   std::cout << " (sqrt(s_NN) = " << sqrtsNN_ << ")" << std::endl;
   std::cout << " beam rapidity is " << beam_y_ << std::endl;
 
-  for (const auto &mod_pos : modules_pos_) {
+  for (const auto& mod_pos : modules_pos_) {
     mod_pos.Print();
   }
 }
@@ -28,4 +28,4 @@ ModulePositions& DataHeader::AddDetector() {
   return modules_pos_.back();
 }
 
-}
+}// namespace AnalysisTree

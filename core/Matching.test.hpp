@@ -17,8 +17,8 @@ TEST(Test_AnalysisTreeCore, Test_Matching) {
   ASSERT_EQ(matching.GetBranch2Id(), 1);
   ASSERT_EQ(matching.GetMatches().size(), 0);
 
-  matching.AddMatch(0,0);
-  matching.AddMatch(1,2);
+  matching.AddMatch(0, 0);
+  matching.AddMatch(1, 2);
 
   ASSERT_EQ(matching.GetMatches().size(), 2);
 
@@ -31,7 +31,6 @@ TEST(Test_AnalysisTreeCore, Test_Matching) {
   ASSERT_EQ(matching.GetMatch(1, true), UndefValueInt);
 }
 
-
 }// namespace
 
-#endif //ANALYSISTREE_CORE_MATCHING_TEST_HPP_
+#endif//ANALYSISTREE_CORE_MATCHING_TEST_HPP_

@@ -5,7 +5,7 @@
 
 #include "Module.hpp"
 
-namespace{
+namespace {
 
 using namespace AnalysisTree;
 
@@ -30,6 +30,6 @@ TEST(Test_AnalysisTreeCore, Test_Module) {
   EXPECT_FLOAT_EQ(module.GetNumber(), module.GetField<float>(ModuleFields::kNumber));
   EXPECT_FLOAT_EQ(module.GetSignal(), module.GetField<float>(ModuleFields::kSignal));
 }
-}
+}// namespace
 
 #endif//ANALYSISTREE_TEST_CORE_MODULE_TEST_HPP_

@@ -13,10 +13,10 @@ class Configuration;
 class Field {
  public:
   Field() = default;
-  Field(const Field &) = default;
-  Field(Field &&) = default;
-  Field &operator=(Field &&) = default;
-  Field &operator=(const Field &) = default;
+  Field(const Field&) = default;
+  Field(Field&&) = default;
+  Field& operator=(Field&&) = default;
+  Field& operator=(const Field&) = default;
   ~Field() = default;
 
   Field(std::string name) : field_(std::move(name)){};
@@ -24,14 +24,14 @@ class Field {
   Field(std::string branch, std::string field) : branch_(std::move(branch)),
                                                  field_(std::move(field)){};
 
-  friend bool operator==(const Field &that, const Field &other);
-  friend bool operator>(const Field &that, const Field &other);
-  friend bool operator<(const Field &that, const Field &other);
+  friend bool operator==(const Field& that, const Field& other);
+  friend bool operator>(const Field& that, const Field& other);
+  friend bool operator<(const Field& that, const Field& other);
 
-  void Init(const Configuration &conf);
+  void Init(const Configuration& conf);
 
-  [[nodiscard]] const std::string &GetName() const { return field_; }
-  [[nodiscard]] const std::string &GetBranchName() const { return branch_; }
+  [[nodiscard]] const std::string& GetName() const { return field_; }
+  [[nodiscard]] const std::string& GetBranchName() const { return branch_; }
 
   [[nodiscard]] short GetBranchId() const { return branch_id_; }
   [[nodiscard]] short GetFieldId() const { return field_id_; }
@@ -40,7 +40,7 @@ class Field {
   [[nodiscard]] Types GetFieldType() const { return field_type_; }
 
   template<class T>
-  double GetValue(const T &object) const {
+  double GetValue(const T& object) const {
     if (!is_init_) {
       throw std::runtime_error("Field::Fill - Field " + field_ + " is not initialized");
     }

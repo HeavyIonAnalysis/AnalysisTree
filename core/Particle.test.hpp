@@ -5,7 +5,7 @@
 
 #include "Particle.hpp"
 
-namespace{
+namespace {
 
 using namespace AnalysisTree;
 
@@ -27,6 +27,6 @@ TEST(Test_AnalysisTreeCore, Test_Particle) {
   EXPECT_EQ(particle.GetPid(), 211);
   EXPECT_FLOAT_EQ(particle.GetMass(), 0.13957);
 }
-}
+}// namespace
 
-#endif //ANALYSISTREE_CORE_PARTICLE_TEST_HPP_
+#endif//ANALYSISTREE_CORE_PARTICLE_TEST_HPP_

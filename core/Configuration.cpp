@@ -3,10 +3,10 @@
 #include "Configuration.hpp"
 #include "Matching.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 BranchConfig& Configuration::GetBranchConfig(const std::string& name) {
-  for (auto &branch : branches_) {
+  for (auto& branch : branches_) {
     if (branch.GetName() == name)
       return branch;
   }
@@ -14,7 +14,7 @@ BranchConfig& Configuration::GetBranchConfig(const std::string& name) {
 }
 
 const BranchConfig& Configuration::GetBranchConfig(const std::string& name) const {
-  for (const auto &branch : branches_) {
+  for (const auto& branch : branches_) {
     if (branch.GetName() == name)
       return branch;
   }
@@ -24,13 +24,13 @@ const BranchConfig& Configuration::GetBranchConfig(const std::string& name) cons
 void Configuration::Print() const {
   std::cout << "This is a " << name_ << std::endl;
   std::cout << "The Tree has the following branches:" << std::endl;
-  for (const auto &branch : branches_) {
+  for (const auto& branch : branches_) {
     std::cout << std::endl;
     branch.Print();
   }
   std::cout << std::endl;
   std::cout << "Matching between branches available" << std::endl;
-  for (const auto &match : matches_) {
+  for (const auto& match : matches_) {
     std::cout << "  " << match.first[0] << " " << match.first[1]
               << " in branch " << match.second << std::endl;
   }
@@ -70,4 +70,4 @@ void Configuration::AddMatch(Matching* match) {
   matches_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
 }
 
-}
+}// namespace AnalysisTree

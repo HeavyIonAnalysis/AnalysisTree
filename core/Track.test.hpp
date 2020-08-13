@@ -8,9 +8,9 @@
 #include <gtest/gtest.h>
 #include <vector>
 
+#include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
 #include <core/Detector.hpp>
-#include <core/BranchConfig.hpp>
 
 namespace {
 
@@ -45,8 +45,8 @@ TEST(Test_AnalysisTreeCore, Test_Track) {
 
 TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
 
-  TFile *f = TFile::Open("test.root", "recreate");
-  TTree *t{new TTree("test", "")};
+  TFile* f = TFile::Open("test.root", "recreate");
+  TTree* t{new TTree("test", "")};
 
   Configuration config;
 
@@ -57,7 +57,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
   RecTracksBranch.AddField<int>("nhits");
 
   config.AddBranchConfig(RecTracksBranch);
-  auto *RecTracks = new TrackDetector(0);
+  auto* RecTracks = new TrackDetector(0);
 
   t->Branch("RecTracks", "AnalysisTree::TrackDetector", &RecTracks);
 
@@ -65,7 +65,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
     RecTracks->ClearChannels();
     int n_tracks = 5;//std::rand() % 100;
     for (int j = 0; j < n_tracks; ++j) {
-      auto *iTrack = RecTracks->AddChannel();
+      auto* iTrack = RecTracks->AddChannel();
       iTrack->Init(RecTracksBranch);
 
       const float px = std::rand() * (1. / RAND_MAX * 2.);

@@ -29,12 +29,9 @@ TEST(Test_AnalysisTreeCore, Test_Configuration) {
   const auto& br1 = config.GetBranchConfig("RecTrack");
   EXPECT_EQ(br1.GetId(), 0);
 
-//  Matching match()
-
+  //  Matching match()
 }
-
 
 }// namespace
 
-
-#endif //ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
+#endif//ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
