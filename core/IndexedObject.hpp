@@ -1,7 +1,3 @@
-//
-// Created by eugene on 10/3/18.
-//
-
 #ifndef ANALYSISTREE_INDEXEDOBJECT_H
 #define ANALYSISTREE_INDEXEDOBJECT_H
 
@@ -19,7 +15,7 @@ class IndexedObject;
 class IndexAccessor {
 
  public:
-  static void InitIndexedObject(IndexedObject *indexedObject, Integer_t newID);
+  static void InitIndexedObject(IndexedObject* indexedObject, Integer_t newID);
 };
 
 /**
@@ -44,17 +40,17 @@ class IndexedObject {
    * TODO consider if we do really need this ctor since as soon as it was copied it is not uniq
    * @param indexedObject
    */
-  IndexedObject(const IndexedObject &indexedObject) = default;
-  IndexedObject(IndexedObject &&indexedObject) = default;
-  IndexedObject &operator=(IndexedObject &&) = default;
-  IndexedObject &operator=(const IndexedObject &indexedObject) = default;
+  IndexedObject(const IndexedObject& indexedObject) = default;
+  IndexedObject(IndexedObject&& indexedObject) = default;
+  IndexedObject& operator=(IndexedObject&&) = default;
+  IndexedObject& operator=(const IndexedObject& indexedObject) = default;
   virtual ~IndexedObject() = default;
 
   inline Integer_t GetId() const {
     return id_;
   }
 
-  friend bool operator==(const IndexedObject &that, const IndexedObject &other) {
+  friend bool operator==(const IndexedObject& that, const IndexedObject& other) {
     if (&that == &other) {
       return true;
     }
@@ -62,7 +58,7 @@ class IndexedObject {
     return that.id_ == other.id_;
   }
 
-  friend bool operator!=(const IndexedObject &that, const IndexedObject &other) {
+  friend bool operator!=(const IndexedObject& that, const IndexedObject& other) {
     return !(that == other);
   }
 

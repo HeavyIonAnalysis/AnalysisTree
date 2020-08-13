@@ -15,20 +15,31 @@ if (CMAKE_BUILD_TYPE MATCHES DEBUG)
     set(CMAKE_VERBOSE_MAKEFILE ON)
 endif ()
 
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra")
+if(CMAKE_CXX_STANDARD LESS 17)
+    find_package(Boost)
+endif()
+
+if(Boost_FOUND)
+    message(STATUS "Boost version ${Boost_VERSION_STRING} is found!")
+    message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
+    add_definitions(-DUSEBOOST)
+endif()
+
+
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNODEBUG")
 message(STATUS "Using CXX flags for ${CMAKE_BUILD_TYPE}: ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}")
+
+list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+list(APPEND CMAKE_PREFIX_PATH ${ROOTSYS})
 
 find_package(ROOT REQUIRED)
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 
-if (ROOT_FOUND)
-    message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
-    include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS})
-    include(${ROOT_USE_FILE})
-endif (ROOT_FOUND)
+message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
+include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
+include(${ROOT_USE_FILE})
 
-include_directories(${CMAKE_SOURCE_DIR} core)
 
 add_subdirectory(core)
 add_subdirectory(infra)

@@ -8,6 +8,7 @@
 #include <gtest/gtest.h>
 #include <vector>
 
+#include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
 #include <core/Detector.hpp>
 
@@ -15,7 +16,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTree, Test_TracksMomentum) {
+TEST(Test_AnalysisTreeCore, Test_Track) {
 
   Track track(0);
 
@@ -44,30 +45,19 @@ TEST(Test_AnalysisTree, Test_TracksMomentum) {
 
 TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
 
-  TFile *f = TFile::Open("test.root", "recreate");
-  TTree *t{new TTree("test", "")};
+  TFile* f = TFile::Open("test.root", "recreate");
+  TTree* t{new TTree("test", "")};
 
   Configuration config;
 
-  AnalysisTree::BranchConfig RecTracksBranch("RecTrack", AnalysisTree::DetType::kTrack);
+  BranchConfig RecTracksBranch("RecTrack", DetType::kTrack);
   RecTracksBranch.AddField<float>("dcax");
   RecTracksBranch.AddField<float>("dcay");
   RecTracksBranch.AddField<float>("dcaz");
   RecTracksBranch.AddField<int>("nhits");
 
   config.AddBranchConfig(RecTracksBranch);
-  auto *RecTracks = new AnalysisTree::TrackDetector(0);
-
-  EXPECT_EQ(RecTracksBranch.GetFieldId("dcax"), 0);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("dcay"), 1);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("nhits"), 0);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("pT"), TrackFields::kPt);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("phi"), TrackFields::kPhi);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("eta"), TrackFields::kEta);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("p"), TrackFields::kP);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("px"), TrackFields::kPx);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("py"), TrackFields::kPy);
-  EXPECT_EQ(RecTracksBranch.GetFieldId("pz"), TrackFields::kPz);
+  auto* RecTracks = new TrackDetector(0);
 
   t->Branch("RecTracks", "AnalysisTree::TrackDetector", &RecTracks);
 
@@ -75,7 +65,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
     RecTracks->ClearChannels();
     int n_tracks = 5;//std::rand() % 100;
     for (int j = 0; j < n_tracks; ++j) {
-      auto *iTrack = RecTracks->AddChannel();
+      auto* iTrack = RecTracks->AddChannel();
       iTrack->Init(RecTracksBranch);
 
       const float px = std::rand() * (1. / RAND_MAX * 2.);

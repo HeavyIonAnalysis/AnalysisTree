@@ -45,8 +45,8 @@ const std::map<int, float> MassMap = {{11, 0.000511},// e
   } else {
     //for not only print warning not to break all converters //TODO exeption
     std::cout << "WARINING! Mass of " + std::to_string(pid) + " is not known" << std::endl;
+    //    throw std::runtime_error("Mass of " + std::to_string(pid) + " is not known");
     return 0.f;
-    throw std::runtime_error("Mass of " + std::to_string(pid) + " is not known");
   }
   //TODO wtf??
   //  auto db = TDatabasePDG::Instance();
@@ -64,6 +64,7 @@ enum Exyz : ShortInt_t {
   kZ
 };
 }
+
 enum class DetType : ShortInt_t {
   kHit = 0,
   kModule,
@@ -118,7 +119,7 @@ enum HitFields : ShortInt_t {
 
 namespace ModuleFields {
 enum ModuleFields : ShortInt_t {
-  kId = -1,
+  kNumber = -1,
   kSignal = -2
 };
 }

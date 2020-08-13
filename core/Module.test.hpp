@@ -1,4 +1,35 @@
 #ifndef ANALYSISTREE_TEST_CORE_MODULE_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_MODULE_TEST_HPP_
 
+#include <gtest/gtest.h>
+
+#include "Module.hpp"
+
+namespace {
+
+using namespace AnalysisTree;
+
+TEST(Test_AnalysisTreeCore, Test_Module) {
+
+  Module module;
+
+  EXPECT_EQ(module.GetSize<int>(), 0);
+  EXPECT_EQ(module.GetSize<float>(), 0);
+  EXPECT_EQ(module.GetSize<bool>(), 0);
+
+  module.SetNumber(1);
+  module.SetSignal(10.);
+
+  EXPECT_EQ(module.GetSize<int>(), 0);
+  EXPECT_EQ(module.GetSize<float>(), 0);
+  EXPECT_EQ(module.GetSize<bool>(), 0);
+
+  EXPECT_FLOAT_EQ(module.GetNumber(), 1.);
+  EXPECT_FLOAT_EQ(module.GetSignal(), 10.);
+
+  EXPECT_FLOAT_EQ(module.GetNumber(), module.GetField<float>(ModuleFields::kNumber));
+  EXPECT_FLOAT_EQ(module.GetSignal(), module.GetField<float>(ModuleFields::kSignal));
+}
+}// namespace
+
 #endif//ANALYSISTREE_TEST_CORE_MODULE_TEST_HPP_

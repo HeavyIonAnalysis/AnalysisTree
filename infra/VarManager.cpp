@@ -1,94 +1,71 @@
 #include "VarManager.hpp"
+#include <numeric>
 
 namespace AnalysisTree {
 
-void VarManager::Init(std::map<std::string, void *> &pointers_map) {
-  assert(!in_branches_.empty());
+void VarManager::Init(std::map<std::string, void*>& pointers_map) {
 
-  for (auto &var : vars_) {
-    var.Init(*config_);
-  }
-
-  for (const auto &branch : in_branches_) {
+  branches_.reserve(in_branches_.size());
+  for (const auto& branch : in_branches_) {
     const auto type = config_->GetBranchConfig(branch).GetType();
-    auto *ptr = pointers_map.find(branch)->second;
+    auto* ptr = pointers_map.find(branch)->second;
     auto find = cuts_map_.find(branch);
-    Cuts *cut = find != cuts_map_.end() ? find->second : nullptr;
+    Cuts* cut = find != cuts_map_.end() ? find->second : nullptr;
     if (cut) {
       cut->Init(*config_);
     }
     branches_.emplace_back(BranchReader(branch, ptr, type, cut));
-
-    for (const auto &var : vars_) {
-      if (var.GetBranchName() == branch) {
-        branches_.back().AddVariable(var);
-      }
-    }
   }
+
+  for (auto& var : vars_) {
+    var.Init(*config_, pointers_map);
+    for (const auto& br : var.GetBranchNames()) {
+      var.AddBranchPointer(GetBranch(br));
+    }
+  }// vars
 }
 
 void VarManager::Exec() {
-  for (auto &branch : branches_) {
-    branch.FillValues();
-  }
-}
-
-void VarManager::FillOutputIndexes(const std::vector<Variable> &vars) {
-  var_indexes_.reserve(vars.size());
-
-  std::vector<int> branch_entries(in_branches_.size(), 0);
-  std::vector<std::pair<int, int>> unique_var_indexes{};
-  for (const auto &var : vars_) {
-    unique_var_indexes.emplace_back(std::make_pair(-1, -1));
-
-    for (size_t i_branch = 0; i_branch < in_branches_.size(); ++i_branch) {
-      if (var.GetBranchName() == in_branches_.at(i_branch)) {
-        unique_var_indexes.back().first = i_branch;
-        unique_var_indexes.back().second = branch_entries.at(i_branch)++;
-      }
-    }
-  }
-
-  for (size_t i_var = 0; i_var < vars.size(); ++i_var) {
-    var_indexes_.emplace_back(unique_var_indexes.at(unique_map_.find(i_var)->second));
-  }
-}
-
-void VarManager::CopyUniqueVars(const std::vector<Variable> &vars) {
-  vars_.reserve(vars.size());
-  for (const auto &var : vars) {
-    vars_.emplace_back(var);
-  }
-
-  std::sort(vars_.begin(), vars_.end());
-  auto ip = std::unique(vars_.begin(), vars_.end());
-  vars_.resize(std::distance(vars_.begin(), ip));
-
-  CreateMapUnique(vars);
-}
-
-void VarManager::CreateMapUnique(const std::vector<Variable> &vars) {
-  int i_var{0};
-  for (const auto &var : vars) {
-    int i_var_unique{0};
-    for (const auto &var_unique : vars_) {
-      if (var_unique == var) {
-        unique_map_.insert(std::make_pair(i_var, i_var_unique));
-        break;
-      }
-      i_var_unique++;
-    }
-    i_var++;
+  for (auto& var : vars_) {
+    var.FillValues();
   }
 }
 
 void VarManager::FillBranchNames() {
-  for (const auto &var : vars_) {
-    for (const auto &branch : var.GetBranches())
-      in_branches_.emplace_back(branch);
+  for (auto& var : vars_) {
+    const auto& br = var.GetBranchNames();
+    in_branches_.insert(in_branches_.end(), br.begin(), br.end());
   }
   std::sort(in_branches_.begin(), in_branches_.end());
-  auto ip1 = std::unique(in_branches_.begin(), in_branches_.end());
-  in_branches_.resize(std::distance(in_branches_.begin(), ip1));
+  auto ip = std::unique(in_branches_.begin(), in_branches_.end());
+  in_branches_.resize(std::distance(in_branches_.begin(), ip));
 }
+
+std::pair<int, std::vector<int>> VarManager::AddEntry(const VarManagerEntry& vars) {
+
+  std::vector<int> var_ids(vars.GetVariables().size());
+
+  for (int ivar = 0; ivar < vars_.size(); ++ivar) {
+
+    if (vars.GetBranchNames() == vars_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), vars_[ivar].GetCuts())) {// branch exists
+      for (int i = 0; i < vars.GetVariables().size(); ++i) {
+        var_ids[i] = vars_[ivar].AddVariable(vars.GetVariables()[i]);
+      }
+      return std::make_pair(ivar, var_ids);
+    }
+  }
+  vars_.emplace_back(vars);
+  std::iota(var_ids.begin(), var_ids.end(), 0);// var_ids will become: [0..size]
+  return std::make_pair(vars_.size() - 1, var_ids);
+}
+
+BranchReader* VarManager::GetBranch(const std::string& name) {
+  for (auto& branch : branches_) {
+    if (branch.GetName() == name) {
+      return &branch;
+    }
+  }
+  throw std::runtime_error("Branch " + name + " is not found");
+}
+
 }// namespace AnalysisTree

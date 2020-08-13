@@ -10,29 +10,25 @@ class Particle : public Track {
  public:
   Particle() = default;
   explicit Particle(Integer_t id) : Track(id) {}
-  explicit Particle(const Track &track) : Track(track) {}
+  explicit Particle(const Track& track) : Track(track) {}
 
-  Particle(const Particle &particle) = default;
-  Particle(Particle &&particle) = default;
-  Particle &operator=(Particle &&) = default;
-  Particle &operator=(const Particle &particle) = default;
+  Particle(const Particle& particle) = default;
+  Particle(Particle&& particle) = default;
+  Particle& operator=(Particle&&) = default;
+  Particle& operator=(const Particle& particle) = default;
 
-  Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
-  PdgCode_t GetPid() const { return pid_; }
-  Floating_t GetMass() const { return mass_; }
+  [[nodiscard]] Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
+  [[nodiscard]] PdgCode_t GetPid() const { return pid_; }
+  [[nodiscard]] Floating_t GetMass() const { return mass_; }
 
   void SetMass(Floating_t mass) {
     mass_ = mass;
   }
 
-  void SetPid(PdgCode_t pid) {
-    pid_ = pid;
-    if (mass_ == -1000.f)
-      mass_ = GetMassByPdgId(pid);
-  }
+  void SetPid(PdgCode_t pid);
 
-  Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
-  Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
+  [[nodiscard]] Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
+  [[nodiscard]] Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
 
   template<typename T>
   T GetField(Integer_t iField) const {

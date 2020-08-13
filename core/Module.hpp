@@ -3,9 +3,6 @@
 
 #include <TVector3.h>
 
-#include <cmath>
-
-#include "Constants.hpp"
 #include "Container.hpp"
 
 namespace AnalysisTree {
@@ -14,31 +11,20 @@ class Module : public Container {
 
  public:
   Module() = default;
-  Module(const Module &otherModule) = default;
-  Module(Module &&otherModule) = default;
-  Module &operator=(Module &&) = default;
-  Module &operator=(const Module &part) = default;
+  Module(const Module& otherModule) = default;
+  Module(Module&& otherModule) = default;
+  Module& operator=(Module&&) = default;
+  Module& operator=(const Module& part) = default;
 
   explicit Module(Integer_t id) : Container(id) {}
 
-  Floating_t GetSignal() const { return signal_; }
+  [[nodiscard]] Floating_t GetSignal() const { return signal_; }
+  [[nodiscard]] ShortInt_t GetNumber() const { return number_; }
 
-  void SetSignal(Floating_t signal) {
-    signal_ = signal;
-  }
-
-  ShortInt_t GetNumber() const { return number_; }
+  void SetSignal(Floating_t signal) { signal_ = signal; }
   void SetNumber(ShortInt_t number) { number_ = number; }
 
-  friend bool operator==(const Module &that, const Module &other) {
-    if (&that == &other) {
-      return true;
-    }
-    if ((Container &) that != (Container &) other) {
-      return false;
-    }
-    return that.number_ == other.number_ && that.signal_ == other.signal_;
-  }
+  friend bool operator==(const Module& that, const Module& other);
 
   template<typename T>
   T GetField(Integer_t iField) const {
@@ -46,16 +32,14 @@ class Module : public Container {
       return Container::GetField<T>(iField);
     else {
       switch (iField) {
-        case ModuleFields::kId: return GetId();
+        case ModuleFields::kNumber: return GetNumber();
         case ModuleFields::kSignal: return GetSignal();
         default: throw std::out_of_range("Module::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }
   }
 
-  void Print() const {
-    std::cout << "  number = " << number_ << "  signal = " << signal_ << std::endl;
-  }
+  void Print() const;
 
  protected:
   Floating_t signal_{0.f};
@@ -68,10 +52,10 @@ class ModulePosition : public IndexedObject {
 
  public:
   ModulePosition() = default;
-  ModulePosition(const ModulePosition &otherModulePosition) = default;
-  ModulePosition(ModulePosition &&otherModulePosition) = default;
-  ModulePosition &operator=(ModulePosition &&) = default;
-  ModulePosition &operator=(const ModulePosition &part) = default;
+  ModulePosition(const ModulePosition& otherModulePosition) = default;
+  ModulePosition(ModulePosition&& otherModulePosition) = default;
+  ModulePosition& operator=(ModulePosition&&) = default;
+  ModulePosition& operator=(const ModulePosition& part) = default;
 
   explicit ModulePosition(Integer_t id) : IndexedObject(id) {}
   ModulePosition(Integer_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
@@ -80,7 +64,7 @@ class ModulePosition : public IndexedObject {
     return TVector3(x_, y_, z_);
   }
 
-  void SetPosition(const TVector3 &position) {
+  void SetPosition(const TVector3& position) {
     x_ = position.X();
     y_ = position.Y();
     z_ = position.Z();
