@@ -11,7 +11,12 @@
 #include <core/Matching.test.hpp>
 #include <core/DataHeader.test.hpp>
 #include <core/Particle.test.hpp>
+#include <core/EventHeader.test.hpp>
 
+#include <infra/Field.test.hpp>
+#include <infra/Variable.test.hpp>
+
+#include <infra/SimpleCut.test.hpp>
 #include <infra/Cuts.test.hpp>
 
 int main(int argc, char **argv) {

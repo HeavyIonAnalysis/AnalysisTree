@@ -1,3 +1,6 @@
+#ifndef ANALYSISTREE_INFRA_CUT_TEST_HPP_
+#define ANALYSISTREE_INFRA_CUT_TEST_HPP_
+
 #include <gtest/gtest.h>
 
 #include <vector>
@@ -6,6 +9,7 @@
 #include <TTree.h>
 
 #include <core/Track.hpp>
+#include <core/Configuration.hpp>
 
 #include <infra/Cuts.hpp>
 #include <infra/SimpleCut.hpp>
@@ -140,3 +144,5 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
 //}
 
 }// namespace
+
+#endif
