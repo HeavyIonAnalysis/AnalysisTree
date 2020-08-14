@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>
 
 #include "Configuration.hpp"
+#include "Matching.hpp"
 
 namespace {
 
@@ -28,9 +29,35 @@ TEST(Test_AnalysisTreeCore, Test_Configuration) {
 
   const auto& br1 = config.GetBranchConfig("RecTrack");
   EXPECT_EQ(br1.GetId(), 0);
-
-  //  Matching match()
 }
+
+TEST(Test_AnalysisTreeCore, Test_ConfigurationMatch) {
+  Configuration config("test");
+
+  config.AddBranchConfig(BranchConfig("RecTrack", DetType::kParticle));
+  config.AddBranchConfig(BranchConfig("SimTrack", DetType::kParticle));
+
+  Matching match(0, 1);
+  config.AddMatch(&match);
+
+  EXPECT_STREQ(config.GetMatchName("RecTrack", "SimTrack").c_str(), "RecTrack2SimTrack");
+
+  try {
+    auto name = config.GetMatchName("SimTrack", "RecTrack");
+    FAIL() << "throwException() should throw an error\n";
+  } catch (std::runtime_error& exception) {}
+
+  auto match_info = config.GetMatchInfo("RecTrack", "SimTrack");
+  auto match_info_inv = config.GetMatchInfo("SimTrack", "RecTrack");
+
+  EXPECT_EQ(match_info.second, false);
+  EXPECT_EQ(match_info_inv.second, true);
+
+  EXPECT_STREQ(match_info.first.c_str(), "RecTrack2SimTrack");
+  EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
+}
+
+
 
 }// namespace
 
