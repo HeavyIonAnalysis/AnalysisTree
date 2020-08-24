@@ -17,7 +17,7 @@ class Configuration;
 class Cuts {
 
  public:
-  Cuts() = delete;
+  Cuts() = default;
   Cuts(const Cuts& cut) = default;
   Cuts(Cuts&& cut) = default;
   Cuts& operator=(Cuts&&) = default;

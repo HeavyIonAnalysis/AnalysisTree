@@ -12,6 +12,7 @@
 #include <core/DataHeader.test.hpp>
 #include <core/Particle.test.hpp>
 #include <core/EventHeader.test.hpp>
+#include <core/ToyMC.test.hpp>
 
 #include <infra/Field.test.hpp>
 #include <infra/Variable.test.hpp>
