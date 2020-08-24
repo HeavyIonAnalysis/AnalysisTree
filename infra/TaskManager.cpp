@@ -54,7 +54,7 @@ void TaskManager::Run(long long nEvents) {
   std::cout << "AnalysisTree::Manager::Run" << std::endl;
   auto start = std::chrono::system_clock::now();
 
-  nEvents = nEvents < 0 ? in_tree_->GetEntries() : nEvents;
+  nEvents = nEvents < 0 || nEvents > in_tree_->GetEntries() ? in_tree_->GetEntries() : nEvents;
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     in_tree_->GetEntry(iEvent);

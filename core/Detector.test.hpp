@@ -26,7 +26,7 @@ DetType GetDetectorType<Hit>() { return DetType::kHit; }
 template<>
 DetType GetDetectorType<Module>() { return DetType::kModule; }
 
-template<class T>
+template<class T, class GENERATOR>
 class TestDetector : public Detector<T> {
 
  public:
@@ -50,58 +50,92 @@ class TestDetector : public Detector<T> {
 
       FillBaseInfo(ch);
 
-      const float f = std::rand() * (1. / RAND_MAX * 2.);
-      const int i = std::rand() * (1. / RAND_MAX * 2.);
-      const bool b = std::rand() * (1. / RAND_MAX) > 0.5;
+      const float f = random_f_(generator_);
+      const int i = random_i_(generator_);
+      const bool b = random_b_(generator_);
 
       ch->SetField(f, 0);
       ch->SetField(i, 0);
       ch->SetField(b, 0);
     }
   }
-
-  void WriteToFile(size_t n_events) {
-
-    TFile out_file("Test_WriteDetector.root", "recreate");
-    auto* out_tree = new TTree("TestDetector", "");
-    Detector<T>* pointer = this;
-    out_tree->Branch("detector", &pointer);
-
-    for (size_t i_event = 0; i_event < n_events; ++i_event) {
-      FillDetector(10);
-      out_tree->Fill();
-    }
-    out_tree->Write();
-    out_file.Close();
-  }
-
  protected:
   BranchConfig config_;
+  GENERATOR generator_;
+  std::uniform_real_distribution<float> random_f_{-1, 1};
+  std::uniform_int_distribution<int> random_i_{-1000, 1000};
+  std::uniform_int_distribution<int> random_b_{0, 1};
 };
 
-class TestHitDetector : public TestDetector<Hit> {
+template<class GENERATOR>
+class TestParticles : public TestDetector<Particle, GENERATOR> {
  public:
-  TestHitDetector() = default;
-  ~TestHitDetector() override = default;
+  TestParticles() = default;
+  ~TestParticles() override = default;
 
-  void FillBaseInfo(Hit* hit) override {
+  void FillBaseInfo(Particle* particle) override {
 
-    const float x = -1 + std::rand() * (1. / RAND_MAX * 2.);
-    const float y = -1 + std::rand() * (1. / RAND_MAX * 2.);
-    const float z = 2. + std::rand() * (1. / RAND_MAX);
-    const float signal = std::rand() * (10. / RAND_MAX);
+    const float phi = phi_distr_(this->generator_);
+    const float pT = pT_dist_(this->generator_);
+    const float eta = eta_dist_(this->generator_);
+    const int pdg = 211;
 
-    hit->SetSignal(signal);
-    hit->SetPosition({x, y, z});
+    TVector3 mom;
+    mom.SetPtEtaPhi(pT, eta, phi);
+    particle->SetMomentum3(mom);
+    particle->SetPid(pdg);
   };
+
+ private:
+  std::uniform_real_distribution<float> phi_distr_{-M_PI, M_PI};
+  std::exponential_distribution<float> pT_dist_{1.};
+  std::normal_distribution<float> eta_dist_{0., 1.};
 };
+
+template<class GENERATOR>
+class TestTrackDetector : public TestDetector<Track, GENERATOR> {
+ public:
+  TestTrackDetector() = default;
+  ~TestTrackDetector() override = default;
+
+  void FillBaseInfo(Track* track) override {
+
+    const float phi = phi_distr_(this->generator_);
+    const float pT = pT_dist_(this->generator_);
+    const float eta = eta_dist_(this->generator_);
+
+    TVector3 mom;
+    mom.SetPtEtaPhi(pT, eta, phi);
+    track->SetMomentum3(mom);
+  };
+
+  void FillDetector(const TestParticles<GENERATOR>& particles){
+    for(const auto& particle : particles.GetChannels()){
+      bool is_passed = eff_(this->generator_) > 50;
+      if(!is_passed) continue;
+
+      auto* track = this->AddChannel();
+      track->Init(this->config_);
+      track = particle;
+    }
+  }
+
+ private:
+  std::uniform_real_distribution<float> phi_distr_{-M_PI, M_PI};
+  std::exponential_distribution<float> pT_dist_{1.};
+  std::normal_distribution<float> eta_dist_{0., 1.};
+
+  std::uniform_int_distribution<int> eff_{0, 100};
+
+};
+
 
 TEST(Test_AnalysisTreeCore, Test_WriteDetector) {
 
-  TestHitDetector hit_detector;
+  TestParticles<std::default_random_engine> particle;
 
-  hit_detector.Init();
-  hit_detector.WriteToFile(100);
+  particle.Init();
+//  particle.WriteToFile(100);
 }
 
 TEST(Test_AnalysisTreeCore, Test_ChannelizedDetector) {
@@ -126,7 +160,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteHit) {
   hit->SetPosition(hitPosition);
 
   TFile outputFile("Test_WriteHit.root", "recreate");
-  TTree* hitTree = new TTree("TestHitTree", "");
+  auto* hitTree = new TTree("TestHitTree", "");
   hitTree->Branch("hit", &hit);
 
   hitTree->Fill();
