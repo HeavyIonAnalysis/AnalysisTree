@@ -18,7 +18,11 @@ message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
 list(APPEND HEADERS "VariantMagic.hpp")
 
-include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
+if(Boost_FOUND)
+  include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} ${Boost_INCLUDE_DIR})
+else()
+  include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
         
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS} LINKDEF AnalysisTreeInfraLinkDef.h)
