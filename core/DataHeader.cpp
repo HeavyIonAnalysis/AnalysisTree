@@ -2,7 +2,7 @@
 
 namespace AnalysisTree {
 
-void DataHeader::Print() const {
+void DataHeader::Print(Option_t*) const {
   std::cout << "AnalysisTree::DataHeader::Print()" << std::endl;
   std::cout << " Collision system is " << system_ << std::endl;
   std::cout << " at beam momentum " << beam_mom_;

@@ -23,7 +23,7 @@ class DataHeader : public TObject {
 
   ModulePositions& AddDetector();
 
-  void Print() const;
+  void Print(Option_t* ="") const;
 
   void SetSystem(std::string sys) { system_ = std::move(sys); }
   void SetBeamMomentum(float mom, float m_target = 0.938, float m_beam = 0.938);
