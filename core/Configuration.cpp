@@ -21,7 +21,7 @@ const BranchConfig& Configuration::GetBranchConfig(const std::string& name) cons
   throw std::runtime_error("Configuration::GetBranchConfig - no branch " + name);
 }
 
-void Configuration::Print() const {
+void Configuration::Print(Option_t*) const {
   std::cout << "This is a " << name_ << std::endl;
   std::cout << "The Tree has the following branches:" << std::endl;
   for (const auto& branch : branches_) {

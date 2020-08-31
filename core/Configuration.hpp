@@ -44,7 +44,7 @@ class Configuration : public TObject {
   [[nodiscard]] std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
   [[nodiscard]] const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_; }
 
-  void Print() const;
+  void Print(Option_t* ="") const;
 
  protected:
   std::string name_;
