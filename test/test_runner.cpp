@@ -16,9 +16,9 @@
 
 #include <infra/Field.test.hpp>
 #include <infra/Variable.test.hpp>
-
 #include <infra/SimpleCut.test.hpp>
 #include <infra/Cuts.test.hpp>
+#include <infra/VarManager.test.hpp>
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

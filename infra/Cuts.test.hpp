@@ -124,25 +124,6 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   ASSERT_TRUE(Nhits_true.Apply(*track));
 }
 
-//TEST(Test_AnalysisTreeInfra, Test_WriteCut) {
-//
-//  AnalysisTree::Test::TestCut testCutDcaXY({"dcax", "dcay"}, [](std::vector<double>& dca) { return dca[0]*dca[0] + dca[1]*dca[1] < 2; } );
-//  testCutDcaXY.SetFieldId(0, 0);
-//  testCutDcaXY.SetFieldId(1, 1);
-//
-//  AnalysisTree::Test::TestCut testCut1("dcax", -1, 1);
-//  testCut1.SetFieldId(0);
-//
-//  std::unique_ptr <TFile> f {TFile::Open("Test_WriteCut.root", "recreate")};
-//
-//  AnalysisTree::Cuts cut;
-//  cut.AddCut(testCutDcaXY);
-//  cut.AddCut(testCut1);
-//
-//  cut.Write("test_cut");
-//  f->Close();
-//}
-
 }// namespace
 
 #endif
