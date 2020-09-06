@@ -25,6 +25,10 @@ if(Boost_FOUND)
     add_definitions(-DUSEBOOST)
 endif()
 
+# CMake options
+set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
+set(AnalysisTree_BUILD_EXAMPLES ON CACHE BOOL "Build examples for the AnalysisTree")
+
 
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNODEBUG")
@@ -43,13 +47,16 @@ include(${ROOT_USE_FILE})
 
 add_subdirectory(core)
 add_subdirectory(infra)
-add_subdirectory(examples)
 
-IF (CMAKE_BUILD_TYPE MATCHES Debug)
+if(AnalysisTree_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+if(AnalysisTree_BUILD_TESTS)
     include(GoogleTest)
     enable_testing()
     add_subdirectory(test)
-ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)
+endif()
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
