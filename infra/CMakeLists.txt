@@ -27,6 +27,17 @@ add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
         
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS} LINKDEF AnalysisTreeInfraLinkDef.h)
 target_link_libraries(AnalysisTreeInfra ${ROOT_LIBRARIES} AnalysisTreeBase)
+add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/include/AnalysisTree
+        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_BINARY_DIR}/include/AnalysisTree
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+target_include_directories(AnalysisTreeInfra
+        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+        PUBLIC
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+            $<INSTALL_INTERFACE:include>
+        )
 
 install(TARGETS AnalysisTreeInfra EXPORT AnalysisTreeTargets
         LIBRARY DESTINATION lib
