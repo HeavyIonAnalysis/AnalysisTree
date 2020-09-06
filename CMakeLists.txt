@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.0)
+# Minimum 3.5 version is determined by cmake -E copy_if_different command
+# that was used to copy headers to the build directory:
+# multiple files are supported since cmake 3.5
+cmake_minimum_required(VERSION 3.5)
 project(AnalysisTree CXX)
 set(PROJECT_VERSION 1.1)
 
