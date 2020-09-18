@@ -4,38 +4,56 @@
 
 namespace AnalysisTree {
 
+void PlainTreeFiller::AddBranch(const std::string& branch_name) {
+  branch_name_ = branch_name;
+  in_branches_.emplace_back(branch_name);
+}
+
 void PlainTreeFiller::Init(std::map<std::string, void*>& branches) {
-  in_branch_ = (AnalysisTree::Particles*) branches.find(in_branches_[0])->second;
 
-  if (vars_.empty()) {//copy all variables
-    const auto& branch_config = config_->GetBranchConfig(in_branches_[0]);
+//  config_->Print();
 
+  if(!branch_name_.empty()){
+    const auto& branch_config = config_->GetBranchConfig(branch_name_);
     for (const auto& field : branch_config.GetMap<float>()) {
-      vars_.emplace_back(std::make_pair(0.f, Variable(in_branches_[0], field.first)));
+      VarManager::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
     }
     for (const auto& field : branch_config.GetMap<int>()) {
-      vars_.emplace_back(std::make_pair(0.f, Variable(in_branches_[0], field.first)));
+      VarManager::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
     }
     for (const auto& field : branch_config.GetMap<bool>()) {
-      vars_.emplace_back(std::make_pair(0.f, Variable(in_branches_[0], field.first)));
+      VarManager::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
     }
   }
 
-  out_tree_ = new TTree(tree_name_.c_str(), "Plain TTree from AnalysisTree");
+  VarManager::Init(branches);
+  if(entries_.size() != 1){
+    throw std::runtime_error("Only 1 output branch");
+  }
+  const auto& vars = entries_[0].GetVariables();
+  vars_.resize(vars.size());
 
-  for (auto& var : vars_) {
-    var.second.Init(*config_);
-    out_tree_->Branch(var.second.GetName().c_str(), &var.first, Form("%s/F", var.second.GetName().c_str()));
+  plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
+  for (size_t i=0; i<vars.size(); ++i) {
+    std::string leaf_name = vars[i].GetName();
+    plain_tree_->Branch(vars[i].GetName().c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
   }
 }
 
 void PlainTreeFiller::Exec() {
-  for (const auto& channel : *in_branch_->GetChannels()) {
-    for (auto& var : vars_) {
-      var.first = var.second.GetValue(channel);
+  VarManager::Exec();
+  const auto& values = entries_[0].GetValues();
+  for(const auto& channel : values){
+    assert (channel.size() == vars_.size());
+    for (size_t i=0; i<channel.size(); ++i) {
+      vars_.at(i) = channel.at(i);
     }
-    out_tree_->Fill();
+    plain_tree_->Fill();
   }
 }
 
+void PlainTreeFiller::Finish() {
+  VarManager::Finish();
+  plain_tree_->Write();
+}
 }// namespace AnalysisTree
