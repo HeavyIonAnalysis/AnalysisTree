@@ -45,10 +45,10 @@ std::pair<int, std::vector<int>> VarManager::AddEntry(const VarManagerEntry& var
 
   std::vector<int> var_ids(vars.GetVariables().size());
 
-  for (int ivar = 0; ivar < entries_.size(); ++ivar) {
+  for (size_t ivar = 0; ivar < entries_.size(); ++ivar) {
 
-    if (vars.GetBranchNames() == entries_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), entries_[ivar].GetCuts())) {// branch exists
-      for (int i = 0; i < vars.GetVariables().size(); ++i) {
+    if (vars.GetBranchNames() == entries_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), entries_[ivar].GetCuts())) { //branch exists
+      for (size_t i = 0; i < vars.GetVariables().size(); ++i) {
         var_ids[i] = entries_[ivar].AddVariable(vars.GetVariables()[i]);
       }
       return std::make_pair(ivar, var_ids);
