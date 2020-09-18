@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "TChain.h"
+#include <TChain.h>
 
-#include "core/DataHeader.hpp"
-#include "core/EventHeader.hpp"
-#include "infra/TreeReader.hpp"
+#include <AnalysisTree/DataHeader.hpp>
+#include <AnalysisTree/EventHeader.hpp>
+#include <AnalysisTree/TreeReader.hpp>
 
 using namespace AnalysisTree;
 
