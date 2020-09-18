@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <memory>
+#include <set>
 
 #include "TChain.h"
 #include "TFile.h"

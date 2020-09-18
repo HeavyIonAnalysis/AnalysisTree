@@ -77,12 +77,7 @@ class VarManagerTest : public VarManager{
 
 TEST(Test_AnalysisTreeInfra, Test_VarManager) {
 
-  const int n_events = 1000;
-
-  ToyMC<std::default_random_engine> toy_mc;
-  toy_mc.GenerateEvents(n_events);
-  toy_mc.WriteToFile("toy_mc.root", "fl_toy_mc.txt");
-
+  const int n_events = 1000;  // TODO propagate somehow
   TaskManager man({"fl_toy_mc.txt"}, {"tTree"});
 
   auto* var_manager = new VarManagerTest;

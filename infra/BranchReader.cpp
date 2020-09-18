@@ -46,7 +46,6 @@ size_t BranchReader::GetNumberOfChannels() {
 }
 
 bool BranchReader::ApplyCut(int i_channel) {
-  if (i_channel < 0) return false;
   if (!cuts_) return true;
 #ifdef USEBOOST
   return boost::apply_visitor(apply_cut(i_channel, cuts_), data_);

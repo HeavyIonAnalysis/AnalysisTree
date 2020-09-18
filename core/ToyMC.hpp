@@ -3,12 +3,16 @@
 
 #include <TH2.h>
 #include <fstream>
+#include <random>
 
 #include "TTree.h"
+#include "TFile.h"
 #include "TF1.h"
 
 #include "Configuration.hpp"
 #include "DataHeader.hpp"
+#include "EventHeader.hpp"
+#include "Matching.hpp"
 
 namespace AnalysisTree{
 
