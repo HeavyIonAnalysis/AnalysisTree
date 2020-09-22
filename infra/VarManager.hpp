@@ -11,7 +11,7 @@
 
 namespace AnalysisTree {
 
-class VarManager : public FillTask {
+class VarManager : virtual public FillTask {
   typedef std::vector<std::vector<double>> array2D;
 
  public:
