@@ -34,6 +34,11 @@ double VarManagerEntry::FillVariabe(const Variable& var, BranchReader* br1, int 
 #endif
 }
 
+/**
+ * @brief takes BranchReader and evaluates all Variables associated with branch.
+ * If a branch is a Channel or Tracking detector, evaluation is performed channel-by-channel.
+ * If channel or track fails to pass cuts it won't be written
+ */
 void VarManagerEntry::FillFromOneBranch() {
   BranchReader* br = branches_.at(0);
   const auto n_channels = br->GetNumberOfChannels();
@@ -59,6 +64,10 @@ void VarManagerEntry::FillMatchingForEventHeader(BranchReader* br1, BranchReader
   }
 }
 
+/**
+ * @brief FillFromTwoBranches populates Variables if matching between two branches is defined
+ * It iterates over registered matches and fills variables
+ */
 void VarManagerEntry::FillFromTwoBranches() {
   BranchReader* br1 = branches_.at(0);
   BranchReader* br2 = branches_.at(1);

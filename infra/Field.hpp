@@ -10,6 +10,9 @@ namespace AnalysisTree {
 
 class Configuration;
 
+/**
+ * @brief Field is a _pointer_ in a branch/field structure.
+ */
 class Field {
  public:
   Field() = default;
@@ -28,6 +31,10 @@ class Field {
   friend bool operator>(const Field& that, const Field& other);
   friend bool operator<(const Field& that, const Field& other);
 
+  /**
+   * @brief Initializes branchId and fieldId
+   * @param conf Configuration
+   */
   void Init(const Configuration& conf);
 
   [[nodiscard]] const std::string& GetName() const { return field_; }
@@ -39,6 +46,12 @@ class Field {
   [[nodiscard]] DetType GetBranchType() const { return branch_type_; }
   [[nodiscard]] Types GetFieldType() const { return field_type_; }
 
+  /**
+   * @brief Gets numerical value from data-object associated with TTree
+   * @tparam T type of data-object (EventHeader, Track, etc)
+   * @param object
+   * @return value of the field
+   */
   template<class T>
   double GetValue(const T& object) const {
     if (!is_init_) {

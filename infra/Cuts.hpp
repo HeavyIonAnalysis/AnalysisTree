@@ -14,6 +14,10 @@ namespace AnalysisTree {
 
 class Configuration;
 
+
+/**
+ * @brief Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts
+ */
 class Cuts {
 
  public:

@@ -16,6 +16,7 @@ namespace AnalysisTree {
 
 class Configuration;
 
+
 class TaskManager {
 
  public:

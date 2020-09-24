@@ -11,6 +11,11 @@
 
 namespace AnalysisTree {
 
+/**
+ * @brief VarManager is a FillTask which keeps list of VarManagerEntry-s
+ * It evaluates Variables according to the rules of VarManagerEntry-s and
+ * populates 2-dimensional array with results of evaluation
+ */
 class VarManager : virtual public FillTask {
   typedef std::vector<std::vector<double>> array2D;
 

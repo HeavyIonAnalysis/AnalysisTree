@@ -60,6 +60,13 @@ static inline TTree* MakeTree(const std::string& filename, const std::string& tr
   return tree;
 }
 
+/**
+ * @brief Loads object of type T from one (first) ROOT file specified in filelist
+ * @tparam T type of object
+ * @param filelist
+ * @param name name of the object
+ * @return pointer to the loaded object
+ */
 template<class T>
 static inline T* GetObjectFromFileList(const std::string& filelist, const std::string& name) {
   std::cout << "GetObjectFromFileList " << filelist << " " << name << std::endl;
@@ -83,6 +90,12 @@ static inline T* GetObjectFromFileList(const std::string& filelist, const std::s
   return object;
 }
 
+/**
+ * @brief Retrieves Configuration from each of provided filelist, merges different Configurations
+ * @param filelists - list of filelists
+ * @param name name of Configuration object
+ * @return pointer to Configuration object
+ */
 static inline Configuration* GetConfigurationFromFileList(const std::vector<std::string>& filelists, const std::string& name = "Configuration") {
   assert(!filelists.empty());
 
@@ -97,6 +110,13 @@ static inline Configuration* GetConfigurationFromFileList(const std::vector<std:
   return config;
 }
 
+/**
+ * @brief Loads selected list of branches from TTree
+ * @param t
+ * @param config
+ * @param names List of selected branches. If empty, loads all branches found in Configuration
+ * @return
+ */
 static inline std::map<std::string, void*> GetPointersToBranches(TChain* t, const Configuration& config,
                                                                  std::set<std::string> names = {}) {
 
