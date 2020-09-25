@@ -23,6 +23,12 @@ namespace AnalysisTree {
 class IBranchView;
 typedef std::shared_ptr<IBranchView> IBranchViewPtr;
 
+template<typename T>
+using ResultsColumn = std::vector<T>;
+
+template<typename T>
+using ResultsMCols = std::map<std::string, ResultsColumn<T>>;
+
 /**
  * @brief Interface class representing two-dimensional object
  * with index [channel_id, field_name + (type)]
@@ -219,11 +225,35 @@ class AnalysisTreeBranch : public IBranchView {
     tree_->GetEntry(entry);
   }
 
-  explicit AnalysisTreeBranch(BranchConfig Config) : config_(std::move(Config)) {}
+  explicit AnalysisTreeBranch(BranchConfig config) : config_(std::move(config)) {
+  }
 
   explicit AnalysisTreeBranch(BranchConfig Config, TTree* tree) : config_(std::move(Config)) {
     tree_ = tree;
     InitTree(tree);
+  }
+
+  ResultsMCols<double> GetResultsMatrix() {
+    ResultsMCols<double> result;
+    for (auto &column_name : GetFields()) {
+      auto emplace_result = result.emplace(column_name, ResultsColumn<double>(GetNumberOfChannels()));
+      ResultsColumn<double>& column_vector = emplace_result.first->second;
+
+      auto column_field_id = config_.GetFieldId(column_name);
+      auto column_field_type = config_.GetFieldType(column_name);
+
+      for (size_t channel_id = 0; channel_id < GetNumberOfChannels(); ++channel_id) {
+        ChannelType &channel = Details::EntityTraits<Entity>::GetChannel(*data, channel_id);
+        if (column_field_type == Types::kInteger) {
+          column_vector[channel_id] = channel.template GetField<int>(column_field_id);
+        } else if (column_field_type == Types::kFloat) {
+          column_vector[channel_id] = channel.template GetField<float>(column_field_id);
+        } else if (column_field_type == Types::kBool) {
+          column_vector[channel_id] = channel.template GetField<bool>(column_field_id);
+        }
+      }
+    }
+    return result;
   }
 
  private:
@@ -238,6 +268,7 @@ class AnalysisTreeBranch : public IBranchView {
       return elem.first;
     });
   }
+
 
   BranchConfig config_;
   TTree* tree_{nullptr};
