@@ -27,10 +27,18 @@ typedef std::shared_ptr<IBranchView> IBranchViewPtr;
 class IAction {
 
  public:
-  virtual ~IAction() {};
+  virtual ~IAction() = default;
   virtual IBranchViewPtr ApplyAction(const IBranchViewPtr& tgt) = 0;
 };
 
+class IFieldRef {
+
+ public:
+  virtual ~IFieldRef() = default;
+  virtual double GetValue(size_t i_channel) const = 0;
+};
+
+typedef std::shared_ptr<IFieldRef> IFieldPtr;
 
 namespace BranchViewAction {
 
@@ -74,11 +82,25 @@ class IBranchView {
    */
   virtual size_t GetNumberOfChannels() const = 0;
 
+
+  virtual IFieldPtr GetFieldPtr(std::string field_name) const = 0;
+
   /**
    * @brief returns matrix of evaluation results
    * @return
    */
-  virtual ResultsMCols<double> GetDataMatrix() = 0;
+  virtual ResultsMCols<double> GetDataMatrix() {
+    ResultsMCols<double> result;
+    for (auto &column_name : GetFields()) {
+      auto emplace_result = result.emplace(column_name, ResultsColumn<double>(GetNumberOfChannels()));
+      ResultsColumn<double>& column_vector = emplace_result.first->second;
+      IFieldPtr field_ptr = GetFieldPtr(column_name);
+      for (size_t i_channel = 0; i_channel < GetNumberOfChannels(); ++i_channel) {
+        column_vector[i_channel] = field_ptr->GetValue(i_channel);
+      }
+    }
+    return result;
+  }
 
   /**
    * @brief
@@ -193,6 +215,28 @@ struct EntityTraits<Detector<T>> {
 template<typename Entity>
 class AnalysisTreeBranch : public IBranchView {
 
+  class FieldRefImpl : public IFieldRef {
+   public:
+    FieldRefImpl(Entity* Data, ShortInt_t FieldId, Types FieldType) : data_(Data), field_id_(FieldId), field_type_(FieldType) {}
+    double GetValue(size_t i_channel) const override {
+      auto &channel = Details::EntityTraits<Entity>::GetChannel(*data_, i_channel);
+      if (field_type_ == Types::kInteger) {
+        return channel.template GetField<int>(field_id_);
+      } else if (field_type_ == Types::kFloat) {
+        return channel.template GetField<float>(field_id_);
+      } else if (field_type_ == Types::kBool) {
+        return channel.template GetField<bool>(field_id_);
+      }
+      assert(false);
+    }
+
+   private:
+    Entity *data_{nullptr};
+    ShortInt_t field_id_{};
+    Types field_type_{Types::kNumberOfTypes};
+
+  };
+
  public:
   typedef typename Details::EntityTraits<Entity>::ChannelType ChannelType;
 
@@ -227,28 +271,13 @@ class AnalysisTreeBranch : public IBranchView {
     InitTree(tree);
   }
 
-  ResultsMCols<double> GetDataMatrix() override {
-    ResultsMCols<double> result;
-    for (auto &column_name : GetFields()) {
-      auto emplace_result = result.emplace(column_name, ResultsColumn<double>(GetNumberOfChannels()));
-      ResultsColumn<double>& column_vector = emplace_result.first->second;
-
-      auto column_field_id = config_.GetFieldId(column_name);
-      auto column_field_type = config_.GetFieldType(column_name);
-
-      for (size_t channel_id = 0; channel_id < GetNumberOfChannels(); ++channel_id) {
-        ChannelType &channel = Details::EntityTraits<Entity>::GetChannel(*data, channel_id);
-        if (column_field_type == Types::kInteger) {
-          column_vector[channel_id] = channel.template GetField<int>(column_field_id);
-        } else if (column_field_type == Types::kFloat) {
-          column_vector[channel_id] = channel.template GetField<float>(column_field_id);
-        } else if (column_field_type == Types::kBool) {
-          column_vector[channel_id] = channel.template GetField<bool>(column_field_id);
-        }
-      }
-    }
-    return result;
+  IFieldPtr GetFieldPtr(std::string field_name) const override {
+    auto column_field_id = config_.GetFieldId(field_name);
+    auto column_field_type = config_.GetFieldType(field_name);
+    return std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type);
   }
+
+
 
  private:
   void InitTree(TTree *tree) {
@@ -273,25 +302,32 @@ class AnalysisTreeBranch : public IBranchView {
 namespace BranchViewAction {
 
 
-template<typename Lambda>
+template<typename Function>
 class BranchViewDefineAction : public IAction {
 
   class DefineActionResultImpl : public IBranchView {
 
    public:
     std::vector<std::string> GetFields() const override {
-      return std::vector<std::string>();
+      std::vector<std::string> fields({defined_field_name_});
+      auto origin_fields = origin_->GetFields();
+      std::copy(origin_fields.begin(), origin_fields.end(), std::back_inserter(fields));
+      return fields;
     }
     size_t GetNumberOfChannels() const override {
-      return 0;
+      return origin_->GetNumberOfChannels();
     }
     ResultsMCols<double> GetDataMatrix() override {
       return AnalysisTree::ResultsMCols<double>();
     }
     void GetEntry(Long64_t entry) const override {
+      origin_->GetEntry(entry);
     }
     IBranchViewPtr Clone() const override {
       return AnalysisTree::IBranchViewPtr();
+    }
+    IFieldPtr GetFieldPtr(std::string field_name) const override {
+      return AnalysisTree::IFieldPtr();
     }
 
     std::string defined_field_name_;
@@ -300,7 +336,7 @@ class BranchViewDefineAction : public IAction {
   };
 
  public:
-  BranchViewDefineAction(std::string field_name, std::vector<std::string> lambda_args, Lambda&& lambda) : defined_field_name_(std::move(field_name)), lambda_args_(std::move(lambda_args)) {
+  BranchViewDefineAction(std::string field_name, std::vector<std::string> lambda_args, Function&& lambda) : defined_field_name_(std::move(field_name)), lambda_args_(std::move(lambda_args)) {
   }
   IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) override {
     /* check if all fields exist in the origin */
@@ -320,6 +356,9 @@ class BranchViewDefineAction : public IAction {
     }
 
     auto result = std::make_shared<DefineActionResultImpl>();
+    result->origin_ = origin;
+    result->defined_field_name_ = defined_field_name_;
+    result->lambda_args_ = lambda_args_;
 
 
     return result;
@@ -335,6 +374,11 @@ IAction* NewDefineAction(const std::string& field_name, const std::vector<std::s
   return new BranchViewDefineAction(field_name, lambda_args, std::function(std::forward<Lambda>(lambda)));
 }
 
+template<typename Lambda>
+IAction* NewDefineAction(const std::string& field_name, std::initializer_list<std::string> lambda_args, Lambda&& lambda) {
+  std::vector<std::string> lambda_args_v(lambda_args.begin(), lambda_args.end());
+  return NewDefineAction(field_name, lambda_args_v, lambda);
+}
 
 
 }

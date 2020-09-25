@@ -46,13 +46,8 @@ class SelectFieldsAction {
       newView->selected_fields_ = selected_fields_;
       return newView;
     }
-    ResultsMCols<double> GetDataMatrix() override {
-      ResultsMCols<double> result;
-      auto origin_matrix = origin_->GetDataMatrix();
-      for (auto& field : selected_fields_) {
-        result.emplace(field, origin_matrix.at(field));
-      }
-      return result;
+    IFieldPtr GetFieldPtr(std::string field_name) const override {
+      return origin_->GetFieldPtr(field_name);
     }
 
     IBranchViewPtr origin_;
