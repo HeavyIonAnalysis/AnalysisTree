@@ -13,6 +13,7 @@ namespace {
 
 using namespace AnalysisTree;
 
+
 TEST(Test_AnalysisTreeBranch,Test_GetFields) {
   BranchConfig c("test", DetType::kEventHeader);
   AnalysisTreeBranch<EventHeader> br(c, nullptr);
@@ -35,16 +36,28 @@ TEST(Test_AnalysisTreeBranch,Test_GetNChannels) {
 }
 
 TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
-  BranchConfig c("test", DetType::kEventHeader);
-  auto data = new EventHeader;
+  BranchConfig event_header_config("test", DetType::kEventHeader);
+  auto data_event_header = new EventHeader;
+
+  BranchConfig vtx_tracks_config("vtx_tracks", DetType::kTrack);
+  auto data_vtx_tracks = new TrackDetector;
+
   {
     TFile f("tmp.root", "RECREATE");
     auto tree = new TTree("aTree", "");
-    tree->Branch(c.GetName().c_str(), &data);
+    tree->Branch(event_header_config.GetName().c_str(), &data_event_header);
+    tree->Branch(vtx_tracks_config.GetName().c_str(), &data_vtx_tracks);
 
-    data->Init(c);
+    data_event_header->Init(event_header_config);
     for (size_t iEv = 0; iEv < 100; ++iEv) {
-      data->SetVertexPosition3({float(10 * iEv + 1), float(10 * iEv + 2), float(10 * iEv + 3)});
+      data_event_header->SetVertexPosition3({float(10 * iEv + 1), float(10 * iEv + 2), float(10 * iEv + 3)});
+
+      for (size_t iTr = 0; iTr < 10*iEv; ++iTr) {
+        auto channel = data_vtx_tracks->AddChannel();
+        channel->Init(vtx_tracks_config);
+        channel->SetMomentum(10.*iEv, 20.*iEv, 30.*iEv);
+      }
+
       tree->Fill();
     }
     tree->Write();
@@ -52,7 +65,8 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
   }
 
   TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(c, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
 
   for (size_t iEv = 0; iEv < 100; ++iEv) {
     atb.GetEntry(iEv);
@@ -62,6 +76,10 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
     EXPECT_EQ(results["vtx_x"][0], 10*iEv + 1);
     EXPECT_EQ(results["vtx_y"][0], 10*iEv + 2);
     EXPECT_EQ(results["vtx_z"][0], 10*iEv + 3);
+
+    auto vtx_tracks_results = atb_vtx.GetResultsMatrix();
+    EXPECT_EQ(vtx_tracks_results.size(), atb_vtx.GetFields().size());
+    EXPECT_EQ(vtx_tracks_results["px"].size(), atb_vtx.GetNumberOfChannels());
   }
 
 }
