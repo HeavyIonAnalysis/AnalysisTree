@@ -59,10 +59,18 @@ class IBranchView {
   virtual size_t GetNumberOfChannels() const = 0;
 
   /**
+   * @brief returns matrix of evaluation results
+   * @return
+   */
+  virtual ResultsMCols<double> GetDataMatrix() = 0;
+
+  /**
    * @brief
    * @param entry
    */
   virtual void GetEntry(Long64_t entry) const = 0;
+
+  virtual IBranchViewPtr Clone() const = 0;
 
   /**
    * @brief Select fields in a given channel range [channel_lo, channel_hi)
@@ -73,7 +81,6 @@ class IBranchView {
   IBranchViewPtr RangeChannels(size_t channel_lo, size_t channel_hi) const {
     throw std::runtime_error("Not implemented");
   };
-
   /**
    * @brief Returns fields of a given channel
    * --     dca_x       dca_y
@@ -82,22 +89,23 @@ class IBranchView {
    * @return
    */
   IBranchViewPtr SliceFields(size_t channel_id) const { return RangeChannels(channel_id, channel_id + 1); };
+
   IBranchViewPtr operator[](size_t channel_id) const { return SliceFields(channel_id); }
 
+
+
+  IBranchViewPtr Select(const std::vector<std::string>& field_names) const;
   /**
-   * @brief Returns array of values vs channel if
-   * --     dca_x
-   * 0      0.
-   * 1      1.
-   * ...
+   * @brief Returns array of values vs channel
    * @param field_name
    * @return
    */
   IBranchViewPtr Select(const std::string& field_name) const;;
+
   IBranchViewPtr operator[](const std::string& field_name) const { return Select(field_name); }
 
   /**
-   * @brief Merges two similar views
+   * @brief Merges two compatible views
    *        N (v1) == N (v2)
    * @param other
    * @return
@@ -106,7 +114,10 @@ class IBranchView {
     throw std::runtime_error("Not implemented");
   }
 
-  virtual IBranchViewPtr Clone() const = 0;
+  template<typename Action>
+  IBranchViewPtr Apply(Action && action) const {
+    return action.ApplyAction(Clone());
+  }
 };
 
 namespace Details {
@@ -233,7 +244,7 @@ class AnalysisTreeBranch : public IBranchView {
     InitTree(tree);
   }
 
-  ResultsMCols<double> GetResultsMatrix() {
+  ResultsMCols<double> GetDataMatrix() override {
     ResultsMCols<double> result;
     for (auto &column_name : GetFields()) {
       auto emplace_result = result.emplace(column_name, ResultsColumn<double>(GetNumberOfChannels()));

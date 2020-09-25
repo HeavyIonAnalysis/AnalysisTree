@@ -7,7 +7,7 @@ set(SOURCES
   TreeReader.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-  BranchView.cpp)
+  BranchView.cpp BranchViewAction.cpp BranchViewAction.hpp)
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
@@ -25,11 +25,17 @@ ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS}
         LINKDEF AnalysisTreeInfraLinkDef.h
         OPTIONS -I${CMAKE_BINARY_DIR}/include)
 target_link_libraries(AnalysisTreeInfra ${ROOT_LIBRARIES} AnalysisTreeBase)
-add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/include/AnalysisTree
-        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_BINARY_DIR}/include/AnalysisTree
+
+foreach(HEADER ${HEADERS})
+    set(HEADER_ABS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${HEADER})
+    set(HEADERS_BINARY_DIR ${CMAKE_BINARY_DIR}/include/AnalysisTree)
+    set(HEADER_SYMLINK_PATH ${HEADERS_BINARY_DIR}/${HEADER})
+    add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${HEADERS_BINARY_DIR}
+        COMMAND ${CMAKE_COMMAND} ARGS -E create_symlink ${HEADER_ABS_PATH} ${HEADER_SYMLINK_PATH}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
+endforeach()
 target_include_directories(AnalysisTreeInfra
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC

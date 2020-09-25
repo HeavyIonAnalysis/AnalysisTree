@@ -16,7 +16,7 @@ using namespace AnalysisTree;
 
 TEST(Test_AnalysisTreeBranch,Test_GetFields) {
   BranchConfig c("test", DetType::kEventHeader);
-  AnalysisTreeBranch<EventHeader> br(c, nullptr);
+  AnalysisTreeBranch<EventHeader> br(c);
 
   EXPECT_EQ(br.GetFields(), std::vector<std::string>({"vtx_x","vtx_y","vtx_z"}));
   EXPECT_EQ(br.Select("vtx_x")->GetFields(), std::vector<std::string>({"vtx_x"}));
@@ -70,14 +70,14 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
 
   for (size_t iEv = 0; iEv < 100; ++iEv) {
     atb.GetEntry(iEv);
-    auto results = atb.GetResultsMatrix();
+    auto results = atb.GetDataMatrix();
     EXPECT_EQ(results.size(), atb.GetFields().size());
     EXPECT_EQ(results["vtx_x"].size(), atb.GetNumberOfChannels());
     EXPECT_EQ(results["vtx_x"][0], 10*iEv + 1);
     EXPECT_EQ(results["vtx_y"][0], 10*iEv + 2);
     EXPECT_EQ(results["vtx_z"][0], 10*iEv + 3);
 
-    auto vtx_tracks_results = atb_vtx.GetResultsMatrix();
+    auto vtx_tracks_results = atb_vtx.GetDataMatrix();
     EXPECT_EQ(vtx_tracks_results.size(), atb_vtx.GetFields().size());
     EXPECT_EQ(vtx_tracks_results["px"].size(), atb_vtx.GetNumberOfChannels());
   }

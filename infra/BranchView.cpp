@@ -4,8 +4,15 @@
 
 #include "BranchView.hpp"
 
+#include "BranchViewAction.hpp"
+
+using namespace AnalysisTree;
+
 AnalysisTree::IBranchViewPtr AnalysisTree::IBranchView::Select(const std::string& field_name) const {
-  using Details::SelectFieldsAction;
-  return BranchViewActionResult<SelectFieldsAction>(
-      SelectFieldsAction(std::vector<std::string>({field_name})), Clone()).Clone();
+  return Select(std::vector<std::string>({field_name}));
+}
+
+IBranchViewPtr IBranchView::Select(const std::vector<std::string>& field_names) const {
+  BranchViewAction::SelectFieldsAction action(field_names);
+  return Apply(action);
 }
