@@ -139,6 +139,10 @@ class BranchViewActionResult : public IBranchView {
     return newBranchView;
   }
 
+  void GetEntry(Long64_t i_entry) const override {
+    action_arg_->GetEntry(i_entry);
+  }
+
   /* could be lazy, could be not, const is not needed */
   size_t GetNumberOfChannels() const override {
     return 0;
@@ -151,15 +155,38 @@ class BranchViewActionResult : public IBranchView {
 
 namespace Details {
 
-template<typename T>
-size_t GetNChannels(const Detector<T> detector) {
-  return detector.GetNumberOfChannels();
-}
+
 
 template<typename T>
-size_t GetNChannels(const T& /* entity */) {
-  return 1ul;
-}
+struct EntityTraits {
+  static constexpr bool is_channel_or_track = false;
+  typedef T ChannelType;
+
+  inline static size_t GetNChannels(const T& /* entity */) {
+    return 1ul;
+  }
+
+  inline static T& GetChannel(T& entity, size_t i_channel) {
+    if (i_channel == 0) {
+      return entity;
+    }
+    throw std::out_of_range("Non-channel entity cannot have > 1 channels");
+  }
+};
+
+template<typename T>
+struct EntityTraits<Detector<T>> {
+  static constexpr bool is_channel_or_track = true;
+  typedef T ChannelType;
+
+  inline static T& GetChannel(Detector<T>& det, size_t i_channel) {
+    return det.GetChannel(i_channel);
+  }
+
+  inline static size_t GetNChannels(const Detector<T> detector) {
+    return detector.GetNumberOfChannels();
+  }
+};
 
 }// namespace Details
 
@@ -167,6 +194,8 @@ template<typename Entity>
 class AnalysisTreeBranch : public IBranchView {
 
  public:
+  typedef typename Details::EntityTraits<Entity>::ChannelType ChannelType;
+
   IBranchViewPtr Clone() const override {
     auto newAnalysisTreeBranch = std::make_shared<AnalysisTreeBranch>(this->config_);
     newAnalysisTreeBranch->tree_ = tree_;
@@ -175,7 +204,7 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
   size_t GetNumberOfChannels() const override {
-    return Details::GetNChannels(*data);
+    return Details::EntityTraits<Entity>::GetNChannels(*data);
   }
 
   std::vector<std::string> GetFields() const override {
