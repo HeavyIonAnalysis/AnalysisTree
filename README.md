@@ -3,7 +3,7 @@
 
 ## Doxygen documentation:
 
-https://heavyionanalysis.github.io/AnalysisTree/index.html
+https://heavyionanalysis.github.io/AnalysisTree/
 
 ## General information
 
