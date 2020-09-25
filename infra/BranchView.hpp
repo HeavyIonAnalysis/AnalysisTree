@@ -20,8 +20,17 @@
 
 namespace AnalysisTree {
 
+/* fwd declatarions */
 class IBranchView;
 typedef std::shared_ptr<IBranchView> IBranchViewPtr;
+
+namespace BranchViewAction {
+
+template <typename Lambda>
+class BranchViewDefineAction;
+
+}
+
 
 template<typename T>
 using ResultsColumn = std::vector<T>;
@@ -94,14 +103,18 @@ class IBranchView {
 
 
 
+  /**
+   * @brief Requests enlisted field_names
+   * @param field_names
+   * @return
+   */
   IBranchViewPtr Select(const std::vector<std::string>& field_names) const;
   /**
-   * @brief Returns array of values vs channel
+   * @brief Selects single field
    * @param field_name
    * @return
    */
   IBranchViewPtr Select(const std::string& field_name) const;;
-
   IBranchViewPtr operator[](const std::string& field_name) const { return Select(field_name); }
 
   /**
@@ -114,60 +127,16 @@ class IBranchView {
     throw std::runtime_error("Not implemented");
   }
 
+  template<typename Lambda>
+  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string> && arg_names, Lambda && function) const {
+    BranchViewAction::BranchViewDefineAction<Lambda> action(new_field_name, arg_names, std::forward<Lambda>(function));
+    return Apply(action);
+  }
+
   template<typename Action>
   IBranchViewPtr Apply(Action && action) const {
     return action.ApplyAction(Clone());
   }
-};
-
-namespace Details {
-
-class SelectFieldsAction {
-
- public:
-  SelectFieldsAction(std::vector<std::string> fields) : selected_fields_(std::move(fields)) {}
-
-  std::vector<std::string> GetFieldsAfterAction(const IBranchViewPtr& view) const {
-    std::vector<std::string> result;
-    auto view_fields = view->GetFields();
-    std::set_intersection(view_fields.begin(), view_fields.end(),
-                          selected_fields_.begin(), selected_fields_.end(),
-                          std::back_inserter(result));
-    return result;
-  }
-
- private:
-  std::vector<std::string> selected_fields_;
-};
-
-}// namespace Details
-
-template<typename Action>
-class BranchViewActionResult : public IBranchView {
- public:
-  BranchViewActionResult(Action action, IBranchViewPtr action_arg) : action_(action), action_arg_(std::move(action_arg)) {}
-
-  std::vector<std::string> GetFields() const override {
-    return action_.GetFieldsAfterAction(action_arg_);
-  }
-
-  IBranchViewPtr Clone() const override {
-    auto newBranchView = std::make_shared<BranchViewActionResult>(action_, action_arg_);
-    return newBranchView;
-  }
-
-  void GetEntry(Long64_t i_entry) const override {
-    action_arg_->GetEntry(i_entry);
-  }
-
-  /* could be lazy, could be not, const is not needed */
-  size_t GetNumberOfChannels() const override {
-    return 0;
-  }
-
- private:
-  Action action_;
-  IBranchViewPtr action_arg_;
 };
 
 namespace Details {

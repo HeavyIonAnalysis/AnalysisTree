@@ -19,10 +19,6 @@ TEST(Test_AnalysisTreeBranch,Test_GetFields) {
   AnalysisTreeBranch<EventHeader> br(c);
 
   EXPECT_EQ(br.GetFields(), std::vector<std::string>({"vtx_x","vtx_y","vtx_z"}));
-  EXPECT_EQ(br.Select("vtx_x")->GetFields(), std::vector<std::string>({"vtx_x"}));
-
-  auto s_result = br.Select("vtx_x");
-  s_result->GetFields();
 }
 
 TEST(Test_AnalysisTreeBranch,Test_GetNChannels) {
@@ -81,8 +77,33 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
     EXPECT_EQ(vtx_tracks_results.size(), atb_vtx.GetFields().size());
     EXPECT_EQ(vtx_tracks_results["px"].size(), atb_vtx.GetNumberOfChannels());
   }
-
 }
+
+TEST(Test_BranchViewAction, Define) {
+  BranchConfig event_header_config("test", DetType::kEventHeader);
+  auto data_event_header = new EventHeader;
+
+  {
+    TFile f("tmp.root", "RECREATE");
+    auto tree = new TTree("aTree", "");
+    tree->Branch(event_header_config.GetName().c_str(), &data_event_header);
+
+    data_event_header->Init(event_header_config);
+    for (size_t iEv = 0; iEv < 100; ++iEv) {
+      data_event_header->SetVertexPosition3({float(10 * iEv + 1), float(10 * iEv + 2), float(10 * iEv + 3)});
+      tree->Fill();
+    }
+    tree->Write();
+    f.Close();
+  }
+
+
+  TFile f("tmp.root", "READ");
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+  EXPECT_NO_THROW(atb.Define("vtx_xy", std::vector<std::string>({"vtx_x", "vtx_y"}), [] () {}));
+}
+
+
 }
 
 #endif//ANALYSISTREE_INFRA_BRANCHVIEW_TEST_HPP
