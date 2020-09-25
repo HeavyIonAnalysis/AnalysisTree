@@ -2,6 +2,13 @@ language: cpp
 services:
   - docker
 
+sudo: false
+
+addons:
+  apt:
+    packages:
+      - doxygen
+
 script: |
   docker run --rm -it -v ${TRAVIS_BUILD_DIR}:/AnalysisTree kreisl/rootcpp17:v6.20.04 /bin/bash -c '
   set -e # exit on failure
@@ -17,3 +24,14 @@ script: |
 branches:
   only:
   - master
+
+script:
+  - doxygen docs/Doxyfile.in
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: docs/html
+  github_token: $GH_REPO_TOKEN
+  on:
+    branch: master
