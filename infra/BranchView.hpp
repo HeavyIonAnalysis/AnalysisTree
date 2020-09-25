@@ -24,13 +24,20 @@ namespace AnalysisTree {
 class IBranchView;
 typedef std::shared_ptr<IBranchView> IBranchViewPtr;
 
+class IAction {
+
+ public:
+  virtual ~IAction() {};
+  virtual IBranchViewPtr ApplyAction(const IBranchViewPtr& tgt) = 0;
+};
+
+
 namespace BranchViewAction {
 
-template <typename Lambda>
-class BranchViewDefineAction;
+template<typename Lambda>
+IAction * NewDefineAction(const std::string& field_name, const std::vector<std::string>& lambda_args, Lambda &&lambda);
 
 }
-
 
 template<typename T>
 using ResultsColumn = std::vector<T>;
@@ -128,14 +135,21 @@ class IBranchView {
   }
 
   template<typename Lambda>
-  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string> && arg_names, Lambda && function) const {
-    BranchViewAction::BranchViewDefineAction<Lambda> action(new_field_name, arg_names, std::forward<Lambda>(function));
-    return Apply(action);
+  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string> && arg_names, Lambda&& function) const {
+    auto function_wrap = std::function(function);
+    auto action_ptr = BranchViewAction::NewDefineAction(new_field_name, arg_names, std::move(function_wrap));
+    return Apply(action_ptr);
   }
 
   template<typename Action>
   IBranchViewPtr Apply(Action && action) const {
     return action.ApplyAction(Clone());
+  }
+
+  IBranchViewPtr Apply(IAction * action) const {
+    auto apply_result = action->ApplyAction(Clone());
+    delete action;
+    return apply_result;
   }
 };
 
@@ -255,9 +269,76 @@ class AnalysisTreeBranch : public IBranchView {
   Entity* data{new Entity};
 };
 
-namespace Details {
+
+namespace BranchViewAction {
+
+
+template<typename Lambda>
+class BranchViewDefineAction : public IAction {
+
+  class DefineActionResultImpl : public IBranchView {
+
+   public:
+    std::vector<std::string> GetFields() const override {
+      return std::vector<std::string>();
+    }
+    size_t GetNumberOfChannels() const override {
+      return 0;
+    }
+    ResultsMCols<double> GetDataMatrix() override {
+      return AnalysisTree::ResultsMCols<double>();
+    }
+    void GetEntry(Long64_t entry) const override {
+    }
+    IBranchViewPtr Clone() const override {
+      return AnalysisTree::IBranchViewPtr();
+    }
+
+    std::string defined_field_name_;
+    std::vector<std::string> lambda_args_;
+    IBranchViewPtr origin_;
+  };
+
+ public:
+  BranchViewDefineAction(std::string field_name, std::vector<std::string> lambda_args, Lambda&& lambda) : defined_field_name_(std::move(field_name)), lambda_args_(std::move(lambda_args)) {
+  }
+  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) override {
+    /* check if all fields exist in the origin */
+    auto origin_fields = origin->GetFields();
+    std::vector<std::string> field_intersection;
+    std::sort(origin_fields.begin(), origin_fields.end());
+    std::sort(lambda_args_.begin(), lambda_args_.end());
+    std::set_intersection(origin_fields.begin(), origin_fields.end(),
+                          lambda_args_.begin(), lambda_args_.end(),
+                          std::back_inserter(field_intersection));
+    if (field_intersection.size() != lambda_args_.size()) {
+      throw std::out_of_range("Requested field is missing in the input view");
+    }
+    /* check if defined field is absent in the input */
+    if (std::find(origin_fields.begin(), origin_fields.end(), defined_field_name_) != origin_fields.end()) {
+      throw std::runtime_error("New variable already exists in the input view");
+    }
+
+    auto result = std::make_shared<DefineActionResultImpl>();
+
+
+    return result;
+  }
+
+ private:
+  std::string defined_field_name_;
+  std::vector<std::string> lambda_args_;
+};
+
+template<typename Lambda>
+IAction* NewDefineAction(const std::string& field_name, const std::vector<std::string>& lambda_args, Lambda&& lambda) {
+  return new BranchViewDefineAction(field_name, lambda_args, std::function(std::forward<Lambda>(lambda)));
+}
+
+
 
 }
+
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_INFRA_BRANCHVIEW_HPP

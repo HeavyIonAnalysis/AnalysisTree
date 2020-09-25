@@ -2,11 +2,10 @@
 // Created by eugene on 25/09/2020.
 //
 
-#ifndef ANALYSISTREE_INFRA_BRANCHVIEW_TEST_HPP
-#define ANALYSISTREE_INFRA_BRANCHVIEW_TEST_HPP
-
-#include "BranchView.hpp"
-#include "BranchConfig.hpp"
+#include <TFile.h>
+#include <AnalysisTree/EventHeader.hpp>
+#include <AnalysisTree/BranchView.hpp>
+#include <AnalysisTree/BranchConfig.hpp>
 #include <gtest/gtest.h>
 
 namespace {
@@ -100,10 +99,11 @@ TEST(Test_BranchViewAction, Define) {
 
   TFile f("tmp.root", "READ");
   AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
-  EXPECT_NO_THROW(atb.Define("vtx_xy", std::vector<std::string>({"vtx_x", "vtx_y"}), [] () {}));
+  EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", std::vector<std::string>({"vtx_x", "vtx_y"}), [] () -> double { return 1.0; })));
+  EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_x", std::vector<std::string>({"vtx_x", "vtx_y"}), [] () -> double { return 1.0; })), std::runtime_error);
+  EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", std::vector<std::string>({"vtx_x", "tx_y"}), [] () -> double { return 1.0; })), std::out_of_range);
 }
 
 
 }
 
-#endif//ANALYSISTREE_INFRA_BRANCHVIEW_TEST_HPP

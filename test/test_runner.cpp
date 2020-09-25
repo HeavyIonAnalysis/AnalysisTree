@@ -21,8 +21,6 @@
 #include <infra/VarManager.test.hpp>
 #include <infra/PlainTreeFiller.test.hpp>
 
-#include <infra/BranchView.test.hpp>
-
 int main(int argc, char **argv) {
 
   const int n_events = 1000;

@@ -16,16 +16,16 @@ namespace BranchViewAction {
 
 namespace Details {
 
-template <typename T>
+template<typename T>
 struct Arity : Arity<decltype(&T::operator())> {};
-template <typename R, typename... Args>
-struct Arity<R(*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
-template <typename R, typename C, typename... Args>
-struct Arity<R(C::*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
-template <typename R, typename C, typename... Args>
-struct Arity<R(C::*)(Args...) const> : std::integral_constant<unsigned, sizeof...(Args)> {};
+template<typename R, typename... Args>
+struct Arity<R (*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
+template<typename R, typename C, typename... Args>
+struct Arity<R (C::*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
+template<typename R, typename C, typename... Args>
+struct Arity<R (C::*)(Args...) const> : std::integral_constant<unsigned, sizeof...(Args)> {};
 
-}
+}// namespace Details
 
 class SelectFieldsAction {
 
@@ -49,7 +49,7 @@ class SelectFieldsAction {
     ResultsMCols<double> GetDataMatrix() override {
       ResultsMCols<double> result;
       auto origin_matrix = origin_->GetDataMatrix();
-      for (auto &field : selected_fields_) {
+      for (auto& field : selected_fields_) {
         result.emplace(field, origin_matrix.at(field));
       }
       return result;
@@ -57,11 +57,10 @@ class SelectFieldsAction {
 
     IBranchViewPtr origin_;
     std::vector<std::string> selected_fields_;
-
   };
 
  public:
-  SelectFieldsAction(std::vector<std::string> selectedFields) : selected_fields_(std::move(selectedFields)) {}
+  explicit SelectFieldsAction(std::vector<std::string> selectedFields) : selected_fields_(std::move(selectedFields)) {}
   IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) {
     auto origin_fields = origin->GetFields();
     std::vector<std::string> intersection;
@@ -79,14 +78,11 @@ class SelectFieldsAction {
 
  private:
   std::vector<std::string> selected_fields_;
-
 };
 
 
+}// namespace BranchViewAction
 
-}
-
-
-}
+}// namespace AnalysisTree
 
 #endif//ANALYSISTREE_INFRA_BRANCHREADERACTION_HPP
