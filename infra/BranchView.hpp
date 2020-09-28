@@ -313,7 +313,7 @@ class BranchViewDefineAction : public IAction {
     class FieldRefImpl : public IFieldRef {
 
      public:
-      FieldRefImpl(Function&& Lambda, std::vector<IFieldPtr> LambdaArgs) : lambda_(Lambda), lambda_args_(std::move(LambdaArgs)) {}
+      FieldRefImpl(Function&& lambda, std::vector<IFieldPtr> lambda_args) : lambda_(lambda), lambda_args_(std::move(lambda_args)) {}
 
       double GetValue(size_t i_channel) const final {
         return GetValueImpl(i_channel, std::make_index_sequence<function_arity>());
@@ -325,11 +325,11 @@ class BranchViewDefineAction : public IAction {
         return lambda_args_[ArgIndex]->GetValue(i_channel);
       }
 
-      template<size_t ... ArgIndex>
-      double GetValueImpl(size_t i_channel, std::index_sequence<ArgIndex...>) const {
+      template<size_t... ArgIndex>
+      double
+      GetValueImpl(size_t i_channel, std::index_sequence<ArgIndex...>) const {
         return lambda_(GetArgValue<ArgIndex>(i_channel)...);
       }
-
 
       Function lambda_;
       std::vector<IFieldPtr> lambda_args_;
@@ -339,9 +339,10 @@ class BranchViewDefineAction : public IAction {
     DefineActionResultImpl(std::string defined_field_name,
                            Function lambda,
                            const std::vector<std::string>& lambda_args,
-                           IBranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)), origin_(std::move(origin)) {
+                           IBranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)),
+                                                    origin_(std::move(origin)) {
       if (function_arity != lambda_args.size()) {
-        throw std::out_of_range("Function arity is now consistend with number of passed arguments");
+        throw std::out_of_range("Function arity is now consistent with number of passed arguments");
       }
       std::vector<IFieldPtr> lambda_args_ptrs;
       lambda_args_ptrs.reserve(lambda_args.size());
