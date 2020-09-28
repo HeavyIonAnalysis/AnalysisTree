@@ -105,8 +105,11 @@ TEST(Test_BranchViewAction, Define) {
   EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; }))->GetFields(), std::vector<std::string>({"vtx_xy","vtx_x","vtx_y","vtx_z"}));
 
 
-  auto define_result = atb.Apply(BranchViewAction::NewDefineAction("one", {}, [] () -> double { return 1.0; }));
-  EXPECT_EQ(define_result->GetDataMatrix()["one"][0], 1.);
+  auto define_result = atb.Apply(BranchViewAction::NewDefineAction("const", {}, [] () -> double { return 2.0; }));
+  for (size_t i = 0; i < 100; ++i) {
+    atb.GetEntry(i);
+    EXPECT_EQ(define_result->GetDataMatrix()["const"][0], 2.);
+  }
 
 }
 

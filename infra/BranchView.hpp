@@ -115,7 +115,7 @@ class IBranchView {
    * @param channel_hi
    * @return
    */
-  IBranchViewPtr RangeChannels(size_t channel_lo, size_t channel_hi) const {
+  IBranchViewPtr RangeChannels(size_t /*channel_lo*/, size_t /*channel_hi*/) const {
     throw std::runtime_error("Not implemented");
   };
   /**
@@ -150,7 +150,7 @@ class IBranchView {
    * @param other
    * @return
    */
-  IBranchViewPtr PlainMerge(const IBranchView& other) const {
+  IBranchViewPtr PlainMerge(const IBranchView& /*other */) const {
     throw std::runtime_error("Not implemented");
   }
 
@@ -354,22 +354,22 @@ class BranchViewDefineAction : public IAction {
       defined_field_ptr_ = std::make_shared<FieldRefImpl>(std::forward<Function>(lambda_), lambda_args_ptrs);
     }
 
-    std::vector<std::string> GetFields() const override {
+    std::vector<std::string> GetFields() const final {
       std::vector<std::string> fields({defined_field_name_});
       auto origin_fields = origin_->GetFields();
       std::copy(origin_fields.begin(), origin_fields.end(), std::back_inserter(fields));
       return fields;
     }
-    size_t GetNumberOfChannels() const override {
+    size_t GetNumberOfChannels() const final {
       return origin_->GetNumberOfChannels();
     }
-    void GetEntry(Long64_t entry) const override {
+    void GetEntry(Long64_t entry) const final {
       origin_->GetEntry(entry);
     }
-    IBranchViewPtr Clone() const override {
+    IBranchViewPtr Clone() const final {
       return std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin_->Clone());
     }
-    IFieldPtr GetFieldPtr(std::string field_name) const override {
+    IFieldPtr GetFieldPtr(std::string field_name) const final {
       if (field_name == defined_field_name_) {
         return defined_field_ptr_;
       }
@@ -386,7 +386,7 @@ class BranchViewDefineAction : public IAction {
  public:
   BranchViewDefineAction(std::string field_name, std::vector<std::string> lambda_args, Function&& lambda) : defined_field_name_(std::move(field_name)), lambda_args_(std::move(lambda_args)), lambda_(lambda) {
   }
-  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) override {
+  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) final {
     /* check if all fields exist in the origin */
     auto origin_fields = origin->GetFields();
     std::vector<std::string> field_intersection;
@@ -398,13 +398,12 @@ class BranchViewDefineAction : public IAction {
     if (field_intersection.size() != lambda_args_.size()) {
       throw std::out_of_range("Requested field is missing in the input view");
     }
-    /* check if defined field is absent in the input */
+    /* check if defined field is not defined in the origin */
     if (std::find(origin_fields.begin(), origin_fields.end(), defined_field_name_) != origin_fields.end()) {
       throw std::runtime_error("New variable already exists in the input view");
     }
 
-    auto result = std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin);
-    return result;
+    return std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin);
   }
 
  private:
