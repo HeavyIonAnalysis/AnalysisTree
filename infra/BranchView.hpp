@@ -337,19 +337,21 @@ class BranchViewDefineAction : public IAction {
 
    public:
     DefineActionResultImpl(std::string defined_field_name,
+                           std::vector<std::string> lambda_args,
                            Function lambda,
-                           const std::vector<std::string>& lambda_args,
                            IBranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)),
+                                                    lambda_args_(std::move(lambda_args)),
+                                                    lambda_(lambda),
                                                     origin_(std::move(origin)) {
-      if (function_arity != lambda_args.size()) {
+      if (function_arity != lambda_args_.size()) {
         throw std::out_of_range("Function arity is now consistent with number of passed arguments");
       }
       std::vector<IFieldPtr> lambda_args_ptrs;
-      lambda_args_ptrs.reserve(lambda_args.size());
-      for (auto& arg_field_name : lambda_args) {
+      lambda_args_ptrs.reserve(lambda_args_.size());
+      for (auto& arg_field_name : lambda_args_) {
         lambda_args_ptrs.emplace_back(origin_->GetFieldPtr(arg_field_name));
       }
-      defined_field_ptr_ = std::make_shared<FieldRefImpl>(std::forward<Function>(lambda), lambda_args_ptrs);
+      defined_field_ptr_ = std::make_shared<FieldRefImpl>(std::forward<Function>(lambda_), lambda_args_ptrs);
     }
 
     std::vector<std::string> GetFields() const override {
@@ -365,7 +367,7 @@ class BranchViewDefineAction : public IAction {
       origin_->GetEntry(entry);
     }
     IBranchViewPtr Clone() const override {
-      return AnalysisTree::IBranchViewPtr();
+      return std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin_->Clone());
     }
     IFieldPtr GetFieldPtr(std::string field_name) const override {
       if (field_name == defined_field_name_) {
@@ -375,6 +377,8 @@ class BranchViewDefineAction : public IAction {
     }
 
     std::string defined_field_name_;
+    std::vector<std::string> lambda_args_;
+    Function lambda_;
     IBranchViewPtr origin_;
     IFieldPtr defined_field_ptr_;
   };
@@ -399,7 +403,7 @@ class BranchViewDefineAction : public IAction {
       throw std::runtime_error("New variable already exists in the input view");
     }
 
-    auto result = std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_, lambda_args_, origin);
+    auto result = std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin);
     return result;
   }
 
