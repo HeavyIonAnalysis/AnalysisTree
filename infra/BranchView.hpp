@@ -43,7 +43,7 @@ typedef std::shared_ptr<IFieldRef> IFieldPtr;
 namespace BranchViewAction {
 
 template<typename Lambda>
-IAction * NewDefineAction(const std::string& field_name, const std::vector<std::string>& lambda_args, Lambda &&lambda);
+IAction* NewDefineAction(const std::string& field_name, const std::vector<std::string>& lambda_args, Lambda&& lambda);
 
 }
 
@@ -82,7 +82,6 @@ class IBranchView {
    */
   virtual size_t GetNumberOfChannels() const = 0;
 
-
   virtual IFieldPtr GetFieldPtr(std::string field_name) const = 0;
 
   /**
@@ -91,7 +90,7 @@ class IBranchView {
    */
   virtual ResultsMCols<double> GetDataMatrix() {
     ResultsMCols<double> result;
-    for (auto &column_name : GetFields()) {
+    for (auto& column_name : GetFields()) {
       auto emplace_result = result.emplace(column_name, ResultsColumn<double>(GetNumberOfChannels()));
       ResultsColumn<double>& column_vector = emplace_result.first->second;
       IFieldPtr field_ptr = GetFieldPtr(column_name);
@@ -130,8 +129,6 @@ class IBranchView {
 
   IBranchViewPtr operator[](size_t channel_id) const { return SliceFields(channel_id); }
 
-
-
   /**
    * @brief Requests enlisted field_names
    * @param field_names
@@ -143,7 +140,8 @@ class IBranchView {
    * @param field_name
    * @return
    */
-  IBranchViewPtr Select(const std::string& field_name) const;;
+  IBranchViewPtr Select(const std::string& field_name) const;
+  ;
   IBranchViewPtr operator[](const std::string& field_name) const { return Select(field_name); }
 
   /**
@@ -157,18 +155,18 @@ class IBranchView {
   }
 
   template<typename Lambda>
-  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string> && arg_names, Lambda&& function) const {
+  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string>&& arg_names, Lambda&& function) const {
     auto function_wrap = std::function(function);
     auto action_ptr = BranchViewAction::NewDefineAction(new_field_name, arg_names, std::move(function_wrap));
     return Apply(action_ptr);
   }
 
   template<typename Action>
-  IBranchViewPtr Apply(Action && action) const {
+  IBranchViewPtr Apply(Action&& action) const {
     return action.ApplyAction(Clone());
   }
 
-  IBranchViewPtr Apply(IAction * action) const {
+  IBranchViewPtr Apply(IAction* action) const {
     auto apply_result = action->ApplyAction(Clone());
     delete action;
     return apply_result;
@@ -176,8 +174,6 @@ class IBranchView {
 };
 
 namespace Details {
-
-
 
 template<typename T>
 struct EntityTraits {
@@ -219,7 +215,7 @@ class AnalysisTreeBranch : public IBranchView {
    public:
     FieldRefImpl(Entity* Data, ShortInt_t FieldId, Types FieldType) : data_(Data), field_id_(FieldId), field_type_(FieldType) {}
     double GetValue(size_t i_channel) const override {
-      auto &channel = Details::EntityTraits<Entity>::GetChannel(*data_, i_channel);
+      auto& channel = Details::EntityTraits<Entity>::GetChannel(*data_, i_channel);
       if (field_type_ == Types::kInteger) {
         return channel.template GetField<int>(field_id_);
       } else if (field_type_ == Types::kFloat) {
@@ -231,10 +227,9 @@ class AnalysisTreeBranch : public IBranchView {
     }
 
    private:
-    Entity *data_{nullptr};
+    Entity* data_{nullptr};
     ShortInt_t field_id_{};
     Types field_type_{Types::kNumberOfTypes};
-
   };
 
  public:
@@ -277,10 +272,8 @@ class AnalysisTreeBranch : public IBranchView {
     return std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type);
   }
 
-
-
  private:
-  void InitTree(TTree *tree) {
+  void InitTree(TTree* tree) {
     tree->SetBranchAddress(config_.GetName().c_str(), &data);
   }
 
@@ -292,22 +285,72 @@ class AnalysisTreeBranch : public IBranchView {
     });
   }
 
-
   BranchConfig config_;
   TTree* tree_{nullptr};
   Entity* data{new Entity};
 };
 
-
 namespace BranchViewAction {
 
+namespace Details {
+template<typename T>
+struct Arity : Arity<decltype(&T::operator())> {};
+template<typename R, typename... Args>
+struct Arity<R (*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
+template<typename R, typename C, typename... Args>
+struct Arity<R (C::*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
+template<typename R, typename C, typename... Args>
+struct Arity<R (C::*)(Args...) const> : std::integral_constant<unsigned, sizeof...(Args)> {};
+}// namespace Details
 
 template<typename Function>
 class BranchViewDefineAction : public IAction {
 
   class DefineActionResultImpl : public IBranchView {
 
+    static constexpr size_t function_arity = Details::Arity<Function>::value;
+
+    class FieldRefImpl : public IFieldRef {
+
+     public:
+      FieldRefImpl(Function&& Lambda, std::vector<IFieldPtr> LambdaArgs) : lambda_(Lambda), lambda_args_(std::move(LambdaArgs)) {}
+
+      double GetValue(size_t i_channel) const final {
+        return GetValueImpl(i_channel, std::make_index_sequence<function_arity>());
+      }
+
+     private:
+      template<size_t ArgIndex>
+      double GetArgValue(size_t i_channel) const {
+        return lambda_args_[ArgIndex]->GetValue(i_channel);
+      }
+
+      template<size_t ... ArgIndex>
+      double GetValueImpl(size_t i_channel, std::index_sequence<ArgIndex...>) const {
+        return lambda_(GetArgValue<ArgIndex>(i_channel)...);
+      }
+
+
+      Function lambda_;
+      std::vector<IFieldPtr> lambda_args_;
+    };
+
    public:
+    DefineActionResultImpl(std::string defined_field_name,
+                           Function lambda,
+                           const std::vector<std::string>& lambda_args,
+                           IBranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)), origin_(std::move(origin)) {
+      if (function_arity != lambda_args.size()) {
+        throw std::out_of_range("Function arity is now consistend with number of passed arguments");
+      }
+      std::vector<IFieldPtr> lambda_args_ptrs;
+      lambda_args_ptrs.reserve(lambda_args.size());
+      for (auto& arg_field_name : lambda_args) {
+        lambda_args_ptrs.emplace_back(origin_->GetFieldPtr(arg_field_name));
+      }
+      defined_field_ptr_ = std::make_shared<FieldRefImpl>(std::forward<Function>(lambda), lambda_args_ptrs);
+    }
+
     std::vector<std::string> GetFields() const override {
       std::vector<std::string> fields({defined_field_name_});
       auto origin_fields = origin_->GetFields();
@@ -317,9 +360,6 @@ class BranchViewDefineAction : public IAction {
     size_t GetNumberOfChannels() const override {
       return origin_->GetNumberOfChannels();
     }
-    ResultsMCols<double> GetDataMatrix() override {
-      return AnalysisTree::ResultsMCols<double>();
-    }
     void GetEntry(Long64_t entry) const override {
       origin_->GetEntry(entry);
     }
@@ -327,16 +367,19 @@ class BranchViewDefineAction : public IAction {
       return AnalysisTree::IBranchViewPtr();
     }
     IFieldPtr GetFieldPtr(std::string field_name) const override {
-      return AnalysisTree::IFieldPtr();
+      if (field_name == defined_field_name_) {
+        return defined_field_ptr_;
+      }
+      return origin_->GetFieldPtr(field_name);
     }
 
     std::string defined_field_name_;
-    std::vector<std::string> lambda_args_;
     IBranchViewPtr origin_;
+    IFieldPtr defined_field_ptr_;
   };
 
  public:
-  BranchViewDefineAction(std::string field_name, std::vector<std::string> lambda_args, Function&& lambda) : defined_field_name_(std::move(field_name)), lambda_args_(std::move(lambda_args)) {
+  BranchViewDefineAction(std::string field_name, std::vector<std::string> lambda_args, Function&& lambda) : defined_field_name_(std::move(field_name)), lambda_args_(std::move(lambda_args)), lambda_(lambda) {
   }
   IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) override {
     /* check if all fields exist in the origin */
@@ -355,18 +398,14 @@ class BranchViewDefineAction : public IAction {
       throw std::runtime_error("New variable already exists in the input view");
     }
 
-    auto result = std::make_shared<DefineActionResultImpl>();
-    result->origin_ = origin;
-    result->defined_field_name_ = defined_field_name_;
-    result->lambda_args_ = lambda_args_;
-
-
+    auto result = std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_, lambda_args_, origin);
     return result;
   }
 
  private:
   std::string defined_field_name_;
   std::vector<std::string> lambda_args_;
+  Function lambda_;
 };
 
 template<typename Lambda>
@@ -380,9 +419,7 @@ IAction* NewDefineAction(const std::string& field_name, std::initializer_list<st
   return NewDefineAction(field_name, lambda_args_v, lambda);
 }
 
-
-}
-
+}// namespace BranchViewAction
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_INFRA_BRANCHVIEW_HPP

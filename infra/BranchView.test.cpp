@@ -99,10 +99,15 @@ TEST(Test_BranchViewAction, Define) {
 
   TFile f("tmp.root", "READ");
   AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
-  EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] () -> double { return 1.0; })));
-  EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_x", {"vtx_x", "vtx_y"}, [] () -> double { return 1.0; })), std::runtime_error);
-  EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "tx_y"}, [] () -> double { return 1.0; })), std::out_of_range);
-  EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] () -> double { return 1.0; }))->GetFields(), std::vector<std::string>({"vtx_xy","vtx_x","vtx_y","vtx_z"}));
+  EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; })));
+  EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_x", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; })), std::runtime_error);
+  EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "tx_y"}, [] (double , double ) -> double { return 1.0; })), std::out_of_range);
+  EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; }))->GetFields(), std::vector<std::string>({"vtx_xy","vtx_x","vtx_y","vtx_z"}));
+
+
+  auto define_result = atb.Apply(BranchViewAction::NewDefineAction("one", {}, [] () -> double { return 1.0; }));
+  EXPECT_EQ(define_result->GetDataMatrix()["one"][0], 1.);
+
 }
 
 

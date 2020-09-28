@@ -16,14 +16,6 @@ namespace BranchViewAction {
 
 namespace Details {
 
-template<typename T>
-struct Arity : Arity<decltype(&T::operator())> {};
-template<typename R, typename... Args>
-struct Arity<R (*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
-template<typename R, typename C, typename... Args>
-struct Arity<R (C::*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
-template<typename R, typename C, typename... Args>
-struct Arity<R (C::*)(Args...) const> : std::integral_constant<unsigned, sizeof...(Args)> {};
 
 }// namespace Details
 
