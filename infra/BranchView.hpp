@@ -358,6 +358,42 @@ inline std::string GetTypeString<bool>() { return "bool"; }
 std::vector<std::string>
 GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields);
 
+template<typename Func>
+class LambdaFieldRef : public IFieldRef {
+  static constexpr size_t function_arity = Details::FunctionTraits<Func>::Arity;
+  typedef typename Details::FunctionTraits<Func>::ret_type function_ret_type;
+
+ public:
+  LambdaFieldRef(Func&& lambda, std::vector<IFieldPtr> lambda_args) : lambda_(lambda), lambda_args_(std::move(lambda_args)) {}
+
+  double GetValue(size_t i_channel) const final {
+    return GetValueImpl(i_channel, std::make_index_sequence<function_arity>());
+  }
+
+  function_ret_type GetValueRaw(size_t i_channel) const {
+    return GetValueImpl(i_channel, std::make_index_sequence<function_arity>());
+  }
+
+  std::string GetFieldTypeStr() const override {
+    return Details::GetTypeString<function_ret_type>();
+  }
+
+ private:
+  template<size_t ArgIndex>
+  double GetArgValue(size_t i_channel) const {
+    return lambda_args_[ArgIndex]->GetValue(i_channel);
+  }
+
+  template<size_t... ArgIndex>
+  function_ret_type
+  GetValueImpl(size_t i_channel, std::index_sequence<ArgIndex...>) const {
+    return lambda_(GetArgValue<ArgIndex>(i_channel)...);
+  }
+
+  Func lambda_;
+  std::vector<IFieldPtr> lambda_args_;
+};
+
 }// namespace Details
 
 template<typename Function>
@@ -367,35 +403,6 @@ class BranchViewDefineAction : public IAction {
 
     static constexpr size_t function_arity = Details::FunctionTraits<Function>::Arity;
     typedef typename Details::FunctionTraits<Function>::ret_type function_ret_type;
-
-    class FieldRefImpl : public IFieldRef {
-
-     public:
-      FieldRefImpl(Function&& lambda, std::vector<IFieldPtr> lambda_args) : lambda_(lambda), lambda_args_(std::move(lambda_args)) {}
-
-      double GetValue(size_t i_channel) const final {
-        return GetValueImpl(i_channel, std::make_index_sequence<function_arity>());
-      }
-
-      std::string GetFieldTypeStr() const override {
-        return Details::GetTypeString<function_ret_type>();
-      }
-
-     private:
-      template<size_t ArgIndex>
-      double GetArgValue(size_t i_channel) const {
-        return lambda_args_[ArgIndex]->GetValue(i_channel);
-      }
-
-      template<size_t... ArgIndex>
-      double
-      GetValueImpl(size_t i_channel, std::index_sequence<ArgIndex...>) const {
-        return lambda_(GetArgValue<ArgIndex>(i_channel)...);
-      }
-
-      Function lambda_;
-      std::vector<IFieldPtr> lambda_args_;
-    };
 
    public:
     DefineActionResultImpl(std::string defined_field_name,
@@ -413,7 +420,7 @@ class BranchViewDefineAction : public IAction {
       for (auto& arg_field_name : lambda_args_) {
         lambda_args_ptrs.emplace_back(origin_->GetFieldPtr(arg_field_name));
       }
-      defined_field_ptr_ = std::make_shared<FieldRefImpl>(std::forward<Function>(lambda_), lambda_args_ptrs);
+      defined_field_ptr_ = std::make_shared<Details::LambdaFieldRef<Function>>(std::forward<Function>(lambda_), lambda_args_ptrs);
     }
     Long64_t GetEntries() const override {
       return origin_->GetEntries();
@@ -476,7 +483,6 @@ class BranchViewFilterAction : public IAction {
 
   class FilterActionResultImpl : public IBranchView {
     struct ChannelsCache {
-      Long64_t cached_entry{-1};
       std::vector<size_t> passed_channels;
     };
 
