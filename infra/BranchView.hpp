@@ -210,7 +210,7 @@ struct EntityTraits<Detector<T>> {
     return det.GetChannel(i_channel);
   }
 
-  inline static size_t GetNChannels(const Detector<T> detector) {
+  inline static size_t GetNChannels(const Detector<T> &detector) {
     return detector.GetNumberOfChannels();
   }
 };
@@ -521,7 +521,7 @@ class BranchViewFilterAction : public IAction {
       return origin_->GetFields();
     }
     size_t GetNumberOfChannels() const override {
-      return 0;
+      return cache_->channels.size();
     }
     IFieldPtr GetFieldPtr(std::string) const override {
       /* Here's custom field-refs */
@@ -542,7 +542,8 @@ class BranchViewFilterAction : public IAction {
     void UpdateCache() const {
       cache_->channels.clear();
       for (size_t i_channel = 0; i_channel < origin_->GetNumberOfChannels(); i_channel++) {
-        if (predicate_->GetValueRaw(i_channel)) {
+        auto predicate_result = predicate_->GetValueRaw(i_channel);
+        if (predicate_result) {
           cache_->channels.push_back(i_channel);
         }
       }

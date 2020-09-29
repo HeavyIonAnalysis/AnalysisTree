@@ -47,7 +47,8 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
     for (size_t iEv = 0; iEv < 100; ++iEv) {
       data_event_header->SetVertexPosition3({float(10 * iEv + 1), float(10 * iEv + 2), float(10 * iEv + 3)});
 
-      for (size_t iTr = 0; iTr < 10*iEv; ++iTr) {
+      data_vtx_tracks->ClearChannels();
+      for (size_t iTr = 0; iTr < 10; ++iTr) {
         auto channel = data_vtx_tracks->AddChannel();
         channel->Init(vtx_tracks_config);
         channel->SetMomentum(10.*iEv, 20.*iEv, 30.*iEv);
@@ -74,7 +75,7 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
 
     auto vtx_tracks_results = atb_vtx.GetDataMatrix();
     EXPECT_EQ(vtx_tracks_results.size(), atb_vtx.GetFields().size());
-    EXPECT_EQ(vtx_tracks_results["px"].size(), atb_vtx.GetNumberOfChannels());
+    EXPECT_EQ(atb_vtx.GetNumberOfChannels(), 10);
   }
 }
 
@@ -120,15 +121,26 @@ TEST(Test_BranchViewAction, Define) {
 TEST(Test_BranchViewAction, Filter) {
   BranchConfig event_header_config("test", DetType::kEventHeader);
   auto data_event_header = new EventHeader;
+  BranchConfig vtx_tracks_config("vtx_tracks", DetType::kTrack);
+  auto data_vtx_tracks = new TrackDetector;
 
   {
     TFile f("tmp.root", "RECREATE");
     auto tree = new TTree("aTree", "");
     tree->Branch(event_header_config.GetName().c_str(), &data_event_header);
+    tree->Branch(vtx_tracks_config.GetName().c_str(), &data_vtx_tracks);
 
     data_event_header->Init(event_header_config);
     for (size_t iEv = 0; iEv < 100; ++iEv) {
       data_event_header->SetVertexPosition3({float(10 * iEv + 1), float(10 * iEv + 2), float(10 * iEv + 3)});
+
+      data_vtx_tracks->ClearChannels();
+      for (size_t iTr = 0; iTr < 10; ++iTr) {
+        auto channel = data_vtx_tracks->AddChannel();
+        channel->Init(vtx_tracks_config);
+        float px = iTr < 2? 0. : 1.;
+        channel->SetMomentum(px, 20.*iEv, 30.*iEv);
+      } // tracks
       tree->Fill();
     }
     tree->Write();
@@ -141,6 +153,20 @@ TEST(Test_BranchViewAction, Filter) {
 
   EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> bool {return false;})));
   EXPECT_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> double {return false;})), std::runtime_error);
+
+  /* none passing */
+  auto filter_false = atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> bool {return false;}));
+  filter_false->SetEntry(0);
+  EXPECT_EQ(filter_false->GetNumberOfChannels(), 0);
+  /* all passing */
+  auto filter_true = atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> bool {return true;}));
+  filter_true->SetEntry(0);
+  EXPECT_EQ(filter_true->GetNumberOfChannels(), 1);
+
+  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
+  auto filter_px = atb_vtx.Apply(BranchViewAction::NewFilterAction({"px"}, [] (double px) -> bool {return px == 0.;}));
+  filter_px->SetEntry(0);
+  EXPECT_EQ(filter_px->GetNumberOfChannels(), 2);
 }
 
 }
