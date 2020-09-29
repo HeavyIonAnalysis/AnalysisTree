@@ -32,6 +32,9 @@ class SelectFieldsAction {
     void GetEntry(Long64_t entry) const override {
       return origin_->GetEntry(entry);
     }
+    Long64_t GetEntries() const override {
+      return origin_->GetEntries();
+    }
     IBranchViewPtr Clone() const override {
       auto newView = std::make_shared<SelectFieldsActionResultImpl>();
       newView->origin_ = origin_->Clone();
@@ -50,15 +53,15 @@ class SelectFieldsAction {
   explicit SelectFieldsAction(std::vector<std::string> selectedFields) : selected_fields_(std::move(selectedFields)) {}
   IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) {
     auto origin_fields = origin->GetFields();
-    std::vector<std::string> intersection;
+    std::vector<std::string> fields_intersection;
     std::sort(origin_fields.begin(), origin_fields.end());
     std::sort(selected_fields_.begin(), selected_fields_.end());
     std::set_intersection(origin_fields.begin(), origin_fields.end(),
                           selected_fields_.begin(), selected_fields_.end(),
-                          std::back_inserter(intersection));
+                          std::back_inserter(fields_intersection));
 
     auto action_result = std::make_shared<SelectFieldsActionResultImpl>();
-    action_result->selected_fields_ = intersection;
+    action_result->selected_fields_ = fields_intersection;
     action_result->origin_ = origin;
     return action_result;
   }

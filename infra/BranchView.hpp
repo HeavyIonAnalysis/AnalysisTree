@@ -88,24 +88,14 @@ class IBranchView {
    * @brief returns matrix of evaluation results
    * @return
    */
-  virtual ResultsMCols<double> GetDataMatrix() {
-    ResultsMCols<double> result;
-    for (auto& column_name : GetFields()) {
-      auto emplace_result = result.emplace(column_name, ResultsColumn<double>(GetNumberOfChannels()));
-      ResultsColumn<double>& column_vector = emplace_result.first->second;
-      IFieldPtr field_ptr = GetFieldPtr(column_name);
-      for (size_t i_channel = 0; i_channel < GetNumberOfChannels(); ++i_channel) {
-        column_vector[i_channel] = field_ptr->GetValue(i_channel);
-      }
-    }
-    return result;
-  }
+  virtual ResultsMCols<double> GetDataMatrix();
 
   /**
    * @brief
    * @param entry
    */
   virtual void GetEntry(Long64_t entry) const = 0;
+  virtual Long64_t GetEntries() const = 0;
 
   virtual IBranchViewPtr Clone() const = 0;
 
@@ -126,7 +116,6 @@ class IBranchView {
    * @return
    */
   IBranchViewPtr SliceFields(size_t channel_id) const { return RangeChannels(channel_id, channel_id + 1); };
-
   IBranchViewPtr operator[](size_t channel_id) const { return SliceFields(channel_id); }
 
   /**
@@ -141,8 +130,16 @@ class IBranchView {
    * @return
    */
   IBranchViewPtr Select(const std::string& field_name) const;
-  ;
-  IBranchViewPtr operator[](const std::string& field_name) const { return Select(field_name); }
+  IBranchViewPtr operator[](const std::string& field_name) const;
+
+
+  /**
+   * @brief TODO
+   * @param old_to_new_names
+   * @return
+   */
+  IBranchViewPtr MapFields(std::map<std::string, std::string> old_to_new_names) const;
+  IBranchViewPtr MapFields(std::string old_name, std::string new_name) const;
 
   /**
    * @brief Merges two compatible views
@@ -154,8 +151,16 @@ class IBranchView {
     throw std::runtime_error("Not implemented");
   }
 
-  template<typename Lambda>
-  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string>&& arg_names, Lambda&& function) const {
+  /**
+   * @brief Defines new field from function evaluation
+   * @tparam Function
+   * @param new_field_name
+   * @param arg_names
+   * @param function
+   * @return
+   */
+  template<typename Function>
+  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string>&& arg_names, Function&& function) const {
     auto function_wrap = std::function(function);
     auto action_ptr = BranchViewAction::NewDefineAction(new_field_name, arg_names, std::move(function_wrap));
     return Apply(action_ptr);
@@ -213,7 +218,7 @@ class AnalysisTreeBranch : public IBranchView {
 
   class FieldRefImpl : public IFieldRef {
    public:
-    FieldRefImpl(Entity* Data, ShortInt_t FieldId, Types FieldType) : data_(Data), field_id_(FieldId), field_type_(FieldType) {}
+    FieldRefImpl(Entity* data, ShortInt_t field_id, Types field_type) : data_(data), field_id_(field_id), field_type_(field_type) {}
     double GetValue(size_t i_channel) const override {
       auto& channel = Details::EntityTraits<Entity>::GetChannel(*data_, i_channel);
       if (field_type_ == Types::kInteger) {
@@ -256,6 +261,10 @@ class AnalysisTreeBranch : public IBranchView {
 
   void GetEntry(Long64_t entry) const override {
     tree_->GetEntry(entry);
+  }
+
+  Long64_t GetEntries() const override {
+    return tree_->GetEntries();
   }
 
   explicit AnalysisTreeBranch(BranchConfig config) : config_(std::move(config)) {
@@ -353,7 +362,9 @@ class BranchViewDefineAction : public IAction {
       }
       defined_field_ptr_ = std::make_shared<FieldRefImpl>(std::forward<Function>(lambda_), lambda_args_ptrs);
     }
-
+    Long64_t GetEntries() const override {
+      return origin_->GetEntries();
+    }
     std::vector<std::string> GetFields() const final {
       std::vector<std::string> fields({defined_field_name_});
       auto origin_fields = origin_->GetFields();
