@@ -16,6 +16,7 @@
 #include <TTree.h>
 
 #include <AnalysisTree/BranchConfig.hpp>
+#include <AnalysisTree/BranchView.hpp>
 #include <AnalysisTree/Detector.hpp>
 
 namespace AnalysisTree {
@@ -602,7 +603,53 @@ IAction* NewFilterAction(std::initializer_list<std::string> lambda_args, Lambda&
   return new BranchViewFilterAction<Lambda>(lambda_args_v, std::forward<Lambda>(lambda));
 }
 
+class SelectFieldsAction {
 
+  class SelectFieldsActionResultImpl : public IBranchView {
+   public:
+    std::vector<std::string> GetFields() const override {
+      return selected_fields_;
+    }
+    size_t GetNumberOfChannels() const override {
+      return origin_->GetNumberOfChannels();
+    }
+    void SetEntry(Long64_t entry) const override {
+      return origin_->SetEntry(entry);
+    }
+    Long64_t GetEntries() const override {
+      return origin_->GetEntries();
+    }
+    IBranchViewPtr Clone() const override {
+      auto newView = std::make_shared<SelectFieldsActionResultImpl>();
+      newView->origin_ = origin_->Clone();
+      newView->selected_fields_ = selected_fields_;
+      return newView;
+    }
+    IFieldPtr GetFieldPtr(std::string field_name) const override {
+      return origin_->GetFieldPtr(field_name);
+    }
+
+    IBranchViewPtr origin_;
+    std::vector<std::string> selected_fields_;
+  };
+
+ public:
+  explicit SelectFieldsAction(std::vector<std::string> selectedFields) : selected_fields_(std::move(selectedFields)) {}
+  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) {
+    auto missing_args = Details::GetMissingArgs(selected_fields_, origin->GetFields());
+    if (!missing_args.empty()) {
+      throw std::out_of_range("Few args are missing");
+    }
+
+    auto action_result = std::make_shared<SelectFieldsActionResultImpl>();
+    action_result->selected_fields_ = selected_fields_;
+    action_result->origin_ = origin;
+    return action_result;
+  }
+
+ private:
+  std::vector<std::string> selected_fields_;
+};
 }// namespace BranchViewAction
 
 }// namespace AnalysisTree

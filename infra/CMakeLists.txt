@@ -8,7 +8,7 @@ set(SOURCES
   TaskManager.cpp
   PlainTreeFiller.cpp
   BranchView.cpp
-  BranchViewAction.cpp)
+        )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")

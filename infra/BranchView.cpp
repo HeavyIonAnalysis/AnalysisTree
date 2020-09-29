@@ -4,7 +4,6 @@
 
 #include "BranchView.hpp"
 
-#include "BranchViewAction.hpp"
 
 using namespace AnalysisTree;
 
