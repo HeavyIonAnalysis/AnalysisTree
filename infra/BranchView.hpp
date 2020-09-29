@@ -92,10 +92,14 @@ class IBranchView {
   virtual ResultsMCols<double> GetDataMatrix();
 
   /**
-   * @brief
+   * @brief set data source to new entry
    * @param entry
    */
   virtual void SetEntry(Long64_t entry) const = 0;
+  /**
+   * @brief Gets number of entries in data source
+   * @return
+   */
   virtual Long64_t GetEntries() const = 0;
 
   virtual IBranchViewPtr Clone() const = 0;
@@ -132,7 +136,6 @@ class IBranchView {
    */
   IBranchViewPtr Select(const std::string& field_name) const;
   IBranchViewPtr operator[](const std::string& field_name) const;
-
 
   /**
    * @brief TODO
@@ -214,6 +217,10 @@ struct EntityTraits<Detector<T>> {
 
 }// namespace Details
 
+/**
+ * @brief Binding of AnalysisTree branch to BranchView
+ * @tparam Entity type of the entity
+ */
 template<typename Entity>
 class AnalysisTreeBranch : public IBranchView {
 
@@ -314,6 +321,7 @@ class AnalysisTreeBranch : public IBranchView {
 namespace BranchViewAction {
 
 namespace Details {
+
 template<typename T>
 struct FunctionTraits : FunctionTraits<decltype(&T::operator())> {};
 template<typename R, typename... Args>
@@ -333,33 +341,22 @@ struct FunctionTraits<R (C::*)(Args...) const> {
 };
 
 template<typename T>
-std::string GetTypeString() {
-  return std::string(typeid(T).name());
-}
+std::string GetTypeString() { return std::string(typeid(T).name()); }
 
 template<>
-inline
-std::string GetTypeString<double>() {
-  return "double";
-}
+inline std::string GetTypeString<double>() { return "double"; }
 
 template<>
-inline
-std::string GetTypeString<int>() {
-  return "int";
-}
+inline std::string GetTypeString<int>() { return "int"; }
 
 template<>
-inline
-std::string GetTypeString<float>() {
-  return "float";
-}
+inline std::string GetTypeString<float>() { return "float"; }
 
 template<>
-inline
-std::string GetTypeString<bool>() {
-  return "bool";
-}
+inline std::string GetTypeString<bool>() { return "bool"; }
+
+std::vector<std::string>
+GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields);
 
 }// namespace Details
 
@@ -369,6 +366,7 @@ class BranchViewDefineAction : public IAction {
   class DefineActionResultImpl : public IBranchView {
 
     static constexpr size_t function_arity = Details::FunctionTraits<Function>::Arity;
+    typedef typename Details::FunctionTraits<Function>::ret_type function_ret_type;
 
     class FieldRefImpl : public IFieldRef {
 
@@ -380,7 +378,7 @@ class BranchViewDefineAction : public IAction {
       }
 
       std::string GetFieldTypeStr() const override {
-        return Details::GetTypeString<typename Details::FunctionTraits<Function>::ret_type>();
+        return Details::GetTypeString<function_ret_type>();
       }
 
      private:
@@ -454,17 +452,12 @@ class BranchViewDefineAction : public IAction {
   }
   IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) final {
     /* check if all fields exist in the origin */
-    auto origin_fields = origin->GetFields();
-    std::vector<std::string> field_intersection;
-    std::sort(origin_fields.begin(), origin_fields.end());
-    std::sort(lambda_args_.begin(), lambda_args_.end());
-    std::set_intersection(origin_fields.begin(), origin_fields.end(),
-                          lambda_args_.begin(), lambda_args_.end(),
-                          std::back_inserter(field_intersection));
-    if (field_intersection.size() != lambda_args_.size()) {
-      throw std::out_of_range("Requested field is missing in the input view");
+    auto missing_args = Details::GetMissingArgs(lambda_args_, origin->GetFields());
+    if (!missing_args.empty()) {
+      throw std::out_of_range("Few arguments are missing");
     }
     /* check if defined field is not defined in the origin */
+    auto origin_fields = origin->GetFields();
     if (std::find(origin_fields.begin(), origin_fields.end(), defined_field_name_) != origin_fields.end()) {
       throw std::runtime_error("New variable already exists in the input view");
     }
@@ -476,6 +469,53 @@ class BranchViewDefineAction : public IAction {
   std::string defined_field_name_;
   std::vector<std::string> lambda_args_;
   Function lambda_;
+};
+
+template<typename Function>
+class BranchViewFilterAction : public IAction {
+
+  class FilterActionResultImpl : public IBranchView {
+    struct ChannelsCache {
+      Long64_t cached_entry{-1};
+      std::vector<size_t> passed_channels;
+    };
+
+   public:
+    std::vector<std::string> GetFields() const override {
+      /* from origin */
+      return std::vector<std::string>();
+    }
+    size_t GetNumberOfChannels() const override {
+      return 0;
+    }
+    IFieldPtr GetFieldPtr(std::string field_name) const override {
+      return AnalysisTree::IFieldPtr();
+    }
+    void SetEntry(Long64_t entry) const override {
+      /* gets new entry
+       * calculates vector of valid channels
+       * sends to field ptrs */
+    }
+    Long64_t GetEntries() const override {
+      /* from origin */
+      return 0;
+    }
+    IBranchViewPtr Clone() const override {
+      return AnalysisTree::IBranchViewPtr();
+    }
+
+   private:
+    IBranchViewPtr origin_;
+    Function lambda_;
+    std::vector<std::string> lambda_args_;
+
+    std::shared_ptr<ChannelsCache> cache_{new ChannelsCache};
+  };
+
+ public:
+  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) override {
+    return AnalysisTree::IBranchViewPtr();
+  }
 };
 
 template<typename Lambda>

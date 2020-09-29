@@ -31,3 +31,14 @@ ResultsMCols<double> IBranchView::GetDataMatrix() {
   }
   return result;
 }
+
+std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {
+  std::vector<std::string> result;
+
+  for (auto& arg : args) {
+    if (std::find(view_fields.begin(), view_fields.end(), arg) == view_fields.end()) {
+      result.emplace_back(arg);
+    }
+  }
+  return result;
+}
