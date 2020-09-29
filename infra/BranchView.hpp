@@ -497,8 +497,25 @@ class BranchViewFilterAction : public IAction {
   typedef typename Details::FunctionTraits<Function>::ret_type function_ret_type;
 
   class FilterActionResultImpl : public IBranchView {
-    struct ChannelsCache {
+    struct ChannelsHolder {
+      bool is_initialized{false};
       std::vector<size_t> channels;
+    };
+
+    typedef std::shared_ptr<ChannelsHolder> ChannelsHolderPtr;
+
+    class FieldRefImpl : public IFieldRef {
+     public:
+      FieldRefImpl(IFieldPtr origin_field, const ChannelsHolderPtr& cache) : origin_field_(std::move(origin_field)), cache_(cache) {}
+      double GetValue(size_t i_channel) const override {
+        return origin_field_->GetValue(cache_->channels[i_channel]);
+      }
+      std::string GetFieldTypeStr() const override {
+        return origin_field_->GetFieldTypeStr();
+      }
+     private:
+      IFieldPtr origin_field_;
+      ChannelsHolderPtr cache_;
     };
 
    public:
@@ -515,7 +532,7 @@ class BranchViewFilterAction : public IAction {
         lambda_args_ptrs.emplace_back(origin->GetFieldPtr(arg_name));
       }
       predicate_ = std::make_shared<LambdaFieldRef>(lambda_, lambda_args_ptrs);
-      cache_ = std::make_shared<ChannelsCache>();
+      cache_ = std::make_shared<ChannelsHolder>();
     }
     std::vector<std::string> GetFields() const override {
       return origin_->GetFields();
@@ -523,9 +540,8 @@ class BranchViewFilterAction : public IAction {
     size_t GetNumberOfChannels() const override {
       return cache_->channels.size();
     }
-    IFieldPtr GetFieldPtr(std::string) const override {
-      /* Here's custom field-refs */
-      return AnalysisTree::IFieldPtr();
+    IFieldPtr GetFieldPtr(std::string field_name) const override {
+      return std::make_shared<FieldRefImpl>(origin_->GetFieldPtr(field_name), cache_);
     }
     void SetEntry(Long64_t entry) const override {
       origin_->SetEntry(entry);
@@ -535,12 +551,14 @@ class BranchViewFilterAction : public IAction {
       return origin_->GetEntries();
     }
     IBranchViewPtr Clone() const override {
-      return AnalysisTree::IBranchViewPtr();
+      return std::make_shared<FilterActionResultImpl>(lambda_, lambda_args_, origin_->Clone());
     }
 
    private:
     void UpdateCache() const {
+      cache_->is_initialized = true;
       cache_->channels.clear();
+      cache_->channels.reserve(origin_->GetNumberOfChannels());
       for (size_t i_channel = 0; i_channel < origin_->GetNumberOfChannels(); i_channel++) {
         auto predicate_result = predicate_->GetValueRaw(i_channel);
         if (predicate_result) {
@@ -553,7 +571,7 @@ class BranchViewFilterAction : public IAction {
     std::vector<std::string> lambda_args_;
     IBranchViewPtr origin_;
 
-    std::shared_ptr<ChannelsCache> cache_;
+    ChannelsHolderPtr cache_;
     std::shared_ptr<Details::LambdaFieldRef<Function>> predicate_;
   };
 
