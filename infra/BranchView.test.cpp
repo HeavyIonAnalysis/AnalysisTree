@@ -64,7 +64,7 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
   AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
 
   for (size_t iEv = 0; iEv < 100; ++iEv) {
-    atb.GetEntry(iEv);
+    atb.SetEntry(iEv);
     auto results = atb.GetDataMatrix();
     EXPECT_EQ(results.size(), atb.GetFields().size());
     EXPECT_EQ(results["vtx_x"].size(), atb.GetNumberOfChannels());
@@ -107,9 +107,14 @@ TEST(Test_BranchViewAction, Define) {
 
   auto define_result = atb.Apply(BranchViewAction::NewDefineAction("const", {}, [] () -> double { return 2.0; }));
   for (size_t i = 0; i < 100; ++i) {
-    atb.GetEntry(i);
+    atb.SetEntry(i);
     EXPECT_EQ(define_result->GetDataMatrix()["const"][0], 2.);
   }
+
+  EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("double_const", {}, [] () -> double { return 1.0; }))->GetFieldPtr("double_const")->GetFieldTypeStr(), "double");
+  EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("int_const", {}, [] () -> int { return 1; }))->GetFieldPtr("int_const")->GetFieldTypeStr(), "int");
+  EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("float_const", {}, [] () -> float { return 1; }))->GetFieldPtr("float_const")->GetFieldTypeStr(), "float");
+  EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("bool_const", {}, [] () -> bool { return true; }))->GetFieldPtr("bool_const")->GetFieldTypeStr(), "bool");
 
 }
 

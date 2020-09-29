@@ -36,6 +36,7 @@ class IFieldRef {
  public:
   virtual ~IFieldRef() = default;
   virtual double GetValue(size_t i_channel) const = 0;
+  virtual std::string GetFieldTypeStr() const = 0;
 };
 
 typedef std::shared_ptr<IFieldRef> IFieldPtr;
@@ -94,7 +95,7 @@ class IBranchView {
    * @brief
    * @param entry
    */
-  virtual void GetEntry(Long64_t entry) const = 0;
+  virtual void SetEntry(Long64_t entry) const = 0;
   virtual Long64_t GetEntries() const = 0;
 
   virtual IBranchViewPtr Clone() const = 0;
@@ -231,6 +232,17 @@ class AnalysisTreeBranch : public IBranchView {
       assert(false);
     }
 
+    std::string GetFieldTypeStr() const override {
+      if (field_type_ == Types::kInteger) {
+        return "int";
+      } else if (field_type_ == Types::kFloat) {
+        return "float";
+      } else if (field_type_ == Types::kBool) {
+        return "bool";
+      }
+      assert(false);
+    }
+
    private:
     Entity* data_{nullptr};
     ShortInt_t field_id_{};
@@ -259,7 +271,7 @@ class AnalysisTreeBranch : public IBranchView {
     return result;
   }
 
-  void GetEntry(Long64_t entry) const override {
+  void SetEntry(Long64_t entry) const override {
     tree_->GetEntry(entry);
   }
 
@@ -303,13 +315,52 @@ namespace BranchViewAction {
 
 namespace Details {
 template<typename T>
-struct Arity : Arity<decltype(&T::operator())> {};
+struct FunctionTraits : FunctionTraits<decltype(&T::operator())> {};
 template<typename R, typename... Args>
-struct Arity<R (*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
+struct FunctionTraits<R (*)(Args...)> {
+  constexpr static size_t Arity = sizeof...(Args);
+  typedef R ret_type;
+};
 template<typename R, typename C, typename... Args>
-struct Arity<R (C::*)(Args...)> : std::integral_constant<unsigned, sizeof...(Args)> {};
+struct FunctionTraits<R (C::*)(Args...)> {
+  constexpr static size_t Arity = sizeof...(Args);
+  typedef R ret_type;
+};
 template<typename R, typename C, typename... Args>
-struct Arity<R (C::*)(Args...) const> : std::integral_constant<unsigned, sizeof...(Args)> {};
+struct FunctionTraits<R (C::*)(Args...) const> {
+  constexpr static size_t Arity = sizeof...(Args);
+  typedef R ret_type;
+};
+
+template<typename T>
+std::string GetTypeString() {
+  return std::string(typeid(T).name());
+}
+
+template<>
+inline
+std::string GetTypeString<double>() {
+  return "double";
+}
+
+template<>
+inline
+std::string GetTypeString<int>() {
+  return "int";
+}
+
+template<>
+inline
+std::string GetTypeString<float>() {
+  return "float";
+}
+
+template<>
+inline
+std::string GetTypeString<bool>() {
+  return "bool";
+}
+
 }// namespace Details
 
 template<typename Function>
@@ -317,7 +368,7 @@ class BranchViewDefineAction : public IAction {
 
   class DefineActionResultImpl : public IBranchView {
 
-    static constexpr size_t function_arity = Details::Arity<Function>::value;
+    static constexpr size_t function_arity = Details::FunctionTraits<Function>::Arity;
 
     class FieldRefImpl : public IFieldRef {
 
@@ -326,6 +377,10 @@ class BranchViewDefineAction : public IAction {
 
       double GetValue(size_t i_channel) const final {
         return GetValueImpl(i_channel, std::make_index_sequence<function_arity>());
+      }
+
+      std::string GetFieldTypeStr() const override {
+        return Details::GetTypeString<typename Details::FunctionTraits<Function>::ret_type>();
       }
 
      private:
@@ -374,8 +429,8 @@ class BranchViewDefineAction : public IAction {
     size_t GetNumberOfChannels() const final {
       return origin_->GetNumberOfChannels();
     }
-    void GetEntry(Long64_t entry) const final {
-      origin_->GetEntry(entry);
+    void SetEntry(Long64_t entry) const final {
+      origin_->SetEntry(entry);
     }
     IBranchViewPtr Clone() const final {
       return std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin_->Clone());

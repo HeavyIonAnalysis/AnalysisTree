@@ -29,8 +29,8 @@ class SelectFieldsAction {
     size_t GetNumberOfChannels() const override {
       return origin_->GetNumberOfChannels();
     }
-    void GetEntry(Long64_t entry) const override {
-      return origin_->GetEntry(entry);
+    void SetEntry(Long64_t entry) const override {
+      return origin_->SetEntry(entry);
     }
     Long64_t GetEntries() const override {
       return origin_->GetEntries();
