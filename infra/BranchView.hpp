@@ -16,20 +16,19 @@
 #include <TTree.h>
 
 #include <AnalysisTree/BranchConfig.hpp>
-#include <AnalysisTree/BranchView.hpp>
 #include <AnalysisTree/Detector.hpp>
 
 namespace AnalysisTree {
 
 /* fwd declatarions */
 class IBranchView;
-typedef std::shared_ptr<IBranchView> IBranchViewPtr;
+typedef std::shared_ptr<IBranchView> BranchViewPtr;
 
 class IAction {
 
  public:
   virtual ~IAction() = default;
-  virtual IBranchViewPtr ApplyAction(const IBranchViewPtr& tgt) = 0;
+  virtual BranchViewPtr ApplyAction(const BranchViewPtr& tgt) = 0;
 };
 
 class IFieldRef {
@@ -40,7 +39,7 @@ class IFieldRef {
   virtual std::string GetFieldTypeStr() const = 0;
 };
 
-typedef std::shared_ptr<IFieldRef> IFieldPtr;
+typedef std::shared_ptr<IFieldRef> FieldPtr;
 
 namespace BranchViewAction {
 
@@ -84,7 +83,7 @@ class IBranchView {
    */
   virtual size_t GetNumberOfChannels() const = 0;
 
-  virtual IFieldPtr GetFieldPtr(std::string field_name) const = 0;
+  virtual FieldPtr GetFieldPtr(std::string field_name) const = 0;
 
   /**
    * @brief returns matrix of evaluation results
@@ -103,48 +102,29 @@ class IBranchView {
    */
   virtual Long64_t GetEntries() const = 0;
 
-  virtual IBranchViewPtr Clone() const = 0;
-
-  /**
-   * @brief Select fields in a given channel range [channel_lo, channel_hi)
-   * @param channel_lo
-   * @param channel_hi
-   * @return
-   */
-  IBranchViewPtr RangeChannels(size_t /*channel_lo*/, size_t /*channel_hi*/) const {
-    throw std::runtime_error("Not implemented");
-  };
-  /**
-   * @brief Returns fields of a given channel
-   * --     dca_x       dca_y
-   * 0      0.          0.
-   * @param channel_id
-   * @return
-   */
-  IBranchViewPtr SliceFields(size_t channel_id) const { return RangeChannels(channel_id, channel_id + 1); };
-  IBranchViewPtr operator[](size_t channel_id) const { return SliceFields(channel_id); }
+  virtual BranchViewPtr Clone() const = 0;
 
   /**
    * @brief Requests enlisted field_names
    * @param field_names
    * @return
    */
-  IBranchViewPtr Select(const std::vector<std::string>& field_names) const;
+  BranchViewPtr Select(const std::vector<std::string>& field_names) const;
   /**
    * @brief Selects single field
    * @param field_name
    * @return
    */
-  IBranchViewPtr Select(const std::string& field_name) const;
-  IBranchViewPtr operator[](const std::string& field_name) const;
+  BranchViewPtr Select(const std::string& field_name) const;
+  BranchViewPtr operator[](const std::string& field_name) const;
 
   /**
    * @brief TODO
    * @param old_to_new_map
    * @return
    */
-  IBranchViewPtr RenameFields(std::map<std::string, std::string> old_to_new_map) const;
-  IBranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
+  BranchViewPtr RenameFields(std::map<std::string, std::string> old_to_new_map) const;
+  BranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
 
   /**
    * @brief Merges two compatible views
@@ -152,7 +132,7 @@ class IBranchView {
    * @param other
    * @return
    */
-  IBranchViewPtr PlainMerge(const IBranchView& /*other */) const {
+  BranchViewPtr PlainMerge(const IBranchView& /*other */) const {
     throw std::runtime_error("Not implemented");
   }
 
@@ -165,18 +145,18 @@ class IBranchView {
    * @return
    */
   template<typename Function>
-  IBranchViewPtr Define(std::string new_field_name, std::vector<std::string>&& arg_names, Function&& function) const {
+  BranchViewPtr Define(std::string new_field_name, std::vector<std::string>&& arg_names, Function&& function) const {
     auto function_wrap = std::function(function);
     auto action_ptr = BranchViewAction::NewDefineAction(new_field_name, arg_names, std::move(function_wrap));
     return Apply(action_ptr);
   }
 
   template<typename Action>
-  IBranchViewPtr Apply(Action&& action) const {
+  BranchViewPtr Apply(Action&& action) const {
     return action.ApplyAction(Clone());
   }
 
-  IBranchViewPtr Apply(IAction* action) const {
+  BranchViewPtr Apply(IAction* action) const {
     auto apply_result = action->ApplyAction(Clone());
     delete action;
     return apply_result;
@@ -270,7 +250,7 @@ class AnalysisTreeBranch : public IBranchView {
  public:
   typedef typename Details::EntityTraits<Entity>::ChannelType ChannelType;
 
-  IBranchViewPtr Clone() const override {
+  BranchViewPtr Clone() const override {
     auto newAnalysisTreeBranch = std::make_shared<AnalysisTreeBranch>(this->config_);
     newAnalysisTreeBranch->tree_ = tree_;
     newAnalysisTreeBranch->data = data;
@@ -305,7 +285,7 @@ class AnalysisTreeBranch : public IBranchView {
     InitTree(tree);
   }
 
-  IFieldPtr GetFieldPtr(std::string field_name) const override {
+  FieldPtr GetFieldPtr(std::string field_name) const override {
     auto column_field_id = config_.GetFieldId(field_name);
     auto column_field_type = config_.GetFieldType(field_name);
     /* TODO check if the field does not exist */
@@ -376,7 +356,7 @@ class LambdaFieldRef : public IFieldRef {
   typedef typename Details::FunctionTraits<Func>::ret_type function_ret_type;
 
  public:
-  LambdaFieldRef(Func lambda, std::vector<IFieldPtr> lambda_args) : lambda_(std::move(lambda)), lambda_args_(std::move(lambda_args)) {
+  LambdaFieldRef(Func lambda, std::vector<FieldPtr> lambda_args) : lambda_(std::move(lambda)), lambda_args_(std::move(lambda_args)) {
     if (function_arity != lambda_args_.size()) {
       throw std::out_of_range("Function arity is not consistent with number of passed arguments");
     }
@@ -407,7 +387,7 @@ class LambdaFieldRef : public IFieldRef {
   }
 
   Func lambda_;
-  std::vector<IFieldPtr> lambda_args_;
+  std::vector<FieldPtr> lambda_args_;
 };
 
 }// namespace Details
@@ -420,11 +400,11 @@ class BranchViewDefineAction : public IAction {
     DefineActionResultImpl(std::string defined_field_name,
                            std::vector<std::string> lambda_args,
                            Function lambda,
-                           IBranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)),
+                           BranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)),
                                                     lambda_args_(std::move(lambda_args)),
                                                     lambda_(std::move(lambda)),
                                                     origin_(std::move(origin)) {
-      std::vector<IFieldPtr> lambda_args_ptrs;
+      std::vector<FieldPtr> lambda_args_ptrs;
       lambda_args_ptrs.reserve(lambda_args_.size());
       for (auto& arg_field_name : lambda_args_) {
         lambda_args_ptrs.emplace_back(origin_->GetFieldPtr(arg_field_name));
@@ -446,10 +426,10 @@ class BranchViewDefineAction : public IAction {
     void SetEntry(Long64_t entry) const final {
       origin_->SetEntry(entry);
     }
-    IBranchViewPtr Clone() const final {
+    BranchViewPtr Clone() const final {
       return std::make_shared<DefineActionResultImpl>(defined_field_name_, lambda_args_, lambda_, origin_->Clone());
     }
-    IFieldPtr GetFieldPtr(std::string field_name) const final {
+    FieldPtr GetFieldPtr(std::string field_name) const final {
       if (field_name == defined_field_name_) {
         return defined_field_ptr_;
       }
@@ -459,8 +439,8 @@ class BranchViewDefineAction : public IAction {
     std::string defined_field_name_;
     std::vector<std::string> lambda_args_;
     Function lambda_;
-    IBranchViewPtr origin_;
-    IFieldPtr defined_field_ptr_;
+    BranchViewPtr origin_;
+    FieldPtr defined_field_ptr_;
   };
 
  public:
@@ -470,7 +450,7 @@ class BranchViewDefineAction : public IAction {
                                               lambda_args_(std::move(lambda_args)),
                                               lambda_(std::move(lambda)) {
   }
-  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) final {
+  BranchViewPtr ApplyAction(const BranchViewPtr& origin) final {
     /* check if all fields exist in the origin */
     auto missing_args = Details::GetMissingArgs(lambda_args_, origin->GetFields());
     if (!missing_args.empty()) {
@@ -517,7 +497,7 @@ class BranchViewFilterAction : public IAction {
 
     class FieldRefImpl : public IFieldRef {
      public:
-      FieldRefImpl(IFieldPtr origin_field, const ChannelsHolderPtr& cache) : origin_field_(std::move(origin_field)), cache_(cache) {}
+      FieldRefImpl(FieldPtr origin_field, const ChannelsHolderPtr& cache) : origin_field_(std::move(origin_field)), cache_(cache) {}
       double GetValue(size_t i_channel) const override {
         return origin_field_->GetValue(cache_->channels[i_channel]);
       }
@@ -525,19 +505,19 @@ class BranchViewFilterAction : public IAction {
         return origin_field_->GetFieldTypeStr();
       }
      private:
-      IFieldPtr origin_field_;
+      FieldPtr origin_field_;
       ChannelsHolderPtr cache_;
     };
 
    public:
     FilterActionResultImpl(Function lambda,
                            std::vector<std::string> lambda_args,
-                           const IBranchViewPtr& origin) : lambda_(lambda),
+                           const BranchViewPtr& origin) : lambda_(lambda),
                                                            lambda_args_(std::move(lambda_args)),
                                                            origin_(origin) {
       using LambdaFieldRef = Details::LambdaFieldRef<Function>;
 
-      std::vector<IFieldPtr> lambda_args_ptrs;
+      std::vector<FieldPtr> lambda_args_ptrs;
       lambda_args_ptrs.reserve(lambda_args_.size());
       for (auto &arg_name: lambda_args_) {
         lambda_args_ptrs.emplace_back(origin->GetFieldPtr(arg_name));
@@ -551,7 +531,7 @@ class BranchViewFilterAction : public IAction {
     size_t GetNumberOfChannels() const override {
       return cache_->channels.size();
     }
-    IFieldPtr GetFieldPtr(std::string field_name) const override {
+    FieldPtr GetFieldPtr(std::string field_name) const override {
       return std::make_shared<FieldRefImpl>(origin_->GetFieldPtr(field_name), cache_);
     }
     void SetEntry(Long64_t entry) const override {
@@ -561,7 +541,7 @@ class BranchViewFilterAction : public IAction {
     Long64_t GetEntries() const override {
       return origin_->GetEntries();
     }
-    IBranchViewPtr Clone() const override {
+    BranchViewPtr Clone() const override {
       return std::make_shared<FilterActionResultImpl>(lambda_, lambda_args_, origin_->Clone());
     }
 
@@ -580,7 +560,7 @@ class BranchViewFilterAction : public IAction {
 
     Function lambda_;
     std::vector<std::string> lambda_args_;
-    IBranchViewPtr origin_;
+    BranchViewPtr origin_;
 
     ChannelsHolderPtr cache_;
     std::shared_ptr<Details::LambdaFieldRef<Function>> predicate_;
@@ -588,7 +568,7 @@ class BranchViewFilterAction : public IAction {
 
  public:
   BranchViewFilterAction(std::vector<std::string> lambda_args, Function lambda) : lambda_args_(std::move(lambda_args)), lambda_(std::move(lambda)) {}
-  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) override {
+  BranchViewPtr ApplyAction(const BranchViewPtr& origin) override {
     /* check if all fields exist in the origin */
     auto missing_args = Details::GetMissingArgs(lambda_args_, origin->GetFields());
     if (!missing_args.empty()) {
@@ -629,23 +609,23 @@ class SelectFieldsAction {
     Long64_t GetEntries() const override {
       return origin_->GetEntries();
     }
-    IBranchViewPtr Clone() const override {
+    BranchViewPtr Clone() const override {
       auto newView = std::make_shared<SelectFieldsActionResultImpl>();
       newView->origin_ = origin_->Clone();
       newView->selected_fields_ = selected_fields_;
       return newView;
     }
-    IFieldPtr GetFieldPtr(std::string field_name) const override {
+    FieldPtr GetFieldPtr(std::string field_name) const override {
       return origin_->GetFieldPtr(field_name);
     }
 
-    IBranchViewPtr origin_;
+    BranchViewPtr origin_;
     std::vector<std::string> selected_fields_;
   };
 
  public:
   explicit SelectFieldsAction(std::vector<std::string> selectedFields) : selected_fields_(std::move(selectedFields)) {}
-  IBranchViewPtr ApplyAction(const IBranchViewPtr& origin) {
+  BranchViewPtr ApplyAction(const BranchViewPtr& origin) {
     auto missing_args = Details::GetMissingArgs(selected_fields_, origin->GetFields());
     if (!missing_args.empty()) {
       throw std::out_of_range("Few args are missing");
