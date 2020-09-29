@@ -60,11 +60,11 @@ using ResultsMCols = std::map<std::string, ResultsColumn<T>>;
  * with index [channel_id, field_name + (type)]
  *
  * e.g:
- *
- * --       dca_x       dca_y
- * 0        0.          0.
- * 1        1.          1.
- * ...
+ * +---+--------+---------+---------+---------+
+ * |#ch|const   |vtx_x    |vtx_y    |vtx_z    |
+ * +---+--------+---------+---------+---------+
+ * |0  |2.000000|11.000000|12.000000|13.000000|
+ * +---+--------+---------+---------+---------+
  */
 class IBranchView {
  public:
@@ -140,11 +140,11 @@ class IBranchView {
 
   /**
    * @brief TODO
-   * @param old_to_new_names
+   * @param old_to_new_map
    * @return
    */
-  IBranchViewPtr MapFields(std::map<std::string, std::string> old_to_new_names) const;
-  IBranchViewPtr MapFields(std::string old_name, std::string new_name) const;
+  IBranchViewPtr RenameFields(std::map<std::string, std::string> old_to_new_map) const;
+  IBranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
 
   /**
    * @brief Merges two compatible views
@@ -308,7 +308,7 @@ class AnalysisTreeBranch : public IBranchView {
   IFieldPtr GetFieldPtr(std::string field_name) const override {
     auto column_field_id = config_.GetFieldId(field_name);
     auto column_field_type = config_.GetFieldType(field_name);
-    /* TODO check if field does not exist */
+    /* TODO check if the field does not exist */
     return std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type);
   }
 
@@ -660,6 +660,8 @@ class SelectFieldsAction {
  private:
   std::vector<std::string> selected_fields_;
 };
+
+
 }// namespace BranchViewAction
 
 }// namespace AnalysisTree

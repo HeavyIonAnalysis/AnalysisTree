@@ -41,8 +41,9 @@ endforeach()
 target_include_directories(AnalysisTreeInfra
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
             $<INSTALL_INTERFACE:include>
+        INTERFACE
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         )
 
 if(AnalysisTree_BUILD_TESTS)

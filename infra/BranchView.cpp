@@ -58,6 +58,14 @@ void IBranchView::PrintEntry(std::ostream& os) {
   }
   os << t << std::endl;
 }
+IBranchViewPtr IBranchView::RenameFields(std::map<std::string, std::string> old_to_new_map) const {
+  return AnalysisTree::IBranchViewPtr();
+}
+IBranchViewPtr IBranchView::RenameFields(std::string old_name, std::string new_name) const {
+  std::map<std::string, std::string> tmp_map;
+  tmp_map.emplace(old_name, new_name);
+  return RenameFields(tmp_map);
+}
 
 std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {
   std::vector<std::string> result;
