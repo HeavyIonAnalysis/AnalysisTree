@@ -181,7 +181,17 @@ class IBranchView {
     delete action;
     return apply_result;
   }
+
+  virtual void PrintEntry(std::ostream& os);
 };
+
+inline
+std::ostream& operator<<(std::ostream &os, IBranchView& view) {
+  view.PrintEntry(os);
+  return os;
+}
+
+
 
 namespace Details {
 

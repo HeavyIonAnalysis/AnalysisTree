@@ -108,9 +108,11 @@ TEST(Test_BranchViewAction, Define) {
 
   auto define_result = atb.Apply(BranchViewAction::NewDefineAction("const", {}, [] () -> double { return 2.0; }));
   for (size_t i = 0; i < 100; ++i) {
-    atb.SetEntry(i);
+    define_result->SetEntry(i);
     EXPECT_EQ(define_result->GetDataMatrix()["const"][0], 2.);
   }
+  define_result->SetEntry(1);
+  std::cout << *define_result;
 
   EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("double_const", {}, [] () -> double { return 1.0; }))->GetFieldPtr("double_const")->GetFieldTypeStr(), "double");
   EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("int_const", {}, [] () -> int { return 1; }))->GetFieldPtr("int_const")->GetFieldTypeStr(), "int");
@@ -171,6 +173,8 @@ TEST(Test_BranchViewAction, Filter) {
     EXPECT_EQ(atb_vtx.GetNumberOfChannels(), 10);
     EXPECT_EQ(filter_px->GetNumberOfChannels(), 2);
   }
+  filter_px->SetEntry(1);
+  std::cout << *filter_px;
 }
 
 }

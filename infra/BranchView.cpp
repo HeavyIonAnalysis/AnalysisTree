@@ -3,9 +3,12 @@
 //
 
 #include "BranchView.hpp"
+#include "TextTable.h"
 
 
 using namespace AnalysisTree;
+
+
 
 AnalysisTree::IBranchViewPtr AnalysisTree::IBranchView::Select(const std::string& field_name) const {
   return Select(std::vector<std::string>({field_name}));
@@ -29,6 +32,31 @@ ResultsMCols<double> IBranchView::GetDataMatrix() {
     }
   }
   return result;
+}
+
+void IBranchView::PrintEntry(std::ostream& os) {
+
+  std::vector<IFieldPtr> field_ptrs;
+  field_ptrs.reserve(GetFields().size());
+  for (auto &field_name : GetFields()) {
+    field_ptrs.emplace_back(GetFieldPtr(field_name));
+  }
+
+  TextTable t('-', '|', '+');
+  t.add("#ch");
+  for (auto &field : GetFields()) {
+    t.add(field);
+  }
+  t.endOfRow();
+
+  for (size_t i_channel = 0; i_channel < GetNumberOfChannels(); ++i_channel) {
+    t.add(std::to_string(i_channel));
+    for (auto &field : field_ptrs) {
+      t.add(std::to_string(field->GetValue(i_channel)));
+    }
+    t.endOfRow();
+  }
+  os << t << std::endl;
 }
 
 std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {
