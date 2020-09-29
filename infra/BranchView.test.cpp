@@ -115,9 +115,33 @@ TEST(Test_BranchViewAction, Define) {
   EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("int_const", {}, [] () -> int { return 1; }))->GetFieldPtr("int_const")->GetFieldTypeStr(), "int");
   EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("float_const", {}, [] () -> float { return 1; }))->GetFieldPtr("float_const")->GetFieldTypeStr(), "float");
   EXPECT_EQ(atb.Apply(BranchViewAction::NewDefineAction("bool_const", {}, [] () -> bool { return true; }))->GetFieldPtr("bool_const")->GetFieldTypeStr(), "bool");
-
 }
 
+TEST(Test_BranchViewAction, Filter) {
+  BranchConfig event_header_config("test", DetType::kEventHeader);
+  auto data_event_header = new EventHeader;
+
+  {
+    TFile f("tmp.root", "RECREATE");
+    auto tree = new TTree("aTree", "");
+    tree->Branch(event_header_config.GetName().c_str(), &data_event_header);
+
+    data_event_header->Init(event_header_config);
+    for (size_t iEv = 0; iEv < 100; ++iEv) {
+      data_event_header->SetVertexPosition3({float(10 * iEv + 1), float(10 * iEv + 2), float(10 * iEv + 3)});
+      tree->Fill();
+    }
+    tree->Write();
+    f.Close();
+  }
+
+
+  TFile f("tmp.root", "READ");
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+
+  EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> bool {return false;})));
+  EXPECT_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> double {return false;})), std::runtime_error);
+}
 
 }
 
