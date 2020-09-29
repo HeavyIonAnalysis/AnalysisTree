@@ -165,8 +165,12 @@ TEST(Test_BranchViewAction, Filter) {
 
   AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
   auto filter_px = atb_vtx.Apply(BranchViewAction::NewFilterAction({"px"}, [] (double px) -> bool {return px == 0.;}));
-  filter_px->SetEntry(0);
-  EXPECT_EQ(filter_px->GetNumberOfChannels(), 2);
+  for (Long64_t iEntry = 0; iEntry < atb_vtx.GetEntries(); ++iEntry) {
+    filter_px->SetEntry(iEntry);
+    atb_vtx.SetEntry(iEntry);
+    EXPECT_EQ(atb_vtx.GetNumberOfChannels(), 10);
+    EXPECT_EQ(filter_px->GetNumberOfChannels(), 2);
+  }
 }
 
 }
