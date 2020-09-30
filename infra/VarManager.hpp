@@ -16,7 +16,7 @@ namespace AnalysisTree {
  * It evaluates Variables according to the rules of VarManagerEntry-s and
  * populates 2-dimensional array with results of evaluation
  */
-class VarManager : virtual public FillTask {
+class VarManager : public FillTask {
   typedef std::vector<std::vector<double>> array2D;
 
  public:
