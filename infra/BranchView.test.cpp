@@ -169,12 +169,24 @@ TEST(Test_BranchViewAction, Filter) {
   auto filter_px = atb_vtx.Apply(BranchViewAction::NewFilterAction({"px"}, [] (double px) -> bool {return px == 0.;}));
   for (Long64_t iEntry = 0; iEntry < atb_vtx.GetEntries(); ++iEntry) {
     filter_px->SetEntry(iEntry);
-    atb_vtx.SetEntry(iEntry);
-    EXPECT_EQ(atb_vtx.GetNumberOfChannels(), 10);
+//    atb_vtx.SetEntry(iEntry);
+//    EXPECT_EQ(atb_vtx.GetNumberOfChannels(), 10);
     EXPECT_EQ(filter_px->GetNumberOfChannels(), 2);
   }
   filter_px->SetEntry(1);
   std::cout << *filter_px;
+}
+
+TEST(Test_BranchViewAction,Rename) {
+  BranchConfig c("test", DetType::kEventHeader);
+  AnalysisTreeBranch<EventHeader> br(c);
+
+  EXPECT_NO_THROW(br.RenameFields({{"vtx_x", "vtx_y"}, {"vtx_y","vtx_x"}})); /* exchange fields */
+  EXPECT_NO_THROW(br.RenameFields("vtx_x", "vtx_x")); /* no change */
+  EXPECT_THROW(br.RenameFields("no-field","VTX_X"), std::out_of_range);
+  EXPECT_THROW(br.RenameFields({{"vtx_x", "VTX_XY"}, {"xtx_y","VTX_XY"}}), std::runtime_error);
+  EXPECT_TRUE(br.RenameFields("vtx_x","VTX_X")->HasField("VTX_X"));
+  EXPECT_FALSE(br.RenameFields("vtx_x","VTX_X")->HasField("vtx_x"));
 }
 
 }
