@@ -68,7 +68,7 @@ BranchViewPtr IBranchView::RenameFields(std::string old_name, std::string new_na
   tmp_map.emplace(old_name, new_name);
   return RenameFields(tmp_map);
 }
-bool IBranchView::HasField(const std::string& name) {
+bool IBranchView::HasField(const std::string& name) const {
   auto fields = GetFields();
   return std::find(fields.begin(), fields.end(), name) != fields.end();
 }

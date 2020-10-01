@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <Rtypes.h>
+#include <TFile.h>
 #include <TTree.h>
 
 #include <AnalysisTree/BranchConfig.hpp>
@@ -109,7 +110,7 @@ class IBranchView {
    * @param name
    * @return
    */
-  virtual bool HasField(const std::string &name);
+  virtual bool HasField(const std::string &name) const;
   /**
    * @brief Requests enlisted field_names
    * @param field_names
@@ -217,6 +218,8 @@ struct EntityTraits<Detector<T>> {
  */
 template<typename Entity>
 class AnalysisTreeBranch : public IBranchView {
+  using Traits = Details::EntityTraits<Entity>;
+
   struct DataPtrHolder {
     Entity* ptr{nullptr};
 
@@ -233,7 +236,7 @@ class AnalysisTreeBranch : public IBranchView {
                                      field_id_(field_id),
                                      field_type_(field_type) {}
     double GetValue(size_t i_channel) const override {
-      auto& channel = Details::EntityTraits<Entity>::GetChannel(data_->ref(), i_channel);
+      auto& channel = Traits::GetChannel(data_->ref(), i_channel);
       if (field_type_ == Types::kInteger) {
         return channel.template GetField<int>(field_id_);
       } else if (field_type_ == Types::kFloat) {
@@ -262,18 +265,18 @@ class AnalysisTreeBranch : public IBranchView {
   };
 
  public:
-  typedef typename Details::EntityTraits<Entity>::ChannelType ChannelType;
+  typedef typename Traits::ChannelType ChannelType;
 
   BranchViewPtr Clone() const override {
-    if (is_tree_input_) {
-      return std::make_shared<AnalysisTreeBranch<Entity>>(config_, tree_name_, tree_dir_);
+    if (is_file_input_) {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_, tree_name_, file_->GetName());
     } else {
       return std::make_shared<AnalysisTreeBranch<Entity>>(config_);
     }
   }
 
   size_t GetNumberOfChannels() const override {
-    return Details::EntityTraits<Entity>::GetNChannels(data->ref());
+    return Traits::GetNChannels(data->ref());
   }
 
   std::vector<std::string> GetFields() const override {
@@ -296,11 +299,13 @@ class AnalysisTreeBranch : public IBranchView {
     InitFields<bool>();
   }
 
-  AnalysisTreeBranch(const BranchConfig& config, const std::string& tree_name, TDirectory* dir) : AnalysisTreeBranch(config) {
-    is_tree_input_ = true;
-    tree_name_ = tree_name;
-    tree_dir_ = dir;
-    InitTree();
+  AnalysisTreeBranch(const BranchConfig& config, std::string tree_name, std::string input_file_name) : AnalysisTreeBranch(config) {
+    is_file_input_ = true;
+    tree_name_ = std::move(tree_name);
+    input_file_name_ = std::move(input_file_name);
+    file_ = TFile::Open(input_file_name_.c_str(),"READ");
+    tree_ = file_->Get<TTree>(tree_name_.c_str());
+    tree_->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
   }
 
   FieldPtr GetFieldPtr(std::string field_name) const override {
@@ -308,10 +313,6 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
  private:
-  void InitTree() {
-    tree_ = tree_dir_->Get<TTree>(tree_name_.c_str());
-    tree_->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
-  }
 
   template<typename T>
   void InitFields() {
@@ -325,11 +326,12 @@ class AnalysisTreeBranch : public IBranchView {
     }
   }
 
-  bool is_tree_input_{false};
+  bool is_file_input_{false};
   BranchConfig config_;
   std::string tree_name_;
-  TDirectory *tree_dir_{nullptr};
+  std::string input_file_name_;
 
+  TFile* file_{nullptr};
   TTree* tree_{nullptr};
 
   std::shared_ptr<DataPtrHolder> data{};
@@ -381,8 +383,10 @@ void ThrowMissingArgs(const std::vector<std::string>& missing_args);
 
 template<typename Func>
 class LambdaFieldRef : public IFieldRef {
-  static constexpr size_t function_arity = Details::FunctionTraits<Func>::Arity;
-  typedef typename Details::FunctionTraits<Func>::ret_type function_ret_type;
+  using Traits = Details::FunctionTraits<Func>;
+  static constexpr size_t function_arity = Traits::Arity;
+
+  using function_ret_type = typename Traits::ret_type;
 
  public:
   LambdaFieldRef(Func lambda, std::vector<FieldPtr> lambda_args) : lambda_(std::move(lambda)), lambda_args_(std::move(lambda_args)) {
@@ -681,6 +685,9 @@ class RenameFieldsAction : public IAction {
       return origin_->GetNumberOfChannels();
     }
     FieldPtr GetFieldPtr(std::string field_name) const final {
+      if (!HasField(field_name)) {
+        throw std::out_of_range("Field '" + field_name + "' does not exist");
+      }
       decltype(new_to_old_map_)::const_iterator find_it;
       if ((find_it = new_to_old_map_.find(field_name)) != new_to_old_map_.end()) {
         return origin_->GetFieldPtr(find_it->second);
