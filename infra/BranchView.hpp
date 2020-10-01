@@ -13,6 +13,7 @@
 #include <vector>
 
 #include <Rtypes.h>
+#include <TFile.h>
 #include <TTree.h>
 
 #include <AnalysisTree/BranchConfig.hpp>
@@ -105,6 +106,12 @@ class IBranchView {
   virtual BranchViewPtr Clone() const = 0;
 
   /**
+   * @brief
+   * @param name
+   * @return
+   */
+  virtual bool HasField(const std::string &name) const;
+  /**
    * @brief Requests enlisted field_names
    * @param field_names
    * @return
@@ -123,8 +130,9 @@ class IBranchView {
    * @param old_to_new_map
    * @return
    */
-  BranchViewPtr RenameFields(std::map<std::string, std::string> old_to_new_map) const;
+  BranchViewPtr RenameFields(const std::map<std::string, std::string>& old_to_new_map) const;
   BranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
+  BranchViewPtr AddPrefix(const std::string &prefix);
 
   /**
    * @brief Merges two compatible views
@@ -165,13 +173,10 @@ class IBranchView {
   virtual void PrintEntry(std::ostream& os);
 };
 
-inline
-std::ostream& operator<<(std::ostream &os, IBranchView& view) {
+inline std::ostream& operator<<(std::ostream& os, IBranchView& view) {
   view.PrintEntry(os);
   return os;
 }
-
-
 
 namespace Details {
 
@@ -201,7 +206,7 @@ struct EntityTraits<Detector<T>> {
     return det.GetChannel(i_channel);
   }
 
-  inline static size_t GetNChannels(const Detector<T> &detector) {
+  inline static size_t GetNChannels(const Detector<T>& detector) {
     return detector.GetNumberOfChannels();
   }
 };
@@ -214,12 +219,25 @@ struct EntityTraits<Detector<T>> {
  */
 template<typename Entity>
 class AnalysisTreeBranch : public IBranchView {
+  using Traits = Details::EntityTraits<Entity>;
+
+  struct DataPtrHolder {
+    Entity* ptr{nullptr};
+
+    Entity& ref() {
+      return *ptr;
+    }
+  };
 
   class FieldRefImpl : public IFieldRef {
    public:
-    FieldRefImpl(Entity* data, ShortInt_t field_id, Types field_type) : data_(data), field_id_(field_id), field_type_(field_type) {}
+    FieldRefImpl(std::shared_ptr<DataPtrHolder> data,
+                 ShortInt_t field_id,
+                 Types field_type) : data_(data),
+                                     field_id_(field_id),
+                                     field_type_(field_type) {}
     double GetValue(size_t i_channel) const override {
-      auto& channel = Details::EntityTraits<Entity>::GetChannel(*data_, i_channel);
+      auto& channel = Traits::GetChannel(data_->ref(), i_channel);
       if (field_type_ == Types::kInteger) {
         return channel.template GetField<int>(field_id_);
       } else if (field_type_ == Types::kFloat) {
@@ -242,31 +260,28 @@ class AnalysisTreeBranch : public IBranchView {
     }
 
    private:
-    Entity* data_{nullptr};
+    std::shared_ptr<DataPtrHolder> data_;
     ShortInt_t field_id_{};
     Types field_type_{Types::kNumberOfTypes};
   };
 
  public:
-  typedef typename Details::EntityTraits<Entity>::ChannelType ChannelType;
+  typedef typename Traits::ChannelType ChannelType;
 
   BranchViewPtr Clone() const override {
-    auto newAnalysisTreeBranch = std::make_shared<AnalysisTreeBranch>(this->config_);
-    newAnalysisTreeBranch->tree_ = tree_;
-    newAnalysisTreeBranch->data = data;
-    return newAnalysisTreeBranch;
+    if (is_file_input_) {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_, tree_name_, file_->GetName());
+    } else {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_);
+    }
   }
 
   size_t GetNumberOfChannels() const override {
-    return Details::EntityTraits<Entity>::GetNChannels(*data);
+    return Traits::GetNChannels(data->ref());
   }
 
   std::vector<std::string> GetFields() const override {
-    std::vector<std::string> result;
-    GetFieldsImpl<int>(result);
-    GetFieldsImpl<float>(result);
-    GetFieldsImpl<bool>(result);
-    return result;
+    return field_names_;
   }
 
   void SetEntry(Long64_t entry) const override {
@@ -278,36 +293,51 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
   explicit AnalysisTreeBranch(BranchConfig config) : config_(std::move(config)) {
+    data = std::make_shared<DataPtrHolder>();
+    data->ptr = new Entity;
+    InitFields<int>();
+    InitFields<float>();
+    InitFields<bool>();
   }
 
-  explicit AnalysisTreeBranch(BranchConfig Config, TTree* tree) : config_(std::move(Config)) {
-    tree_ = tree;
-    InitTree(tree);
+  AnalysisTreeBranch(const BranchConfig& config, std::string tree_name, std::string input_file_name) : AnalysisTreeBranch(config) {
+    is_file_input_ = true;
+    tree_name_ = std::move(tree_name);
+    input_file_name_ = std::move(input_file_name);
+    file_ = TFile::Open(input_file_name_.c_str(),"READ");
+    tree_ = file_->Get<TTree>(tree_name_.c_str());
+    tree_->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
   }
 
   FieldPtr GetFieldPtr(std::string field_name) const override {
-    auto column_field_id = config_.GetFieldId(field_name);
-    auto column_field_type = config_.GetFieldType(field_name);
-    /* TODO check if the field does not exist */
-    return std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type);
+    return fields_.at(field_name);
   }
 
  private:
-  void InitTree(TTree* tree) {
-    tree->SetBranchAddress(config_.GetName().c_str(), &data);
-  }
 
   template<typename T>
-  void GetFieldsImpl(std::vector<std::string>& fields) const {
+  void InitFields() {
     auto field_map = config_.GetMap<T>();
-    std::transform(field_map.begin(), field_map.end(), std::back_inserter(fields), [](auto& elem) {
-      return elem.first;
-    });
+    for (auto entry : field_map) {
+      auto field_name = entry.first;
+      auto column_field_id = entry.second;
+      field_names_.emplace_back(field_name);
+      auto column_field_type = config_.GetFieldType(field_name);
+      fields_.emplace(field_name,std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type));
+    }
   }
 
+  bool is_file_input_{false};
   BranchConfig config_;
+  std::string tree_name_;
+  std::string input_file_name_;
+
+  TFile* file_{nullptr};
   TTree* tree_{nullptr};
-  Entity* data{new Entity};
+
+  std::shared_ptr<DataPtrHolder> data{};
+  std::vector<std::string> field_names_;
+  std::map<std::string, std::shared_ptr<FieldRefImpl>> fields_;
 };
 
 namespace BranchViewAction {
@@ -350,10 +380,14 @@ inline std::string GetTypeString<bool>() { return "bool"; }
 std::vector<std::string>
 GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields);
 
+void ThrowMissingArgs(const std::vector<std::string>& missing_args);
+
 template<typename Func>
 class LambdaFieldRef : public IFieldRef {
-  static constexpr size_t function_arity = Details::FunctionTraits<Func>::Arity;
-  typedef typename Details::FunctionTraits<Func>::ret_type function_ret_type;
+  using Traits = Details::FunctionTraits<Func>;
+  static constexpr size_t function_arity = Traits::Arity;
+
+  using function_ret_type = typename Traits::ret_type;
 
  public:
   LambdaFieldRef(Func lambda, std::vector<FieldPtr> lambda_args) : lambda_(std::move(lambda)), lambda_args_(std::move(lambda_args)) {
@@ -401,9 +435,9 @@ class BranchViewDefineAction : public IAction {
                            std::vector<std::string> lambda_args,
                            Function lambda,
                            BranchViewPtr origin) : defined_field_name_(std::move(defined_field_name)),
-                                                    lambda_args_(std::move(lambda_args)),
-                                                    lambda_(std::move(lambda)),
-                                                    origin_(std::move(origin)) {
+                                                   lambda_args_(std::move(lambda_args)),
+                                                   lambda_(std::move(lambda)),
+                                                   origin_(std::move(origin)) {
       std::vector<FieldPtr> lambda_args_ptrs;
       lambda_args_ptrs.reserve(lambda_args_.size());
       for (auto& arg_field_name : lambda_args_) {
@@ -447,15 +481,13 @@ class BranchViewDefineAction : public IAction {
   BranchViewDefineAction(std::string field_name,
                          std::vector<std::string> lambda_args,
                          Function lambda) : defined_field_name_(std::move(field_name)),
-                                              lambda_args_(std::move(lambda_args)),
-                                              lambda_(std::move(lambda)) {
+                                            lambda_args_(std::move(lambda_args)),
+                                            lambda_(std::move(lambda)) {
   }
   BranchViewPtr ApplyAction(const BranchViewPtr& origin) final {
     /* check if all fields exist in the origin */
     auto missing_args = Details::GetMissingArgs(lambda_args_, origin->GetFields());
-    if (!missing_args.empty()) {
-      throw std::out_of_range("Few arguments are missing");
-    }
+    Details::ThrowMissingArgs(missing_args);
     /* check if new field is already defined in the origin */
     auto origin_fields = origin->GetFields();
     if (std::find(origin_fields.begin(), origin_fields.end(), defined_field_name_) != origin_fields.end()) {
@@ -482,7 +514,6 @@ IAction* NewDefineAction(const std::string& field_name, std::initializer_list<st
   return NewDefineAction(field_name, lambda_args_v, lambda);
 }
 
-
 template<typename Function>
 class BranchViewFilterAction : public IAction {
   typedef typename Details::FunctionTraits<Function>::ret_type function_ret_type;
@@ -504,6 +535,7 @@ class BranchViewFilterAction : public IAction {
       std::string GetFieldTypeStr() const override {
         return origin_field_->GetFieldTypeStr();
       }
+
      private:
       FieldPtr origin_field_;
       ChannelsHolderPtr cache_;
@@ -513,13 +545,13 @@ class BranchViewFilterAction : public IAction {
     FilterActionResultImpl(Function lambda,
                            std::vector<std::string> lambda_args,
                            const BranchViewPtr& origin) : lambda_(lambda),
-                                                           lambda_args_(std::move(lambda_args)),
-                                                           origin_(origin) {
+                                                          lambda_args_(std::move(lambda_args)),
+                                                          origin_(origin) {
       using LambdaFieldRef = Details::LambdaFieldRef<Function>;
 
       std::vector<FieldPtr> lambda_args_ptrs;
       lambda_args_ptrs.reserve(lambda_args_.size());
-      for (auto &arg_name: lambda_args_) {
+      for (auto& arg_name : lambda_args_) {
         lambda_args_ptrs.emplace_back(origin->GetFieldPtr(arg_name));
       }
       predicate_ = std::make_shared<LambdaFieldRef>(lambda_, lambda_args_ptrs);
@@ -571,11 +603,9 @@ class BranchViewFilterAction : public IAction {
   BranchViewPtr ApplyAction(const BranchViewPtr& origin) override {
     /* check if all fields exist in the origin */
     auto missing_args = Details::GetMissingArgs(lambda_args_, origin->GetFields());
-    if (!missing_args.empty()) {
-      throw std::out_of_range("Few arguments are missing");
-    }
+    Details::ThrowMissingArgs(missing_args);
 
-    if (!std::is_same_v<bool,function_ret_type>) {
+    if (!std::is_same_v<bool, function_ret_type>) {
       throw std::runtime_error("Function return type must be boolean");
     }
 
@@ -627,9 +657,7 @@ class SelectFieldsAction {
   explicit SelectFieldsAction(std::vector<std::string> selectedFields) : selected_fields_(std::move(selectedFields)) {}
   BranchViewPtr ApplyAction(const BranchViewPtr& origin) {
     auto missing_args = Details::GetMissingArgs(selected_fields_, origin->GetFields());
-    if (!missing_args.empty()) {
-      throw std::out_of_range("Few args are missing");
-    }
+    Details::ThrowMissingArgs(missing_args);
 
     auto action_result = std::make_shared<SelectFieldsActionResultImpl>();
     action_result->selected_fields_ = selected_fields_;
@@ -641,6 +669,89 @@ class SelectFieldsAction {
   std::vector<std::string> selected_fields_;
 };
 
+class RenameFieldsAction : public IAction {
+
+  class RenameFieldsActionResultImpl : public IBranchView {
+   public:
+    RenameFieldsActionResultImpl(std::vector<std::string> new_fields,
+                                 std::map<std::string, std::string> new_to_old_map,
+                                 BranchViewPtr origin) : new_fields_(std::move(new_fields)),
+                                                         new_to_old_map_(std::move(new_to_old_map)),
+                                                         origin_(std::move(origin)) {
+    }
+    std::vector<std::string> GetFields() const final {
+      return new_fields_;
+    }
+    size_t GetNumberOfChannels() const final {
+      return origin_->GetNumberOfChannels();
+    }
+    FieldPtr GetFieldPtr(std::string field_name) const final {
+      if (!HasField(field_name)) {
+        throw std::out_of_range("Field '" + field_name + "' does not exist");
+      }
+      decltype(new_to_old_map_)::const_iterator find_it;
+      if ((find_it = new_to_old_map_.find(field_name)) != new_to_old_map_.end()) {
+        return origin_->GetFieldPtr(find_it->second);
+      }
+      /* not found in map */
+      return origin_->GetFieldPtr(field_name);
+    }
+    void SetEntry(Long64_t entry) const final {
+      origin_->SetEntry(entry);
+    }
+    Long64_t GetEntries() const final {
+      return origin_->GetEntries();
+    }
+    BranchViewPtr Clone() const final {
+      return std::make_shared<RenameFieldsActionResultImpl>(new_fields_, new_to_old_map_, origin_->Clone());
+    }
+
+   private:
+    std::vector<std::string> new_fields_;
+    std::map<std::string, std::string> new_to_old_map_;
+    BranchViewPtr origin_;
+  };
+
+ public:
+  RenameFieldsAction(const std::map<std::string, std::string>& old_to_new_map) : old_to_new_map_(old_to_new_map) {}
+  BranchViewPtr ApplyAction(const BranchViewPtr& origin) override {
+    std::map<std::string, std::string> new_to_old_map;
+    std::vector<std::string> fields_to_rename;
+    fields_to_rename.reserve(old_to_new_map_.size());
+    auto origin_fields = origin->GetFields();
+    std::vector<std::string> fields_after_rename(origin_fields.begin(), origin_fields.end());
+
+    /* invert map, make sure there is no duplication in new set */
+    for (auto& entry : old_to_new_map_) {
+      auto old_value = entry.first;
+      auto new_value = entry.second;
+      fields_to_rename.emplace_back(old_value);
+      auto emplace_result = new_to_old_map.emplace(new_value, old_value);
+      /* check if no duplications on the right side of old_to_new map */
+      if (!emplace_result.second) {
+        throw std::runtime_error("New field '" + new_value + "' is duplicated in the map");
+      }
+
+      auto field_position = std::distance(origin_fields.begin(), std::find(origin_fields.begin(), origin_fields.end(), old_value));
+      fields_after_rename.at(field_position) = new_value;
+    }
+
+    {
+      std::set<std::string> tmp(fields_after_rename.begin(), fields_after_rename.end());
+      if (tmp.size() < fields_after_rename.size()) {
+        throw std::runtime_error("Duplicated fields after rename");
+      }
+    }
+
+    auto missing_args = Details::GetMissingArgs(fields_to_rename, origin_fields);
+    Details::ThrowMissingArgs(missing_args);
+
+    return std::make_shared<RenameFieldsActionResultImpl>(fields_after_rename, new_to_old_map, origin);
+  }
+
+ private:
+  std::map<std::string, std::string> old_to_new_map_;
+};
 
 }// namespace BranchViewAction
 

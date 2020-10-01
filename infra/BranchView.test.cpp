@@ -60,12 +60,12 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
     f.Close();
   }
 
-  TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
-  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, "aTree", "tmp.root");
+  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, "aTree", "tmp.root");
 
   for (size_t iEv = 0; iEv < 100; ++iEv) {
     atb.SetEntry(iEv);
+    atb_vtx.SetEntry(iEv);
     auto results = atb.GetDataMatrix();
     EXPECT_EQ(results.size(), atb.GetFields().size());
     EXPECT_EQ(results["vtx_x"].size(), atb.GetNumberOfChannels());
@@ -98,8 +98,7 @@ TEST(Test_BranchViewAction, Define) {
   }
 
 
-  TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, "aTree", "tmp.root");
   EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; })));
   EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_x", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; })), std::runtime_error);
   EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "tx_y"}, [] (double , double ) -> double { return 1.0; })), std::out_of_range);
@@ -151,7 +150,7 @@ TEST(Test_BranchViewAction, Filter) {
 
 
   TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, "aTree", "tmp.root");
 
   EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> bool {return false;})));
   EXPECT_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> double {return false;})), std::runtime_error);
@@ -165,7 +164,7 @@ TEST(Test_BranchViewAction, Filter) {
   filter_true->SetEntry(0);
   EXPECT_EQ(filter_true->GetNumberOfChannels(), 1);
 
-  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, "aTree", "tmp.root");
   auto filter_px = atb_vtx.Apply(BranchViewAction::NewFilterAction({"px"}, [] (double px) -> bool {return px == 0.;}));
   for (Long64_t iEntry = 0; iEntry < atb_vtx.GetEntries(); ++iEntry) {
     filter_px->SetEntry(iEntry);
@@ -177,5 +176,23 @@ TEST(Test_BranchViewAction, Filter) {
   std::cout << *filter_px;
 }
 
+TEST(Test_BranchViewAction,Rename) {
+  BranchConfig c("test", DetType::kEventHeader);
+  AnalysisTreeBranch<EventHeader> br(c);
+
+  EXPECT_NO_THROW(br.RenameFields({{"vtx_x", "vtx_y"}, {"vtx_y","vtx_x"}})); /* exchange fields */
+  EXPECT_NO_THROW(br.RenameFields("vtx_x", "vtx_x")); /* no change */
+  EXPECT_THROW(br.RenameFields("no-field","VTX_X"), std::out_of_range);
+  EXPECT_THROW(br.RenameFields({{"vtx_x", "VTX_XY"}, {"xtx_y","VTX_XY"}}), std::runtime_error);
+  EXPECT_TRUE(br.RenameFields("vtx_x","VTX_X")->HasField("VTX_X"));
+  EXPECT_FALSE(br.RenameFields("vtx_x","VTX_X")->HasField("vtx_x"));
+  EXPECT_THROW(br.RenameFields("vtx_x", "VTX_X")->GetFieldPtr("vtx_x"), std::out_of_range);
+  EXPECT_NO_THROW(br.RenameFields("vtx_x", "VTX_X")->GetFieldPtr("VTX_X"));
+
+  std::cout << br << std::endl;
+  std::cout << *br.RenameFields("vtx_x", "VTX_X") << std::endl;
+
+  EXPECT_EQ(br.AddPrefix("sim_")->GetFields(), std::vector<std::string>({"sim_vtx_x", "sim_vtx_y", "sim_vtx_z"}));
+}
 }
 

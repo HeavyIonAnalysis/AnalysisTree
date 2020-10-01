@@ -5,6 +5,8 @@
 #include "BranchView.hpp"
 #include "TextTable.h"
 
+#include <sstream>
+
 
 using namespace AnalysisTree;
 
@@ -58,13 +60,24 @@ void IBranchView::PrintEntry(std::ostream& os) {
   }
   os << t << std::endl;
 }
-BranchViewPtr IBranchView::RenameFields(std::map<std::string, std::string> old_to_new_map) const {
-  return AnalysisTree::BranchViewPtr();
+BranchViewPtr IBranchView::RenameFields(const std::map<std::string, std::string>& old_to_new_map) const {
+  return Apply(BranchViewAction::RenameFieldsAction(old_to_new_map));
 }
 BranchViewPtr IBranchView::RenameFields(std::string old_name, std::string new_name) const {
   std::map<std::string, std::string> tmp_map;
   tmp_map.emplace(old_name, new_name);
   return RenameFields(tmp_map);
+}
+bool IBranchView::HasField(const std::string& name) const {
+  auto fields = GetFields();
+  return std::find(fields.begin(), fields.end(), name) != fields.end();
+}
+BranchViewPtr IBranchView::AddPrefix(const std::string& prefix) {
+  std::map<std::string, std::string> rename_map;
+  for (auto &field : GetFields()) {
+    rename_map.emplace(field, prefix + field);
+  }
+  return RenameFields(rename_map);
 }
 
 std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {
@@ -76,4 +89,16 @@ std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::ve
     }
   }
   return result;
+}
+void BranchViewAction::Details::ThrowMissingArgs(const std::vector<std::string>& missing_args) {
+  if (missing_args.empty()) {
+    return;
+  }
+  std::stringstream stream;
+  stream << "Args ";
+  for (auto &arg : missing_args) {
+    stream << "'" << arg << "'" << " ";
+  }
+  stream << "missing";
+  throw std::out_of_range(stream.str());
 }
