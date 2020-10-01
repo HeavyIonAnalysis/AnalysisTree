@@ -191,6 +191,8 @@ TEST(Test_BranchViewAction,Rename) {
 
   std::cout << br << std::endl;
   std::cout << *br.RenameFields("vtx_x", "VTX_X") << std::endl;
+
+  EXPECT_EQ(br.AddPrefix("sim_")->GetFields(), std::vector<std::string>({"sim_vtx_x", "sim_vtx_y", "sim_vtx_z"}));
 }
 }
 

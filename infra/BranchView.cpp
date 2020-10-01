@@ -72,6 +72,13 @@ bool IBranchView::HasField(const std::string& name) const {
   auto fields = GetFields();
   return std::find(fields.begin(), fields.end(), name) != fields.end();
 }
+BranchViewPtr IBranchView::AddPrefix(const std::string& prefix) {
+  std::map<std::string, std::string> rename_map;
+  for (auto &field : GetFields()) {
+    rename_map.emplace(field, prefix + field);
+  }
+  return RenameFields(rename_map);
+}
 
 std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {
   std::vector<std::string> result;

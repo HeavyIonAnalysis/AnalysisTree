@@ -132,6 +132,7 @@ class IBranchView {
    */
   BranchViewPtr RenameFields(const std::map<std::string, std::string>& old_to_new_map) const;
   BranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
+  BranchViewPtr AddPrefix(const std::string &prefix);
 
   /**
    * @brief Merges two compatible views
