@@ -265,10 +265,11 @@ class AnalysisTreeBranch : public IBranchView {
   typedef typename Details::EntityTraits<Entity>::ChannelType ChannelType;
 
   BranchViewPtr Clone() const override {
-    if (tree_) {
-      return std::make_shared<AnalysisTreeBranch>(config_, tree_);
+    if (is_tree_input_) {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_, tree_name_, tree_dir_);
+    } else {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_);
     }
-    return std::make_shared<AnalysisTreeBranch>(config_);
   }
 
   size_t GetNumberOfChannels() const override {
@@ -295,9 +296,11 @@ class AnalysisTreeBranch : public IBranchView {
     InitFields<bool>();
   }
 
-  explicit AnalysisTreeBranch(const BranchConfig& config, TTree* tree) : AnalysisTreeBranch(config) {
-    tree_ = tree;
-    InitTree(tree_);
+  AnalysisTreeBranch(const BranchConfig& config, const std::string& tree_name, TDirectory* dir) : AnalysisTreeBranch(config) {
+    is_tree_input_ = true;
+    tree_name_ = tree_name;
+    tree_dir_ = dir;
+    InitTree();
   }
 
   FieldPtr GetFieldPtr(std::string field_name) const override {
@@ -305,8 +308,9 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
  private:
-  void InitTree(TTree* tree) {
-    tree->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
+  void InitTree() {
+    tree_ = tree_dir_->Get<TTree>(tree_name_.c_str());
+    tree_->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
   }
 
   template<typename T>
@@ -321,7 +325,11 @@ class AnalysisTreeBranch : public IBranchView {
     }
   }
 
+  bool is_tree_input_{false};
   BranchConfig config_;
+  std::string tree_name_;
+  TDirectory *tree_dir_{nullptr};
+
   TTree* tree_{nullptr};
 
   std::shared_ptr<DataPtrHolder> data{};

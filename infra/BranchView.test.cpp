@@ -61,8 +61,8 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
   }
 
   TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
-  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, "aTree", &f);
+  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, "aTree", &f);
 
   for (size_t iEv = 0; iEv < 100; ++iEv) {
     atb.SetEntry(iEv);
@@ -99,7 +99,7 @@ TEST(Test_BranchViewAction, Define) {
 
 
   TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, "aTree", &f);
   EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; })));
   EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_x", {"vtx_x", "vtx_y"}, [] (double , double ) -> double { return 1.0; })), std::runtime_error);
   EXPECT_THROW(atb.Apply(BranchViewAction::NewDefineAction("vtx_xy", {"vtx_x", "tx_y"}, [] (double , double ) -> double { return 1.0; })), std::out_of_range);
@@ -151,7 +151,7 @@ TEST(Test_BranchViewAction, Filter) {
 
 
   TFile f("tmp.root", "READ");
-  AnalysisTreeBranch<EventHeader> atb(event_header_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<EventHeader> atb(event_header_config, "aTree", &f);
 
   EXPECT_NO_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> bool {return false;})));
   EXPECT_THROW(atb.Apply(BranchViewAction::NewFilterAction({}, [] () -> double {return false;})), std::runtime_error);
@@ -165,7 +165,7 @@ TEST(Test_BranchViewAction, Filter) {
   filter_true->SetEntry(0);
   EXPECT_EQ(filter_true->GetNumberOfChannels(), 1);
 
-  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, f.Get<TTree>("aTree"));
+  AnalysisTreeBranch<TrackDetector> atb_vtx(vtx_tracks_config, "aTree", &f);
   auto filter_px = atb_vtx.Apply(BranchViewAction::NewFilterAction({"px"}, [] (double px) -> bool {return px == 0.;}));
   for (Long64_t iEntry = 0; iEntry < atb_vtx.GetEntries(); ++iEntry) {
     filter_px->SetEntry(iEntry);
