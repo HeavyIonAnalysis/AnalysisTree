@@ -81,9 +81,12 @@ BranchViewPtr IBranchView::AddPrefix(const std::string& prefix) const {
   return RenameFields(rename_map);
 }
 
-BranchViewPtr IBranchView::Merge(const BranchViewPtr& right, std::string left_prefix, std::string right_prefix) const {
-  BranchViewAction::CombiningMergeAction action(right, std::move(left_prefix), std::move(right_prefix));
+BranchViewPtr IBranchView::Merge(const IBranchView& right, std::string left_prefix, std::string right_prefix) const {
+  BranchViewAction::CombiningMergeAction action(right.Clone(), std::move(right_prefix), std::move(left_prefix));
   return Apply(action);
+}
+BranchViewPtr IBranchView::Merge(const BranchViewPtr& right, const std::string& left_prefix, const std::string& right_prefix) const {
+  return Merge(*right, left_prefix, right_prefix);
 }
 
 std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {
@@ -109,6 +112,41 @@ void BranchViewAction::Details::ThrowMissingArgs(const std::vector<std::string>&
   throw std::out_of_range(stream.str());
 }
 
+BranchViewPtr BranchViewAction::RenameFieldsAction::ApplyAction(const BranchViewPtr& origin) {
+  std::map<std::string, std::string> new_to_old_map;
+  std::vector<std::string> fields_to_rename;
+  fields_to_rename.reserve(old_to_new_map_.size());
+  auto origin_fields = origin->GetFields();
+  std::vector<std::string> fields_after_rename(origin_fields.begin(), origin_fields.end());
+
+  /* invert map, make sure there is no duplication in new set */
+  for (auto& entry : old_to_new_map_) {
+    auto old_value = entry.first;
+    auto new_value = entry.second;
+    fields_to_rename.emplace_back(old_value);
+    auto emplace_result = new_to_old_map.emplace(new_value, old_value);
+    /* check if no duplications on the right side of old_to_new map */
+    if (!emplace_result.second) {
+      throw std::runtime_error("New field '" + new_value + "' is duplicated in the map");
+    }
+
+    auto field_position = std::distance(origin_fields.begin(), std::find(origin_fields.begin(), origin_fields.end(), old_value));
+    fields_after_rename.at(field_position) = new_value;
+  }
+
+  {
+    std::set<std::string> tmp(fields_after_rename.begin(), fields_after_rename.end());
+    if (tmp.size() < fields_after_rename.size()) {
+      throw std::runtime_error("Duplicated fields after rename");
+    }
+  }
+
+  auto missing_args = Details::GetMissingArgs(fields_to_rename, origin_fields);
+  Details::ThrowMissingArgs(missing_args);
+
+  return std::make_shared<RenameFieldsActionResultImpl>(fields_after_rename, new_to_old_map, origin);
+}
+
 BranchViewPtr BranchViewAction::CombiningMergeAction::ApplyAction(const BranchViewPtr& left) {
   /* same number of events */
   if (left->GetEntries() != right_->GetEntries()) {
@@ -126,7 +164,6 @@ BranchViewPtr BranchViewAction::CombiningMergeAction::ApplyAction(const BranchVi
 
   auto left_arg = left;
   auto right_arg = right_;
-  bool right_take_clone = true;
   if (!intersection.empty()) {
     if (left_prefix_ == right_prefix_) {
       throw std::runtime_error("left_prefix and right prefix must be different (not both empty also)");
@@ -146,13 +183,11 @@ BranchViewPtr BranchViewAction::CombiningMergeAction::ApplyAction(const BranchVi
         rename_map.emplace(field, right_prefix_ + field);
       }
       right_arg = right_->RenameFields(rename_map);
-      right_take_clone = false;/// already cloned during RenameFields
     }
   }// !intersection.empty()
 
-  return std::make_shared<CombiningMergeActionResultImpl>(left_arg, right_take_clone ? right_arg->Clone() : right_arg);
+  return std::make_shared<CombiningMergeActionResultImpl>(left_arg, right_arg);
 }
-
 BranchViewAction::CombiningMergeAction::CombiningMergeActionResultImpl::CombiningMergeActionResultImpl(BranchViewPtr left, BranchViewPtr right) : left_(std::move(left)), right_(std::move(right)) {
   left_index_ = std::make_shared<ChannelIndex>();
   left_index_->side = ChannelIndex::LEFT;

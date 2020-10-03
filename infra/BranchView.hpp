@@ -144,7 +144,8 @@ class IBranchView {
     throw std::runtime_error("Not implemented");
   }
 
-  BranchViewPtr Merge(const BranchViewPtr& right, std::string left_prefix = "", std::string right_prefix = "") const;
+  BranchViewPtr Merge(const IBranchView& right, std::string left_prefix = "", std::string right_prefix = "") const;
+  BranchViewPtr Merge(const BranchViewPtr& right, const std::string& left_prefix = "", const std::string& right_prefix = "") const;
 
   /**
    * @brief Defines new field from function evaluation
@@ -287,11 +288,18 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
   void SetEntry(Long64_t entry) const override {
-    tree_->GetEntry(entry);
+    if (is_file_input_) {
+      tree_->GetEntry(entry);
+    }
+    Warning(__func__, "Fake view for tests only. Ignoring call SetEntry(%llu)...", entry);
   }
 
   Long64_t GetEntries() const override {
-    return tree_->GetEntries();
+    if (is_file_input_) {
+      return tree_->GetEntries();
+    }
+    Warning(__func__, "Fake view for tests only. Will return 1...");
+    return 1;
   }
 
   explicit AnalysisTreeBranch(BranchConfig config) : config_(std::move(config)) {
@@ -714,41 +722,8 @@ class RenameFieldsAction : public IAction {
   };
 
  public:
-  explicit RenameFieldsAction(const std::map<std::string, std::string>& old_to_new_map) : old_to_new_map_(old_to_new_map) {}
-  BranchViewPtr ApplyAction(const BranchViewPtr& origin) override {
-    std::map<std::string, std::string> new_to_old_map;
-    std::vector<std::string> fields_to_rename;
-    fields_to_rename.reserve(old_to_new_map_.size());
-    auto origin_fields = origin->GetFields();
-    std::vector<std::string> fields_after_rename(origin_fields.begin(), origin_fields.end());
-
-    /* invert map, make sure there is no duplication in new set */
-    for (auto& entry : old_to_new_map_) {
-      auto old_value = entry.first;
-      auto new_value = entry.second;
-      fields_to_rename.emplace_back(old_value);
-      auto emplace_result = new_to_old_map.emplace(new_value, old_value);
-      /* check if no duplications on the right side of old_to_new map */
-      if (!emplace_result.second) {
-        throw std::runtime_error("New field '" + new_value + "' is duplicated in the map");
-      }
-
-      auto field_position = std::distance(origin_fields.begin(), std::find(origin_fields.begin(), origin_fields.end(), old_value));
-      fields_after_rename.at(field_position) = new_value;
-    }
-
-    {
-      std::set<std::string> tmp(fields_after_rename.begin(), fields_after_rename.end());
-      if (tmp.size() < fields_after_rename.size()) {
-        throw std::runtime_error("Duplicated fields after rename");
-      }
-    }
-
-    auto missing_args = Details::GetMissingArgs(fields_to_rename, origin_fields);
-    Details::ThrowMissingArgs(missing_args);
-
-    return std::make_shared<RenameFieldsActionResultImpl>(fields_after_rename, new_to_old_map, origin);
-  }
+  explicit RenameFieldsAction(std::map<std::string, std::string>  old_to_new_map) : old_to_new_map_(std::move(old_to_new_map)) {}
+  BranchViewPtr ApplyAction(const BranchViewPtr& origin) override;
 
  private:
   std::map<std::string, std::string> old_to_new_map_;
@@ -837,7 +812,7 @@ class CombiningMergeAction : public IAction {
   };
 
  public:
-  CombiningMergeAction(BranchViewPtr right,
+  explicit CombiningMergeAction(BranchViewPtr right,
                        std::string right_prefix = "",
                        std::string left_prefix = "") : right_(std::move(right)),
                                                        right_prefix_(std::move(right_prefix)),

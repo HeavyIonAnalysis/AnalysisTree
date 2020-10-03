@@ -194,5 +194,25 @@ TEST(Test_BranchViewAction,Rename) {
 
   EXPECT_EQ(br.AddPrefix("sim_")->GetFields(), std::vector<std::string>({"sim_vtx_x", "sim_vtx_y", "sim_vtx_z"}));
 }
+
+TEST(Test_BranchViewActiom,Merge) {
+
+  BranchConfig rec_header_config("rec_event", DetType::kEventHeader);
+  AnalysisTreeBranch<EventHeader> rec_header_branch(rec_header_config);
+  BranchConfig sim_header_config("sim_event", DetType::kEventHeader);
+  AnalysisTreeBranch<EventHeader> sim_header_branch(sim_header_config);
+
+  EXPECT_THROW(rec_header_branch.Merge(sim_header_branch), std::runtime_error); // same vtx_x, vtx_y, vtx_z
+  EXPECT_NO_THROW(rec_header_branch.Merge(sim_header_branch, "sim_", "rec_"));
+  auto merge_result = rec_header_branch.Merge(sim_header_branch, "rec_", "sim_");
+  EXPECT_EQ(merge_result->GetNumberOfChannels(), 1);
+  merge_result->SetEntry(0);
+  std::cout << *merge_result << std::endl;
+
+
+
+
+
+}
 }
 
