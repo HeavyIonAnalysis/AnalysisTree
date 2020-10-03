@@ -230,7 +230,7 @@ TEST(Test_BranchViewAction, Merge) {
   /* add few channels */
   for (size_t i = 0; i < 10; ++i) {
     auto* ch = sim_tracks->AddChannel();
-    ch->SetMomentum(-i, -i, -i);
+    ch->SetMomentum(-float(i), -float(i), -float(i));
   }
 
   merge_result = vtx_tracks_branch.Merge(sim_tracks_branch, "rec_", "sim_");
