@@ -108,3 +108,68 @@ void BranchViewAction::Details::ThrowMissingArgs(const std::vector<std::string>&
   stream << "missing";
   throw std::out_of_range(stream.str());
 }
+
+BranchViewPtr BranchViewAction::CombiningMergeAction::ApplyAction(const BranchViewPtr& left) {
+  /* same number of events */
+  if (left->GetEntries() != right_->GetEntries()) {
+    throw std::runtime_error("Two BranchViews MUST have same number of events to be merged!");
+  }
+  /* overlapping fields */
+  auto left_fields = left->GetFields();
+  auto right_fields = right_->GetFields();
+  std::sort(left_fields.begin(), left_fields.end());
+  std::sort(right_fields.begin(), right_fields.end());
+  std::vector<std::string> intersection;
+  std::set_intersection(left_fields.begin(), left_fields.end(),
+                        right_fields.begin(), right_fields.end(),
+                        std::back_inserter(intersection));
+
+  auto left_arg = left;
+  auto right_arg = right_;
+  bool right_take_clone = true;
+  if (!intersection.empty()) {
+    if (left_prefix_ == right_prefix_) {
+      throw std::runtime_error("left_prefix and right prefix must be different (not both empty also)");
+    }
+
+    if (!left_prefix_.empty()) {
+      std::map<std::string, std::string> rename_map;
+      for (auto& field : intersection) {
+        rename_map.emplace(field, left_prefix_ + field);
+      }
+      left_arg = left->RenameFields(rename_map);
+    }
+
+    if (!right_prefix_.empty()) {
+      std::map<std::string, std::string> rename_map;
+      for (auto& field : intersection) {
+        rename_map.emplace(field, right_prefix_ + field);
+      }
+      right_arg = right_->RenameFields(rename_map);
+      right_take_clone = false;/// already cloned during RenameFields
+    }
+  }// !intersection.empty()
+
+  return std::make_shared<CombiningMergeActionResultImpl>(left_arg, right_take_clone ? right_arg->Clone() : right_arg);
+}
+
+BranchViewAction::CombiningMergeAction::CombiningMergeActionResultImpl::CombiningMergeActionResultImpl(BranchViewPtr left, BranchViewPtr right) : left_(std::move(left)), right_(std::move(right)) {
+  left_index_ = std::make_shared<ChannelIndex>();
+  left_index_->side = ChannelIndex::LEFT;
+  right_index_ = std::make_shared<ChannelIndex>();
+  right_index_->side = ChannelIndex::RIGHT;
+
+  auto left_fields = left_->GetFields();
+  auto right_fields = right_->GetFields();
+  field_names_.reserve(left_fields.size() + right_fields.size());
+  std::copy(left_fields.begin(), left_fields.end(), std::back_inserter(field_names_));
+  std::copy(right_fields.begin(), right_fields.end(), std::back_inserter(field_names_));
+
+  for (auto& field_name : left_->GetFields()) {
+    fields_.emplace(field_name, std::make_shared<FieldImpl>(left_index_, left_->GetFieldPtr(field_name)));
+  }
+
+  for (auto& field_name : right_->GetFields()) {
+    fields_.emplace(field_name, std::make_shared<FieldImpl>(right_index_, right_->GetFieldPtr(field_name)));
+  }
+}

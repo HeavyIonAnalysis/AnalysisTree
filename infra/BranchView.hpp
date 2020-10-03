@@ -144,7 +144,7 @@ class IBranchView {
     throw std::runtime_error("Not implemented");
   }
 
-  BranchViewPtr Merge(const BranchViewPtr &right, std::string left_prefix = "", std::string right_prefix = "") const;
+  BranchViewPtr Merge(const BranchViewPtr& right, std::string left_prefix = "", std::string right_prefix = "") const;
 
   /**
    * @brief Defines new field from function evaluation
@@ -714,7 +714,7 @@ class RenameFieldsAction : public IAction {
   };
 
  public:
-  RenameFieldsAction(const std::map<std::string, std::string>& old_to_new_map) : old_to_new_map_(old_to_new_map) {}
+  explicit RenameFieldsAction(const std::map<std::string, std::string>& old_to_new_map) : old_to_new_map_(old_to_new_map) {}
   BranchViewPtr ApplyAction(const BranchViewPtr& origin) override {
     std::map<std::string, std::string> new_to_old_map;
     std::vector<std::string> fields_to_rename;
@@ -791,7 +791,7 @@ class CombiningMergeAction : public IAction {
         if (index_->isValidIndex(i_channel)) {
           return origin_field_->GetValue(index_->globalToLocal(i_channel));
         }
-        return std::nan("nan");
+        return std::nan("<invalid-channel-id>");
       }
       std::string GetFieldTypeStr() const override {
         return origin_field_->GetFieldTypeStr();
@@ -803,26 +803,7 @@ class CombiningMergeAction : public IAction {
     };
 
    public:
-    CombiningMergeActionResultImpl(BranchViewPtr left, BranchViewPtr right) : left_(std::move(left)), right_(std::move(right)) {
-      left_index_ = std::make_shared<ChannelIndex>();
-      left_index_->side = ChannelIndex::LEFT;
-      right_index_ = std::make_shared<ChannelIndex>();
-      right_index_->side = ChannelIndex::RIGHT;
-
-      auto left_fields = left_->GetFields();
-      auto right_fields = right_->GetFields();
-      field_names_.reserve(left_fields.size() + right_fields.size());
-      std::copy(left_fields.begin(), left_fields.end(), std::back_inserter(field_names_));
-      std::copy(right_fields.begin(), right_fields.end(), std::back_inserter(field_names_));
-
-      for (auto& field_name : left_->GetFields()) {
-        fields_.emplace(field_name, std::make_shared<FieldImpl>(left_index_, left_->GetFieldPtr(field_name)));
-      }
-
-      for (auto& field_name : right_->GetFields()) {
-        fields_.emplace(field_name, std::make_shared<FieldImpl>(right_index_, right_->GetFieldPtr(field_name)));
-      }
-    }
+    CombiningMergeActionResultImpl(BranchViewPtr left, BranchViewPtr right);
 
     std::vector<std::string> GetFields() const override {
       return field_names_;
@@ -856,51 +837,13 @@ class CombiningMergeAction : public IAction {
   };
 
  public:
-  CombiningMergeAction(BranchViewPtr right, std::string right_prefix = "", std::string left_prefix = "") : right_(std::move(right)), right_prefix_(std::move(right_prefix)), left_prefix_(std::move(left_prefix)) {}
+  CombiningMergeAction(BranchViewPtr right,
+                       std::string right_prefix = "",
+                       std::string left_prefix = "") : right_(std::move(right)),
+                                                       right_prefix_(std::move(right_prefix)),
+                                                       left_prefix_(std::move(left_prefix)) {}
 
-  BranchViewPtr ApplyAction(const BranchViewPtr& left) override {
-    /* same number of events */
-    if (left->GetEntries() != right_->GetEntries()) {
-      throw std::runtime_error("Two BranchViews MUST have same number of events to be merged!");
-    }
-    /* overlapping fields */
-    auto left_fields = left->GetFields();
-    auto right_fields = right_->GetFields();
-    std::sort(left_fields.begin(), left_fields.end());
-    std::sort(right_fields.begin(), right_fields.end());
-    std::vector<std::string> intersection;
-    std::set_intersection(left_fields.begin(), left_fields.end(),
-                          right_fields.begin(), right_fields.end(),
-                          std::back_inserter(intersection));
-
-    auto left_arg = left;
-    auto right_arg = right_;
-    bool right_take_clone = true;
-    if (!intersection.empty()) {
-      if (left_prefix_ == right_prefix_) {
-        throw std::runtime_error("left_prefix and right prefix must be different (not both empty also)");
-      }
-
-      if (!left_prefix_.empty()) {
-        std::map<std::string, std::string> rename_map;
-        for (auto& field : intersection) {
-          rename_map.emplace(field, left_prefix_ + field);
-        }
-        left_arg = left->RenameFields(rename_map);
-      }
-
-      if (!right_prefix_.empty()) {
-        std::map<std::string, std::string> rename_map;
-        for (auto& field : intersection) {
-          rename_map.emplace(field, right_prefix_ + field);
-        }
-        right_arg = right_->RenameFields(rename_map);
-        right_take_clone = false;/// already cloned during RenameFields
-      }
-    }// !intersection.empty()
-
-    return std::make_shared<CombiningMergeActionResultImpl>(left_arg, right_take_clone ? right_arg->Clone() : right_arg);
-  }
+  BranchViewPtr ApplyAction(const BranchViewPtr& left) override;
 
  private:
   BranchViewPtr right_;
