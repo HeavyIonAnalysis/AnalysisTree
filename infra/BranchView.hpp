@@ -110,7 +110,7 @@ class IBranchView {
    * @param name
    * @return
    */
-  virtual bool HasField(const std::string &name) const;
+  virtual bool HasField(const std::string& name) const;
   /**
    * @brief Requests enlisted field_names
    * @param field_names
@@ -131,8 +131,8 @@ class IBranchView {
    * @return
    */
   BranchViewPtr RenameFields(const std::map<std::string, std::string>& old_to_new_map) const;
-  BranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
-  BranchViewPtr AddPrefix(const std::string &prefix);
+  BranchViewPtr RenameFields(const std::string& old_name, const std::string& new_name) const;
+  BranchViewPtr AddPrefix(const std::string& prefix) const;
 
   /**
    * @brief Merges two compatible views
@@ -143,6 +143,9 @@ class IBranchView {
   BranchViewPtr PlainMerge(const IBranchView& /*other */) const {
     throw std::runtime_error("Not implemented");
   }
+
+  BranchViewPtr Merge(const IBranchView& right, std::string left_prefix = "", std::string right_prefix = "") const;
+  BranchViewPtr Merge(const BranchViewPtr& right, const std::string& left_prefix = "", const std::string& right_prefix = "") const;
 
   /**
    * @brief Defines new field from function evaluation
@@ -271,8 +274,10 @@ class AnalysisTreeBranch : public IBranchView {
   BranchViewPtr Clone() const override {
     if (is_file_input_) {
       return std::make_shared<AnalysisTreeBranch<Entity>>(config_, tree_name_, file_->GetName());
+    } else if (is_fake_constructor_) {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_, data.get()->ptr);
     } else {
-      return std::make_shared<AnalysisTreeBranch<Entity>>(config_);
+      assert(false);
     }
   }
 
@@ -285,26 +290,32 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
   void SetEntry(Long64_t entry) const override {
-    tree_->GetEntry(entry);
+    if (is_file_input_) {
+      tree_->GetEntry(entry);
+      return;
+    }
+    Warning(__func__, "Fake view for tests only. Ignoring call SetEntry(%llu)...", entry);
   }
 
   Long64_t GetEntries() const override {
-    return tree_->GetEntries();
+    if (is_file_input_) {
+      return tree_->GetEntries();
+    }
+    Warning(__func__, "Fake view for tests only. Will return 1...");
+    return 1;
   }
 
-  explicit AnalysisTreeBranch(BranchConfig config) : config_(std::move(config)) {
-    data = std::make_shared<DataPtrHolder>();
-    data->ptr = new Entity;
-    InitFields<int>();
-    InitFields<float>();
-    InitFields<bool>();
+  explicit AnalysisTreeBranch(BranchConfig config, Entity* e = new Entity) : config_(std::move(config)) {
+    InitData(e);
+    is_fake_constructor_ = true;
   }
 
-  AnalysisTreeBranch(const BranchConfig& config, std::string tree_name, std::string input_file_name) : AnalysisTreeBranch(config) {
+  AnalysisTreeBranch(BranchConfig config, std::string tree_name, std::string input_file_name) : config_(std::move(config)) {
+    InitData(new Entity);
     is_file_input_ = true;
     tree_name_ = std::move(tree_name);
     input_file_name_ = std::move(input_file_name);
-    file_ = TFile::Open(input_file_name_.c_str(),"READ");
+    file_ = TFile::Open(input_file_name_.c_str(), "READ");
     tree_ = file_->Get<TTree>(tree_name_.c_str());
     tree_->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
   }
@@ -314,6 +325,13 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
  private:
+  void InitData(Entity *e) {
+    data = std::make_shared<DataPtrHolder>();
+    data->ptr = e;
+    InitFields<int>();
+    InitFields<float>();
+    InitFields<bool>();
+  }
 
   template<typename T>
   void InitFields() {
@@ -323,10 +341,11 @@ class AnalysisTreeBranch : public IBranchView {
       auto column_field_id = entry.second;
       field_names_.emplace_back(field_name);
       auto column_field_type = config_.GetFieldType(field_name);
-      fields_.emplace(field_name,std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type));
+      fields_.emplace(field_name, std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type));
     }
   }
 
+  bool is_fake_constructor_{false};
   bool is_file_input_{false};
   BranchConfig config_;
   std::string tree_name_;
@@ -713,44 +732,108 @@ class RenameFieldsAction : public IAction {
   };
 
  public:
-  RenameFieldsAction(const std::map<std::string, std::string>& old_to_new_map) : old_to_new_map_(old_to_new_map) {}
-  BranchViewPtr ApplyAction(const BranchViewPtr& origin) override {
-    std::map<std::string, std::string> new_to_old_map;
-    std::vector<std::string> fields_to_rename;
-    fields_to_rename.reserve(old_to_new_map_.size());
-    auto origin_fields = origin->GetFields();
-    std::vector<std::string> fields_after_rename(origin_fields.begin(), origin_fields.end());
-
-    /* invert map, make sure there is no duplication in new set */
-    for (auto& entry : old_to_new_map_) {
-      auto old_value = entry.first;
-      auto new_value = entry.second;
-      fields_to_rename.emplace_back(old_value);
-      auto emplace_result = new_to_old_map.emplace(new_value, old_value);
-      /* check if no duplications on the right side of old_to_new map */
-      if (!emplace_result.second) {
-        throw std::runtime_error("New field '" + new_value + "' is duplicated in the map");
-      }
-
-      auto field_position = std::distance(origin_fields.begin(), std::find(origin_fields.begin(), origin_fields.end(), old_value));
-      fields_after_rename.at(field_position) = new_value;
-    }
-
-    {
-      std::set<std::string> tmp(fields_after_rename.begin(), fields_after_rename.end());
-      if (tmp.size() < fields_after_rename.size()) {
-        throw std::runtime_error("Duplicated fields after rename");
-      }
-    }
-
-    auto missing_args = Details::GetMissingArgs(fields_to_rename, origin_fields);
-    Details::ThrowMissingArgs(missing_args);
-
-    return std::make_shared<RenameFieldsActionResultImpl>(fields_after_rename, new_to_old_map, origin);
-  }
+  explicit RenameFieldsAction(std::map<std::string, std::string>  old_to_new_map) : old_to_new_map_(std::move(old_to_new_map)) {}
+  BranchViewPtr ApplyAction(const BranchViewPtr& origin) override;
 
  private:
   std::map<std::string, std::string> old_to_new_map_;
+};
+
+class CombiningMergeAction : public IAction {
+
+  class CombiningMergeActionResultImpl : public IBranchView {
+
+    struct ChannelIndex {
+      enum ESide { LEFT,
+                   RIGHT };
+      void UpdateIndex(std::size_t l, std::size_t r) {
+        left_n = l;
+        right_n = r;
+        is_initialized = true;
+      }
+      bool isValidIndex(std::size_t index) const {
+        return index < left_n * right_n;
+      }
+      std::size_t globalToLocal(std::size_t global) const {
+        if (side == LEFT) {
+          return global % left_n;
+        } else if (side == RIGHT) {
+          return global / left_n;
+        }
+        __builtin_unreachable();
+      };
+
+      bool is_initialized{false};
+      ESide side{LEFT};
+      std::size_t left_n{0};
+      std::size_t right_n{0};
+    };
+
+    class FieldImpl : public IFieldRef {
+     public:
+      FieldImpl(std::shared_ptr<const ChannelIndex> index, FieldPtr origin_field) : index_(std::move(index)), origin_field_(std::move(origin_field)) {}
+      double GetValue(size_t i_channel) const override {
+        if (index_->isValidIndex(i_channel)) {
+          return origin_field_->GetValue(index_->globalToLocal(i_channel));
+        }
+        return std::nan("<invalid-channel-id>");
+      }
+      std::string GetFieldTypeStr() const override {
+        return origin_field_->GetFieldTypeStr();
+      }
+
+     private:
+      std::shared_ptr<const ChannelIndex> index_;
+      FieldPtr origin_field_;
+    };
+
+   public:
+    CombiningMergeActionResultImpl(BranchViewPtr left, BranchViewPtr right);
+
+    std::vector<std::string> GetFields() const override {
+      return field_names_;
+    }
+    size_t GetNumberOfChannels() const override {
+      return left_->GetNumberOfChannels() * right_->GetNumberOfChannels();
+    }
+    FieldPtr GetFieldPtr(std::string field_name) const override {
+      return fields_.at(field_name);
+    }
+    void SetEntry(Long64_t entry) const override {
+      left_->SetEntry(entry);
+      right_->SetEntry(entry);
+      left_index_->UpdateIndex(left_->GetNumberOfChannels(), right_->GetNumberOfChannels());
+      right_index_->UpdateIndex(left_->GetNumberOfChannels(), right_->GetNumberOfChannels());
+    }
+    Long64_t GetEntries() const override {
+      return left_->GetEntries();
+    }
+    BranchViewPtr Clone() const override {
+      return std::make_shared<CombiningMergeActionResultImpl>(left_->Clone(), right_->Clone());
+    }
+
+   private:
+    BranchViewPtr left_;
+    BranchViewPtr right_;
+    std::vector<std::string> field_names_;
+    std::map<std::string, FieldPtr> fields_;
+    std::shared_ptr<ChannelIndex> left_index_;
+    std::shared_ptr<ChannelIndex> right_index_;
+  };
+
+ public:
+  explicit CombiningMergeAction(BranchViewPtr right,
+                       std::string right_prefix = "",
+                       std::string left_prefix = "") : right_(std::move(right)),
+                                                       right_prefix_(std::move(right_prefix)),
+                                                       left_prefix_(std::move(left_prefix)) {}
+
+  BranchViewPtr ApplyAction(const BranchViewPtr& left) override;
+
+ private:
+  BranchViewPtr right_;
+  std::string right_prefix_;
+  std::string left_prefix_;
 };
 
 }// namespace BranchViewAction
