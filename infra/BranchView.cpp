@@ -6,6 +6,7 @@
 #include "TextTable.h"
 
 #include <sstream>
+#include <utility>
 
 
 using namespace AnalysisTree;
@@ -63,7 +64,7 @@ void IBranchView::PrintEntry(std::ostream& os) {
 BranchViewPtr IBranchView::RenameFields(const std::map<std::string, std::string>& old_to_new_map) const {
   return Apply(BranchViewAction::RenameFieldsAction(old_to_new_map));
 }
-BranchViewPtr IBranchView::RenameFields(std::string old_name, std::string new_name) const {
+BranchViewPtr IBranchView::RenameFields(const std::string& old_name, const std::string& new_name) const {
   std::map<std::string, std::string> tmp_map;
   tmp_map.emplace(old_name, new_name);
   return RenameFields(tmp_map);
@@ -72,12 +73,17 @@ bool IBranchView::HasField(const std::string& name) const {
   auto fields = GetFields();
   return std::find(fields.begin(), fields.end(), name) != fields.end();
 }
-BranchViewPtr IBranchView::AddPrefix(const std::string& prefix) {
+BranchViewPtr IBranchView::AddPrefix(const std::string& prefix) const {
   std::map<std::string, std::string> rename_map;
   for (auto &field : GetFields()) {
     rename_map.emplace(field, prefix + field);
   }
   return RenameFields(rename_map);
+}
+
+BranchViewPtr IBranchView::Merge(const BranchViewPtr& right, std::string left_prefix, std::string right_prefix) const {
+  BranchViewAction::CombiningMergeAction action(right, std::move(left_prefix), std::move(right_prefix));
+  return Apply(action);
 }
 
 std::vector<std::string> BranchViewAction::Details::GetMissingArgs(const std::vector<std::string>& args, const std::vector<std::string>& view_fields) {

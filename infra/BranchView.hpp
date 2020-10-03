@@ -110,7 +110,7 @@ class IBranchView {
    * @param name
    * @return
    */
-  virtual bool HasField(const std::string &name) const;
+  virtual bool HasField(const std::string& name) const;
   /**
    * @brief Requests enlisted field_names
    * @param field_names
@@ -131,8 +131,8 @@ class IBranchView {
    * @return
    */
   BranchViewPtr RenameFields(const std::map<std::string, std::string>& old_to_new_map) const;
-  BranchViewPtr RenameFields(std::string old_name, std::string new_name) const;
-  BranchViewPtr AddPrefix(const std::string &prefix);
+  BranchViewPtr RenameFields(const std::string& old_name, const std::string& new_name) const;
+  BranchViewPtr AddPrefix(const std::string& prefix) const;
 
   /**
    * @brief Merges two compatible views
@@ -143,6 +143,8 @@ class IBranchView {
   BranchViewPtr PlainMerge(const IBranchView& /*other */) const {
     throw std::runtime_error("Not implemented");
   }
+
+  BranchViewPtr Merge(const BranchViewPtr &right, std::string left_prefix = "", std::string right_prefix = "") const;
 
   /**
    * @brief Defines new field from function evaluation
@@ -304,7 +306,7 @@ class AnalysisTreeBranch : public IBranchView {
     is_file_input_ = true;
     tree_name_ = std::move(tree_name);
     input_file_name_ = std::move(input_file_name);
-    file_ = TFile::Open(input_file_name_.c_str(),"READ");
+    file_ = TFile::Open(input_file_name_.c_str(), "READ");
     tree_ = file_->Get<TTree>(tree_name_.c_str());
     tree_->SetBranchAddress(config_.GetName().c_str(), &(data.get()->ptr));
   }
@@ -314,7 +316,6 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
  private:
-
   template<typename T>
   void InitFields() {
     auto field_map = config_.GetMap<T>();
@@ -323,7 +324,7 @@ class AnalysisTreeBranch : public IBranchView {
       auto column_field_id = entry.second;
       field_names_.emplace_back(field_name);
       auto column_field_type = config_.GetFieldType(field_name);
-      fields_.emplace(field_name,std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type));
+      fields_.emplace(field_name, std::make_shared<FieldRefImpl>(data, column_field_id, column_field_type));
     }
   }
 
@@ -758,25 +759,39 @@ class CombiningMergeAction : public IAction {
   class CombiningMergeActionResultImpl : public IBranchView {
 
     struct ChannelIndex {
-      enum ESide {LEFT, RIGHT};
+      enum ESide { LEFT,
+                   RIGHT };
       void UpdateIndex(std::size_t l, std::size_t r) {
         left_n = l;
         right_n = r;
+        is_initialized = true;
       }
-      size_t globalToLocal(std::size_t global) const {
-
+      bool isValidIndex(std::size_t index) const {
+        return index < left_n * right_n;
+      }
+      std::size_t globalToLocal(std::size_t global) const {
+        if (side == LEFT) {
+          return global % left_n;
+        } else if (side == RIGHT) {
+          return global / left_n;
+        }
+        __builtin_unreachable();
       };
 
+      bool is_initialized{false};
       ESide side{LEFT};
-      size_t left_n{0};
-      size_t right_n{0};
+      std::size_t left_n{0};
+      std::size_t right_n{0};
     };
 
     class FieldImpl : public IFieldRef {
      public:
-      FieldImpl(std::shared_ptr<const ChannelIndex>  index, FieldPtr  origin_field) : index_(std::move(index)), origin_field_(std::move(origin_field)) {}
+      FieldImpl(std::shared_ptr<const ChannelIndex> index, FieldPtr origin_field) : index_(std::move(index)), origin_field_(std::move(origin_field)) {}
       double GetValue(size_t i_channel) const override {
+        if (index_->isValidIndex(i_channel)) {
           return origin_field_->GetValue(index_->globalToLocal(i_channel));
+        }
+        return std::nan("nan");
       }
       std::string GetFieldTypeStr() const override {
         return origin_field_->GetFieldTypeStr();
@@ -788,7 +803,7 @@ class CombiningMergeAction : public IAction {
     };
 
    public:
-    CombiningMergeActionResultImpl(BranchViewPtr  left, BranchViewPtr right) : left_(std::move(left)), right_(std::move(right)) {
+    CombiningMergeActionResultImpl(BranchViewPtr left, BranchViewPtr right) : left_(std::move(left)), right_(std::move(right)) {
       left_index_ = std::make_shared<ChannelIndex>();
       left_index_->side = ChannelIndex::LEFT;
       right_index_ = std::make_shared<ChannelIndex>();
@@ -800,14 +815,13 @@ class CombiningMergeAction : public IAction {
       std::copy(left_fields.begin(), left_fields.end(), std::back_inserter(field_names_));
       std::copy(right_fields.begin(), right_fields.end(), std::back_inserter(field_names_));
 
-      for (auto & field_name : left_->GetFields()) {
+      for (auto& field_name : left_->GetFields()) {
         fields_.emplace(field_name, std::make_shared<FieldImpl>(left_index_, left_->GetFieldPtr(field_name)));
       }
 
-      for (auto & field_name : right_->GetFields()) {
+      for (auto& field_name : right_->GetFields()) {
         fields_.emplace(field_name, std::make_shared<FieldImpl>(right_index_, right_->GetFieldPtr(field_name)));
       }
-
     }
 
     std::vector<std::string> GetFields() const override {
@@ -829,7 +843,7 @@ class CombiningMergeAction : public IAction {
       return left_->GetEntries();
     }
     BranchViewPtr Clone() const override {
-      return AnalysisTree::BranchViewPtr();
+      return std::make_shared<CombiningMergeActionResultImpl>(left_->Clone(), right_->Clone());
     }
 
    private:
@@ -842,7 +856,7 @@ class CombiningMergeAction : public IAction {
   };
 
  public:
-  CombiningMergeAction(BranchViewPtr right, std::string  right_prefix = "", std::string  left_prefix = "") : right_(std::move(right)), right_prefix_(std::move(right_prefix)), left_prefix_(std::move(left_prefix)) {}
+  CombiningMergeAction(BranchViewPtr right, std::string right_prefix = "", std::string left_prefix = "") : right_(std::move(right)), right_prefix_(std::move(right_prefix)), left_prefix_(std::move(left_prefix)) {}
 
   BranchViewPtr ApplyAction(const BranchViewPtr& left) override {
     /* same number of events */
@@ -869,7 +883,7 @@ class CombiningMergeAction : public IAction {
 
       if (!left_prefix_.empty()) {
         std::map<std::string, std::string> rename_map;
-        for (auto &field : intersection) {
+        for (auto& field : intersection) {
           rename_map.emplace(field, left_prefix_ + field);
         }
         left_arg = left->RenameFields(rename_map);
@@ -877,22 +891,21 @@ class CombiningMergeAction : public IAction {
 
       if (!right_prefix_.empty()) {
         std::map<std::string, std::string> rename_map;
-        for (auto &field : intersection) {
+        for (auto& field : intersection) {
           rename_map.emplace(field, right_prefix_ + field);
         }
         right_arg = right_->RenameFields(rename_map);
-        right_take_clone = false; /// already cloned during RenameFields
+        right_take_clone = false;/// already cloned during RenameFields
       }
-    } // !intersection.empty()
+    }// !intersection.empty()
 
-    return std::make_shared<CombiningMergeActionResultImpl>(left_arg, right_take_clone? right_arg->Clone() : right_arg);
+    return std::make_shared<CombiningMergeActionResultImpl>(left_arg, right_take_clone ? right_arg->Clone() : right_arg);
   }
 
  private:
   BranchViewPtr right_;
   std::string right_prefix_;
   std::string left_prefix_;
-
 };
 
 }// namespace BranchViewAction
