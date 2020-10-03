@@ -274,8 +274,10 @@ class AnalysisTreeBranch : public IBranchView {
   BranchViewPtr Clone() const override {
     if (is_file_input_) {
       return std::make_shared<AnalysisTreeBranch<Entity>>(config_, tree_name_, file_->GetName());
+    } else if (is_fake_constructor_) {
+      return std::make_shared<AnalysisTreeBranch<Entity>>(config_, data.get()->ptr);
     } else {
-      return std::make_shared<AnalysisTreeBranch<Entity>>(config_);
+      assert(false);
     }
   }
 
@@ -290,6 +292,7 @@ class AnalysisTreeBranch : public IBranchView {
   void SetEntry(Long64_t entry) const override {
     if (is_file_input_) {
       tree_->GetEntry(entry);
+      return;
     }
     Warning(__func__, "Fake view for tests only. Ignoring call SetEntry(%llu)...", entry);
   }
@@ -302,15 +305,13 @@ class AnalysisTreeBranch : public IBranchView {
     return 1;
   }
 
-  explicit AnalysisTreeBranch(BranchConfig config) : config_(std::move(config)) {
-    data = std::make_shared<DataPtrHolder>();
-    data->ptr = new Entity;
-    InitFields<int>();
-    InitFields<float>();
-    InitFields<bool>();
+  explicit AnalysisTreeBranch(BranchConfig config, Entity* e = new Entity) : config_(std::move(config)) {
+    InitData(e);
+    is_fake_constructor_ = true;
   }
 
-  AnalysisTreeBranch(const BranchConfig& config, std::string tree_name, std::string input_file_name) : AnalysisTreeBranch(config) {
+  AnalysisTreeBranch(BranchConfig config, std::string tree_name, std::string input_file_name) : config_(std::move(config)) {
+    InitData(new Entity);
     is_file_input_ = true;
     tree_name_ = std::move(tree_name);
     input_file_name_ = std::move(input_file_name);
@@ -324,6 +325,14 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
  private:
+  void InitData(Entity *e) {
+    data = std::make_shared<DataPtrHolder>();
+    data->ptr = e;
+    InitFields<int>();
+    InitFields<float>();
+    InitFields<bool>();
+  }
+
   template<typename T>
   void InitFields() {
     auto field_map = config_.GetMap<T>();
@@ -336,6 +345,7 @@ class AnalysisTreeBranch : public IBranchView {
     }
   }
 
+  bool is_fake_constructor_{false};
   bool is_file_input_{false};
   BranchConfig config_;
   std::string tree_name_;
