@@ -156,14 +156,24 @@ class IBranchView {
    * @return
    */
   template<typename Function>
-  BranchViewPtr Define(std::string new_field_name, std::vector<std::string>&& arg_names, Function&& function) const {
-    auto function_wrap = std::function(function);
-    auto action_ptr = BranchViewAction::NewDefineAction(new_field_name, arg_names, std::move(function_wrap));
-    return Apply(action_ptr);
-  }
+  BranchViewPtr Define(const std::string& new_field_name, std::vector<std::string>&& arg_names, Function&& function) const;
+
+  /**
+   * @brief Filters channel using boolean result of function evaluation
+   * @tparam Predicate
+   * @param arg_names
+   * @param predicate
+   * @return
+   */
+  template<typename Predicate>
+  BranchViewPtr Filter(std::vector<std::string>&& arg_names, Predicate&& predicate) const;
 
   template<typename Action>
   BranchViewPtr Apply(Action&& action) const {
+    return action.ApplyAction(Clone());
+  }
+
+  BranchViewPtr Apply(IAction& action) const {
     return action.ApplyAction(Clone());
   }
 
@@ -325,7 +335,7 @@ class AnalysisTreeBranch : public IBranchView {
   }
 
  private:
-  void InitData(Entity *e) {
+  void InitData(Entity* e) {
     data = std::make_shared<DataPtrHolder>();
     data->ptr = e;
     InitFields<int>();
@@ -521,17 +531,6 @@ class BranchViewDefineAction : public IAction {
   std::vector<std::string> lambda_args_;
   Function lambda_;
 };
-
-template<typename Lambda>
-IAction* NewDefineAction(const std::string& field_name, const std::vector<std::string>& lambda_args, Lambda&& lambda) {
-  return new BranchViewDefineAction(field_name, lambda_args, std::function(std::forward<Lambda>(lambda)));
-}
-
-template<typename Lambda>
-IAction* NewDefineAction(const std::string& field_name, std::initializer_list<std::string> lambda_args, Lambda&& lambda) {
-  std::vector<std::string> lambda_args_v(lambda_args.begin(), lambda_args.end());
-  return NewDefineAction(field_name, lambda_args_v, lambda);
-}
 
 template<typename Function>
 class BranchViewFilterAction : public IAction {
@@ -732,7 +731,7 @@ class RenameFieldsAction : public IAction {
   };
 
  public:
-  explicit RenameFieldsAction(std::map<std::string, std::string>  old_to_new_map) : old_to_new_map_(std::move(old_to_new_map)) {}
+  explicit RenameFieldsAction(std::map<std::string, std::string> old_to_new_map) : old_to_new_map_(std::move(old_to_new_map)) {}
   BranchViewPtr ApplyAction(const BranchViewPtr& origin) override;
 
  private:
@@ -823,10 +822,10 @@ class CombiningMergeAction : public IAction {
 
  public:
   explicit CombiningMergeAction(BranchViewPtr right,
-                       std::string right_prefix = "",
-                       std::string left_prefix = "") : right_(std::move(right)),
-                                                       right_prefix_(std::move(right_prefix)),
-                                                       left_prefix_(std::move(left_prefix)) {}
+                                std::string right_prefix = "",
+                                std::string left_prefix = "") : right_(std::move(right)),
+                                                                right_prefix_(std::move(right_prefix)),
+                                                                left_prefix_(std::move(left_prefix)) {}
 
   BranchViewPtr ApplyAction(const BranchViewPtr& left) override;
 
@@ -838,5 +837,16 @@ class CombiningMergeAction : public IAction {
 
 }// namespace BranchViewAction
 
+template<typename Function>
+BranchViewPtr IBranchView::Define(const std::string& new_field_name, std::vector<std::string>&& arg_names, Function&& function) const {
+  BranchViewAction::BranchViewDefineAction action(new_field_name, arg_names, std::forward<Function>(function));
+  return Apply(action);
+}
+
+template<typename Predicate>
+BranchViewPtr IBranchView::Filter(std::vector<std::string>&& arg_names, Predicate&& predicate) const {
+  BranchViewAction::BranchViewFilterAction action(arg_names, std::forward<Predicate>(predicate));
+  return Apply(action);
+};
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_INFRA_BRANCHVIEW_HPP
