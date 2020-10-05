@@ -1,6 +1,10 @@
 # AnalysisTree
 [![Build Status](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree.svg?branch=master)](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree)
 
+## Doxygen documentation:
+
+https://heavyionanalysis.github.io/AnalysisTree/
+
 ## General information
 
 This is a dataformat to store information in configurable objects. Basic objects are:

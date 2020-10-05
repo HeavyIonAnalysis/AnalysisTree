@@ -22,6 +22,10 @@ using BranchPointer = boost::variant<TrackDetector*, Particles*, ModuleDetector*
 using BranchPointer = std::variant<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
 #endif
 
+/**
+ * @brief BranchReader keeps data-object associated with tree branch and list of cuts for this branch
+ * lots of visitor boilerplate
+ */
 class BranchReader {
 
  public:

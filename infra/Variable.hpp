@@ -11,6 +11,10 @@
 
 namespace AnalysisTree {
 
+/**
+ * @brief Variable is a wrapper object for Field. In contrary to Field Variable is not bound to the data.
+ * It could represent a Field itself or, if specified, a result of operation on two or more fields
+ */
 class Variable {
  public:
   Variable() = default;

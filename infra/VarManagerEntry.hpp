@@ -10,6 +10,10 @@
 
 namespace AnalysisTree {
 
+/**
+ * @brief VarManager entry keeps list of Variables from one or more branches.
+ * Before each event VarManagerEntry evaluates Variables and Cuts
+ */
 class VarManagerEntry {
 
   typedef std::vector<std::vector<double>> array2D;

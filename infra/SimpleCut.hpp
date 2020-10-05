@@ -11,6 +11,9 @@
 
 namespace AnalysisTree {
 
+/**
+ * @brief SimpleCut keeps predicate (lambda function with vector of arguments) and list of Variables.
+ */
 class SimpleCut {
 
  public:
@@ -53,6 +56,12 @@ class SimpleCut {
     FillBranchNames();
   }
 
+  /**
+   * @brief Evaluates cut
+   * @tparam T type of data-object associated with TTree
+   * @param object
+   * @return result of cut
+   */
   template<class T>
   bool Apply(const T& object) const {
     std::vector<double> variables;
