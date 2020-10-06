@@ -8,6 +8,7 @@
 #include <set>
 #include <sstream>
 #include <utility>
+#include <set>
 
 
 using namespace AnalysisTree;
