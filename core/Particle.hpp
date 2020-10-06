@@ -16,6 +16,7 @@ class Particle : public Track {
   Particle(Particle&& particle) = default;
   Particle& operator=(Particle&&) = default;
   Particle& operator=(const Particle& particle) = default;
+  ~Particle() override = default;
 
   [[nodiscard]] Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
   [[nodiscard]] PdgCode_t GetPid() const { return pid_; }

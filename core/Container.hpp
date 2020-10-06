@@ -11,8 +11,8 @@ class Vector {
  public:
   Vector() = default;
   Vector(const Vector&) = default;
-  Vector(Vector&&) = default;
-  Vector& operator=(Vector&&) = default;
+  Vector(Vector&&)  noexcept = default;
+  Vector& operator=(Vector&&)  noexcept = default;
   Vector& operator=(const Vector&) = default;
   virtual ~Vector() = default;
 
@@ -32,6 +32,9 @@ class Vector {
 
  protected:
   std::vector<T> field_{};
+
+//  ClassDef(AnalysisTree::Vector, 1);
+
 };
 
 /**
@@ -46,6 +49,9 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   Container(Container&& container) = default;
   Container& operator=(Container&&) = default;
   Container& operator=(const Container& part) = default;
+  ~Container() override {
+      std::cout << "~Container()" << std::endl;
+  };
 
   template<typename T>
   void SetField(T value, Integer_t iField) { Vector<T>::SetField(value, iField); }
@@ -55,6 +61,10 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   [[nodiscard]] size_t GetSize() const { return Vector<T>::field_.size(); }
 
   void Init(const BranchConfig& branch);
+
+ protected:
+  ClassDef(AnalysisTree::Container, 1);
+
 };
 
 }// namespace AnalysisTree

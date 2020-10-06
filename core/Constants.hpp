@@ -43,7 +43,7 @@ const std::map<int, float> MassMap = {{11, 0.000511},// e
   if (it != MassMap.end()) {
     return MassMap.find(std::abs(pid))->second;
   } else {
-    //for not only print warning not to break all converters //TODO exeption
+    //for now only print warning not to break all converters //TODO exeption
     std::cout << "WARINING! Mass of " + std::to_string(pid) + " is not known" << std::endl;
     //    throw std::runtime_error("Mass of " + std::to_string(pid) + " is not known");
     return 0.f;

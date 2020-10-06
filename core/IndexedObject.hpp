@@ -46,7 +46,7 @@ class IndexedObject {
   IndexedObject& operator=(const IndexedObject& indexedObject) = default;
   virtual ~IndexedObject() = default;
 
-  inline Integer_t GetId() const {
+  [[nodiscard]] inline Integer_t GetId() const {
     return id_;
   }
 
