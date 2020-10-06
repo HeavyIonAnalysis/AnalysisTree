@@ -21,27 +21,33 @@ class Detector : public IndexedObject, protected IndexAccessor {
   Detector() = default;
   explicit Detector(Integer_t id) : IndexedObject(id) {}
 
-  ~Detector() override {
-    ClearChannels();
+  ~Detector() {
+    std::cout << "~Detector()" << std::endl;
+//    delete channels_;
+//    ClearChannels();
   }
 
-  size_t GetNumberOfChannels() const {
-    return channels_->size();
+  [[nodiscard]] size_t GetNumberOfChannels() const {
+    return channels_.size();
   }
 
   T* AddChannel() {
-    channels_->push_back(T(channels_->size()));
-    return &(channels_->back());
+    channels_.push_back(T(channels_.size()));
+    return &(channels_.back());
   }
 
   void ClearChannels() {
-    if (channels_ != nullptr) channels_->clear();
+//    if (channels_ != nullptr)
+      channels_.clear();
   }
 
   T& GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
   {
+//    if(!channels_){
+//      channels_ = new std::vector<T>;
+//    }
     if (number < GetNumberOfChannels()) {
-      return channels_->at(number);
+      return channels_.at(number);
     } else {
       throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
@@ -49,7 +55,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
   const T& GetChannel(size_t number) const {
     if (number < GetNumberOfChannels()) {
-      return channels_->at(number);
+      return channels_.at(number);
     } else {
       throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
@@ -64,23 +70,27 @@ class Detector : public IndexedObject, protected IndexAccessor {
       return false;
     }
 
-    return std::equal(that.channels_->begin(), that.channels_->end(), other.channels_->begin());
+    return std::equal(that.channels_.begin(), that.channels_.end(), other.channels_.begin());
   }
 
-  const std::vector<T>* GetChannels() const { return channels_; }
-  std::vector<T>* Channels() { return channels_; }
+  const std::vector<T>* GetChannels() const { return &channels_; }
+  std::vector<T>* Channels() { return &channels_; }
 
-  void Reserve(size_t n) { channels_->reserve(n); }
-  void Resize(size_t n) { channels_->resize(n); }
+  void Reserve(size_t n) {
+//    if(!channels_){
+//      channels_ = new std::vector<T>;
+//    }
+    channels_.reserve(n);
+  }
 
   void Print() const {
-    for (const auto& channel : *channels_) {
+    for (const auto& channel : channels_) {
       channel.Print();
     }
   }
 
  protected:
-  std::vector<T>* channels_{new std::vector<T>};
+  std::vector<T> channels_{};
 };
 
 using TrackDetector = Detector<Track>;

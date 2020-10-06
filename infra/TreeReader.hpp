@@ -167,6 +167,7 @@ static inline std::map<std::string, void*> GetPointersToBranches(TChain* t, cons
   for (auto& branch_map_entry : ret) {
     t->SetBranchAddress(branch_map_entry.first.c_str(), &branch_map_entry.second);
   }
+  std::cout << t->GetEntries() << std::endl;
   t->GetEntry(0);//init pointers
 
   return ret;
