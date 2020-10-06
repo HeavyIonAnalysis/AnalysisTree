@@ -4,10 +4,11 @@
 
 #include <gtest/gtest.h>
 
+#include "TaskManager.hpp"
+
 #include "PlainTreeFiller.hpp"
 
 TEST(Test_AnalysisTreeInfra, Test_PlainTreeFiller) {
-
 
   TaskManager man({"fl_toy_mc.txt"}, {"tTree"});
   man.SetOutFileName("test_plain_tree.root");
