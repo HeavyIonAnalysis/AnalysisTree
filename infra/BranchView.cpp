@@ -5,6 +5,7 @@
 #include "BranchView.hpp"
 #include "TextTable.h"
 
+#include <set>
 #include <sstream>
 #include <utility>
 
