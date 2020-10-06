@@ -21,10 +21,8 @@ class Detector : public IndexedObject, protected IndexAccessor {
   Detector() = default;
   explicit Detector(Integer_t id) : IndexedObject(id) {}
 
-  ~Detector() {
+  ~Detector() override {
     std::cout << "~Detector()" << std::endl;
-//    delete channels_;
-//    ClearChannels();
   }
 
   [[nodiscard]] size_t GetNumberOfChannels() const {
@@ -32,20 +30,16 @@ class Detector : public IndexedObject, protected IndexAccessor {
   }
 
   T* AddChannel() {
-    channels_.push_back(T(channels_.size()));
+    channels_.emplace_back(T(channels_.size()));
     return &(channels_.back());
   }
 
   void ClearChannels() {
-//    if (channels_ != nullptr)
       channels_.clear();
   }
 
   T& GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
   {
-//    if(!channels_){
-//      channels_ = new std::vector<T>;
-//    }
     if (number < GetNumberOfChannels()) {
       return channels_.at(number);
     } else {
@@ -77,9 +71,6 @@ class Detector : public IndexedObject, protected IndexAccessor {
   std::vector<T>* Channels() { return &channels_; }
 
   void Reserve(size_t n) {
-//    if(!channels_){
-//      channels_ = new std::vector<T>;
-//    }
     channels_.reserve(n);
   }
 
@@ -91,6 +82,9 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
  protected:
   std::vector<T> channels_{};
+
+ ClassDef(Detector,1)
+
 };
 
 using TrackDetector = Detector<Track>;
