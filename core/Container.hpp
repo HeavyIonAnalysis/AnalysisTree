@@ -6,41 +6,13 @@
 
 namespace AnalysisTree {
 
-template<typename T>
-class Vector {
- public:
-  Vector() = default;
-  Vector(const Vector&) = default;
-  Vector(Vector&&)  noexcept = default;
-  Vector& operator=(Vector&&)  noexcept = default;
-  Vector& operator=(const Vector&) = default;
-  virtual ~Vector() = default;
 
-  friend bool operator==(const Vector& that, const Vector& other) {
-    if (&that == &other) {
-      return true;
-    }
-    return that.field_ == other.field_;
-  }
-
-  virtual void SetField(T value, Integer_t iField) { field_.at(iField) = value; }//NOTE
-  [[nodiscard]] virtual T GetField(Integer_t iField) const { return field_.at(iField); }
-
-  void Resize(int size) {
-    field_.resize(size);
-  }
-
- protected:
-  std::vector<T> field_{};
-
-//  ClassDef(AnalysisTree::Vector, 1);
-
-};
-
-/**
- * A class to store integers, floats and bools
+/*! \brief A class to store any number of integers, floats and bools
+ *
+ *  Consists of IndexedObject and separate std::vector<T>, for T={float, int, bool}.
  */
-class Container : public IndexedObject, public Vector<int>, public Vector<float>, public Vector<bool> {
+
+class Container : public IndexedObject {
  public:
   Container() = default;
 
@@ -53,17 +25,36 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
       std::cout << "~Container()" << std::endl;
   };
 
+  template<class T>
+  std::vector<T>& Vector();
+
+  template<class T>
+  const std::vector<T>& GetVector() const;
+
   template<typename T>
-  void SetField(T value, Integer_t iField) { Vector<T>::SetField(value, iField); }
+  void SetField(T value, Integer_t field_id){
+    Vector<T>().at(field_id) = value;
+  }
+
   template<typename T>
-  [[nodiscard]] T GetField(Integer_t iField) const { return Vector<T>::GetField(iField); }
+  [[nodiscard]] T GetField(Integer_t field_id) const {
+    return GetVector<T>().at(field_id);
+  }
+
   template<typename T>
-  [[nodiscard]] size_t GetSize() const { return Vector<T>::field_.size(); }
+  [[nodiscard]] size_t GetSize() const {
+    return GetVector<T>().size();
+  }
 
   void Init(const BranchConfig& branch);
 
  protected:
-  ClassDef(AnalysisTree::Container, 1);
+
+  std::vector<float> floats_{};
+  std::vector<int> ints_{};
+  std::vector<bool> bools_{};
+
+  ClassDefOverride(AnalysisTree::Container, 2);
 
 };
 

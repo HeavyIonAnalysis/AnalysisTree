@@ -16,9 +16,6 @@
 #pragma link C++ class AnalysisTree::EventHeader+;
 #pragma link C++ class AnalysisTree::Matching+;
 
-#pragma link C++ class AnalysisTree::VectorConfig<int>+;
-#pragma link C++ class AnalysisTree::VectorConfig<float>+;
-#pragma link C++ class AnalysisTree::VectorConfig<bool>+;
 #pragma link C++ class AnalysisTree::Configuration+;
 #pragma link C++ class AnalysisTree::BranchConfig+;
 #pragma link C++ class AnalysisTree::DataHeader+;
