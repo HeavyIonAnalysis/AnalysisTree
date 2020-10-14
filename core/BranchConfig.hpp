@@ -15,10 +15,12 @@ namespace AnalysisTree {
 template<typename T>
 class VectorConfig {
  public:
+  typedef std::map<std::string,ShortInt_t> MapType;
+
   VectorConfig() = default;
   VectorConfig(const VectorConfig&) = default;
-  VectorConfig(VectorConfig&&) noexcept = default;
-  VectorConfig& operator=(VectorConfig&&) noexcept = default;
+  VectorConfig(VectorConfig&&) noexcept(std::is_nothrow_move_constructible<MapType>::value) = default;
+  VectorConfig& operator=(VectorConfig&&) noexcept(std::is_nothrow_move_assignable<MapType>::value) = default;
   VectorConfig& operator=(const VectorConfig&) = default;
   virtual ~VectorConfig() = default;
 
@@ -44,7 +46,7 @@ class VectorConfig {
   [[nodiscard]] virtual ShortInt_t GetSize() const { return size_; }
 
  protected:
-  std::map<std::string, ShortInt_t> map_{};
+  MapType map_{};
   ShortInt_t size_{0};
 };
 
