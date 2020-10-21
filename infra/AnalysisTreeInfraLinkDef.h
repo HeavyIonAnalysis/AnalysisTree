@@ -1,6 +1,8 @@
 #ifdef __MAKECINT__
 
 #pragma link C++ class AnalysisTree::SimpleCut+;
+#pragma link C++ function AnalysisTree::RangeCut;
+#pragma link C++ function AnalysisTree::EqualsCut;
 #pragma link C++ class AnalysisTree::Cuts+;
 #pragma link C++ class AnalysisTree::Variable+;
 #pragma link C++ class AnalysisTree::FillTask+;

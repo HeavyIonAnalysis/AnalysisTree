@@ -47,12 +47,15 @@ class SimpleCut {
   }
   /**
   * Constructor for generic cut: bool f(var1, var2, ..., varn)
-  * @param vars vector of Variables needed for a cut
+  * @param vars vector of variable NAMES needed for a cut
   * @param lambda function of fields, returns bool
   */
-  SimpleCut(std::vector<Variable> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
-                                                                                                                    vars_(std::move(vars)),
+  SimpleCut(std::vector<std::string> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
                                                                                                                     lambda_(std::move(lambda)) {
+    std::transform(vars.begin(), vars.end(),
+                   std::back_inserter(vars_),
+                   [] (const std::string& arg_name) { return Variable(arg_name); });
+
     FillBranchNames();
   }
 
@@ -100,6 +103,10 @@ class SimpleCut {
 
   ClassDef(AnalysisTree::SimpleCut, 1)
 };
+
+
+SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title = "");
+SimpleCut EqualsCut(const std::string &variable_name, float value, const std::string &title = "");
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_SIMPLECUT_H
