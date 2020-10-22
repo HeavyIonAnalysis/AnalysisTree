@@ -38,7 +38,12 @@ class Cuts {
   };
 
   Cuts(std::string name, std::initializer_list<SimpleCut> cuts) : name_(std::move(name)),
-                                                                  cuts_(cuts.begin(), cuts.end()) {}
+                                                                  cuts_(cuts.begin(), cuts.end()) {
+    for (const auto& v : cuts_) {
+      const auto& br = v.GetBranches();
+      branch_names_.insert(br.begin(), br.end());
+    }
+  }
 
   template<class T>
   bool Apply(const T& ob) const {
