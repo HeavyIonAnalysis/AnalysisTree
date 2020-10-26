@@ -95,7 +95,7 @@ class ToyMC {
 
     track_detector_->Reserve(particles_->GetNumberOfChannels());
 
-    for(const auto& particle : *particles_->GetChannels()){
+    for(const auto& particle : *particles_){
       auto* track = track_detector_->AddChannel();
       *track = particle;
       rec_tracks_to_sim_->AddMatch(track->GetId(), particle.GetId());

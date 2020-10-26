@@ -51,36 +51,35 @@ class Module : public Container {
 class ModulePosition : public IndexedObject {
 
  public:
-  ModulePosition() = default;
+  ModulePosition() noexcept = default;
   ModulePosition(const ModulePosition& otherModulePosition) = default;
-  ModulePosition(ModulePosition&& otherModulePosition) = default;
-  ModulePosition& operator=(ModulePosition&&) = default;
+  ModulePosition(ModulePosition&& otherModulePosition) noexcept = default;
+  ModulePosition& operator=(ModulePosition&&) noexcept = default;
   ModulePosition& operator=(const ModulePosition& part) = default;
 
   explicit ModulePosition(Integer_t id) : IndexedObject(id) {}
   ModulePosition(Integer_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
 
-  TVector3 GetPosition() const {
+  [[nodiscard]] TVector3 GetPosition() const noexcept {
     return TVector3(x_, y_, z_);
   }
 
-  void SetPosition(const TVector3& position) {
+  void SetPosition(const TVector3& position) noexcept {
     x_ = position.X();
     y_ = position.Y();
     z_ = position.Z();
   }
 
-  void SetPosition(Double_t x, Double_t y, Double_t z) {
+  void SetPosition(Double_t x, Double_t y, Double_t z) noexcept {
     x_ = x;
     y_ = y;
     z_ = z;
   }
 
-  Floating_t GetX() const { return x_; }
-  Floating_t GetY() const { return y_; }
-  Floating_t GetZ() const { return z_; }
-
-  Floating_t GetPhi() const { return atan2(y_, x_); }
+  [[nodiscard]] inline Floating_t GetX() const noexcept { return x_; }
+  [[nodiscard]] inline Floating_t GetY() const noexcept { return y_; }
+  [[nodiscard]] inline Floating_t GetZ() const noexcept { return z_; }
+  [[nodiscard]] inline Floating_t GetPhi() const noexcept { return atan2(y_, x_); }
 
   void Print() const {
     std::cout << "  x = " << x_ << "  y = " << y_ << "  z = " << z_ << "  phi = " << GetPhi() << std::endl;

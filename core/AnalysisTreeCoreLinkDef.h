@@ -16,13 +16,13 @@
 #pragma link C++ class AnalysisTree::EventHeader+;
 #pragma link C++ class AnalysisTree::Matching+;
 
+#pragma link C++ class AnalysisTree::VectorConfig<int>+;
+#pragma link C++ class AnalysisTree::VectorConfig<float>+;
+#pragma link C++ class AnalysisTree::VectorConfig<bool>+;
 #pragma link C++ class AnalysisTree::Configuration+;
 #pragma link C++ class AnalysisTree::BranchConfig+;
 #pragma link C++ class AnalysisTree::DataHeader+;
 
-#pragma link C++ class AnalysisTree::Vector<int>+;
-#pragma link C++ class AnalysisTree::Vector<float>+;
-#pragma link C++ class AnalysisTree::Vector<bool>+;
 #pragma link C++ class AnalysisTree::Container+;
 
 #pragma link C++ class AnalysisTree::Detector<AnalysisTree::Hit>+;
@@ -30,6 +30,7 @@
 #pragma link C++ class AnalysisTree::Detector<AnalysisTree::Module>+;
 #pragma link C++ class AnalysisTree::Detector<AnalysisTree::ModulePosition>+;
 #pragma link C++ class AnalysisTree::Detector<AnalysisTree::Particle>+;
+#pragma link C++ class AnalysisTree::Detector<AnalysisTree::Container>+;
 
 #pragma link C++ typedef AnalysisTree::TrackDetector;
 #pragma link C++ typedef AnalysisTree::Particles;

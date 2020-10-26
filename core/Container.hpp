@@ -6,7 +6,6 @@
 
 namespace AnalysisTree {
 
-
 /*! \brief A class to store any number of integers, floats and bools
  *
  *  Consists of IndexedObject and separate std::vector<T>, for T={float, int, bool}.
@@ -18,12 +17,10 @@ class Container : public IndexedObject {
 
   explicit Container(Integer_t id) : IndexedObject(id) {}
   Container(const Container& container) = default;
-  Container(Container&& container) = default;
-  Container& operator=(Container&&) = default;
+  Container(Container&& container) noexcept = default;
+  Container& operator=(Container&&) noexcept = default;
   Container& operator=(const Container& part) = default;
-  ~Container() override {
-      std::cout << "~Container()" << std::endl;
-  };
+  ~Container() override = default;
 
   template<class T>
   std::vector<T>& Vector();

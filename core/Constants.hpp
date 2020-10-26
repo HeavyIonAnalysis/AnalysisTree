@@ -6,9 +6,6 @@
 
 #include <Rtypes.h>
 
-//#include <TDatabasePDG.h>
-//class TDataBasePDG;
-
 namespace AnalysisTree {
 
 typedef Float_t Floating_t;
@@ -21,41 +18,6 @@ constexpr Floating_t UndefValueFloat = -999.;
 constexpr ShortInt_t UndefValueShort = -999;
 constexpr Integer_t UndefValueInt = -999;
 constexpr Floating_t SmallNumber = 1e-6f;
-
-const std::map<int, float> MassMap = {{11, 0.000511},// e
-                                      {211, 0.13957},// pi^{+,-}
-                                      {111, 0.13498},// pi^0
-                                      {130, 0.4976},
-                                      {310, 0.4976},
-                                      {311, 0.4976},
-                                      {321, 0.493677},  // K^{+,-}
-                                      {2212, 0.938272}, // p, anti-p
-                                      {2112, 0.939565}, // n
-                                      {3122, 1.115683}};// Lambda(-bar)
-
-[[maybe_unused]] static float GetMassByPdgId(PdgCode_t pid) {
-  /* 100ZZZAAA0 */
-  if (pid > 1000000000) {
-    auto A = (pid % 10000) / 10;
-    return A * 0.938f /* GeV */;
-  }
-  auto it = MassMap.find(std::abs(pid));
-  if (it != MassMap.end()) {
-    return MassMap.find(std::abs(pid))->second;
-  } else {
-    //for now only print warning not to break all converters //TODO exeption
-    std::cout << "WARINING! Mass of " + std::to_string(pid) + " is not known" << std::endl;
-    //    throw std::runtime_error("Mass of " + std::to_string(pid) + " is not known");
-    return 0.f;
-  }
-  //TODO wtf??
-  //  auto db = TDatabasePDG::Instance();
-  //  auto particle = db->GetParticle(pid);
-  //
-  //  if (particle) {
-  //    return particle->Mass();
-  //  }
-}
 
 namespace Exyz {
 enum Exyz : ShortInt_t {
