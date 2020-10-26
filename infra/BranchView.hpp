@@ -16,8 +16,8 @@
 #include <TFile.h>
 #include <TTree.h>
 
-#include <AnalysisTree/BranchConfig.hpp>
-#include <AnalysisTree/Detector.hpp>
+#include <BranchConfig.hpp>
+#include <Detector.hpp>
 
 namespace AnalysisTree {
 
@@ -216,7 +216,7 @@ struct EntityTraits<Detector<T>> {
   typedef T ChannelType;
 
   inline static T& GetChannel(Detector<T>& det, size_t i_channel) {
-    return det.GetChannel(i_channel);
+    return det.Channel(i_channel);
   }
 
   inline static size_t GetNChannels(const Detector<T>& detector) {

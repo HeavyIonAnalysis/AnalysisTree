@@ -2,9 +2,10 @@
 // Created by eugene on 25/09/2020.
 //
 
-#include <AnalysisTree/BranchConfig.hpp>
-#include <AnalysisTree/BranchView.hpp>
-#include <AnalysisTree/EventHeader.hpp>
+#include <BranchConfig.hpp>
+#include <BranchView.hpp>
+#include <EventHeader.hpp>
+
 #include <TFile.h>
 #include <gtest/gtest.h>
 
