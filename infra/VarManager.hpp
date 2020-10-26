@@ -34,7 +34,7 @@ class VarManager : public FillTask {
   [[nodiscard]] const std::vector<BranchReader>& GetBranches() const { return branches_; }
 
   std::vector<BranchReader>& Branches() { return branches_; }
-  BranchReader* GetBranch(const std::string& name);
+  BranchReader GetBranch(const std::string& name);
 
   void FillBranchNames();
 

@@ -24,7 +24,7 @@ class Variable {
   Variable& operator=(const Variable&) = default;
   ~Variable() = default;
 
-  Variable(std::string name) : name_(std::move(name)) {
+  explicit Variable(std::string name) : name_(std::move(name)) {
     fields_.emplace_back(Field(name_));
   };
 
@@ -74,7 +74,7 @@ class Variable {
   std::vector<Field> fields_{};
   std::set<std::string> branch_names_{};
   std::set<short> branch_ids_{};
-
+  mutable std::vector<double> vars_{};
   std::function<double(std::vector<double>&)> lambda_{[](std::vector<double>& var) { return var.at(0); }};//!
 
   short size_{1};
@@ -86,29 +86,27 @@ class Variable {
 template<class T>
 double Variable::GetValue(const T& object) const {
   assert(branch_ids_.size() == 1);
-  std::vector<double> vars{};
-  vars.reserve(fields_.size());
+  vars_.clear();
   for (const auto& field : fields_) {
-    vars.emplace_back(field.GetValue(object));
+    vars_.emplace_back(field.GetValue(object));
   }
-  return lambda_(vars);
+  return lambda_(vars_);
 }
 
 template<class A, class B>
 double Variable::GetValue(const A& a, int a_id, const B& b, int b_id) const {
   //    assert(branch_ids_.size() == 2);
-  std::vector<double> vars{};
-  vars.reserve(fields_.size());
+  vars_.clear();
   for (const auto& field : fields_) {
     if (field.GetBranchId() == a_id)
-      vars.emplace_back(field.GetValue(a));
+      vars_.emplace_back(field.GetValue(a));
     else if (field.GetBranchId() == b_id)
-      vars.emplace_back(field.GetValue(b));
+      vars_.emplace_back(field.GetValue(b));
     else {
       throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
     }
   }
-  return lambda_(vars);
+  return lambda_(vars_);
 }
 
 }// namespace AnalysisTree

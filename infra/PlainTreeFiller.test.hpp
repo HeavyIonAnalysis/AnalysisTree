@@ -15,7 +15,7 @@ TEST(Test_AnalysisTreeInfra, Test_PlainTreeFiller) {
 
   auto* plain_tree = new PlainTreeFiller;
   plain_tree->AddBranch("SimParticles");
-//  plain_tree->FillBranchNames(); //TODO remove?
+  plain_tree->FillBranchNames(); //TODO remove?
   man.AddTask(plain_tree);
 
   man.Init();

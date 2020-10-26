@@ -35,10 +35,10 @@ class BranchReader {
   [[nodiscard]] const std::string& GetName() const { return name_; }
   [[nodiscard]] DetType GetType() const { return type_; }
   [[nodiscard]] const Cuts* GetCut() const { return cuts_; }
-  [[nodiscard]] double GetValue(const Variable& var, int i_channel);
+  [[nodiscard]] double GetValue(const Variable& var, int i_channel) const;
 
-  size_t GetNumberOfChannels();
-  bool ApplyCut(int i_channel);
+  [[nodiscard]] size_t GetNumberOfChannels() const;
+  [[nodiscard]] bool ApplyCut(int i_channel) const;
 
   [[nodiscard]] const BranchPointer& GetData() const {
     return data_;
