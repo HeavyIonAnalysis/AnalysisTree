@@ -9,6 +9,7 @@
 #include "TFile.h"
 #include "TTree.h"
 
+#include "BranchReader.hpp"
 #include "Configuration.hpp"
 #include "Detector.hpp"
 #include "EventHeader.hpp"
@@ -117,11 +118,13 @@ static inline Configuration* GetConfigurationFromFileList(const std::vector<std:
  * @param names List of selected branches. If empty, loads all branches found in Configuration
  * @return
  */
-static inline std::map<std::string, void*> GetPointersToBranches(TChain* t, const Configuration& config,
+static inline std::map<std::string, void*> GetPointersToBranches(TTree* t, const Configuration& config,
                                                                  std::set<std::string> names = {}) {
 
-  std::cout << "GetPointersToBranches" << std::endl;
+
   std::map<std::string, void*> ret;
+
+  std::map<std::string, BranchPointer> temp;
 
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto& branch : config.GetBranchConfigs()) {
@@ -130,7 +133,7 @@ static inline std::map<std::string, void*> GetPointersToBranches(TChain* t, cons
   }
 
   for (const auto& branch : names) {// Init all pointers to branches
-    void* branch_ptr{nullptr};
+    BranchPointer branch_ptr;
     const auto& branch_config = config.GetBranchConfig(branch);
     std::cout << "Adding branch pointer: " << branch << std::endl;
     switch (branch_config.GetType()) {
@@ -155,22 +158,58 @@ static inline std::map<std::string, void*> GetPointersToBranches(TChain* t, cons
         break;
       }
     }
-    ret.emplace(branch, branch_ptr);
+    temp.emplace(branch, branch_ptr);
   }
 
-  for (const auto& match : config.GetMatches()) {// Init all pointers to matching //TODO exclude unused
-    auto* matching_ptr = new Matching;
+  std::map<std::string, Matching*> matches;
+  for (const auto& match : config.GetMatches()) { // Init all pointers to matching //TODO exclude unused
     std::cout << "Adding branch pointer: " << match.second << std::endl;
-    ret.emplace(match.second, matching_ptr);
+    matches.emplace(match.second, new Matching);
   }
 
-  for (auto& branch_map_entry : ret) {
+  for (auto& branch_map_entry : matches) {
     t->SetBranchAddress(branch_map_entry.first.c_str(), &branch_map_entry.second);
   }
-  t->GetEntry(0);//init pointers
+  for (auto& branch_map_entry : temp) {
+    std::visit([t, branch_map_entry](auto&& arg){ t->SetBranchAddress(branch_map_entry.first.c_str(), &(arg)); }, branch_map_entry.second);
+  }
+
+  t->GetEntry(0);
+
+  for (auto& branch_map_entry : temp) {
+    void* ptr{ nullptr};
+    const auto& branch_config = config.GetBranchConfig(branch_map_entry.first);
+    switch (branch_config.GetType()) {
+      case DetType::kTrack: {
+        ptr = std::get<TrackDetector*>(branch_map_entry.second);
+        break;
+      }
+      case DetType::kHit: {
+        ptr = std::get<HitDetector*>(branch_map_entry.second);
+        break;
+      }
+      case DetType::kEventHeader: {
+        ptr = std::get<EventHeader*>(branch_map_entry.second);
+        break;
+      }
+      case DetType::kParticle: {
+        ptr = std::get<Particles *>(branch_map_entry.second);
+        break;
+      }
+      case DetType::kModule: {
+        ptr = std::get<ModuleDetector *>(branch_map_entry.second);
+        break;
+      }
+    }
+    ret.emplace(branch_map_entry.first, ptr);
+  }
+
+  for (auto& branch_map_entry : matches) {
+    void* ptr = branch_map_entry.second;
+    ret.emplace(branch_map_entry.first, ptr);
+  }
 
   return ret;
 }
-
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_TREEREADER_H

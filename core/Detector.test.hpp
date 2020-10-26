@@ -59,7 +59,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteChannelizedDetector) {
   TVector3 hitPosition(1., 1., 1.);
 
   auto* module_detector = new HitDetector;
-  auto hitCh = module_detector->AddChannel();
+  auto* hitCh = module_detector->AddChannel();
   hitCh->SetPosition(hitPosition);
 
   TFile outputFile("Test_WriteChDet.root", "recreate");

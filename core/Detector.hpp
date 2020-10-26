@@ -9,6 +9,7 @@
 #include "Track.hpp"
 
 namespace AnalysisTree {
+
 /**
  * A base class for any kind of channel detector.
  * As an IndexAccessor has an access to index variable if the Channel
@@ -20,36 +21,45 @@ class Detector : public IndexedObject, protected IndexAccessor {
  public:
   Detector() = default;
   explicit Detector(Integer_t id) : IndexedObject(id) {}
+  Detector(const Detector& otherDetector) = default;
+  Detector(Detector&& otherDetector) noexcept = default;
+  Detector& operator=(Detector&&) noexcept = default;
+  Detector& operator=(const Detector& part) = default;
 
   ~Detector() override {
-    ClearChannels();
+    std::cout << "~Detector()" << std::endl;
   }
 
-  size_t GetNumberOfChannels() const {
-    return channels_->size();
+  [[nodiscard]] size_t GetNumberOfChannels() const noexcept {
+    return channels_.size();
   }
 
   T* AddChannel() {
-    channels_->push_back(T(channels_->size()));
-    return &(channels_->back());
+    channels_.emplace_back(T(channels_.size()));
+    return &(channels_.back());
   }
 
   void ClearChannels() {
-    if (channels_ != nullptr) channels_->clear();
+      channels_.clear();
   }
 
-  T& GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
+//  [[deprecated("Please use T& Channel(size_t number) to avoid confusion with const T& GetChannel(size_t number) const")]]
+//  T& GetChannel(size_t number) {
+//    return Channel(number);
+//  }
+
+  T& Channel(size_t number)// needed in converter to modify tracks id
   {
     if (number < GetNumberOfChannels()) {
-      return channels_->at(number);
+      return channels_.at(number);
     } else {
-      throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
+      throw std::out_of_range("Detector::Channel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
   }
 
-  const T& GetChannel(size_t number) const {
+  T GetChannel(size_t number) const {
     if (number < GetNumberOfChannels()) {
-      return channels_->at(number);
+      return channels_.at(number);
     } else {
       throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
@@ -64,23 +74,36 @@ class Detector : public IndexedObject, protected IndexAccessor {
       return false;
     }
 
-    return std::equal(that.channels_->begin(), that.channels_->end(), other.channels_->begin());
+    return std::equal(that.channels_.begin(), that.channels_.end(), other.channels_.begin());
   }
 
-  const std::vector<T>* GetChannels() const { return channels_; }
-  std::vector<T>* Channels() { return channels_; }
+  [[deprecated("Please use range-based loops: for(const auto& channel : detector)")]]
+  const std::vector<T>* GetChannels() const { return &channels_; }
+  [[deprecated("Please use range-based loops: for(const auto& channel : detector)")]]
+  std::vector<T>* Channels() { return &channels_; }
 
-  void Reserve(size_t n) { channels_->reserve(n); }
-  void Resize(size_t n) { channels_->resize(n); }
+  void Reserve(size_t n) {
+    channels_.reserve(n);
+  }
 
   void Print() const {
-    for (const auto& channel : *channels_) {
+    for (const auto& channel : channels_) {
       channel.Print();
     }
   }
 
+  auto begin() { return channels_.begin(); }
+  auto end() { return channels_.end(); }
+  auto cbegin() const { return channels_.begin(); }
+  auto cend() const { return channels_.end(); }
+  auto begin() const { return channels_.begin(); }
+  auto end() const { return channels_.end(); }
+
  protected:
-  std::vector<T>* channels_{new std::vector<T>};
+  std::vector<T> channels_{};
+
+ ClassDefOverride(Detector,2)
+
 };
 
 using TrackDetector = Detector<Track>;
@@ -88,6 +111,7 @@ using ModuleDetector = Detector<Module>;
 using ModulePositions = Detector<ModulePosition>;
 using HitDetector = Detector<Hit>;
 using Particles = Detector<Particle>;
+using GeneralDetector = Detector<Container>;
 
 }// namespace AnalysisTree
 

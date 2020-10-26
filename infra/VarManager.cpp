@@ -59,10 +59,10 @@ std::pair<int, std::vector<int>> VarManager::AddEntry(const VarManagerEntry& var
   return std::make_pair(entries_.size() - 1, var_ids);
 }
 
-BranchReader* VarManager::GetBranch(const std::string& name) {
+BranchReader VarManager::GetBranch(const std::string& name) {
   for (auto& branch : branches_) {
     if (branch.GetName() == name) {
-      return &branch;
+      return branch;
     }
   }
   throw std::runtime_error("Branch " + name + " is not found");

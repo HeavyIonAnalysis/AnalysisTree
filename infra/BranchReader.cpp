@@ -5,7 +5,7 @@
 namespace AnalysisTree {
 
 BranchReader::BranchReader(std::string name, void* data, DetType type, Cuts* cuts) : name_(std::move(name)), cuts_(cuts), type_(type) {
-  switch (type) {
+  switch (type_) {
     case DetType::kTrack: {
       data_ = (TrackDetector*) data;
       break;
@@ -26,9 +26,6 @@ BranchReader::BranchReader(std::string name, void* data, DetType type, Cuts* cut
       data_ = (EventHeader*) data;
       break;
     }
-    default: {
-      throw std::runtime_error("BranchReader::BranchReader - Wrong branch type");
-    }
   }
 #ifdef USEBOOST
   id_ = boost::apply_visitor(get_id_struct(), data_);
@@ -37,15 +34,16 @@ BranchReader::BranchReader(std::string name, void* data, DetType type, Cuts* cut
 #endif
 }
 
-size_t BranchReader::GetNumberOfChannels() {
+size_t BranchReader::GetNumberOfChannels() const {
 #ifdef USEBOOST
   return boost::apply_visitor(get_n_channels_struct(), data_);
 #else
-  return std::visit([](auto&& arg) { return arg->GetNumberOfChannels(); }, data_);
+  size_t n = std::visit([](auto&& arg) { return arg->GetNumberOfChannels(); }, data_);
+  return n;
 #endif
 }
 
-bool BranchReader::ApplyCut(int i_channel) {
+bool BranchReader::ApplyCut(int i_channel) const {
   if (!cuts_) return true;
 #ifdef USEBOOST
   return boost::apply_visitor(apply_cut(i_channel, cuts_), data_);
@@ -54,11 +52,11 @@ bool BranchReader::ApplyCut(int i_channel) {
 #endif
 }
 
-double BranchReader::GetValue(const Variable& var, int i_channel) {
+double BranchReader::GetValue(const Variable& var, int i_channel) const {
 #ifdef USEBOOST
   return boost::apply_visitor(get_value(var, i_channel), data_);
 #else
-  return std::visit([var, i_channel](auto&& arg) { return var.GetValue(arg->GetChannel(i_channel)); }, data_);
+  return std::visit([&var, i_channel](auto&& arg) { return var.GetValue(arg->GetChannel(i_channel)); }, data_);
 #endif
 }
 

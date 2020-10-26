@@ -33,13 +33,13 @@ class VarManagerEntry {
 
   [[nodiscard]] const array2D& GetValues() const { return values_; }
   [[nodiscard]] const std::set<std::string>& GetBranchNames() const { return branch_names_; }
-  [[nodiscard]] const std::vector<BranchReader*>& GetBranches() const { return branches_; }
+  [[nodiscard]] const std::vector<BranchReader>& GetBranches() const { return branches_; }
   [[nodiscard]] size_t GetNumberOfBranches() const { return branch_names_.size(); }
   [[nodiscard]] const Cuts* GetCuts() const { return cuts_; }
   [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_; }
   [[nodiscard]] std::vector<Variable>& Variables() { return vars_; }
 
-  void AddBranchPointer(BranchReader* branch) { branches_.emplace_back(branch); }
+  void AddBranchPointer(const BranchReader& branch) { branches_.emplace_back(branch); }
   void SetMatching(Matching* matching) { matching_ = matching; }
   void SetIsInvertedMatching(bool is_inverted_matching) { is_inverted_matching_ = is_inverted_matching; }
   void FillBranchNames();
@@ -48,16 +48,16 @@ class VarManagerEntry {
   //  void FillVarEntry(const std::vector<int>& ch);
   void FillFromOneBranch();
   void FillFromTwoBranches();
-  void FillMatchingForEventHeader(BranchReader* br1, BranchReader* br2);
-  bool ApplyCutOnBranch(BranchReader* br, int i_channel) const;
-  bool ApplyCutOnBranches(BranchReader* br1, int ch1, BranchReader* br2, int ch2) const;
-  static double FillVariabe(const Variable& var, BranchReader* br1, int ch1, BranchReader* br2, int ch2);
+  void FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2);
+  bool ApplyCutOnBranch(const BranchReader& br, int i_channel) const;
+  bool ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const;
+  static double FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2);
 
   std::vector<Variable> vars_{};
   Cuts* cuts_{nullptr};///< non-owning
 
   std::set<std::string> branch_names_{};
-  std::vector<BranchReader*> branches_{};///< non-owning pointers
+  std::vector<BranchReader> branches_{};///< non-owning pointers
 
   Matching* matching_{nullptr};///< non-owning
   bool is_inverted_matching_{false};
