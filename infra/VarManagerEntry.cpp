@@ -42,11 +42,6 @@ double VarManagerEntry::FillVariabe(const Variable& var, const BranchReader& br1
 void VarManagerEntry::FillFromOneBranch() {
   const BranchReader& br = branches_.at(0);
   const auto n_channels = br.GetNumberOfChannels();
-
-  std::cout << br.GetName() << std::endl;
-  std::cout << br.GetId() << std::endl;
-  std::cout << br.GetNumberOfChannels() << std::endl;
-
   values_.reserve(n_channels);
 
   for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
