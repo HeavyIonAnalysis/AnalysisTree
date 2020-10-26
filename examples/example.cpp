@@ -2,9 +2,9 @@
 
 #include <TChain.h>
 
-#include <AnalysisTree/DataHeader.hpp>
-#include <AnalysisTree/EventHeader.hpp>
-#include <AnalysisTree/TreeReader.hpp>
+#include <core/DataHeader.hpp>
+#include <core/EventHeader.hpp>
+#include <infra/TreeReader.hpp>
 
 using namespace AnalysisTree;
 
