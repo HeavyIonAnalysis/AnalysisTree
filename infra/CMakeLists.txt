@@ -4,9 +4,11 @@ set(SOURCES
   Field.cpp
   Variable.cpp
   FillTask.cpp
+  Task.cpp
   TreeReader.cpp
   TaskManager.cpp
-  PlainTreeFiller.cpp
+  TaskManagerNew.cpp
+#  PlainTreeFiller.cpp
   BranchView.cpp
         )
 
