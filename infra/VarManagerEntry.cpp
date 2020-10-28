@@ -11,7 +11,7 @@ bool VarManagerEntry::ApplyCutOnBranch(const BranchReader& br, int i_channel) co
 #else
   return std::visit([this, i_channel](auto&& arg) { return cuts_->Apply(arg->GetChannel(i_channel)); }, br.GetData());
 #endif
-}
+} 
 
 bool VarManagerEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const {
   if (!cuts_) return true;
@@ -115,7 +115,7 @@ void VarManagerEntry::FillBranchNames() {
   }
 }
 
-void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, std::map<std::string, void*>& pointers_map) {
+void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, const std::map<std::string, void*>& pointers_map) {
   if (cuts_) {
     cuts_->Init(conf);
   }

@@ -26,7 +26,7 @@ class VarManagerEntry {
     FillBranchNames();
   };
 
-  void Init(const Configuration& conf, std::map<std::string, void*>& pointers_map);
+  void Init(const Configuration& conf, const std::map<std::string, void*>& pointers_map);
   void FillValues();
 
   size_t AddVariable(const Variable& var);
