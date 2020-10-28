@@ -123,7 +123,6 @@ static inline std::map<std::string, void*> GetPointersToBranches(TTree* t, const
 
 
   std::map<std::string, void*> ret;
-
   std::map<std::string, BranchPointer> temp;
 
   if (names.empty()) {// all branches by default, if not implicitly specified
@@ -132,7 +131,7 @@ static inline std::map<std::string, void*> GetPointersToBranches(TTree* t, const
     }
   }
 
-  for (const auto& branch : names) {// Init all pointers to branches
+  for (const auto& branch : names) { // Init all pointers to branches
     BranchPointer branch_ptr;
     const auto& branch_config = config.GetBranchConfig(branch);
     std::cout << "Adding branch pointer: " << branch << std::endl;
@@ -167,17 +166,17 @@ static inline std::map<std::string, void*> GetPointersToBranches(TTree* t, const
     matches.emplace(match.second, new Matching);
   }
 
-  for (auto& branch_map_entry : matches) {
-    t->SetBranchAddress(branch_map_entry.first.c_str(), &branch_map_entry.second);
+  for (auto& match : matches) {
+    t->SetBranchAddress(match.first.c_str(), &(match.second));
   }
   for (auto& branch_map_entry : temp) {
-    std::visit([t, branch_map_entry](auto&& arg){ t->SetBranchAddress(branch_map_entry.first.c_str(), &(arg)); }, branch_map_entry.second);
+    std::visit([&t, branch_map_entry](auto&& arg){ t->SetBranchAddress(branch_map_entry.first.c_str(), &(arg)); }, branch_map_entry.second);
   }
 
   t->GetEntry(0);
 
-  for (auto& branch_map_entry : temp) {
-    void* ptr{ nullptr};
+  for (const auto& branch_map_entry : temp) {
+    void* ptr{nullptr};
     const auto& branch_config = config.GetBranchConfig(branch_map_entry.first);
     switch (branch_config.GetType()) {
       case DetType::kTrack: {
@@ -204,11 +203,10 @@ static inline std::map<std::string, void*> GetPointersToBranches(TTree* t, const
     ret.emplace(branch_map_entry.first, ptr);
   }
 
-  for (auto& branch_map_entry : matches) {
+  for (const auto& branch_map_entry : matches) {
     void* ptr = branch_map_entry.second;
     ret.emplace(branch_map_entry.first, ptr);
   }
-
   return ret;
 }
 }// namespace AnalysisTree
