@@ -2,8 +2,9 @@
 #define ANALYSISTREE_BASEEVENTHEADER_H
 
 #include "Container.hpp"
-#include <TVector3.h>
 #include <array>
+
+class TVector3;
 
 namespace AnalysisTree {
 
@@ -22,15 +23,9 @@ class EventHeader : public Container {
   /**
    * @return 3D-position of the vertex
    */
-  [[nodiscard]] inline TVector3 GetVertexPosition3() const {
-    return TVector3(vtx_pos_[Exyz::kX], vtx_pos_[Exyz::kY], vtx_pos_[Exyz::kZ]);
-  }
+  [[nodiscard]] inline TVector3 GetVertexPosition3() const;
 
-  void SetVertexPosition3(const TVector3& pos) {
-    vtx_pos_[Exyz::kX] = pos.Px();
-    vtx_pos_[Exyz::kY] = pos.Py();
-    vtx_pos_[Exyz::kZ] = pos.Pz();
-  }
+  void SetVertexPosition3(const TVector3& pos);
 
   template<typename T>
   T GetField(Integer_t iField) const {
@@ -51,12 +46,8 @@ class EventHeader : public Container {
   [[nodiscard]] inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }
 
   static constexpr size_t GetNumberOfChannels() { return 1; }// needed in order to have EventHeader similar to Detector
-  [[nodiscard]] const EventHeader& GetChannel(int i) const {
-    if (i == 0) {
-      return *this;
-    }
-    throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
-  }// needed in order to have EventHeader similar to Detector
+
+  [[nodiscard]] const EventHeader& GetChannel(size_t i) const;// needed in order to have EventHeader similar to Detector
 
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};

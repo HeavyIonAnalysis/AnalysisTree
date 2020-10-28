@@ -2,7 +2,6 @@
 set(SOURCES
   IndexedObject.cpp
   Track.cpp
-  Detector.cpp
   Hit.cpp
   EventHeader.cpp
   Module.cpp
@@ -14,7 +13,7 @@ set(SOURCES
   Particle.cpp)
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "Constants.hpp" "ToyMC.hpp")
+list(APPEND HEADERS "Constants.hpp" "ToyMC.hpp" "Detector.hpp")
 
 add_library(AnalysisTreeBase SHARED ${SOURCES} G__AnalysisTreeBase.cxx)
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeBase ${HEADERS} LINKDEF AnalysisTreeCoreLinkDef.h)

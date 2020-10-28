@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <core/ToyMC.hpp>
+
 #include <core/Detector.test.hpp>
 #include <core/Hit.test.hpp>
 #include <core/IndexedObject.test.hpp>
