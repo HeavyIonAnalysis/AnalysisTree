@@ -3,17 +3,16 @@ set(SOURCES
   Cuts.cpp
   Field.cpp
   Variable.cpp
-  FillTask.cpp
   Task.cpp
+  AnalysisTask.cpp
   TreeReader.cpp
-  TaskManager.cpp
   TaskManagerNew.cpp
 #  PlainTreeFiller.cpp
   BranchView.cpp
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
-    list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
+    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
 endif()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
