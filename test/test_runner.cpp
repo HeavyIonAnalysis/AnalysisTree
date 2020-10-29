@@ -20,8 +20,7 @@
 #include <infra/SimpleCut.test.hpp>
 #include <infra/Cuts.test.hpp>
 #include <infra/AnalysisTask.test.hpp>
-//#include <infra/VarManager.test.hpp>
-//#include <infra/PlainTreeFiller.test.hpp>
+#include <infra/PlainTreeFiller.test.hpp>
 
 int main(int argc, char **argv) {
 

@@ -23,7 +23,7 @@ class EventHeader : public Container {
   /**
    * @return 3D-position of the vertex
    */
-  [[nodiscard]] inline TVector3 GetVertexPosition3() const;
+  [[nodiscard]] TVector3 GetVertexPosition3() const;
 
   void SetVertexPosition3(const TVector3& pos);
 
