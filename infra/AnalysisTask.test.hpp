@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 #include "AnalysisTask.hpp"
-#include "TaskManagerNew.hpp"
+#include "TaskManager.hpp"
 
 namespace{
 
@@ -78,7 +78,7 @@ class AnalysisTaskTest : public AnalysisTask {
 TEST(Test_AnalysisTreeInfra, Test_AnalysisTask) {
 
 const int n_events = 1000;  // TODO propagate somehow
-auto* man = AnalysisTree::TaskManagerNew::GetInstance();
+auto* man = AnalysisTree::TaskManager::GetInstance();
 
 auto* var_manager = new AnalysisTaskTest;
 Variable px_sim("SimParticles", "px");

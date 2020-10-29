@@ -16,7 +16,7 @@ namespace AnalysisTree {
 
 class Configuration;
 
-class TaskManagerNew {
+class TaskManager {
 
   enum class eBranchWriteMode{
     kUpdateCurrentTree = 0,
@@ -26,11 +26,11 @@ class TaskManagerNew {
 
  public:
 
-  static TaskManagerNew *GetInstance();
+  static TaskManager*GetInstance();
 
-  TaskManagerNew(TaskManagerNew &other) = delete;
-  void operator=(const TaskManagerNew &) = delete;
-  virtual ~TaskManagerNew() = default;
+  TaskManager(TaskManager&other) = delete;
+  void operator=(const TaskManager&) = delete;
+  virtual ~TaskManager() = default;
 
   virtual void Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees);
   virtual void Run(long long nEvents);
@@ -60,8 +60,8 @@ class TaskManagerNew {
   [[nodiscard]] const std::map<std::string, void*>& GetBranchesMap() const { return branches_map_; }
 
  protected:
-  TaskManagerNew() = default;
-  static TaskManagerNew* manager_;
+  TaskManager() = default;
+  static TaskManager* manager_;
 
   TChain* in_tree_{nullptr};
   std::string data_header_name_{"DataHeader"};

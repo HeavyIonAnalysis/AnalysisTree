@@ -47,6 +47,7 @@ class Task {
   Cuts* event_cuts_{nullptr};
 
   std::vector<std::string> in_branches_{};
+  bool is_init_{false};
 };
 
 }// namespace AnalysisTree

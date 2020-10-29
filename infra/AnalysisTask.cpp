@@ -1,13 +1,14 @@
 #include "AnalysisTask.hpp"
-#include "TaskManagerNew.hpp"
+#include "TaskManager.hpp"
 
 #include <numeric>
 
 namespace AnalysisTree {
 
 void AnalysisTask::Init() {
+  assert(!is_init_);
 
-  const auto& pointers_map = TaskManagerNew::GetInstance()->GetBranchesMap();
+  const auto& pointers_map = TaskManager::GetInstance()->GetBranchesMap();
 
   branches_.reserve(in_branches_.size());
   for (const auto& branch : in_branches_) {
@@ -27,6 +28,7 @@ void AnalysisTask::Init() {
       var.AddBranchPointer(GetBranch(br));
     }
   }// vars
+  is_init_ = true;
 }
 
 void AnalysisTask::Exec() {

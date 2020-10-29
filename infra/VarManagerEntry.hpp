@@ -49,8 +49,8 @@ class VarManagerEntry {
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2);
-  bool ApplyCutOnBranch(const BranchReader& br, int i_channel) const;
-  bool ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const;
+  [[nodiscard]] bool ApplyCutOnBranch(const BranchReader& br, int i_channel) const;
+  [[nodiscard]] bool ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const;
   static double FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2);
 
   std::vector<Variable> vars_{};

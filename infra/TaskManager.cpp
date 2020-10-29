@@ -1,22 +1,22 @@
-#include "TaskManagerNew.hpp"
+#include "TaskManager.hpp"
 
 namespace AnalysisTree{
 
-TaskManagerNew* TaskManagerNew::manager_= nullptr;
+TaskManager* TaskManager::manager_= nullptr;
 
-TaskManagerNew *TaskManagerNew::GetInstance()
+TaskManager* TaskManager::GetInstance()
 {
   /**
    * This is a safer way to create an instance. instance = new Singleton is
    * dangeruous in case two instance threads wants to access at the same time
    */
   if(manager_==nullptr){
-    manager_ = new TaskManagerNew;
+    manager_ = new TaskManager;
   }
   return manager_;
 }
 
-void TaskManagerNew::Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees) {
+void TaskManager::Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees) {
   assert(!is_init_);
   is_init_ = true;
 
@@ -41,7 +41,7 @@ void TaskManagerNew::Init(const std::vector<std::string>& filelists, const std::
   }
 }
 
-void TaskManagerNew::Run(long long nEvents){
+void TaskManager::Run(long long nEvents){
 
   std::cout << "AnalysisTree::Manager::Run" << std::endl;
   auto start = std::chrono::system_clock::now();
@@ -62,7 +62,7 @@ void TaskManagerNew::Run(long long nEvents){
   std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count() / nEvents << "s\n";
 }
 
-void TaskManagerNew::Finish() {
+void TaskManager::Finish() {
   if (out_file_)
     out_file_->cd();
 
@@ -74,6 +74,8 @@ void TaskManagerNew::Finish() {
     out_tree_->Write();
   if (out_file_)
     out_file_->Close();
+
+  delete manager_;
 }
 
 }

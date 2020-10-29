@@ -6,9 +6,10 @@ set(SOURCES
   Task.cpp
   AnalysisTask.cpp
   TreeReader.cpp
-  TaskManagerNew.cpp
-#  PlainTreeFiller.cpp
+  TaskManager.cpp
+  PlainTreeFiller.cpp
   BranchView.cpp
+  Chain.cpp
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)

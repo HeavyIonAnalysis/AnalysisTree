@@ -4,23 +4,22 @@
 
 #include <gtest/gtest.h>
 
-#include "TaskManager.hpp"
-
 #include "PlainTreeFiller.hpp"
+#include "TaskManager.hpp"
 
 TEST(Test_AnalysisTreeInfra, Test_PlainTreeFiller) {
 
-  TaskManager man({"fl_toy_mc.txt"}, {"tTree"});
-  man.SetOutFileName("test_plain_tree.root");
+  auto* man = AnalysisTree::TaskManager::GetInstance();
+  man->SetOutputName("test_plain_tree.root", "pTree");
 
   auto* plain_tree = new PlainTreeFiller;
   plain_tree->AddBranch("SimParticles");
   plain_tree->FillBranchNames(); //TODO remove?
-  man.AddTask(plain_tree);
+  man->AddTask(plain_tree);
 
-  man.Init();
-  man.Run(-1);
-  man.Finish();
+  man->Init({"fl_toy_mc.txt"}, {"tTree"});
+  man->Run(-1);
+  man->Finish();
 }
 
 

@@ -3,7 +3,7 @@
 #pragma link C++ class AnalysisTree::SimpleCut+;
 #pragma link C++ class AnalysisTree::Cuts+;
 #pragma link C++ class AnalysisTree::Variable+;
-#pragma link C++ class AnalysisTree::TaskManagerNew+;
+#pragma link C++ class AnalysisTree::TaskManager+;
 #pragma link C++ class AnalysisTree::AnalysisTask+;
 
 #pragma link C++ class AnalysisTree::BranchReader+;
