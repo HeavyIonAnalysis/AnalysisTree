@@ -8,12 +8,12 @@ namespace AnalysisTree {
 void AnalysisTask::Init() {
   assert(!is_init_);
 
-  const auto& pointers_map = TaskManager::GetInstance()->GetBranchesMap();
+  auto* chain = TaskManager::GetInstance()->GetChain();
 
   branches_.reserve(in_branches_.size());
   for (const auto& branch : in_branches_) {
     const auto type = config_->GetBranchConfig(branch).GetType();
-    auto* ptr = pointers_map.find(branch)->second;
+    BranchPointer ptr = chain->GetPointerToBranch(branch);
     auto find = cuts_map_.find(branch);
     Cuts* cut = find != cuts_map_.end() ? find->second : nullptr;
     if (cut) {
@@ -23,7 +23,7 @@ void AnalysisTask::Init() {
   }
 
   for (auto& var : entries_) {
-    var.Init(*config_, pointers_map);
+    var.Init(*config_, chain->GetMatchPointers());
     for (const auto& br : var.GetBranchNames()) {
       var.AddBranchPointer(GetBranch(br));
     }
@@ -47,7 +47,7 @@ void AnalysisTask::FillBranchNames() {
   in_branches_.resize(std::distance(in_branches_.begin(), ip));
 }
 
-std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const VarManagerEntry& vars) {
+std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const AnalysisEntry& vars) {
 
   std::vector<int> var_ids(vars.GetVariables().size());
 

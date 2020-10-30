@@ -1,10 +1,10 @@
-#include "VarManagerEntry.hpp"
+#include "AnalysisEntry.hpp"
 
 #include "Configuration.hpp"
 
 namespace AnalysisTree {
 
-bool VarManagerEntry::ApplyCutOnBranch(const BranchReader& br, int i_channel) const {
+bool AnalysisEntry::ApplyCutOnBranch(const BranchReader& br, int i_channel) const {
   if (!cuts_) return true;
 #ifdef USEBOOST
   return boost::apply_visitor(apply_cut(i_channel, cuts_), br.GetData());
@@ -13,7 +13,7 @@ bool VarManagerEntry::ApplyCutOnBranch(const BranchReader& br, int i_channel) co
 #endif
 } 
 
-bool VarManagerEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const {
+bool AnalysisEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const {
   if (!cuts_) return true;
   if (!br1.ApplyCut(ch1)) return false;
   if (!br2.ApplyCut(ch2)) return false;
@@ -25,7 +25,7 @@ bool VarManagerEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const
 #endif
 }
 
-double VarManagerEntry::FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) {
+double AnalysisEntry::FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) {
 #ifdef USEBOOST
   return boost::apply_visitor(fill_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
 #else
@@ -39,7 +39,7 @@ double VarManagerEntry::FillVariabe(const Variable& var, const BranchReader& br1
  * If a branch is a Channel or Tracking detector, evaluation is performed channel-by-channel.
  * If channel or track fails to pass cuts it won't be written
  */
-void VarManagerEntry::FillFromOneBranch() {
+void AnalysisEntry::FillFromOneBranch() {
   const BranchReader& br = branches_.at(0);
   const auto n_channels = br.GetNumberOfChannels();
   values_.reserve(n_channels);
@@ -57,7 +57,7 @@ void VarManagerEntry::FillFromOneBranch() {
   }//channels
 }
 
-void VarManagerEntry::FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2) {
+void AnalysisEntry::FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2) {
   matching_ = new Matching(br1.GetId(), br2.GetId());
   for (size_t i = 0; i < br1.GetNumberOfChannels(); ++i) {
     matching_->AddMatch(i, 0);
@@ -68,7 +68,7 @@ void VarManagerEntry::FillMatchingForEventHeader(const BranchReader& br1, const 
  * @brief FillFromTwoBranches populates Variables if matching between two branches is defined
  * It iterates over registered matches and fills variables
  */
-void VarManagerEntry::FillFromTwoBranches() {
+void AnalysisEntry::FillFromTwoBranches() {
   BranchReader& br1 = branches_.at(0);
   BranchReader& br2 = branches_.at(1);
   if (br1.GetType() == DetType::kEventHeader) {//put EventHeader to second place, to be able to fill matching
@@ -93,18 +93,18 @@ void VarManagerEntry::FillFromTwoBranches() {
   }
 }
 
-void VarManagerEntry::FillValues() {
+void AnalysisEntry::FillValues() {
   values_.clear();
   if (branches_.size() == 1) {
     FillFromOneBranch();
   } else if (branches_.size() == 2) {
     FillFromTwoBranches();
   } else {
-    throw std::runtime_error("VarManagerEntry::FillValues - branches_.size() is more than 2 or 0");
+    throw std::runtime_error("AnalysisEntry::FillValues - branches_.size() is more than 2 or 0");
   }
 }
 
-void VarManagerEntry::FillBranchNames() {
+void AnalysisEntry::FillBranchNames() {
   for (auto& var : vars_) {
     const auto& br = var.GetBranches();
     branch_names_.insert(br.begin(), br.end());
@@ -115,7 +115,7 @@ void VarManagerEntry::FillBranchNames() {
   }
 }
 
-void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, const std::map<std::string, void*>& pointers_map) {
+void AnalysisEntry::Init(const AnalysisTree::Configuration& conf, const std::map<std::string, Matching*>& matches) {
   if (cuts_) {
     cuts_->Init(conf);
   }
@@ -131,12 +131,12 @@ void VarManagerEntry::Init(const AnalysisTree::Configuration& conf, const std::m
     if (det1_type != DetType::kEventHeader && det2_type != DetType::kEventHeader) {
       auto match_info = conf.GetMatchInfo(*branches.begin(), *std::next(branches.begin(), 1));
       SetIsInvertedMatching(match_info.second);
-      SetMatching((Matching*) pointers_map.find(match_info.first)->second);
+      SetMatching((Matching*) matches.find(match_info.first)->second);
     }
   }
 }
 
-size_t VarManagerEntry::AddVariable(const Variable& var) {
+size_t AnalysisEntry::AddVariable(const Variable& var) {
   auto it = std::find(vars_.begin(), vars_.end(), var);
   if (it == vars_.end()) {// add new variable
     vars_.emplace_back(var);

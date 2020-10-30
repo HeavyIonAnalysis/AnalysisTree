@@ -4,29 +4,12 @@
 
 namespace AnalysisTree {
 
-BranchReader::BranchReader(std::string name, void* data, DetType type, Cuts* cuts) : name_(std::move(name)), cuts_(cuts), type_(type) {
-  switch (type_) {
-    case DetType::kTrack: {
-      data_ = (TrackDetector*) data;
-      break;
-    }
-    case DetType::kParticle: {
-      data_ = (Particles*) data;
-      break;
-    }
-    case DetType::kHit: {
-      data_ = (HitDetector*) data;
-      break;
-    }
-    case DetType::kModule: {
-      data_ = (ModuleDetector*) data;
-      break;
-    }
-    case DetType::kEventHeader: {
-      data_ = (EventHeader*) data;
-      break;
-    }
-  }
+BranchReader::BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts) :
+  name_(std::move(name)),
+  data_(data),
+  cuts_(cuts),
+  type_(type)
+{
 #ifdef USEBOOST
   id_ = boost::apply_visitor(get_id_struct(), data_);
 #else

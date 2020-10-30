@@ -1,5 +1,5 @@
-#ifndef ANALYSISTREE_INFRA_VARMANAGERENTRY_HPP_
-#define ANALYSISTREE_INFRA_VARMANAGERENTRY_HPP_
+#ifndef ANALYSISTREE_INFRA_ANALYSISENTRY_HPP_
+#define ANALYSISTREE_INFRA_ANALYSISENTRY_HPP_
 
 #include <utility>
 
@@ -11,22 +11,22 @@
 namespace AnalysisTree {
 
 /**
- * @brief VarManager entry keeps list of Variables from one or more branches.
- * Before each event VarManagerEntry evaluates Variables and Cuts
+ * @brief AnalysisEntry keeps list of Variables from one or more branches.
+ * Before each event AnalysisEntry evaluates Variables and Cuts
  */
-class VarManagerEntry {
+class AnalysisEntry {
 
   typedef std::vector<std::vector<double>> array2D;
 
  public:
-  VarManagerEntry() = default;
+  AnalysisEntry() = default;
 
-  explicit VarManagerEntry(std::vector<Variable> vars, Cuts* cuts = nullptr) : vars_(std::move(vars)),
+  explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr) : vars_(std::move(vars)),
                                                                                cuts_(cuts) {
     FillBranchNames();
   };
 
-  void Init(const Configuration& conf, const std::map<std::string, void*>& pointers_map);
+  void Init(const AnalysisTree::Configuration& conf, const std::map<std::string, Matching*>& matches);
   void FillValues();
 
   size_t AddVariable(const Variable& var);
@@ -66,4 +66,4 @@ class VarManagerEntry {
 };
 
 }// namespace AnalysisTree
-#endif//ANALYSISTREE_INFRA_VARMANAGERENTRY_HPP_
+#endif//ANALYSISTREE_INFRA_ANALYSISENTRY_HPP_

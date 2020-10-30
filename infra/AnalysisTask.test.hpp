@@ -84,10 +84,10 @@ auto* var_manager = new AnalysisTaskTest;
 Variable px_sim("SimParticles", "px");
 Variable px_rec("RecTracks", "px");
 Cuts eta_cut("eta_cut", {SimpleCut({"SimParticles", "eta"}, -1, 1)});
-var_manager->AddEntry(VarManagerEntry({px_sim}));
-var_manager->AddEntry(VarManagerEntry({px_rec}));
-var_manager->AddEntry(VarManagerEntry({px_sim, px_rec}));
-var_manager->AddEntry(VarManagerEntry({px_sim, px_rec}, &eta_cut));
+var_manager->AddEntry(AnalysisEntry({px_sim}));
+var_manager->AddEntry(AnalysisEntry({px_rec}));
+var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
+var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
 var_manager->FillBranchNames();
 
 man->AddTask(var_manager);

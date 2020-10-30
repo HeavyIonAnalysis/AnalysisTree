@@ -17,8 +17,8 @@ TEST(Test_AnalysisTreeInfra, Test_PlainTreeFiller) {
   plain_tree->FillBranchNames(); //TODO remove?
   man->AddTask(plain_tree);
 
-  man->Init({"fl_toy_mc.txt"}, {"tTree"});
-  man->Run(-1);
+  man->Init({"/home/vklochkov/Soft/AnalysisTree/test/fl.txt"}, {"tTree"});
+  man->Run(3);
   man->Finish();
 }
 

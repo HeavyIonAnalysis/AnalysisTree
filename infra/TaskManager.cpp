@@ -20,20 +20,14 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   assert(!is_init_);
   is_init_ = true;
 
-  in_tree_ = AnalysisTree::MakeChain(filelists, in_trees);
-  in_config_ = GetConfigurationFromFileList(filelists, in_config_name_);
-  try {
-    data_header_ = GetObjectFromFileList<DataHeader>(filelists[0], data_header_name_);
-  } catch (std::runtime_error& error) {
-    std::cout << error.what() << std::endl;
-  }
+  chain_ = new Chain(filelists, in_trees);
 
   std::set<std::string> branch_names{};
   for (auto* task : tasks_) {
     auto br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
   }
-  branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
+  chain_->InitPointersToBranches(branch_names);
 
   for(auto* task : tasks_) {
     task->PreInit();
@@ -45,10 +39,10 @@ void TaskManager::Run(long long nEvents){
 
   std::cout << "AnalysisTree::Manager::Run" << std::endl;
   auto start = std::chrono::system_clock::now();
-  nEvents = nEvents < 0 || nEvents > in_tree_->GetEntries() ? in_tree_->GetEntries() : nEvents;
+  nEvents = nEvents < 0 || nEvents > chain_->GetEntries() ? chain_->GetEntries() : nEvents;
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
-    in_tree_->GetEntry(iEvent);
+    chain_->GetEntry(iEvent);
     for (auto* task : tasks_) {
       task->Exec();
     }

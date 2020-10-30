@@ -5,9 +5,10 @@
 #pragma link C++ class AnalysisTree::Variable+;
 #pragma link C++ class AnalysisTree::TaskManager+;
 #pragma link C++ class AnalysisTree::AnalysisTask+;
+#pragma link C++ class AnalysisTree::Chain+;
 
 #pragma link C++ class AnalysisTree::BranchReader+;
-#pragma link C++ class AnalysisTree::VarManagerEntry+;
+#pragma link C++ class AnalysisTree::AnalysisEntry+;
 
 #pragma link C++ function AnalysisTree::MakeChain(const std::string& filelist, const std::string& treename);
 

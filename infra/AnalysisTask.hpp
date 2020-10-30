@@ -3,17 +3,17 @@
 
 #include "vector"
 
+#include "AnalysisEntry.hpp"
 #include "BranchReader.hpp"
-#include "Task.hpp"
 #include "Matching.hpp"
-#include "VarManagerEntry.hpp"
+#include "Task.hpp"
 #include "Variable.hpp"
 
 namespace AnalysisTree {
 
 /**
- * @brief AnalysisTask is a Task which keeps list of VarManagerEntry-s
- * It evaluates Variables according to the rules of VarManagerEntry-s and
+ * @brief AnalysisTask is a Task which keeps list of AnalysisEntry-s
+ * It evaluates Variables according to the rules of AnalysisEntry-s and
  * populates 2-dimensional array with results of evaluation
  */
 class AnalysisTask : public Task {
@@ -22,7 +22,7 @@ class AnalysisTask : public Task {
  public:
   AnalysisTask() = default;
 
-  std::pair<int, std::vector<int>> AddEntry(const VarManagerEntry& vars);
+  std::pair<int, std::vector<int>> AddEntry(const AnalysisEntry& vars);
 
   void Init() override;
   void Exec() override;
@@ -36,11 +36,11 @@ class AnalysisTask : public Task {
 
   void FillBranchNames();
 
-  [[nodiscard]] const std::vector<VarManagerEntry>& GetVarEntries() const { return entries_; }
-  [[nodiscard]] std::vector<VarManagerEntry>& VarEntries() { return entries_; }
+  [[nodiscard]] const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
+  [[nodiscard]] std::vector<AnalysisEntry>& VarEntries() { return entries_; }
 
  protected:
-  std::vector<VarManagerEntry> entries_{};
+  std::vector<AnalysisEntry> entries_{};
   std::vector<BranchReader> branches_{};
   std::map<std::string, Cuts*> cuts_map_{};
 };

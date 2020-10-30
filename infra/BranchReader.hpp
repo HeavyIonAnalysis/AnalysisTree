@@ -30,7 +30,7 @@ class BranchReader {
 
  public:
   BranchReader() = default;
-  BranchReader(std::string name, void* data, DetType type, Cuts* cuts = nullptr);
+  BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts = nullptr);
 
   [[nodiscard]] const std::string& GetName() const { return name_; }
   [[nodiscard]] DetType GetType() const { return type_; }

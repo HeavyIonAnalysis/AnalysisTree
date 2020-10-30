@@ -2,11 +2,13 @@
 #define ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
 
 #include <string>
+#include <utility>
 #include <vector>
 
+#include "Chain.hpp"
 #include "Cuts.hpp"
 #include "Task.hpp"
-#include "TreeReader.hpp"
+//#include "TreeReader.hpp"
 
 class TTree;
 class TFile;
@@ -46,31 +48,28 @@ class TaskManager {
   template<class Branch>
   void AddBranch(const std::string& name, Branch* ptr, eBranchWriteMode mode = eBranchWriteMode::kNone) {
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
-      in_tree_->Branch(name.c_str(), &ptr);
+//      in_tree_->Branch(name.c_str(), &ptr);
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      out_tree_->Branch(name.c_str(), &ptr);
+//      out_tree_->Branch(name.c_str(), &ptr);
     }
-    branches_map_.emplace(name, ptr);
+//    branches_map_.emplace(name, ptr);
   }
 
-  [[nodiscard]] const Configuration* GetConfig() const { return in_config_; }
-  [[nodiscard]] const DataHeader* GetDataHeader() const { return data_header_; }
-  [[nodiscard]] const std::map<std::string, void*>& GetBranchesMap() const { return branches_map_; }
+  [[nodiscard]] const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
+  [[nodiscard]] const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
+  [[nodiscard]] Chain* GetChain() const { return chain_; }
+
+//  [[nodiscard]] const std::map<std::string, void*>& GetBranchesMap() const { return branches_map_; }
 
  protected:
   TaskManager() = default;
   static TaskManager* manager_;
 
-  TChain* in_tree_{nullptr};
-  std::string data_header_name_{"DataHeader"};
-  std::string in_config_name_{"Configuration"};
-  Configuration* in_config_{nullptr};
-  DataHeader* data_header_{nullptr};
-
+//  std::unique_ptr<Chain> chain_{nullptr};
+  Chain* chain_;
   std::vector<Task*> tasks_{};
-  std::map<std::string, void*> branches_map_{};
 
   // output data members
   std::string out_file_name_;

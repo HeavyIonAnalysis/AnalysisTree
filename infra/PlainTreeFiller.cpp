@@ -14,13 +14,13 @@ void PlainTreeFiller::Init() {
   if(!branch_name_.empty()){
     const auto& branch_config = config_->GetBranchConfig(branch_name_);
     for (const auto& field : branch_config.GetMap<float>()) {
-      AnalysisTask::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
     }
     for (const auto& field : branch_config.GetMap<int>()) {
-      AnalysisTask::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
     }
     for (const auto& field : branch_config.GetMap<bool>()) {
-      AnalysisTask::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
     }
   }
 
