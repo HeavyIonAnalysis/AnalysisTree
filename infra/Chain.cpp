@@ -141,4 +141,77 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   return object;
 }
 
+void Chain::DrawFieldTransform(std::string& expr) const {
+  auto dot = expr.find('.');
+  auto branch = expr.substr(0, dot);
+  auto field = expr.substr(dot+1);
+  auto type = configuration_->GetBranchConfig(branch).GetFieldType(field);
+  auto id = configuration_->GetBranchConfig(branch).GetFieldId(field);
+  std::string type_str{};
+  std::cout << "DrawFieldTransform: " << branch << "  " << field << "  " << int(type) << std::endl;
+
+  switch (type) {
+    case(Types::kFloat) :   { type_str = "float"; break; }
+    case(Types::kInteger) : { type_str = "int";   break; }
+    case(Types::kBool) :    { type_str = "bool";  break; }
+    default: { throw std::runtime_error("Field type is not defined"); }
+  }
+
+  expr = Form("%s.channels_.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
+}
+
+std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string& expr) {
+
+  std::vector<std::pair<std::string, int>> fields{};
+
+  int pos = 0;
+  while(expr.find('.', pos) != -1){
+    auto dot = expr.find('.', pos);
+    if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && isdigit(expr[dot+1]) != ' '){  // is not a number like 1.5
+
+      auto begin = dot;
+      while( begin > 0 && (isalpha(expr[begin-1]) || isdigit(expr[begin-1])) ){
+        begin--;
+      }
+      auto end = dot;
+      while( end < expr.size()-1 && (isalpha(expr[end+1]) || isdigit(expr[end+1]))){
+        end++;
+      }
+      std::cout << begin << "  " << end << std::endl;
+
+      auto field = expr.substr(begin, end - begin + 1);
+      fields.emplace_back(std::make_pair(field, begin));
+      expr.erase(begin, end-begin+1);
+
+      std::cout << expr << "  " << field << std::endl;
+
+      pos = begin;
+    }
+    else{
+      pos = dot+1;
+    }
+  }
+  return fields;
+}
+
+void Chain::DrawTransform(std::string& expr) const {
+  auto fields = FindAndRemoveFields(expr);
+  auto sum{0};
+  for(auto& field : fields){
+    DrawFieldTransform(field.first);
+    expr.insert(field.second+sum, field.first);
+    sum += field.first.size();
+  }
+}
+
+Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
+  std::string exp{varexp};
+  std::string sel{selection};
+  DrawTransform(exp);
+  if(!sel.empty()){
+    DrawTransform(sel);
+  }
+  return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
+}
+
 }

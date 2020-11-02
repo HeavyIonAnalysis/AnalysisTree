@@ -26,7 +26,7 @@ class AnalysisEntry {
     FillBranchNames();
   };
 
-  void Init(const AnalysisTree::Configuration& conf, const std::map<std::string, Matching*>& matches);
+  void Init(const Configuration& conf, const std::map<std::string, Matching*>& matches);
   void FillValues();
 
   size_t AddVariable(const Variable& var);

@@ -49,11 +49,17 @@ class Chain : public TChain {
 
   void InitPointersToBranches(std::set<std::string> names);
 
+  Long64_t Draw(const char *varexp, const char *selection = nullptr, Option_t *option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
+
  protected:
 
   void InitChain();
   void InitConfiguration();
   void InitDataHeader();
+
+  void DrawTransform(std::string& expr) const;
+  static std::vector<std::pair<std::string, int>> FindAndRemoveFields(std::string& expr);
+  void DrawFieldTransform(std::string& expr) const;
 
   static TChain* MakeChain(const std::string& filelist, const std::string& treename);
 
@@ -76,7 +82,7 @@ class Chain : public TChain {
   std::map<std::string, BranchPointer> branches_{};
   std::map<std::string, Matching*> matches_{};
 
-  ClassDef(AnalysisTree::Chain, 1)
+  ClassDefOverride(AnalysisTree::Chain, 1)
 
 };
 
