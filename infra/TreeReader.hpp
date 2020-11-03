@@ -16,21 +16,7 @@
 
 namespace AnalysisTree {
 
-static inline TChain* MakeChain(const std::string& filelist, const std::string& treename) {
-  auto* chain(new TChain(treename.c_str()));
-  std::ifstream in;
-  in.open(filelist);
-  std::string line;
-  std::cout << "Adding files to chain:" << std::endl;
-  while ((in >> line).good()) {
-    std::cout << line << std::endl;
-    if (!line.empty()) {
-      chain->AddFile(line.data());
-    }
-  }
-
-  return chain;
-}
+TChain* MakeChain(const std::string& filelist, const std::string& treename);
 
 static inline TChain* MakeChain(const std::vector<std::string>& filelists, const std::vector<std::string>& treenames) {
   assert(!filelists.empty() && !treenames.empty() && filelists.size() == treenames.size());
