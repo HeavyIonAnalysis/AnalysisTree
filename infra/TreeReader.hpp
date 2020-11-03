@@ -18,22 +18,10 @@ namespace AnalysisTree {
 
 TChain* MakeChain(const std::string& filelist, const std::string& treename);
 
-static inline TChain* MakeChain(const std::vector<std::string>& filelists, const std::vector<std::string>& treenames) {
-  assert(!filelists.empty() && !treenames.empty() && filelists.size() == treenames.size());
-  auto* chain = MakeChain(filelists.at(0), treenames.at(0));
+std::string
+LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy = 0);
 
-  for (uint i = 1; i < filelists.size(); i++) {
-    chain->AddFriend(MakeChain(filelists.at(i), treenames.at(i)));
-  }
-
-  if (!chain) {
-    throw std::runtime_error("AnalysisTree::MakeChain - chain is nullprt");
-  }
-
-  std::cout << "Ntrees = " << chain->GetNtrees() << "\n";
-  std::cout << "Nentries = " << chain->GetEntries() << "\n";
-  return chain;
-}
+TChain* MakeChain(const std::vector<std::string>& filelists, const std::vector<std::string>& treenames);
 
 static inline TTree* MakeTree(const std::string& filename, const std::string& treename) {
   auto file = std::unique_ptr<TFile>(TFile::Open(filename.c_str(), "infra"));
