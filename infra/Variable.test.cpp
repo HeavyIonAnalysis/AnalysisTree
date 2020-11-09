@@ -3,16 +3,33 @@
 
 #include <gtest/gtest.h>
 
+#include <core/Track.hpp>
 #include <infra/Variable.hpp>
 
 #include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
 
+
 namespace{
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeInfra, Test_Varible) {
+TEST(Variable, FromString) {
+
+  auto v1 = Variable::FromString("branch.field");
+  EXPECT_EQ(v1.GetBranchName(), "branch");
+  EXPECT_EQ(v1.GetFields()[0].GetName(), "field");
+
+  auto v2 = Variable::FromString("branch/field");
+  EXPECT_EQ(v1.GetBranchName(), "branch");
+  EXPECT_EQ(v1.GetFields()[0].GetName(), "field");
+
+  EXPECT_THROW(Variable::FromString("field"), std::runtime_error);
+
+
+}
+
+TEST(Test_AnalysisTreeInfra, Test_Variable) {
 
   BranchConfig branch_config("RecTrack", DetType::kTrack);
   branch_config.AddField<float>("test_f");

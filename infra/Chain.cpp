@@ -4,31 +4,74 @@
 #include "Matching.hpp"
 
 #include <TChain.h>
+#include <TFileCollection.h>
 #include <fstream>
 
 namespace AnalysisTree{
 
-void Chain::InitChain(){
-  assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
+//void Chain::InitChain(){
+//  assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
+//
+//  std::ifstream in;
+//  in.open(filelists_.at(0));
+//  std::string line;
+//  std::cout << "Adding files to chain:" << std::endl;
+//  while ((in >> line).good()) {
+//    std::cout << line << std::endl;
+//    if (!line.empty()) {
+//      this->AddFile(line.data());
+//    }
+//  }
+//
+//  for (uint i = 1; i < filelists_.size(); i++) {
+//    this->AddFriend(MakeChain(filelists_.at(i), treenames_.at(i)));
+//  }
+//
+//  std::cout << "Ntrees = " << this->GetNtrees() << "\n";
+//  std::cout << "Nentries = " << this->GetEntries() << "\n";
+//}
 
-  std::ifstream in;
-  in.open(filelists_.at(0));
-  std::string line;
-  std::cout << "Adding files to chain:" << std::endl;
-  while ((in >> line).good()) {
-    std::cout << line << std::endl;
-    if (!line.empty()) {
-      this->AddFile(line.data());
-    }
+TChain* Chain::MakeChain(const std::string& filelist, const std::string& treename) {
+  auto chain = new TChain(treename.c_str());
+  TFileCollection fc("fc","",filelist.c_str());
+  chain->AddFileInfoList(reinterpret_cast<TCollection*>(fc.GetList()));
+  chain->ls();
+  return chain;
+}
+
+std::string Chain::LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy) {
+  auto full_name = name + "_" + std::to_string(copy);
+  auto it = std::find(names.begin(), names.end(), full_name);
+  /* not found */
+  if (it == names.end()) {
+    return full_name;
+  }
+  return LookupAlias(names, name, copy + 1);
+}
+
+void Chain::InitChain() {
+  /* TODO remove assert, throw exceptions */
+  assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
+  auto* chain = MakeChain(filelists_.at(0), treenames_.at(0));
+
+  std::vector<std::string> aliases;
+  aliases.reserve(treenames_.size());
+  for (const auto& tree_name : treenames_) {
+    aliases.emplace_back(LookupAlias(aliases, tree_name));
   }
 
   for (uint i = 1; i < filelists_.size(); i++) {
-    this->AddFriend(MakeChain(filelists_.at(i), treenames_.at(i)));
+    if (aliases.at(i) != treenames_.at(i)) {
+      std::cout << "Tree '" << treenames_.at(i) << "' will be friended under the alias '" << aliases.at(i) << "'" << std::endl;
+    }
+    this->AddFriend(MakeChain(filelists_.at(i), treenames_.at(i)), aliases.at(i).c_str());
   }
 
-  std::cout << "Ntrees = " << this->GetNtrees() << "\n";
-  std::cout << "Nentries = " << this->GetEntries() << "\n";
+  std::cout << "Ntrees = " << chain->GetNtrees() << "\n";
+  std::cout << "Nentries = " << chain->GetEntries() << "\n";
 }
+
+
 
 void Chain::InitPointersToBranches(std::set<std::string> names){
   if (names.empty()) {// all branches by default, if not implicitly specified
@@ -79,22 +122,22 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
   }
 }
 
-TChain* Chain::MakeChain(const std::string& filelist, const std::string& treename) {
-  auto* chain(new TChain(treename.c_str()));
-
-  std::ifstream in;
-  in.open(filelist);
-  std::string line;
-  std::cout << "Adding files to chain:" << std::endl;
-  while ((in >> line).good()) {
-    std::cout << line << std::endl;
-    if (!line.empty()) {
-      chain->AddFile(line.data());
-    }
-  }
-
-  return chain;
-}
+//TChain* Chain::MakeChain(const std::string& filelist, const std::string& treename) {
+//  auto* chain(new TChain(treename.c_str()));
+//
+//  std::ifstream in;
+//  in.open(filelist);
+//  std::string line;
+//  std::cout << "Adding files to chain:" << std::endl;
+//  while ((in >> line).good()) {
+//    std::cout << line << std::endl;
+//    if (!line.empty()) {
+//      chain->AddFile(line.data());
+//    }
+//  }
+//
+//  return chain;
+//}
 
 void Chain::InitConfiguration(){
   assert(!filelists_.empty());

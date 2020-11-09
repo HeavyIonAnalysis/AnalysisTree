@@ -47,6 +47,12 @@ class Chain : public TChain {
     }
   }
 
+/**
+ * @brief Loads selected list of branches from TTree
+ * @param t
+ * @param config
+ * @param names List of selected branches. If empty, loads all branches found in Configuration
+ */
   void InitPointersToBranches(std::set<std::string> names);
 
   Long64_t Draw(const char *varexp, const char *selection = nullptr, Option_t *option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
@@ -72,6 +78,8 @@ class Chain : public TChain {
  */
   template<class T>
   static T* GetObjectFromFileList(const std::string& filelist, const std::string& name);
+
+  std::string LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy);
 
   std::vector<std::string> filelists_{};
   std::vector<std::string> treenames_{};
