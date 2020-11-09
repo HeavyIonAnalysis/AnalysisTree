@@ -6,7 +6,7 @@ namespace AnalysisTree {
 
 void PlainTreeFiller::AddBranch(const std::string& branch_name) {
   branch_name_ = branch_name;
-  in_branches_.emplace_back(branch_name);
+  in_branches_.emplace(branch_name);
 }
 
 void PlainTreeFiller::Init() {

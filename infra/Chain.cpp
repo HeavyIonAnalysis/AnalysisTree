@@ -148,7 +148,6 @@ void Chain::DrawFieldTransform(std::string& expr) const {
   auto type = configuration_->GetBranchConfig(branch).GetFieldType(field);
   auto id = configuration_->GetBranchConfig(branch).GetFieldId(field);
   std::string type_str{};
-  std::cout << "DrawFieldTransform: " << branch << "  " << field << "  " << int(type) << std::endl;
 
   switch (type) {
     case(Types::kFloat) :   { type_str = "float"; break; }
@@ -177,14 +176,9 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
       while( end < expr.size()-1 && (isalpha(expr[end+1]) || isdigit(expr[end+1]))){
         end++;
       }
-      std::cout << begin << "  " << end << std::endl;
-
       auto field = expr.substr(begin, end - begin + 1);
       fields.emplace_back(std::make_pair(field, begin));
       expr.erase(begin, end-begin+1);
-
-      std::cout << expr << "  " << field << std::endl;
-
       pos = begin;
     }
     else{

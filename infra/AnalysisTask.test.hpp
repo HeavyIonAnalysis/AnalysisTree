@@ -88,7 +88,6 @@ var_manager->AddEntry(AnalysisEntry({px_sim}));
 var_manager->AddEntry(AnalysisEntry({px_rec}));
 var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
 var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
-var_manager->FillBranchNames();
 
 man->AddTask(var_manager);
 

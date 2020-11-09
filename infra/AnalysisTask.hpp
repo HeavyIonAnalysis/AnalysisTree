@@ -34,8 +34,6 @@ class AnalysisTask : public Task {
   std::vector<BranchReader>& Branches() { return branches_; }
   BranchReader GetBranch(const std::string& name);
 
-  void FillBranchNames();
-
   [[nodiscard]] const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
   [[nodiscard]] std::vector<AnalysisEntry>& VarEntries() { return entries_; }
 

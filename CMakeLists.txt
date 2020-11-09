@@ -32,28 +32,23 @@ endif()
 set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
 set(AnalysisTree_BUILD_EXAMPLES ON CACHE BOOL "Build examples for the AnalysisTree")
 
-
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNODEBUG")
 message(STATUS "Using CXX flags for ${CMAKE_BUILD_TYPE}: ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}")
-
-list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
-list(APPEND CMAKE_PREFIX_PATH ${ROOTSYS})
 
 find_package(ROOT REQUIRED)
 list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 
 message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
-include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
+include_directories(${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
 include(${ROOT_USE_FILE})
-
 
 add_subdirectory(core)
 add_subdirectory(infra)
 
-if(AnalysisTree_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
+#if(AnalysisTree_BUILD_EXAMPLES)
+#    add_subdirectory(examples)
+#endif()
 
 if(AnalysisTree_BUILD_TESTS)
     include(GoogleTest)

@@ -21,7 +21,7 @@ class Chain : public TChain {
 
  public:
 
-  Chain() = default;
+  Chain() : TChain() {};
   Chain(std::vector<std::string> filelists, std::vector<std::string> treenames) :
    TChain(treenames.at(0).c_str()),
    filelists_(std::move(filelists)),

@@ -37,17 +37,8 @@ void AnalysisTask::Exec() {
   }
 }
 
-void AnalysisTask::FillBranchNames() {
-  for (auto& var : entries_) {
-    const auto& br = var.GetBranchNames();
-    in_branches_.insert(in_branches_.end(), br.begin(), br.end());
-  }
-  std::sort(in_branches_.begin(), in_branches_.end());
-  auto ip = std::unique(in_branches_.begin(), in_branches_.end());
-  in_branches_.resize(std::distance(in_branches_.begin(), ip));
-}
-
 std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const AnalysisEntry& vars) {
+  in_branches_.insert(vars.GetBranchNames().begin(), vars.GetBranchNames().end());
 
   std::vector<int> var_ids(vars.GetVariables().size());
 

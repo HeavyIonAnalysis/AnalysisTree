@@ -18,7 +18,6 @@ endif()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
-
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
 list(APPEND HEADERS "VariantMagic.hpp")
 
