@@ -1,6 +1,16 @@
 #ifndef ANALYSISTREE_TEST_CORE_INDEXEDOBJECT_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_INDEXEDOBJECT_TEST_HPP_
 
+#include <gtest/gtest.h>
+
+#include "IndexedObject.hpp"
+#include <TTree.h>
+#include <TFile.h>
+
+namespace {
+
+using namespace AnalysisTree;
+
 TEST(Test_AnalysisTreeCore, Test_WriteIndexedObject) {
   auto* indexedObject = new IndexedObject(1);
 
@@ -21,5 +31,5 @@ TEST(Test_AnalysisTreeCore, Test_WriteIndexedObject) {
 
   EXPECT_EQ(*indexedObject1, *indexedObject);
 }
-
+}
 #endif//ANALYSISTREE_TEST_CORE_INDEXEDOBJECT_TEST_HPP_
