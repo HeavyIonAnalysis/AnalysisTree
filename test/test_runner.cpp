@@ -14,11 +14,11 @@
 #include <core/EventHeader.test.hpp>
 #include <core/ToyMC.test.hpp>
 
-#include <infra/Cuts.test.hpp>
-#include <infra/Field.test.hpp>
-#include <infra/PlainTreeFiller.test.hpp>
-#include <infra/SimpleCut.test.hpp>
-#include <infra/VarManager.test.hpp>
+#include <infra/Cuts.test.cpp>
+#include <infra/Field.test.cpp>
+#include <infra/PlainTreeFiller.test.cpp>
+#include <infra/SimpleCut.test.cpp>
+#include <infra/VarManager.test.cpp>
 
 int main(int argc, char **argv) {
 

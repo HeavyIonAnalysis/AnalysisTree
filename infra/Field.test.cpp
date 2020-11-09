@@ -5,6 +5,7 @@
 
 #include <infra/Field.hpp>
 
+#include <core/Track.hpp>
 #include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
 

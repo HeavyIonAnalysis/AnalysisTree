@@ -49,12 +49,17 @@ target_include_directories(AnalysisTreeInfra
 if(AnalysisTree_BUILD_TESTS)
     set(TEST_SOURCES
             BranchView.test.cpp
-            Variable.test.cpp)
+            Variable.test.cpp
+            Cuts.test.cpp
+            Field.test.cpp
+            PlainTreeFiller.test.cpp
+            SimpleCut.test.cpp
+            VarManager.test.cpp
+            )
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
-
-
+    gtest_discover_tests(AnalysisTreeInfra_UnitTests)
 endif()
 
 install(TARGETS AnalysisTreeInfra EXPORT AnalysisTreeTargets
