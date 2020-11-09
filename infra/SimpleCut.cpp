@@ -21,10 +21,10 @@ bool operator==(const SimpleCut& that, const SimpleCut& other) {
 }
 
 SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title) {
-  return SimpleCut(Variable(variable_name), lo, hi, title);
+  return SimpleCut(Variable::FromString(variable_name), lo, hi, title);
 }
 SimpleCut EqualsCut(const std::string& variable_name, float value, const std::string& title) {
-  return SimpleCut(Variable(variable_name), value, title);
+  return SimpleCut(Variable::FromString(variable_name), value, title);
 }
 }// namespace AnalysisTree
 

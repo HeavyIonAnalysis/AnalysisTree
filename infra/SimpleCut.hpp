@@ -40,6 +40,7 @@ class SimpleCut {
   * @param field name of the field
   * @param value only objects with field == value will be accepted
   */
+  [[deprecated("Use AnalysisTree::EqualsCut")]]
   SimpleCut(const Variable& var, int value, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
@@ -50,11 +51,12 @@ class SimpleCut {
   * @param vars vector of variable NAMES needed for a cut
   * @param lambda function of fields, returns bool
   */
+  [[deprecated("Use AnalysisTree::RangeCut instead")]]
   SimpleCut(std::vector<std::string> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
                                                                                                                     lambda_(std::move(lambda)) {
     std::transform(vars.begin(), vars.end(),
                    std::back_inserter(vars_),
-                   [] (const std::string& arg_name) { return Variable(arg_name); });
+                   [] (const std::string& arg_name) { return Variable::FromString(arg_name); });
 
     FillBranchNames();
   }
