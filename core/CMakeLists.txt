@@ -35,7 +35,7 @@ if(AnalysisTree_BUILD_TESTS)
     set(TEST_SOURCES
             BranchConfig.test.cpp
             Configuration.test.cpp
-            Configuration.test.cpp
+            Container.test.cpp
             DataHeader.test.cpp
             Detector.test.cpp
             EventHeader.test.cpp
@@ -47,9 +47,9 @@ if(AnalysisTree_BUILD_TESTS)
             Track.test.cpp
             )
 
-    add_executable(AnalysisTreeCore_UnitTests ${TEST_SOURCES})
-    target_link_libraries(AnalysisTreeCore_UnitTests  PRIVATE AnalysisTreeBase gtest_main)
-    gtest_discover_tests(AnalysisTreeCore_UnitTests )
+    add_executable(AnalysisTreeBase_UnitTests ${TEST_SOURCES})
+    target_link_libraries(AnalysisTreeBase_UnitTests  PRIVATE AnalysisTreeBase gtest_main)
+    gtest_discover_tests(AnalysisTreeBase_UnitTests TEST_PREFIX AnalysisTreeBase_ )
 endif()
 
 install(TARGETS AnalysisTreeBase EXPORT AnalysisTreeTargets

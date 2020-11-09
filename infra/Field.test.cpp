@@ -13,7 +13,7 @@ namespace{
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeInfra, Test_Field) {
+TEST(Field, Basics) {
 
   BranchConfig branch_config("RecTrack", DetType::kTrack);
   branch_config.AddField<float>("test_f");

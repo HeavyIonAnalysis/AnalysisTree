@@ -75,7 +75,7 @@ class VarManagerTest : public VarManager{
 };
 
 
-TEST(Test_AnalysisTreeInfra, Test_VarManager) {
+TEST(VarManager, Basics) {
 
   const int n_events = 1000;  // TODO propagate somehow
   TaskManager man({"fl_toy_mc.txt"}, {"tTree"});

@@ -8,9 +8,6 @@ namespace{
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeInfra, Test_SimpleCut) {
-
-}
 
 }
 

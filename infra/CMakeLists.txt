@@ -59,7 +59,7 @@ if(AnalysisTree_BUILD_TESTS)
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
-    gtest_discover_tests(AnalysisTreeInfra_UnitTests)
+    gtest_discover_tests(AnalysisTreeInfra_UnitTests TEST_PREFIX AnalysisTreeInfra_)
 endif()
 
 install(TARGETS AnalysisTreeInfra EXPORT AnalysisTreeTargets

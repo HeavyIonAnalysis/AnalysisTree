@@ -16,7 +16,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_Track) {
+TEST(Track, Basics) {
 
   Track track(0);
 
@@ -43,7 +43,7 @@ TEST(Test_AnalysisTreeCore, Test_Track) {
   ASSERT_NEAR(vec1.M(), vec.M(), 1e-5);
 }
 
-TEST(Test_AnalysisTreeCore, Test_WriteTracks) {
+TEST(Track, Write) {
 
   TFile* f = TFile::Open("test.root", "recreate");
   TTree* t{new TTree("test", "")};

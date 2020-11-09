@@ -9,7 +9,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_DataHeader) {
+TEST(DataContainer, Basics) {
 
   DataHeader dh;
   dh.SetBeamMomentum(10.);

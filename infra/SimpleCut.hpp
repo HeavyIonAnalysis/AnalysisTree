@@ -30,6 +30,7 @@ class SimpleCut {
   * @param min minimal accepted value
   * @param max maximal accepted value
   */
+  [[deprecated("Use AnalysisTree::RangeCut instead")]]
   SimpleCut(const Variable& var, float min, float max, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
@@ -51,7 +52,6 @@ class SimpleCut {
   * @param vars vector of variable NAMES needed for a cut
   * @param lambda function of fields, returns bool
   */
-  [[deprecated("Use AnalysisTree::RangeCut instead")]]
   SimpleCut(std::vector<std::string> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
                                                                                                                     lambda_(std::move(lambda)) {
     std::transform(vars.begin(), vars.end(),

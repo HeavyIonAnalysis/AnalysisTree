@@ -11,7 +11,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeInfra, Test_PlainTreeFiller) {
+TEST(PlainTreeFiller, Basics) {
 
   TaskManager man({"fl_toy_mc.txt"}, {"tTree"});
   man.SetOutFileName("test_plain_tree.root");

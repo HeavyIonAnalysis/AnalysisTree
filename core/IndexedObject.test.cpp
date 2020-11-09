@@ -11,7 +11,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_WriteIndexedObject) {
+TEST(IndexedObject, Write) {
   auto* indexedObject = new IndexedObject(1);
 
   TFile outputFile("Test_WriteIndexedObject.root", "recreate");
