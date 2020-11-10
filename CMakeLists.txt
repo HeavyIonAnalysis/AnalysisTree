@@ -28,9 +28,15 @@ if(Boost_FOUND)
     add_definitions(-DUSEBOOST)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 # CMake options
 set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
 set(AnalysisTree_BUILD_EXAMPLES ON CACHE BOOL "Build examples for the AnalysisTree")
+
+# Tests
+include(TestsSetup)
+
 
 
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
@@ -55,11 +61,11 @@ if(AnalysisTree_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-if(AnalysisTree_BUILD_TESTS)
-    include(GoogleTest)
-    enable_testing()
-    add_subdirectory(test)
-endif()
+#if(AnalysisTree_BUILD_TESTS)
+#    include(GoogleTest)
+#    enable_testing()
+#    add_subdirectory(test)
+#endif()
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(

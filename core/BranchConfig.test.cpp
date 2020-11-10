@@ -9,7 +9,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_BranchConfig) {
+TEST(BranchConfig, Basics) {
 
   auto det_types = {DetType::kTrack, DetType::kModule, DetType::kParticle, DetType::kHit, DetType::kEventHeader };
   for(auto det_type : det_types){

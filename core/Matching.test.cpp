@@ -9,7 +9,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_Matching) {
+TEST(Matching, Basics) {
 
   Matching matching(0, 1);
 

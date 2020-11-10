@@ -31,6 +31,26 @@ target_include_directories(AnalysisTreeBase
             $<INSTALL_INTERFACE:include>
         )
 
+if(AnalysisTree_BUILD_TESTS)
+    set(TEST_SOURCES
+            BranchConfig.test.cpp
+            Configuration.test.cpp
+            Container.test.cpp
+            DataHeader.test.cpp
+            Detector.test.cpp
+            EventHeader.test.cpp
+            IndexedObject.test.cpp
+            Matching.test.cpp
+            Module.test.cpp
+            Particle.test.cpp
+            ToyMC.test.cpp
+            Track.test.cpp
+            )
+
+    add_executable(AnalysisTreeBase_UnitTests ${TEST_SOURCES})
+    target_link_libraries(AnalysisTreeBase_UnitTests  PRIVATE AnalysisTreeBase gtest_main)
+    gtest_discover_tests(AnalysisTreeBase_UnitTests TEST_PREFIX AnalysisTreeBase_ )
+endif()
 
 install(TARGETS AnalysisTreeBase EXPORT AnalysisTreeTargets
         LIBRARY DESTINATION lib
