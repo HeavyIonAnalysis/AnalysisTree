@@ -55,12 +55,13 @@ if(AnalysisTree_BUILD_TESTS)
             Field.test.cpp
             PlainTreeFiller.test.cpp
             SimpleCut.test.cpp
-            VarManager.test.cpp
+            AnalysisTask.test.cpp
             )
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
-    gtest_discover_tests(AnalysisTreeInfra_UnitTests TEST_PREFIX AnalysisTreeInfra_)
+
+
 endif()
 
 install(TARGETS AnalysisTreeInfra EXPORT AnalysisTreeTargets

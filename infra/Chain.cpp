@@ -52,7 +52,9 @@ std::string Chain::LookupAlias(const std::vector<std::string>& names, const std:
 void Chain::InitChain() {
   /* TODO remove assert, throw exceptions */
   assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
-  auto* chain = MakeChain(filelists_.at(0), treenames_.at(0));
+
+  TFileCollection fc("fc","",filelists_[0].c_str());
+  this->AddFileInfoList(reinterpret_cast<TCollection*>(fc.GetList()));
 
   std::vector<std::string> aliases;
   aliases.reserve(treenames_.size());
@@ -67,8 +69,8 @@ void Chain::InitChain() {
     this->AddFriend(MakeChain(filelists_.at(i), treenames_.at(i)), aliases.at(i).c_str());
   }
 
-  std::cout << "Ntrees = " << chain->GetNtrees() << "\n";
-  std::cout << "Nentries = " << chain->GetEntries() << "\n";
+  std::cout << "Ntrees = " << this->GetNtrees() << "\n";
+  std::cout << "Nentries = " << this->GetEntries() << "\n";
 }
 
 

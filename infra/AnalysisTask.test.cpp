@@ -75,7 +75,7 @@ class AnalysisTaskTest : public AnalysisTask {
 };
 
 
-TEST(Test_AnalysisTreeInfra, Test_AnalysisTask) {
+TEST(AnalysisTask, Basics) {
 
 const int n_events = 1000;  // TODO propagate somehow
 auto* man = AnalysisTree::TaskManager::GetInstance();

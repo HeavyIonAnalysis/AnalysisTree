@@ -79,7 +79,7 @@ class Chain : public TChain {
   template<class T>
   static T* GetObjectFromFileList(const std::string& filelist, const std::string& name);
 
-  std::string LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy);
+  std::string LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy = 0);
 
   std::vector<std::string> filelists_{};
   std::vector<std::string> treenames_{};

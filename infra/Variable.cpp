@@ -1,6 +1,7 @@
 #include "Variable.hpp"
 
 #include <algorithm>
+#include <regex>
 
 #include "Configuration.hpp"
 
