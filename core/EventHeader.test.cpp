@@ -8,7 +8,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_EventHeader) {
+TEST(EventHeader, Basics) {
 
   EventHeader event_header;
 

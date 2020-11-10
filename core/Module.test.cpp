@@ -9,7 +9,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_Module) {
+TEST(Module, Basics) {
 
   Module module;
 

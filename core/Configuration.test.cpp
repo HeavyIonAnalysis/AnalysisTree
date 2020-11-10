@@ -10,7 +10,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_Configuration) {
+TEST(Configuration, Basics) {
 
   Configuration config("test");
 
@@ -31,7 +31,7 @@ TEST(Test_AnalysisTreeCore, Test_Configuration) {
   EXPECT_EQ(br1.GetId(), 0);
 }
 
-TEST(Test_AnalysisTreeCore, Test_ConfigurationMatch) {
+TEST(Configuration, Match) {
   Configuration config("test");
 
   config.AddBranchConfig(BranchConfig("RecTrack", DetType::kParticle));

@@ -29,7 +29,7 @@ TEST(Variable, FromString) {
 
 }
 
-TEST(Test_AnalysisTreeInfra, Test_Variable) {
+TEST(Variable, Basics) {
 
   BranchConfig branch_config("RecTrack", DetType::kTrack);
   branch_config.AddField<float>("test_f");
