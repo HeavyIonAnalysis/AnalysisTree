@@ -24,6 +24,8 @@ class Track : public Container {
   Track& operator=(Track&&) = default;
   Track& operator=(const Track& track) = default;
 
+  virtual ~Track() {};
+
   /**
    * This is a typical semantics for the getter
    * of physical vector and this semantics should be followed by anyone
