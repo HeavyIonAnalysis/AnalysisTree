@@ -1,5 +1,5 @@
-#ifndef ANALYSISTREE_CORE_TOYMC_HPP_
-#define ANALYSISTREE_CORE_TOYMC_HPP_
+#ifndef ANALYSISTREE_INFRA_TOYMC_HPP_
+#define ANALYSISTREE_INFRA_TOYMC_HPP_
 
 #include <TH2.h>
 #include <fstream>
@@ -14,15 +14,22 @@
 #include "EventHeader.hpp"
 #include "Matching.hpp"
 
+#include "Task.hpp"
+#include "TaskManager.hpp"
+
 namespace AnalysisTree{
 
 template<class RandomEngine>
-class ToyMC {
+class ToyMC : public Task {
  public:
   ToyMC() = default;
-  ~ToyMC() = default;
+  ~ToyMC() override = default;
 
-  void Init(){
+  void Init() override {
+
+    auto* man = TaskManager::GetInstance();
+
+
     out_tree_ = new TTree("tTree", "test tree");
 
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
@@ -40,6 +47,8 @@ class ToyMC {
 
     rec_tracks_to_sim_ = new Matching(track_detector_->GetId(), particles_->GetId());
     config_.AddMatch(rec_tracks_to_sim_);
+
+    man->AddBranch("SimEventHeader", sim_event_header_, TaskManager::eBranchWriteMode::kCreateNewTree);
 
     out_tree_->Branch("SimEventHeader", &sim_event_header_);
     out_tree_->Branch("SimParticles", &particles_);
@@ -160,4 +169,4 @@ class ToyMC {
 
 }
 
-#endif //ANALYSISTREE_CORE_TOYMC_HPP_
+#endif //ANALYSISTREE_INFRA_TOYMC_HPP_
