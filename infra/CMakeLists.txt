@@ -5,12 +5,16 @@ set(SOURCES
   Variable.cpp
   Task.cpp
   AnalysisTask.cpp
-#  TreeReader.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-  BranchView.cpp
+#  BranchView.cpp
   Chain.cpp
-        )
+)
+
+#temp solution
+if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
+    list(APPEND SOURCES "BranchView.cpp")
+endif()
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
@@ -19,7 +23,7 @@ endif()
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "VariantMagic.hpp")
+list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
@@ -49,14 +53,19 @@ target_include_directories(AnalysisTreeInfra
 
 if(AnalysisTree_BUILD_TESTS)
     set(TEST_SOURCES
-            BranchView.test.cpp
+
             Variable.test.cpp
             Cuts.test.cpp
             Field.test.cpp
-            PlainTreeFiller.test.cpp
             SimpleCut.test.cpp
-            AnalysisTask.test.cpp
+#            PlainTreeFiller.test.cpp
+#            AnalysisTask.test.cpp
+#            ToyMC.test.cpp
             )
+
+    if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
+        list(APPEND TEST_SOURCES "BranchView.test.cpp")
+    endif()
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)

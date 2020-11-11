@@ -1,14 +1,12 @@
 #ifndef ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
 
-#include "Constants.hpp"
 #include "Detector.hpp"
 
 #include <TFile.h>
 #include <TTree.h>
 #include <gtest/gtest.h>
 
-#include <random>
 #include <vector>
 
 namespace {

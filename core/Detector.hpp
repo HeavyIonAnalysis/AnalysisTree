@@ -26,9 +26,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
   Detector& operator=(Detector&&) noexcept = default;
   Detector& operator=(const Detector& part) = default;
 
-  ~Detector() override {
-    std::cout << "~Detector()" << std::endl;
-  }
+  ~Detector() override = default;
 
   [[nodiscard]] size_t GetNumberOfChannels() const noexcept {
     return channels_.size();
@@ -42,11 +40,6 @@ class Detector : public IndexedObject, protected IndexAccessor {
   void ClearChannels() {
       channels_.clear();
   }
-
-//  [[deprecated("Please use T& Channel(size_t number) to avoid confusion with const T& GetChannel(size_t number) const")]]
-//  T& GetChannel(size_t number) {
-//    return Channel(number);
-//  }
 
   T& Channel(size_t number)// needed in converter to modify tracks id
   {
@@ -92,12 +85,12 @@ class Detector : public IndexedObject, protected IndexAccessor {
     }
   }
 
-  auto begin() { return channels_.begin(); }
-  auto end() { return channels_.end(); }
-  auto cbegin() const { return channels_.begin(); }
-  auto cend() const { return channels_.end(); }
-  auto begin() const { return channels_.begin(); }
-  auto end() const { return channels_.end(); }
+  auto begin() -> typename std::vector<T>::iterator { return channels_.begin(); }
+  auto end() -> typename std::vector<T>::iterator { return channels_.end(); }
+  auto cbegin() const -> typename std::vector<T>::const_iterator  { return channels_.begin(); }
+  auto cend() const -> typename std::vector<T>::const_iterator  { return channels_.end(); }
+  auto begin() const -> typename std::vector<T>::const_iterator  { return channels_.begin(); }
+  auto end() const -> typename std::vector<T>::const_iterator  { return channels_.end(); }
 
  protected:
   std::vector<T> channels_{};

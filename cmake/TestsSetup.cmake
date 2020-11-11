@@ -1,5 +1,4 @@
 
-
 if (AnalysisTree_BUILD_TESTS)
 enable_testing()
 include(GoogleTest)

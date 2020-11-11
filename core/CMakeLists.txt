@@ -13,7 +13,7 @@ set(SOURCES
   Particle.cpp)
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "Constants.hpp" "ToyMC.hpp" "Detector.hpp")
+list(APPEND HEADERS "Constants.hpp" "../infra/ToyMC.hpp" "Detector.hpp")
 
 add_library(AnalysisTreeBase SHARED ${SOURCES} G__AnalysisTreeBase.cxx)
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeBase ${HEADERS} LINKDEF AnalysisTreeCoreLinkDef.h)
@@ -43,7 +43,6 @@ if(AnalysisTree_BUILD_TESTS)
             Matching.test.cpp
             Module.test.cpp
             Particle.test.cpp
-            ToyMC.test.cpp
             Track.test.cpp
             )
 

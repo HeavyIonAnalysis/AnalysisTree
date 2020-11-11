@@ -24,10 +24,20 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
 
   std::set<std::string> branch_names{};
   for (auto* task : tasks_) {
-    auto br = task->GetInputBranchNames();
+    const auto& br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
   }
   chain_->InitPointersToBranches(branch_names);
+
+  for(auto* task : tasks_) {
+    task->PreInit();
+    task->Init();
+  }
+}
+
+void TaskManager::Init(){
+
+  chain_ = new Chain("aTree");
 
   for(auto* task : tasks_) {
     task->PreInit();

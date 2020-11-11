@@ -120,26 +120,13 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
     this->SetBranchAddress(match.first.c_str(), &(match.second));
   }
   for (auto& branch : branches_) {
+#if USEBOOST
+    boost::apply_visitor(set_branch_address_struct(this, branch.first.c_str()), branch.second);
+#else
     std::visit([this, branch](auto&& arg){ this->SetBranchAddress(branch.first.c_str(), &(arg)); }, branch.second);
+#endif
   }
 }
-
-//TChain* Chain::MakeChain(const std::string& filelist, const std::string& treename) {
-//  auto* chain(new TChain(treename.c_str()));
-//
-//  std::ifstream in;
-//  in.open(filelist);
-//  std::string line;
-//  std::cout << "Adding files to chain:" << std::endl;
-//  while ((in >> line).good()) {
-//    std::cout << line << std::endl;
-//    if (!line.empty()) {
-//      chain->AddFile(line.data());
-//    }
-//  }
-//
-//  return chain;
-//}
 
 void Chain::InitConfiguration(){
   assert(!filelists_.empty());

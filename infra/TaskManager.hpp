@@ -20,21 +20,31 @@ class Configuration;
 
 class TaskManager {
 
+ public:
+
   enum class eBranchWriteMode{
     kUpdateCurrentTree = 0,
     kCreateNewTree,
     kNone
   };
 
- public:
-
-  static TaskManager*GetInstance();
+  static TaskManager* GetInstance();
 
   TaskManager(TaskManager&other) = delete;
   void operator=(const TaskManager&) = delete;
   virtual ~TaskManager() = default;
 
+ /**
+ * Initialization in case of reading AnalysisTree
+ * @param filelists vector of filelists -> text files with paths to all root files
+ * @param in_trees vector ot TTree names
+ */
   virtual void Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees);
+
+  /**
+  * Initialization in case of writing AnalysisTree
+  */
+  virtual void Init();
   virtual void Run(long long nEvents);
   virtual void Finish();
 
@@ -48,11 +58,13 @@ class TaskManager {
   template<class Branch>
   void AddBranch(const std::string& name, Branch* ptr, eBranchWriteMode mode = eBranchWriteMode::kNone) {
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
-//      in_tree_->Branch(name.c_str(), &ptr);
+      chain_->Branch(name.c_str(), &ptr);
+      update_current_tree_ = true;
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-//      out_tree_->Branch(name.c_str(), &ptr);
+      out_tree_->Branch(name.c_str(), &ptr);
+      fill_out_tree_ = true;
     }
 //    branches_map_.emplace(name, ptr);
   }
@@ -60,8 +72,6 @@ class TaskManager {
   [[nodiscard]] const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
   [[nodiscard]] const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
   [[nodiscard]] Chain* GetChain() const { return chain_; }
-
-//  [[nodiscard]] const std::map<std::string, void*>& GetBranchesMap() const { return branches_map_; }
 
  protected:
   TaskManager() = default;
@@ -79,6 +89,9 @@ class TaskManager {
   AnalysisTree::Configuration* out_config_{nullptr};
 
   bool is_init_{false};
+
+  bool fill_out_tree_{false};
+  bool update_current_tree_{false};
 };
 
 };// namespace AnalysisTree

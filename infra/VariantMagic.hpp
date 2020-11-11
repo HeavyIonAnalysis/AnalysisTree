@@ -5,6 +5,7 @@
 // To be removed after c++17 will be available everywhere
 
 #ifdef USEBOOST
+#include <TTree.h>
 #include <utility>
 
 #include "Cuts.hpp"
@@ -15,6 +16,20 @@
 #pragma message("Compiling with Boost")
 #define get_func boost::get
 using namespace AnalysisTree;
+
+
+struct set_branch_address_struct : public boost::static_visitor<int> {
+  set_branch_address_struct(TTree* tree, std::string name) : tree_(tree), name_(std::move(name)) {}
+  template<class Det>
+  int set_branch_address(Det* d) const { return tree_->SetBranchAddress(name_.c_str(), &d); }
+  int operator()(TrackDetector* d) const { return set_branch_address<TrackDetector>(d); }
+  int operator()(HitDetector* d) const { return set_branch_address<HitDetector>(d); }
+  int operator()(ModuleDetector* d) const { return set_branch_address<ModuleDetector>(d); }
+  int operator()(Particles* d) const { return set_branch_address<Particles>(d); }
+  int operator()(EventHeader* d) const { return set_branch_address<EventHeader>(d); }
+  TTree* tree_{nullptr};
+  std::string name_;
+};
 
 struct get_value : public boost::static_visitor<double> {
   get_value(Variable var, int i_channel) : var_(std::move(var)), i_channel_(i_channel) {}
