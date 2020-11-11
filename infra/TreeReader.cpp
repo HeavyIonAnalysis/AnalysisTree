@@ -42,3 +42,62 @@ TChain* AnalysisTree::MakeChain(const std::vector<std::string>& filelists, const
   std::cout << "Nentries = " << chain->GetEntries() << "\n";
   return chain;
 }
+
+std::map<std::string, void*> AnalysisTree::GetPointersToBranches(TChain* t, const AnalysisTree::Configuration& config, std::set<std::string> names) {
+
+  std::cout << "GetPointersToBranches" << std::endl;
+  std::map<std::string, void*> ret;
+
+  if (names.empty()) {// all branches by default, if not implicitly specified
+    for (const auto& branch : config.GetBranchConfigs()) {
+      names.insert(branch.GetName());
+    }
+  }
+
+  for (const auto& branch_name : names) {// Init all pointers to branches
+    const auto& branch_config = config.GetBranchConfig(branch_name);
+    std::cout << "Adding branch pointer: " << branch_name << std::endl;
+    auto emplace_result = ret.emplace(branch_name, nullptr);
+    if (!emplace_result.second) {
+      throw std::runtime_error("Branch '" + branch_name + "' already has pointer");
+    }
+    auto &new_element = *emplace_result.first;
+    switch (branch_config.GetType()) {
+      case DetType::kTrack:
+        new_element.second = new TrackDetector;
+        t->SetBranchAddress(branch_name.c_str(), (TrackDetector**) &new_element.second);
+        break;
+      case DetType::kHit:
+        new_element.second = new HitDetector;
+        t->SetBranchAddress(branch_name.c_str(), (HitDetector**) &new_element.second);
+        break;
+      case DetType::kEventHeader:
+        new_element.second = new EventHeader;
+        t->SetBranchAddress(branch_name.c_str(), (EventHeader**) &new_element.second);
+        break;
+      case DetType::kParticle:
+        new_element.second = new Particles;
+        t->SetBranchAddress(branch_name.c_str(), (Particles**) &new_element.second);
+        break;
+      case DetType::kModule:
+        new_element.second = new ModuleDetector;
+        t->SetBranchAddress(branch_name.c_str(), (ModuleDetector**) &new_element.second);
+        break;
+    }
+  }
+
+  for (const auto& match : config.GetMatches()) {// Init all pointers to matching //TODO exclude unused
+    auto match_name = match.second;
+    std::cout << "Adding branch pointer: " << match.second << std::endl;
+    auto emplace_result = ret.emplace(match.second, nullptr);
+    if (!emplace_result.second) {
+      throw std::runtime_error("Branch '" + match.second + "' already has pointer");
+    }
+    auto &new_element = *emplace_result.first;
+    new_element.second = new Matching;
+    t->SetBranchAddress(match_name.c_str(), (Matching**) &new_element.second);
+  }
+
+  t->GetEntry(0);//init pointers
+  return ret;
+}

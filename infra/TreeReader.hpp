@@ -91,60 +91,9 @@ static inline Configuration* GetConfigurationFromFileList(const std::vector<std:
  * @param names List of selected branches. If empty, loads all branches found in Configuration
  * @return
  */
-static inline std::map<std::string, void*> GetPointersToBranches(TChain* t, const Configuration& config,
-                                                                 std::set<std::string> names = {}) {
-
-  std::cout << "GetPointersToBranches" << std::endl;
-  std::map<std::string, void*> ret;
-
-  if (names.empty()) {// all branches by default, if not implicitly specified
-    for (const auto& branch : config.GetBranchConfigs()) {
-      names.insert(branch.GetName());
-    }
-  }
-
-  for (const auto& branch : names) {// Init all pointers to branches
-    void* branch_ptr{nullptr};
-    const auto& branch_config = config.GetBranchConfig(branch);
-    std::cout << "Adding branch pointer: " << branch << std::endl;
-    switch (branch_config.GetType()) {
-      case DetType::kTrack: {
-        branch_ptr = new TrackDetector;
-        break;
-      }
-      case DetType::kHit: {
-        branch_ptr = new HitDetector;
-        break;
-      }
-      case DetType::kEventHeader: {
-        branch_ptr = new EventHeader;
-        break;
-      }
-      case DetType::kParticle: {
-        branch_ptr = new Particles;
-        break;
-      }
-      case DetType::kModule: {
-        branch_ptr = new ModuleDetector;
-        break;
-      }
-    }
-    ret.emplace(branch, branch_ptr);
-  }
-
-  for (const auto& match : config.GetMatches()) {// Init all pointers to matching //TODO exclude unused
-    auto* matching_ptr = new Matching;
-    std::cout << "Adding branch pointer: " << match.second << std::endl;
-    ret.emplace(match.second, matching_ptr);
-  }
-
-  for (auto& branch_map_entry : ret) {
-    t->SetBranchAddress(branch_map_entry.first.c_str(), &branch_map_entry.second);
-  }
-  t->GetEntry(0);//init pointers
-
-  return ret;
-}
+std::map<std::string, void*>
+GetPointersToBranches(TChain* t, const Configuration& config,
+                      std::set<std::string> names = {});
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_TREEREADER_H
