@@ -47,6 +47,8 @@ class Container : public IndexedObject, public Vector<int>, public Vector<float>
   Container& operator=(Container&&) = default;
   Container& operator=(const Container& part) = default;
 
+  virtual ~Container() {};
+
   template<typename T>
   void SetField(T value, Integer_t iField) { Vector<T>::SetField(value, iField); }
   template<typename T>
