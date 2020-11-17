@@ -7,12 +7,15 @@ set(SOURCES
   TreeReader.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-  BranchView.cpp
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
 endif()
+
+if (AnalysisTree_BUILD_EXPERIMENTAL)
+    list(APPEND SOURCES BranchView.cpp)
+endif ()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
@@ -48,7 +51,6 @@ target_include_directories(AnalysisTreeInfra
 
 if(AnalysisTree_BUILD_TESTS)
     set(TEST_SOURCES
-            BranchView.test.cpp
             Variable.test.cpp
             Cuts.test.cpp
             Field.test.cpp
@@ -56,6 +58,10 @@ if(AnalysisTree_BUILD_TESTS)
             SimpleCut.test.cpp
             VarManager.test.cpp
             )
+
+    if (AnalysisTree_BUILD_EXPERIMENTAL)
+        list(APPEND TEST_SOURCES BranchView.test.cpp)
+    endif()
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
