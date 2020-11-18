@@ -73,7 +73,7 @@ class Cuts {
   void Print() const;
 
   [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
-  [[deprecated]]
+  ANALYSISTREE_ATTR_DEPRECATED()
   [[nodiscard]] const std::string&
   GetBranchName() const {
     assert(branch_names_.size() == 1);

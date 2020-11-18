@@ -16,11 +16,7 @@ namespace AnalysisTree {
 class Variable;
 class Cuts;
 
-#if USEBOOST
-using BranchPointer = boost::variant<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-#else
-using BranchPointer = std::variant<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-#endif
+using BranchPointer = ANALYSISTREE_UTILS_VARIANT<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
 
 /**
  * @brief BranchReader keeps data-object associated with tree branch and list of cuts for this branch
