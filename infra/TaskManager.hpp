@@ -8,7 +8,7 @@
 #include "Chain.hpp"
 #include "Cuts.hpp"
 #include "Task.hpp"
-//#include "TreeReader.hpp"
+#include "Matching.hpp"
 
 class TTree;
 class TFile;
@@ -48,26 +48,42 @@ class TaskManager {
   virtual void Run(long long nEvents);
   virtual void Finish();
 
-  void SetOutputName(std::string file, std::string tree) {
-    out_file_name_ = std::move(file);
-    out_tree_name_ = std::move(tree);
-  }
-
   void AddTask(Task* task) { tasks_.emplace_back(task); }
 
   template<class Branch>
-  void AddBranch(const std::string& name, Branch* ptr, eBranchWriteMode mode = eBranchWriteMode::kNone) {
+  void AddBranch(const std::string& name, Branch** ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kNone) {
+    if(!*ptr){
+      *ptr = new Branch;
+    }
+//    (*ptr)->Init(config);
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
-      chain_->Branch(name.c_str(), &ptr);
+      chain_->Branch(name.c_str(), ptr);
+      chain_->GetConfiguration()->AddBranchConfig(std::move(config));
       update_current_tree_ = true;
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      out_tree_->Branch(name.c_str(), &ptr);
+      out_tree_->Branch(name.c_str(), ptr);
+      configuration_->AddBranchConfig(std::move(config));
       fill_out_tree_ = true;
     }
-//    branches_map_.emplace(name, ptr);
   }
+
+  void AddMatching(const std::string& br1, const std::string& br2, Matching** match, eBranchWriteMode mode = eBranchWriteMode::kNone){
+    if(mode == eBranchWriteMode::kUpdateCurrentTree){
+//      chain_->GetConfiguration()->AddMatch(match);
+//      chain_->Branch(chain_->GetConfiguration()->GetMatchName(br1, br2).c_str(), &match);
+//      update_current_tree_ = true;
+    }
+    else if (mode == eBranchWriteMode::kCreateNewTree){
+      assert(out_tree_);
+      *match = new Matching(configuration_->GetBranchConfig(br1).GetId(), configuration_->GetBranchConfig(br2).GetId());
+      configuration_->AddMatch(*match);
+      out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), match);
+      fill_out_tree_ = true;
+    }
+  }
+
 
   [[nodiscard]] const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
   [[nodiscard]] const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
@@ -77,19 +93,18 @@ class TaskManager {
   TaskManager() = default;
   static TaskManager* manager_;
 
+  void InitOutChain();
+
 //  std::unique_ptr<Chain> chain_{nullptr};
   Chain* chain_;
   std::vector<Task*> tasks_{};
 
   // output data members
-  std::string out_file_name_;
-  std::string out_tree_name_;
-  TFile* out_file_{nullptr};
   TTree* out_tree_{nullptr};
-  AnalysisTree::Configuration* out_config_{nullptr};
+  Configuration* configuration_{nullptr};
+  DataHeader* data_header_{nullptr};
 
   bool is_init_{false};
-
   bool fill_out_tree_{false};
   bool update_current_tree_{false};
 };

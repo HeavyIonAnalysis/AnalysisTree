@@ -23,11 +23,13 @@ class Chain : public TChain {
 
   Chain() : TChain() {};
 
-  Chain(const std::string& name) :
-     TChain(name.c_str()),
-     configuration_(new Configuration),
-     data_header_(new DataHeader)
-  {};
+  Chain(TTree* tree, Configuration* config, DataHeader* data_header) :
+      TChain(tree->GetName()),
+      configuration_(config),
+      data_header_(data_header)
+  {
+    this->AddFriend(tree);
+  }
 
   Chain(std::vector<std::string> filelists, std::vector<std::string> treenames) :
    TChain(treenames.at(0).c_str()),

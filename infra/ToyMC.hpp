@@ -29,42 +29,28 @@ class ToyMC : public Task {
 
     auto* man = TaskManager::GetInstance();
 
-
-    out_tree_ = new TTree("tTree", "test tree");
-
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
     sim_eh.AddField<float>("psi_RP");
 
-    config_.AddBranchConfig(sim_eh);
-    sim_event_header_ = new EventHeader(config_.GetLastId());
+    man->AddBranch("SimEventHeader", &sim_event_header_, sim_eh, TaskManager::eBranchWriteMode::kCreateNewTree);
+    man->AddBranch("SimParticles", &particles_, BranchConfig{"SimParticles", DetType::kParticle}, TaskManager::eBranchWriteMode::kCreateNewTree);
+    man->AddBranch("RecTracks", &track_detector_, BranchConfig{"RecTracks", DetType::kTrack}, TaskManager::eBranchWriteMode::kCreateNewTree);
+    man->AddMatching("RecTracks", "SimParticles", &rec_tracks_to_sim_, TaskManager::eBranchWriteMode::kCreateNewTree);
+
     sim_event_header_->Init(sim_eh);
 
-    config_.AddBranchConfig(BranchConfig{"SimParticles", DetType::kParticle});
-    particles_ = new Particles(config_.GetLastId());
-
-    config_.AddBranchConfig(BranchConfig{"RecTracks", DetType::kTrack});
-    track_detector_ = new TrackDetector(config_.GetLastId());
-
-    rec_tracks_to_sim_ = new Matching(track_detector_->GetId(), particles_->GetId());
-    config_.AddMatch(rec_tracks_to_sim_);
-
-    man->AddBranch("SimEventHeader", sim_event_header_, TaskManager::eBranchWriteMode::kCreateNewTree);
-
-    out_tree_->Branch("SimEventHeader", &sim_event_header_);
-    out_tree_->Branch("SimParticles", &particles_);
-    out_tree_->Branch("RecTracks", &track_detector_);
-    out_tree_->Branch("RecTracks2SimParticles", &rec_tracks_to_sim_);
   }
 
-  void GenerateEvents(long n_events){
-    Init();
-    for (long i_event = 0; i_event<n_events; ++i_event) {
-      FillEventInfo();
-      FillMcParticles();
-      FillRecoTracks();
-      out_tree_->Fill();
-    }
+  void Exec() override {
+    FillEventInfo();
+    FillMcParticles();
+    FillRecoTracks();
   }
+
+  void Finish() override {
+
+  }
+
 
   void FillEventInfo(){
     sim_event_header_->SetVertexPosition3({0,0,0});
@@ -112,17 +98,16 @@ class ToyMC : public Task {
   }
 
   void WriteToFile(const std::string& filename, const std::string& filelist="") const {
-    TFile* file{TFile::Open(filename.c_str(), "recreate")};
-    config_.Write("Configuration");
-    dh_.Write("DataHeader");
-    out_tree_->Write();
-    file->Close();
-
-    if(!filelist.empty()){
-      std::ofstream fl(filelist);
-      fl << filename << "\n";
-      fl.close();
-    }
+//    TFile* file{TFile::Open(filename.c_str(), "recreate")};
+//    config_.Write("Configuration");
+//    dh_.Write("DataHeader");
+//    out_tree_->Write();
+//    file->Close();
+//    if(!filelist.empty()){
+//      std::ofstream fl(filelist);
+//      fl << filename << "\n";
+//      fl.close();
+//    }
   }
 
  protected:
@@ -146,11 +131,6 @@ class ToyMC : public Task {
   Matching* rec_tracks_to_sim_{nullptr};
 
   TH2* efficiency_map_{nullptr};
-
-  // output data
-  Configuration config_;
-  DataHeader dh_;
-  TTree* out_tree_{nullptr};
 
   float GetPhi(RandomEngine &engine, float psi) {
     return phi_distr_(engine) + psi;
