@@ -2,6 +2,7 @@
 #define ANALYSISTREE_FILLTASK_H_
 
 #include "Configuration.hpp"
+#include "Utils.hpp"
 
 class TChain;
 class TTree;
@@ -35,9 +36,9 @@ class FillTask {
   void SetInputBranchNames(const std::vector<std::string>& br) { in_branches_ = br; }
   void SetOutputBranchName(const std::string& br) { out_branch_ = br; }
 
-  [[nodiscard]] const std::string& GetOutputBranchName() const { return out_branch_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetOutputBranchName() const { return out_branch_; }
 
-  [[nodiscard]] const std::vector<std::string>& GetInputBranchNames() const { return in_branches_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<std::string>& GetInputBranchNames() const { return in_branches_; }
 
  protected:
   TChain* in_chain_{nullptr};

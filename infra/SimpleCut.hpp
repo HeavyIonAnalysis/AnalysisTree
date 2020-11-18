@@ -91,8 +91,8 @@ class SimpleCut {
   void Print() const;
 
   std::vector<Variable>& Variables() { return vars_; }
-  [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_; }
-  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
 
   friend bool operator==(const SimpleCut& that, const SimpleCut& other);
 

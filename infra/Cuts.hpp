@@ -72,16 +72,16 @@ class Cuts {
   void Init(const Configuration& conf);
   void Print() const;
 
-  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
   ANALYSISTREE_ATTR_DEPRECATED()
-  [[nodiscard]] const std::string&
+  ANALYSISTREE_ATTR_NODISCARD const std::string&
   GetBranchName() const {
     assert(branch_names_.size() == 1);
     return *branch_names_.begin();
   }
 
-  [[nodiscard]] std::set<short> GetBranchIds() const { return branch_ids_; }
-  [[nodiscard]] const std::string& GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD std::set<short> GetBranchIds() const { return branch_ids_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
 
   std::vector<SimpleCut>& GetCuts() { return cuts_; }
 

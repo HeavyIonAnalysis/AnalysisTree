@@ -28,19 +28,19 @@ class BranchReader {
   BranchReader() = default;
   BranchReader(std::string name, void* data, DetType type, Cuts* cuts = nullptr);
 
-  [[nodiscard]] const std::string& GetName() const { return name_; }
-  [[nodiscard]] DetType GetType() const { return type_; }
-  [[nodiscard]] const Cuts* GetCut() const { return cuts_; }
-  [[nodiscard]] double GetValue(const Variable& var, int i_channel);
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
+  ANALYSISTREE_ATTR_NODISCARD const Cuts* GetCut() const { return cuts_; }
+  ANALYSISTREE_ATTR_NODISCARD double GetValue(const Variable& var, int i_channel);
 
   size_t GetNumberOfChannels();
   bool ApplyCut(int i_channel);
 
-  [[nodiscard]] const BranchPointer& GetData() const {
+  ANALYSISTREE_ATTR_NODISCARD const BranchPointer& GetData() const {
     return data_;
   }
 
-  [[nodiscard]] int GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD int GetId() const { return id_; }
 
  protected:
   std::string name_;
