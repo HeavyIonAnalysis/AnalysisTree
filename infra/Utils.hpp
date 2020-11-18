@@ -5,6 +5,10 @@
 #ifndef ANALYSISTREE_INFRA_UTILS_HPP
 #define ANALYSISTREE_INFRA_UTILS_HPP
 
+#ifndef __has_include
+#   define __has_include(MACRO) 0
+#endif
+
 #if __has_include(<variant>)
 #   include <variant>
 #   if defined(__cpp_lib_variant)
