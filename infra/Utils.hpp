@@ -15,14 +15,10 @@
 #     define ANALYSISTREE_STD_VARIANT 1
 #     define ANALYSISTREE_UTILS_VARIANT std::variant
 #     define ANALYSISTREE_UTILS_VISIT std::visit
-#   else
-#     define ANALYSISTREE_STD_VARIANT 0
 #   endif
-#else
-#   define ANALYSISTREE_STD_VARIANT 0
 #endif
 
-#if !defined(ANALYSISTREE_UTILS_VARIANT)
+#if !defined(ANALYSISTREE_STD_VARIANT) && defined(ANALYSISTREE_BOOST_FOUND)
 #   include <boost/variant.hpp>
 #   include <boost/variant/static_visitor.hpp>
 #   define ANALYSISTREE_BOOST_VARIANT 1
