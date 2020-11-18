@@ -5,8 +5,8 @@
 // To be removed after c++17 will be available everywhere
 
 #include "Utils.hpp"
-#include <AnalysisTree/Cuts.hpp>
-#include <AnalysisTree/Variable.hpp>
+#include "Cuts.hpp"
+#include "Variable.hpp"
 
 namespace AnalysisTree {
 
