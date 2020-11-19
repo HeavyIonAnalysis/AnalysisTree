@@ -41,10 +41,10 @@ class Chain : public TChain {
     InitDataHeader();
   };
 
-  [[nodiscard]] Configuration* GetConfiguration() const { return configuration_; }
-  [[nodiscard]] DataHeader* GetDataHeader() const { return data_header_; }
-  [[nodiscard]] const std::map<std::string, BranchPointer>& GetBranchPointers() const { return branches_; }
-  [[nodiscard]] const std::map<std::string, Matching*>& GetMatchPointers() const { return matches_; }
+  ANALYSISTREE_ATTR_NODISCARD Configuration* GetConfiguration() const { return configuration_; }
+  ANALYSISTREE_ATTR_NODISCARD DataHeader* GetDataHeader() const { return data_header_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, BranchPointer>& GetBranchPointers() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, Matching*>& GetMatchPointers() const { return matches_; }
 
   BranchPointer GetPointerToBranch(const std::string& name){
     auto br = branches_.find(name);

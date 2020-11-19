@@ -28,8 +28,6 @@ class Container : public IndexedObject {
   template<class T>
   const std::vector<T>& GetVector() const;
 
-  virtual ~Container() {};
-
   template<typename T>
   void SetField(T value, Integer_t field_id){
     Vector<T>().at(field_id) = value;

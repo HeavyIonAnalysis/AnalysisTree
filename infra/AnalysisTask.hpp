@@ -28,14 +28,14 @@ class AnalysisTask : public Task {
   void Exec() override;
   void Finish() override{};
 
-  [[nodiscard]] const array2D& GetValues(int i_var) const { return entries_.at(i_var).GetValues(); }
-  [[nodiscard]] const std::vector<BranchReader>& GetBranches() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD const array2D& GetValues(int i_var) const { return entries_.at(i_var).GetValues(); }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<BranchReader>& GetBranches() const { return branches_; }
 
   std::vector<BranchReader>& Branches() { return branches_; }
   BranchReader GetBranch(const std::string& name);
 
-  [[nodiscard]] const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
-  [[nodiscard]] std::vector<AnalysisEntry>& VarEntries() { return entries_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
+  ANALYSISTREE_ATTR_NODISCARD std::vector<AnalysisEntry>& VarEntries() { return entries_; }
 
  protected:
   std::vector<AnalysisEntry> entries_{};

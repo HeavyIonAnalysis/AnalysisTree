@@ -34,9 +34,9 @@ class Task {
 
   void SetInputBranchNames(const std::set<std::string>& br) { in_branches_ = br; }
 
-  [[nodiscard]] const std::set<std::string>& GetInputBranchNames() const { return in_branches_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetInputBranchNames() const { return in_branches_; }
 
-  [[nodiscard]] bool IsGoodEvent(const EventHeader& event_header) const {
+  ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const EventHeader& event_header) const {
     return event_cuts_ ? event_cuts_->Apply(event_header) : true;
   }
 

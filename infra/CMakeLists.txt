@@ -10,7 +10,8 @@ set(SOURCES
   AnalysisTask.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-        )
+  Chain.cpp
+    )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
@@ -23,7 +24,7 @@ endif ()
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp")
+list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)

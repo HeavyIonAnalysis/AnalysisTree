@@ -64,7 +64,7 @@ class AnalysisTaskTest : public AnalysisTask {
     }
   }
 
-  [[nodiscard]] const std::vector<AnalysisTaskEntryTest>& GetEntriesTest() const {
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<AnalysisTaskEntryTest>& GetEntriesTest() const {
     return entries_test_;
   }
 

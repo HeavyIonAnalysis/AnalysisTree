@@ -85,9 +85,9 @@ class TaskManager {
   }
 
 
-  [[nodiscard]] const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
-  [[nodiscard]] const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
-  [[nodiscard]] Chain* GetChain() const { return chain_; }
+  ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
+  ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
+  ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
 
  protected:
   TaskManager() = default;
