@@ -14,6 +14,11 @@ void TaskManager::Init() {
     auto br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
   }
+
+  if (event_cuts_) {
+    branch_names.insert(event_cuts_->GetBranches().cbegin(), event_cuts_->GetBranches().cend());
+  }
+
   if (in_tree_ && in_config_) {
     branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
   }
