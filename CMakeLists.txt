@@ -33,6 +33,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 # CMake options
 set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
 set(AnalysisTree_BUILD_EXAMPLES ON CACHE BOOL "Build examples for the AnalysisTree")
+set(AnalysisTree_BUILD_EXPERIMENTAL OFF CACHE BOOL "Build experimental features for the AnalysisTree")
 
 # Tests
 include(TestsSetup)

@@ -8,6 +8,7 @@
 
 #include "Constants.hpp"
 #include "Variable.hpp"
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
@@ -30,7 +31,7 @@ class SimpleCut {
   * @param min minimal accepted value
   * @param max maximal accepted value
   */
-  [[deprecated("Use AnalysisTree::RangeCut instead")]]
+  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::RangeCut instead")
   SimpleCut(const Variable& var, float min, float max, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
@@ -41,7 +42,7 @@ class SimpleCut {
   * @param field name of the field
   * @param value only objects with field == value will be accepted
   */
-  [[deprecated("Use AnalysisTree::EqualsCut")]]
+  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::EqualsCut")
   SimpleCut(const Variable& var, int value, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
@@ -90,8 +91,8 @@ class SimpleCut {
   void Print() const;
 
   std::vector<Variable>& Variables() { return vars_; }
-  [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_; }
-  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
 
   friend bool operator==(const SimpleCut& that, const SimpleCut& other);
 
