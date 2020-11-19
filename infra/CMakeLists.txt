@@ -1,3 +1,6 @@
+
+find_package(Boost QUIET)
+
 set(SOURCES
   SimpleCut.cpp
   Cuts.cpp
@@ -7,18 +10,15 @@ set(SOURCES
   AnalysisTask.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-#  BranchView.cpp
-  Chain.cpp
-)
-
-#temp solution
-if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
-    list(APPEND SOURCES "BranchView.cpp")
-endif()
+        )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
 endif()
+
+if (AnalysisTree_BUILD_EXPERIMENTAL)
+    list(APPEND SOURCES BranchView.cpp)
+endif ()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
@@ -27,11 +27,21 @@ list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
-        
+target_compile_definitions(AnalysisTreeInfra PUBLIC
+        $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
+
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS}
         LINKDEF AnalysisTreeInfraLinkDef.h
-        OPTIONS -I${CMAKE_BINARY_DIR}/include)
-target_link_libraries(AnalysisTreeInfra ${ROOT_LIBRARIES} AnalysisTreeBase)
+        OPTIONS
+            -I${CMAKE_BINARY_DIR}/include
+            $<$<BOOL:${Boost_FOUND}>:-DANALYSISTREE_BOOST_FOUND>
+        )
+target_link_libraries(AnalysisTreeInfra
+        PUBLIC
+            ${ROOT_LIBRARIES}
+            AnalysisTreeBase
+            $<$<BOOL:${Boost_FOUND}>:${Boost_LIBRARIES}>
+        )
 
 foreach(HEADER ${HEADERS})
     set(HEADER_ABS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${HEADER})
@@ -63,14 +73,13 @@ if(AnalysisTree_BUILD_TESTS)
 #            ToyMC.test.cpp
             )
 
-    if(CMAKE_CXX_STANDARD GREATER_EQUAL 17)
-        list(APPEND TEST_SOURCES "BranchView.test.cpp")
+    if (AnalysisTree_BUILD_EXPERIMENTAL)
+        list(APPEND TEST_SOURCES BranchView.test.cpp)
     endif()
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
-
-
+    gtest_discover_tests(AnalysisTreeInfra_UnitTests TEST_PREFIX AnalysisTreeInfra_)
 endif()
 
 install(TARGETS AnalysisTreeInfra EXPORT AnalysisTreeTargets

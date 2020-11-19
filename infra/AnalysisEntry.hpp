@@ -31,13 +31,13 @@ class AnalysisEntry {
 
   size_t AddVariable(const Variable& var);
 
-  [[nodiscard]] const array2D& GetValues() const { return values_; }
-  [[nodiscard]] const std::set<std::string>& GetBranchNames() const { return branch_names_; }
-  [[nodiscard]] const std::vector<BranchReader>& GetBranches() const { return branches_; }
-  [[nodiscard]] size_t GetNumberOfBranches() const { return branch_names_.size(); }
-  [[nodiscard]] const Cuts* GetCuts() const { return cuts_; }
-  [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_; }
-  [[nodiscard]] std::vector<Variable>& Variables() { return vars_; }
+  ANALYSISTREE_ATTR_NODISCARD const array2D& GetValues() const { return values_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranchNames() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<BranchReader>& GetBranches() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfBranches() const { return branch_names_.size(); }
+  ANALYSISTREE_ATTR_NODISCARD const Cuts* GetCuts() const { return cuts_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
+  ANALYSISTREE_ATTR_NODISCARD std::vector<Variable>& Variables() { return vars_; }
 
   void AddBranchPointer(const BranchReader& branch) { branches_.emplace_back(branch); }
   void SetMatching(Matching* matching) { matching_ = matching; }
@@ -49,8 +49,8 @@ class AnalysisEntry {
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2);
-  [[nodiscard]] bool ApplyCutOnBranch(const BranchReader& br, int i_channel) const;
-  [[nodiscard]] bool ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const;
+  ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranch(const BranchReader& br, int i_channel) const;
+  ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const;
   static double FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2);
 
   std::vector<Variable> vars_{};

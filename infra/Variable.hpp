@@ -60,14 +60,14 @@ class Variable {
 
   void Init(const Configuration& conf);
 
-  [[nodiscard]] const std::string& GetName() const { return name_; }
-  [[nodiscard]] const std::vector<Field>& GetFields() const { return fields_; }
-  [[nodiscard]] size_t GetNumberOfBranches() const { return branch_names_.size(); }
-  [[nodiscard]] std::set<std::string> GetBranches() const { return branch_names_; }
-  [[nodiscard]] short GetSize() const { return size_; }
-  [[nodiscard]] short GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<Field>& GetFields() const { return fields_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfBranches() const { return branch_names_.size(); }
+  ANALYSISTREE_ATTR_NODISCARD std::set<std::string> GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetSize() const { return size_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetId() const { return id_; }
 
-  [[nodiscard]] std::string GetBranchName() const { return *branch_names_.begin(); }
+  ANALYSISTREE_ATTR_NODISCARD std::string GetBranchName() const { return *branch_names_.begin(); }
 
   template<class T>
   double GetValue(const T& object) const;

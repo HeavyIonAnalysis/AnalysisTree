@@ -9,7 +9,6 @@
 #include "Track.hpp"
 
 namespace AnalysisTree {
-
 /**
  * A base class for any kind of channel detector.
  * As an IndexAccessor has an access to index variable if the Channel

@@ -26,6 +26,8 @@ class Track : public Container {
   Track& operator=(const Track& track) = default;
   ~Track() override = default;
 
+  virtual ~Track() {};
+
   /**
   * Calculates 4-momentum
   * @param mass - track mass hypotesis in GeV/c^2

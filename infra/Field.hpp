@@ -5,6 +5,7 @@
 #include <string>
 
 #include "Constants.hpp"
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
@@ -37,14 +38,14 @@ class Field {
    */
   void Init(const Configuration& conf);
 
-  [[nodiscard]] const std::string& GetName() const { return field_; }
-  [[nodiscard]] const std::string& GetBranchName() const { return branch_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return field_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetBranchName() const { return branch_; }
 
-  [[nodiscard]] short GetBranchId() const { return branch_id_; }
-  [[nodiscard]] short GetFieldId() const { return field_id_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetBranchId() const { return branch_id_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetFieldId() const { return field_id_; }
 
-  [[nodiscard]] DetType GetBranchType() const { return branch_type_; }
-  [[nodiscard]] Types GetFieldType() const { return field_type_; }
+  ANALYSISTREE_ATTR_NODISCARD DetType GetBranchType() const { return branch_type_; }
+  ANALYSISTREE_ATTR_NODISCARD Types GetFieldType() const { return field_type_; }
 
   /**
    * @brief Gets numerical value from data-object associated with TTree
