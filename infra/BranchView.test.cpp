@@ -13,14 +13,14 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeBranch, Test_GetFields) {
+TEST(AnalysisTreeBranch, GetFields) {
   BranchConfig c("test", DetType::kEventHeader);
   AnalysisTreeBranch<EventHeader> br(c);
 
   EXPECT_EQ(br.GetFields(), std::vector<std::string>({"vtx_x", "vtx_y", "vtx_z"}));
 }
 
-TEST(Test_AnalysisTreeBranch, Test_GetNChannels) {
+TEST(AnalysisTreeBranch, GetNChannels) {
   BranchConfig c("test", DetType::kEventHeader);
   AnalysisTreeBranch<EventHeader> br(c);
   EXPECT_EQ(br.GetNumberOfChannels(), 1);
@@ -30,7 +30,7 @@ TEST(Test_AnalysisTreeBranch, Test_GetNChannels) {
   EXPECT_EQ(br1.GetNumberOfChannels(), 0);
 }
 
-TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
+TEST(AnalysisTreeBranch, GetDataMatrix) {
   BranchConfig event_header_config("test", DetType::kEventHeader);
   auto data_event_header = new EventHeader;
 
@@ -79,7 +79,7 @@ TEST(Test_AnalysisTreeBranch, Test_GetDataMatrix) {
   }
 }
 
-TEST(Test_BranchViewAction, Define) {
+TEST(BranchViewAction, Define) {
   BranchConfig event_header_config("test", DetType::kEventHeader);
   auto data_event_header = new EventHeader;
 
@@ -117,7 +117,7 @@ TEST(Test_BranchViewAction, Define) {
   EXPECT_EQ(atb.Define("bool_const", {}, []() -> bool { return true; })->GetFieldPtr("bool_const")->GetFieldTypeStr(), "bool");
 }
 
-TEST(Test_BranchViewAction, Filter) {
+TEST(BranchViewAction, Filter) {
   BranchConfig event_header_config("test", DetType::kEventHeader);
   auto data_event_header = new EventHeader;
   BranchConfig vtx_tracks_config("vtx_tracks", DetType::kTrack);
@@ -173,7 +173,7 @@ TEST(Test_BranchViewAction, Filter) {
   std::cout << *filter_px;
 }
 
-TEST(Test_BranchViewAction, Rename) {
+TEST(BranchViewAction, Rename) {
   BranchConfig c("test", DetType::kEventHeader);
   AnalysisTreeBranch<EventHeader> br(c);
 
@@ -192,7 +192,7 @@ TEST(Test_BranchViewAction, Rename) {
   EXPECT_EQ(br.AddPrefix("sim_")->GetFields(), std::vector<std::string>({"sim_vtx_x", "sim_vtx_y", "sim_vtx_z"}));
 }
 
-TEST(Test_BranchViewAction, Merge) {
+TEST(BranchViewAction, Merge) {
 
   BranchConfig rec_header_config("rec_event", DetType::kEventHeader);
   AnalysisTreeBranch<EventHeader> rec_header_branch(rec_header_config);

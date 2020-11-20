@@ -16,11 +16,7 @@ namespace AnalysisTree {
 class Variable;
 class Cuts;
 
-#if USEBOOST
-using BranchPointer = boost::variant<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-#else
-using BranchPointer = std::variant<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-#endif
+using BranchPointer = ANALYSISTREE_UTILS_VARIANT<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
 
 /**
  * @brief BranchReader keeps data-object associated with tree branch and list of cuts for this branch
@@ -30,21 +26,21 @@ class BranchReader {
 
  public:
   BranchReader() = default;
-  BranchReader(std::string name, void* data, DetType type, Cuts* cuts = nullptr);
+  BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts = nullptr);
 
-  [[nodiscard]] const std::string& GetName() const { return name_; }
-  [[nodiscard]] DetType GetType() const { return type_; }
-  [[nodiscard]] const Cuts* GetCut() const { return cuts_; }
-  [[nodiscard]] double GetValue(const Variable& var, int i_channel) const;
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
+  ANALYSISTREE_ATTR_NODISCARD const Cuts* GetCut() const { return cuts_; }
+  ANALYSISTREE_ATTR_NODISCARD double GetValue(const Variable& var, int i_channel) const;
 
-  [[nodiscard]] size_t GetNumberOfChannels() const;
-  [[nodiscard]] bool ApplyCut(int i_channel) const;
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfChannels() const;
+  ANALYSISTREE_ATTR_NODISCARD bool ApplyCut(int i_channel) const;
 
-  [[nodiscard]] const BranchPointer& GetData() const {
+  ANALYSISTREE_ATTR_NODISCARD const BranchPointer& GetData() const {
     return data_;
   }
 
-  [[nodiscard]] int GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD int GetId() const { return id_; }
 
  protected:
   std::string name_;

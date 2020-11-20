@@ -18,7 +18,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeInfra, Test_RangeCut) {
+TEST(Cuts, RangeCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
   VtxTracksBranch.AddField<float>("chi2");
@@ -47,7 +47,7 @@ TEST(Test_AnalysisTreeInfra, Test_RangeCut) {
   ASSERT_FALSE(cut_false2.Apply(*track));
 }
 
-TEST(Test_AnalysisTreeInfra, Test_EqualCut) {
+TEST(Cuts, EqualCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
   VtxTracksBranch.AddField<int>("nhits");
@@ -84,7 +84,7 @@ TEST(Test_AnalysisTreeInfra, Test_EqualCut) {
   ASSERT_FALSE(cut_false3.Apply(*track));
 }
 
-TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
+TEST(Cuts, FunctionalCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
   VtxTracksBranch.AddFields<float>({"dcax", "dcay", "dcaz"});
@@ -101,9 +101,9 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   track->SetField(int(10), VtxTracksBranch.GetFieldId("Nhits_vtpc2"));
   track->SetField(int(40), VtxTracksBranch.GetFieldId("Nhits_mtpc"));
 
-  SimpleCut testCutDcaXY_true({{"VtxTracks", "dcax"}, {"VtxTracks", "dcay"}},
+  SimpleCut testCutDcaXY_true({{"VtxTracks.dcax"}, {"VtxTracks.dcay"}},
                               [](std::vector<double>& dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 2; });
-  SimpleCut testCutDcaXY_false({{"VtxTracks", "dcax"}, {"VtxTracks", "dcay"}},
+  SimpleCut testCutDcaXY_false({{"VtxTracks.dcax"}, {"VtxTracks.dcay"}},
                                [](std::vector<double>& dca) { return dca[0] * dca[0] + dca[1] * dca[1] < 1; });
 
   Cuts dca_true("dca_true", {testCutDcaXY_true});
@@ -113,7 +113,7 @@ TEST(Test_AnalysisTreeInfra, Test_FunctionalCut) {
   dca_false.Init(conf);
 
   SimpleCut testCutNhits_true(
-      {{"VtxTracks", "Nhits_vtpc1"}, {"VtxTracks", "Nhits_vtpc2"}, {"VtxTracks", "Nhits_mtpc"}},
+      {{"VtxTracks.Nhits_vtpc1"}, {"VtxTracks.Nhits_vtpc2"}, {"VtxTracks.Nhits_mtpc"}},
       [](std::vector<double>& nhits) { return nhits[0] + nhits[1] > 15 && nhits[0] + nhits[1] + nhits[2] > 30; });
 
   Cuts Nhits_true("Nhits_true", {testCutNhits_true});

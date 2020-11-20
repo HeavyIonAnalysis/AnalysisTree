@@ -4,20 +4,19 @@
 #include <utility>
 
 #include "Detector.hpp"
-#include "VarManager.hpp"
+#include "AnalysisTask.hpp"
 #include "Variable.hpp"
 
 namespace AnalysisTree {
 
-class PlainTreeFiller : public VarManager {
+class PlainTreeFiller : public AnalysisTask {
  public:
   PlainTreeFiller() = default;
 
   void AddBranch(const std::string& branch_name);
 
-  void Init(std::map<std::string, void*>& branches) override;
+  void Init() override;
   void Exec() override;
-
   void Finish() override;
 
  protected:
@@ -26,7 +25,6 @@ class PlainTreeFiller : public VarManager {
   std::string branch_name_;
 
   std::vector<float> vars_{};
-
 };
 
 }// namespace AnalysisTree

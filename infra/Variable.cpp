@@ -1,6 +1,7 @@
 #include "Variable.hpp"
 
 #include <algorithm>
+#include <regex>
 
 #include "Configuration.hpp"
 
@@ -50,6 +51,18 @@ bool operator>(const AnalysisTree::Variable& that, const AnalysisTree::Variable&
 
 bool operator<(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
   return that.name_ > other.name_;
+}
+
+Variable Variable::FromString(const std::string& full_name) {
+  const std::regex name_regex("^(\\w+)[\\.\\/](\\w+)$");
+  std::smatch match;
+  auto search_ok = std::regex_search(full_name, match, name_regex);
+  if (search_ok) {
+    std::string branch_name {match.str(1)};
+    std::string field_name  {match.str(2)};
+    return Variable(branch_name, field_name);
+  }
+  throw std::runtime_error("Field name must be in the format <branch>.<name>");
 }
 
 }// namespace AnalysisTree

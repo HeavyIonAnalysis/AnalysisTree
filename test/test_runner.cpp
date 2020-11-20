@@ -1,25 +1,24 @@
 #include <gtest/gtest.h>
 
-#include <core/Detector.test.hpp>
+#include <core/BranchConfig.test.cpp>
+#include <core/Configuration.test.cpp>
+#include <core/Container.test.cpp>
+#include <core/DataHeader.test.cpp>
+#include <core/Detector.test.cpp>
+#include <core/EventHeader.test.cpp>
 #include <core/Hit.test.hpp>
-#include <core/IndexedObject.test.hpp>
-#include <core/Module.test.hpp>
-#include <core/Track.test.hpp>
-#include <core/BranchConfig.test.hpp>
-#include <core/Container.test.hpp>
-#include <core/Configuration.test.hpp>
-#include <core/Matching.test.hpp>
-#include <core/DataHeader.test.hpp>
-#include <core/Particle.test.hpp>
-#include <core/EventHeader.test.hpp>
-#include <core/ToyMC.test.hpp>
+#include <core/IndexedObject.test.cpp>
+#include <core/Matching.test.cpp>
+#include <core/Module.test.cpp>
+#include <core/Particle.test.cpp>
+#include <core/ToyMC.test.cpp>
+#include <core/Track.test.cpp>
 
-#include <infra/Field.test.hpp>
-#include <infra/Variable.test.hpp>
-#include <infra/SimpleCut.test.hpp>
-#include <infra/Cuts.test.hpp>
-#include <infra/VarManager.test.hpp>
-//#include <infra/PlainTreeFiller.test.hpp>
+#include <infra/Cuts.test.cpp>
+#include <infra/Field.test.cpp>
+#include <infra/PlainTreeFiller.test.cpp>
+#include <infra/SimpleCut.test.cpp>
+#include <infra/VarManager.test.cpp>
 
 int main(int argc, char **argv) {
 

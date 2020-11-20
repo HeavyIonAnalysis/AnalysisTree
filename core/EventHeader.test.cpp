@@ -2,13 +2,17 @@
 #define ANALYSISTREE_CORE_EVENTHEADER_TEST_HPP_
 
 #include <gtest/gtest.h>
+
+#include <TVector3.h>
+
 #include "EventHeader.hpp"
+
 
 namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_EventHeader) {
+TEST(EventHeader, Basics) {
 
   EventHeader event_header;
 

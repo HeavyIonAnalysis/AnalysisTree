@@ -10,7 +10,7 @@ namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_Container) {
+TEST(Container, Basics) {
 
   Container container;
 

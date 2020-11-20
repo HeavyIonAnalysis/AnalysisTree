@@ -1,21 +1,19 @@
 #ifndef ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
 
-#include "Constants.hpp"
 #include "Detector.hpp"
 
 #include <TFile.h>
 #include <TTree.h>
 #include <gtest/gtest.h>
 
-#include <random>
 #include <vector>
 
 namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeCore, Test_ChannelizedDetector) {
+TEST(Detector, ChannelizedDetector) {
   ModuleDetector module_detector;
   auto ch0 = module_detector.AddChannel();
   ASSERT_EQ(ch0->GetId(), 0);
@@ -30,7 +28,7 @@ TEST(Test_AnalysisTreeCore, Test_ChannelizedDetector) {
   ASSERT_EQ(module_detector.GetNumberOfChannels(), 0);
 }
 
-TEST(Test_AnalysisTreeCore, Test_WriteHit) {
+TEST(Detector, WriteHit) {
   TVector3 hitPosition(1, 1, 1);
 
   auto* hit = new Hit(1);
@@ -54,7 +52,7 @@ TEST(Test_AnalysisTreeCore, Test_WriteHit) {
   EXPECT_EQ(*newHit, *hit);
 }
 
-TEST(Test_AnalysisTreeCore, Test_WriteChannelizedDetector) {
+TEST(Detector, WriteChannelizedDetector) {
 
   TVector3 hitPosition(1., 1., 1.);
 

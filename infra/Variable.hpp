@@ -24,7 +24,11 @@ class Variable {
   Variable& operator=(const Variable&) = default;
   ~Variable() = default;
 
-  explicit Variable(std::string name) : name_(std::move(name)) {
+  /**
+   * @brief
+   * @param name
+   */
+  [[deprecated("Use Variable::fromString() instead")]] Variable(std::string name) : name_(std::move(name)) {
     fields_.emplace_back(Field(name_));
   };
 
@@ -36,11 +40,19 @@ class Variable {
   Variable(const std::string& branch, const std::string& field, short size = 1) : Variable({branch, field}, size) {}
 
   /**
-* Generic constructor for complicated variables
-* @param fields vector of Fields
-* @param lambda function to calculate variable
-*/
+   * Generic constructor for complicated variables
+   * @param fields vector of Fields
+   * @param lambda function to calculate variable
+   * TODO maybe move to Variable::FromFunction()
+   */
   Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda);
+
+  /**
+   * @brief
+   * @param full_name
+   * @return
+   */
+  static Variable FromString(const std::string& full_name);
 
   friend bool operator==(const Variable& that, const Variable& other);
   friend bool operator>(const Variable& that, const Variable& other);
@@ -48,14 +60,14 @@ class Variable {
 
   void Init(const Configuration& conf);
 
-  [[nodiscard]] const std::string& GetName() const { return name_; }
-  [[nodiscard]] const std::vector<Field>& GetFields() const { return fields_; }
-  [[nodiscard]] size_t GetNumberOfBranches() const { return branch_names_.size(); }
-  [[nodiscard]] std::set<std::string> GetBranches() const { return branch_names_; }
-  [[nodiscard]] short GetSize() const { return size_; }
-  [[nodiscard]] short GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<Field>& GetFields() const { return fields_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfBranches() const { return branch_names_.size(); }
+  ANALYSISTREE_ATTR_NODISCARD std::set<std::string> GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetSize() const { return size_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetId() const { return id_; }
 
-  [[nodiscard]] std::string GetBranchName() const { return *branch_names_.begin(); }
+  ANALYSISTREE_ATTR_NODISCARD std::string GetBranchName() const { return *branch_names_.begin(); }
 
   template<class T>
   double GetValue(const T& object) const;

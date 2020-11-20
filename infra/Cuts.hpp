@@ -3,6 +3,7 @@
 
 #include <set>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "Constants.hpp"
@@ -36,6 +37,14 @@ class Cuts {
     }
   };
 
+  Cuts(std::string name, std::initializer_list<SimpleCut> cuts) : name_(std::move(name)),
+                                                                  cuts_(cuts.begin(), cuts.end()) {
+    for (const auto& v : cuts_) {
+      const auto& br = v.GetBranches();
+      branch_names_.insert(br.begin(), br.end());
+    }
+  }
+
   template<class T>
   bool Apply(const T& ob) const {
     if (!is_init_) {
@@ -63,16 +72,16 @@ class Cuts {
   void Init(const Configuration& conf);
   void Print() const;
 
-  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
-  [[deprecated]]
-  [[nodiscard]] const std::string&
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_DEPRECATED()
+  ANALYSISTREE_ATTR_NODISCARD const std::string&
   GetBranchName() const {
     assert(branch_names_.size() == 1);
     return *branch_names_.begin();
   }
 
-  [[nodiscard]] std::set<short> GetBranchIds() const { return branch_ids_; }
-  [[nodiscard]] const std::string& GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD std::set<short> GetBranchIds() const { return branch_ids_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
 
   std::vector<SimpleCut>& GetCuts() { return cuts_; }
 

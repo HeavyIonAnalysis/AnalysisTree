@@ -1,6 +1,7 @@
 #ifndef ANALYSISTREE_SIMPLECUT_H
 #define ANALYSISTREE_SIMPLECUT_H
 
+#include <algorithm>
 #include <functional>
 #include <set>
 #include <string>
@@ -8,6 +9,7 @@
 
 #include "Constants.hpp"
 #include "Variable.hpp"
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
@@ -30,6 +32,7 @@ class SimpleCut {
   * @param min minimal accepted value
   * @param max maximal accepted value
   */
+  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::RangeCut instead")
   SimpleCut(const Variable& var, float min, float max, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
@@ -40,6 +43,7 @@ class SimpleCut {
   * @param field name of the field
   * @param value only objects with field == value will be accepted
   */
+  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::EqualsCut")
   SimpleCut(const Variable& var, int value, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
@@ -47,12 +51,15 @@ class SimpleCut {
   }
   /**
   * Constructor for generic cut: bool f(var1, var2, ..., varn)
-  * @param vars vector of Variables needed for a cut
+  * @param vars vector of variable NAMES needed for a cut
   * @param lambda function of fields, returns bool
   */
-  SimpleCut(std::vector<Variable> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
-                                                                                                                    vars_(std::move(vars)),
+  SimpleCut(std::vector<std::string> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
                                                                                                                     lambda_(std::move(lambda)) {
+    std::transform(vars.begin(), vars.end(),
+                   std::back_inserter(vars_),
+                   [] (const std::string& arg_name) { return Variable::FromString(arg_name); });
+
     FillBranchNames();
   }
 
@@ -85,8 +92,8 @@ class SimpleCut {
   void Print() const;
 
   std::vector<Variable>& Variables() { return vars_; }
-  [[nodiscard]] const std::vector<Variable>& GetVariables() const { return vars_; }
-  [[nodiscard]] const std::set<std::string>& GetBranches() const { return branch_names_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
 
   friend bool operator==(const SimpleCut& that, const SimpleCut& other);
 
@@ -100,6 +107,10 @@ class SimpleCut {
 
   ClassDef(AnalysisTree::SimpleCut, 1)
 };
+
+
+SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title = "");
+SimpleCut EqualsCut(const std::string &variable_name, float value, const std::string &title = "");
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_SIMPLECUT_H
