@@ -23,7 +23,10 @@ endif ()
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "VariantMagic.hpp")
+list(APPEND HEADERS
+        VariantMagic.hpp
+        Utils.hpp
+        )
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
