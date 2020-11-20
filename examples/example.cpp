@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include <TChain.h>
-
 #include <AnalysisTree/DataHeader.hpp>
 #include <AnalysisTree/EventHeader.hpp>
-#include <AnalysisTree/TreeReader.hpp>
+#include <AnalysisTree/Matching.hpp>
+
+#include <AnalysisTree/Chain.hpp>
 
 using namespace AnalysisTree;
 
@@ -19,9 +19,10 @@ int main(int argc, char* argv[]) {
   const std::string filelist_reco = argv[1];
   const std::string filelist_ana = argv[2];
 
-  TChain* t{MakeChain(std::vector<std::string>{filelist_reco, filelist_ana}, {"aTree", "cTree"})};
-  Configuration* config = GetConfigurationFromFileList({filelist_reco, filelist_ana});
-  auto* data_header = GetObjectFromFileList<DataHeader>(filelist_reco, "DataHeader");
+  auto* chain = new Chain(std::vector<std::string>{filelist_reco, filelist_ana}, {"aTree", "cTree"});
+  
+  auto* config = chain->GetConfiguration();
+  auto* data_header = chain->GetDataHeader();
 
   data_header->Print();
   config->Print();
@@ -34,21 +35,21 @@ int main(int argc, char* argv[]) {
   TrackDetector* rec_tracks{new TrackDetector};
   Matching* rec2sim_match{new Matching};
 
-  t->SetBranchAddress("SimEventHeader", &sim_event_header);
-  t->SetBranchAddress("RecEventHeader", &rec_event_header);
-  t->SetBranchAddress("AnaEventHeader", &ana_event_header);
-  t->SetBranchAddress("VtxTracks", &rec_tracks);
-  t->SetBranchAddress("SimTracks", &sim_particles);
-  t->SetBranchAddress("RecParticlesMcPid", &rec_particles);
-  t->SetBranchAddress("VtxTracks2SimTracks", &rec2sim_match);
+  chain->SetBranchAddress("SimEventHeader", &sim_event_header);
+  chain->SetBranchAddress("RecEventHeader", &rec_event_header);
+  chain->SetBranchAddress("AnaEventHeader", &ana_event_header);
+  chain->SetBranchAddress("VtxTracks", &rec_tracks);
+  chain->SetBranchAddress("SimTracks", &sim_particles);
+  chain->SetBranchAddress("RecParticlesMcPid", &rec_particles);
+  chain->SetBranchAddress("VtxTracks2SimTracks", &rec2sim_match);
 
   const int dcax_id = config->GetBranchConfig("VtxTracks").GetFieldId("dcax");
 
-  const long n_events = t->GetEntries();
+  const long n_events = chain->GetEntries();
   std::cout << "Number of entries: " << n_events << std::endl;
 
   for (long i_event = 0; i_event < 1 /*n_events*/; ++i_event) {
-    t->GetEntry(i_event);
+    chain->GetEntry(i_event);
 
     const int n_tracks = rec_tracks->GetNumberOfChannels();
     const auto centrality = ana_event_header->GetField<float>(0);//NOTE hardcoded 0, to be fixed

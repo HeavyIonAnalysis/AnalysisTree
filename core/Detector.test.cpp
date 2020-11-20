@@ -1,14 +1,12 @@
 #ifndef ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_DETECTOR_TEST_HPP_
 
-#include "Constants.hpp"
 #include "Detector.hpp"
 
 #include <TFile.h>
 #include <TTree.h>
 #include <gtest/gtest.h>
 
-#include <random>
 #include <vector>
 
 namespace {
@@ -59,7 +57,7 @@ TEST(Detector, WriteChannelizedDetector) {
   TVector3 hitPosition(1., 1., 1.);
 
   auto* module_detector = new HitDetector;
-  auto hitCh = module_detector->AddChannel();
+  auto* hitCh = module_detector->AddChannel();
   hitCh->SetPosition(hitPosition);
 
   TFile outputFile("Test_WriteChDet.root", "recreate");

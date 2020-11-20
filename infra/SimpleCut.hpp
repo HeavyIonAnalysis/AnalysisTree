@@ -1,6 +1,7 @@
 #ifndef ANALYSISTREE_SIMPLECUT_H
 #define ANALYSISTREE_SIMPLECUT_H
 
+#include <algorithm>
 #include <functional>
 #include <set>
 #include <string>

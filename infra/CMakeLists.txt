@@ -6,14 +6,15 @@ set(SOURCES
   Cuts.cpp
   Field.cpp
   Variable.cpp
-  FillTask.cpp
-  TreeReader.cpp
+  Task.cpp
+  AnalysisTask.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-        )
+  Chain.cpp
+    )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
-    list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
+    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
 endif()
 
 if (AnalysisTree_BUILD_EXPERIMENTAL)
@@ -23,13 +24,13 @@ endif ()
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "VariantMagic.hpp")
+list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
 target_compile_definitions(AnalysisTreeInfra PUBLIC
         $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
-        
+
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS}
         LINKDEF AnalysisTreeInfraLinkDef.h
         OPTIONS
@@ -63,12 +64,14 @@ target_include_directories(AnalysisTreeInfra
 
 if(AnalysisTree_BUILD_TESTS)
     set(TEST_SOURCES
+
             Variable.test.cpp
             Cuts.test.cpp
             Field.test.cpp
-            PlainTreeFiller.test.cpp
             SimpleCut.test.cpp
-            VarManager.test.cpp
+#            PlainTreeFiller.test.cpp
+#            AnalysisTask.test.cpp
+#            ToyMC.test.cpp
             )
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)

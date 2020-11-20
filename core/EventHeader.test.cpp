@@ -2,7 +2,11 @@
 #define ANALYSISTREE_CORE_EVENTHEADER_TEST_HPP_
 
 #include <gtest/gtest.h>
+
+#include <TVector3.h>
+
 #include "EventHeader.hpp"
+
 
 namespace {
 

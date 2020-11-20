@@ -1,6 +1,7 @@
 #include "Variable.hpp"
 
 #include <algorithm>
+#include <regex>
 
 #include "Configuration.hpp"
 
@@ -21,6 +22,9 @@ void Variable::Init(const Configuration& conf) {
   for (const auto& branch : branch_names_) {
     branch_ids_.insert(conf.GetBranchConfig(branch).GetId());
   }
+
+  vars_.reserve(fields_.size());
+
   is_init_ = true;
 }
 
@@ -42,24 +46,10 @@ bool operator==(const AnalysisTree::Variable& that, const AnalysisTree::Variable
 }
 
 bool operator>(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
-  //  std::string field_that, field_other;
-  //  for (const auto &field : that.fields_) {
-  //    field_that += field.GetName();
-  //  }
-  //  for (const auto &field : other.fields_) {
-  //    field_other += field.GetName();
-  //  }
   return that.name_ > other.name_;
 }
 
 bool operator<(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
-  //  std::string field_that, field_other;
-  //  for (const auto &field : that.fields_) {
-  //    field_that += field.GetName();
-  //  }
-  //  for (const auto &field : other.fields_) {
-  //    field_other += field.GetName();
-  //  }
   return that.name_ > other.name_;
 }
 

@@ -38,8 +38,6 @@ set(AnalysisTree_BUILD_EXPERIMENTAL OFF CACHE BOOL "Build experimental features 
 # Tests
 include(TestsSetup)
 
-
-
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNODEBUG")
 message(STATUS "Using CXX flags for ${CMAKE_BUILD_TYPE}: ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}")
@@ -54,13 +52,12 @@ message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
 include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
 include(${ROOT_USE_FILE})
 
-
 add_subdirectory(core)
 add_subdirectory(infra)
 
-if(AnalysisTree_BUILD_EXAMPLES)
-    add_subdirectory(examples)
-endif()
+#if(AnalysisTree_BUILD_EXAMPLES)
+#    add_subdirectory(examples)
+#endif()
 
 #if(AnalysisTree_BUILD_TESTS)
 #    include(GoogleTest)

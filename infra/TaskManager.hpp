@@ -1,12 +1,14 @@
-#ifndef ANALYSISTREE_INFRA_TASKMANAGER_H_
-#define ANALYSISTREE_INFRA_TASKMANAGER_H_
+#ifndef ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
+#define ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
 
 #include <string>
+#include <utility>
 #include <vector>
 
+#include "Chain.hpp"
 #include "Cuts.hpp"
-#include "FillTask.hpp"
-#include "TreeReader.hpp"
+#include "Task.hpp"
+#include "Matching.hpp"
 
 class TTree;
 class TFile;
@@ -16,64 +18,97 @@ namespace AnalysisTree {
 
 class Configuration;
 
-
 class TaskManager {
 
  public:
-  TaskManager() = default;
-  TaskManager(const std::vector<std::string>& filelists,
-              const std::vector<std::string>& in_trees) : in_tree_(AnalysisTree::MakeChain(filelists, in_trees)),
-                                                          in_config_(GetConfigurationFromFileList(filelists, in_config_name_)) {
-    try {
-      data_header_ = GetObjectFromFileList<DataHeader>(filelists[0], data_header_name_);
-    } catch (std::runtime_error& error) {
-      std::cout << error.what() << std::endl;
-    }
-  }
 
+  enum class eBranchWriteMode{
+    kUpdateCurrentTree = 0,
+    kCreateNewTree,
+    kNone
+  };
+
+  static TaskManager* GetInstance();
+
+  TaskManager(TaskManager&other) = delete;
+  void operator=(const TaskManager&) = delete;
+  virtual ~TaskManager() = default;
+
+ /**
+ * Initialization in case of reading AnalysisTree
+ * @param filelists vector of filelists -> text files with paths to all root files
+ * @param in_trees vector ot TTree names
+ */
+  virtual void Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees);
+
+  /**
+  * Initialization in case of writing AnalysisTree
+  */
   virtual void Init();
   virtual void Run(long long nEvents);
   virtual void Finish();
 
-  void AddTask(FillTask* task) { tasks_.emplace_back(task); }
+  void AddTask(Task* task) { tasks_.emplace_back(task); }
 
-  virtual ~TaskManager() = default;
-
-  void SetOutFileName(std::string name) {
-    out_file_name_ = std::move(name);
+  template<class Branch>
+  void AddBranch(const std::string& name, Branch** ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kNone) {
+    if(!*ptr){
+      *ptr = new Branch;
+    }
+//    (*ptr)->Init(config);
+    if(mode == eBranchWriteMode::kUpdateCurrentTree){
+      chain_->Branch(name.c_str(), ptr);
+      chain_->GetConfiguration()->AddBranchConfig(std::move(config));
+      update_current_tree_ = true;
+    }
+    else if (mode == eBranchWriteMode::kCreateNewTree){
+      assert(out_tree_);
+      out_tree_->Branch(name.c_str(), ptr);
+      configuration_->AddBranchConfig(std::move(config));
+      fill_out_tree_ = true;
+    }
   }
 
-  void SetOutTreeName(std::string name) {
-    out_tree_name_ = std::move(name);
+  void AddMatching(const std::string& br1, const std::string& br2, Matching** match, eBranchWriteMode mode = eBranchWriteMode::kNone){
+    if(mode == eBranchWriteMode::kUpdateCurrentTree){
+//      chain_->GetConfiguration()->AddMatch(match);
+//      chain_->Branch(chain_->GetConfiguration()->GetMatchName(br1, br2).c_str(), &match);
+//      update_current_tree_ = true;
+    }
+    else if (mode == eBranchWriteMode::kCreateNewTree){
+      assert(out_tree_);
+      *match = new Matching(configuration_->GetBranchConfig(br1).GetId(), configuration_->GetBranchConfig(br2).GetId());
+      configuration_->AddMatch(*match);
+      out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), match);
+      fill_out_tree_ = true;
+    }
   }
 
-  void SetEventCuts(Cuts* cuts) { event_cuts_ = cuts; }
 
-  void AddBranchCut(Cuts* cuts) {
-    cuts_map_.insert(std::make_pair(cuts->GetBranchName(), cuts));
-  }
+  ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
+  ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
+  ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
 
  protected:
-  TFile* out_file_{nullptr};
+  TaskManager() = default;
+  static TaskManager* manager_;
+
+  void InitOutChain();
+
+//  std::unique_ptr<Chain> chain_{nullptr};
+  Chain* chain_;
+  std::vector<Task*> tasks_{};
+
+  // output data members
   TTree* out_tree_{nullptr};
+  Configuration* configuration_{nullptr};
+  DataHeader* data_header_{nullptr};
 
-  TChain* in_tree_{nullptr};
-  std::string data_header_name_{"DataHeader"};
-  std::string in_config_name_{"Configuration"};
-  std::string out_file_name_;
-  std::string out_tree_name_;
-
-  AnalysisTree::Configuration* out_config_{nullptr};
-  AnalysisTree::Configuration* in_config_{nullptr};
-  AnalysisTree::DataHeader* data_header_{nullptr};
-  Cuts* event_cuts_{nullptr};
-
-  std::vector<FillTask*> tasks_{};
-
-  std::map<std::string, void*> branches_map_{};
-  std::map<std::string, Cuts*> cuts_map_{};
+  bool is_init_{false};
+  bool fill_out_tree_{false};
+  bool update_current_tree_{false};
 };
 
 };// namespace AnalysisTree
 
-#endif//ANALYSISTREE_INFRA_TASKMANAGER_H_
+#endif//ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_

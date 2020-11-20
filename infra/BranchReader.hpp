@@ -26,15 +26,15 @@ class BranchReader {
 
  public:
   BranchReader() = default;
-  BranchReader(std::string name, void* data, DetType type, Cuts* cuts = nullptr);
+  BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts = nullptr);
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
   ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
   ANALYSISTREE_ATTR_NODISCARD const Cuts* GetCut() const { return cuts_; }
-  ANALYSISTREE_ATTR_NODISCARD double GetValue(const Variable& var, int i_channel);
+  ANALYSISTREE_ATTR_NODISCARD double GetValue(const Variable& var, int i_channel) const;
 
-  size_t GetNumberOfChannels();
-  bool ApplyCut(int i_channel);
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfChannels() const;
+  ANALYSISTREE_ATTR_NODISCARD bool ApplyCut(int i_channel) const;
 
   ANALYSISTREE_ATTR_NODISCARD const BranchPointer& GetData() const {
     return data_;

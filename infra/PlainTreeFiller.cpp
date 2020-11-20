@@ -6,27 +6,26 @@ namespace AnalysisTree {
 
 void PlainTreeFiller::AddBranch(const std::string& branch_name) {
   branch_name_ = branch_name;
-  in_branches_.emplace_back(branch_name);
+  in_branches_.emplace(branch_name);
 }
 
-void PlainTreeFiller::Init(std::map<std::string, void*>& branches) {
-
-//  config_->Print();
+void PlainTreeFiller::Init() {
 
   if(!branch_name_.empty()){
     const auto& branch_config = config_->GetBranchConfig(branch_name_);
     for (const auto& field : branch_config.GetMap<float>()) {
-      VarManager::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
     }
     for (const auto& field : branch_config.GetMap<int>()) {
-      VarManager::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
     }
     for (const auto& field : branch_config.GetMap<bool>()) {
-      VarManager::AddEntry(VarManagerEntry({Variable(branch_name_, field.first)}));
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
     }
   }
 
-  VarManager::Init(branches);
+  AnalysisTask::Init();
+
   if(entries_.size() != 1){
     throw std::runtime_error("Only 1 output branch");
   }
@@ -41,7 +40,7 @@ void PlainTreeFiller::Init(std::map<std::string, void*>& branches) {
 }
 
 void PlainTreeFiller::Exec() {
-  VarManager::Exec();
+  AnalysisTask::Exec();
   const auto& values = entries_[0].GetValues();
   for(const auto& channel : values){
     assert (channel.size() == vars_.size());
@@ -53,7 +52,7 @@ void PlainTreeFiller::Exec() {
 }
 
 void PlainTreeFiller::Finish() {
-  VarManager::Finish();
+  AnalysisTask::Finish();
   plain_tree_->Write();
 }
 }// namespace AnalysisTree

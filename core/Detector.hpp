@@ -20,58 +20,38 @@ class Detector : public IndexedObject, protected IndexAccessor {
  public:
   Detector() = default;
   explicit Detector(Integer_t id) : IndexedObject(id) {}
+  Detector(const Detector& otherDetector) = default;
+  Detector(Detector&& otherDetector) noexcept = default;
+  Detector& operator=(Detector&&) noexcept = default;
+  Detector& operator=(const Detector& part) = default;
 
-  Detector(const Detector<T>& other) : IndexedObject(other) {
-    if (!channels_) channels_ = new std::vector<T>;
+  ~Detector() override = default;
 
-    if (!other.channels_->empty()) {
-      channels_->reserve(other.channels_->size());
-      std::copy(other.channels_->begin(), other.channels_->end(), std::back_inserter(*this->channels_));
-    }
-  }
-  Detector(Detector<T>&&) = default;
-
-  Detector<T>& operator = (const Detector<T>& other) {
-    if (this == &other) {
-      return *this;
-    }
-
-    if (!other.channels_->empty()) {
-      channels_->clear();
-      channels_->reserve(other.channels_->size());
-      std::copy(other.channels_->begin(), other.channels_->end(), std::back_inserter(*this->channels_));
-    }
-  }
-
-  ~Detector() override {
-    delete channels_;
-  }
-
-  size_t GetNumberOfChannels() const {
-    return channels_->size();
+  [[nodiscard]] size_t GetNumberOfChannels() const noexcept {
+    return channels_.size();
   }
 
   T* AddChannel() {
-    channels_->push_back(T(channels_->size()));
-    return &(channels_->back());
+    channels_.emplace_back(T(channels_.size()));
+    return &(channels_.back());
   }
 
   void ClearChannels() {
-    if (channels_ != nullptr) channels_->clear();
+      channels_.clear();
   }
 
-  T& GetChannel(size_t number)// needed in converter to modify tracks id. //TODO maybe rename?
+  T& Channel(size_t number)// needed in converter to modify tracks id
   {
     if (number < GetNumberOfChannels()) {
-      return channels_->at(number);
+      return channels_.at(number);
     } else {
-      throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
+      throw std::out_of_range("Detector::Channel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
   }
 
-  const T& GetChannel(size_t number) const {
+  T GetChannel(size_t number) const {
     if (number < GetNumberOfChannels()) {
-      return channels_->at(number);
+      return channels_.at(number);
     } else {
       throw std::out_of_range("Detector::GetChannel - wrong channel number " + std::to_string(number) + " Number of channels in this detector is " + std::to_string(GetNumberOfChannels()));
     }
@@ -86,23 +66,36 @@ class Detector : public IndexedObject, protected IndexAccessor {
       return false;
     }
 
-    return std::equal(that.channels_->begin(), that.channels_->end(), other.channels_->begin());
+    return std::equal(that.channels_.begin(), that.channels_.end(), other.channels_.begin());
   }
 
-  const std::vector<T>* GetChannels() const { return channels_; }
-  std::vector<T>* Channels() { return channels_; }
+  [[deprecated("Please use range-based loops: for(const auto& channel : detector)")]]
+  const std::vector<T>* GetChannels() const { return &channels_; }
+  [[deprecated("Please use range-based loops: for(const auto& channel : detector)")]]
+  std::vector<T>* Channels() { return &channels_; }
 
-  void Reserve(size_t n) { channels_->reserve(n); }
-  void Resize(size_t n) { channels_->resize(n); }
+  void Reserve(size_t n) {
+    channels_.reserve(n);
+  }
 
   void Print() const {
-    for (const auto& channel : *channels_) {
+    for (const auto& channel : channels_) {
       channel.Print();
     }
   }
 
+  auto begin() -> typename std::vector<T>::iterator { return channels_.begin(); }
+  auto end() -> typename std::vector<T>::iterator { return channels_.end(); }
+  auto cbegin() const -> typename std::vector<T>::const_iterator  { return channels_.begin(); }
+  auto cend() const -> typename std::vector<T>::const_iterator  { return channels_.end(); }
+  auto begin() const -> typename std::vector<T>::const_iterator  { return channels_.begin(); }
+  auto end() const -> typename std::vector<T>::const_iterator  { return channels_.end(); }
+
  protected:
-  std::vector<T>* channels_{new std::vector<T>};
+  std::vector<T> channels_{};
+
+ ClassDefOverride(Detector,2)
+
 };
 
 using TrackDetector = Detector<Track>;
@@ -110,6 +103,7 @@ using ModuleDetector = Detector<Module>;
 using ModulePositions = Detector<ModulePosition>;
 using HitDetector = Detector<Hit>;
 using Particles = Detector<Particle>;
+using GeneralDetector = Detector<Container>;
 
 }// namespace AnalysisTree
 
