@@ -1,7 +1,7 @@
 # AnalysisTree
 [![Build Status](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree.svg?branch=master)](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/HeavyIonAnalysis/AnalysisTree?sort=semver)
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/HeavyIonAnalysis/AnalysisTree)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/HeavyIonAnalysis/AnalysisTree?include_prereleases)
 ## Doxygen documentation:
 
 https://heavyionanalysis.github.io/AnalysisTree/
