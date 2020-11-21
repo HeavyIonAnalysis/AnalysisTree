@@ -4,6 +4,8 @@
 // I'm really sorry about this, blame Oleg
 // To be removed after c++17 will be available everywhere
 
+#include "TTree.h"
+
 #include "Utils.hpp"
 #include "Cuts.hpp"
 #include "Variable.hpp"
@@ -57,6 +59,16 @@ struct get_n_channels_struct : public Utils::Visitor<size_t> {
   size_t get_n_channels(Det* d) const { return d->GetNumberOfChannels(); }
   template<typename Entity>
   size_t operator()(Entity* d) const { return get_n_channels<Entity>(d); }
+};
+
+struct set_branch_address_struct : public Utils::Visitor<int> {
+  set_branch_address_struct(TTree* tree, std::string name) : tree_(tree), name_(std::move(name)) {}
+  template<class Det>
+  int set_branch_address(Det* d) const { return tree_->SetBranchAddress(name_.c_str(), &d); }
+  template<typename Entity>
+  int operator()(Entity* d) const { return set_branch_address<Entity>(d); }
+  TTree* tree_{nullptr};
+  std::string name_;
 };
 
 struct get_id_struct : public Utils::Visitor<int> {

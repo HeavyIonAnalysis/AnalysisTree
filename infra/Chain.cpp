@@ -120,11 +120,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
     this->SetBranchAddress(match.first.c_str(), &(match.second));
   }
   for (auto& branch : branches_) {
-#if USEBOOST
-    boost::apply_visitor(set_branch_address_struct(this, branch.first.c_str()), branch.second);
-#else
-    std::visit([this, branch](auto&& arg){ this->SetBranchAddress(branch.first.c_str(), &(arg)); }, branch.second);
-#endif
+    ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first.c_str()), branch.second);
   }
 }
 
@@ -196,7 +192,7 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
   std::vector<std::pair<std::string, int>> fields{};
 
   int pos = 0;
-  while(expr.find('.', pos) != -1){
+  while(expr.find('.', pos) != size_t(-1) ){ //TODO fix this
     auto dot = expr.find('.', pos);
     if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && isdigit(expr[dot+1]) != ' '){  // is not a number like 1.5
 

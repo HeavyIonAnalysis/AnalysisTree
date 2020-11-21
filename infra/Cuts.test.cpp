@@ -31,15 +31,13 @@ TEST(Cuts, RangeCut) {
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
-  Variable chi2("VtxTracks", "chi2");
-
-  AnalysisTree::Cuts cut_true("cut1", {{chi2, 2., 3.}});
+  AnalysisTree::Cuts cut_true("cut1", {AnalysisTree::RangeCut("VtxTracks.chi2", 2., 3.)});
   cut_true.Init(conf);
 
-  AnalysisTree::Cuts cut_false1("cut1", {{chi2, 0., 2.3999}});
+  AnalysisTree::Cuts cut_false1("cut1", {AnalysisTree::RangeCut("VtxTracks.chi2", 0., 2.3999)});
   cut_false1.Init(conf);
 
-  AnalysisTree::Cuts cut_false2("cut1", {{chi2, 2.4001, 3.}});
+  AnalysisTree::Cuts cut_false2("cut1", {AnalysisTree::RangeCut("VtxTracks.chi2", 2.4001, 3.)});
   cut_false2.Init(conf);
 
   ASSERT_TRUE(cut_true.Apply(*track));
@@ -61,19 +59,19 @@ TEST(Cuts, EqualCut) {
   track->SetField(3, VtxTracksBranch.GetFieldId("nhits"));
   track->SetField(true, VtxTracksBranch.GetFieldId("is_good"));
 
-  Cuts cut_true1("cut1", {{{"VtxTracks", "nhits"}, 3}});
+  Cuts cut_true1("cut1", {EqualsCut("VtxTracks.nhits", 3)});
   cut_true1.Init(conf);
 
-  Cuts cut_true2("cut4", {{{"VtxTracks", "is_good"}, true}});
+  Cuts cut_true2("cut4", {EqualsCut("VtxTracks.is_good", true)});
   cut_true2.Init(conf);
 
-  Cuts cut_false1("cut2", {{{"VtxTracks", "nhits"}, 2}});
+  Cuts cut_false1("cut2", {EqualsCut("VtxTracks.nhits", 2)});
   cut_false1.Init(conf);
 
-  Cuts cut_false2("cut3", {{{"VtxTracks", "nhits"}, 4}});
+  Cuts cut_false2("cut3", {EqualsCut("VtxTracks.nhits", 4)});
   cut_false2.Init(conf);
 
-  Cuts cut_false3("cut5", {{{"VtxTracks", "is_good"}, false}});
+  Cuts cut_false3("cut5", {EqualsCut("VtxTracks.is_good", false)});
   cut_false3.Init(conf);
 
   ASSERT_TRUE(cut_true1.Apply(*track));
