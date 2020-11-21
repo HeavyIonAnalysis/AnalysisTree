@@ -12,8 +12,4 @@
 #pragma link C++ class AnalysisTree::BranchReader+;
 #pragma link C++ class AnalysisTree::AnalysisEntry+;
 
-#pragma link C++ function AnalysisTree::MakeChain(const std::string& filelist, const std::string& treename);
-
-#pragma link C++ defined_in "TreeReader.h";
-
 #endif

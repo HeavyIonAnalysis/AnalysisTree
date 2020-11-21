@@ -10,6 +10,7 @@
 #include "EventHeader.hpp"
 #include "Variable.hpp"
 #include "VariantMagic.hpp"
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
