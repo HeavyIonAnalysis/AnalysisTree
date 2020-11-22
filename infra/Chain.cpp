@@ -159,7 +159,7 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   if (!line.empty()) {
     std::cout << line << " " << name << std::endl;
     auto* in_file = TFile::Open(line.data(), "infra");
-    object = in_file->Get<T>(name.c_str());
+    object = (T*) in_file->Get(name.c_str());
   }
 
   if (object == nullptr) {
