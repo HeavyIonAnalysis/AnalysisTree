@@ -18,7 +18,11 @@
 #   endif
 #endif
 
-#if !defined(ANALYSISTREE_STD_VARIANT) && defined(ANALYSISTREE_BOOST_FOUND)
+#if __has_include(<boost/variant.hpp>)
+#  define ANALYSISTREE_BOOST_VARIANT 1
+#endif
+
+#if !defined(ANALYSISTREE_STD_VARIANT) && defined(ANALYSISTREE_BOOST_VARIANT)
 #   include <boost/variant.hpp>
 #   include <boost/variant/static_visitor.hpp>
 #   define ANALYSISTREE_BOOST_VARIANT 1
