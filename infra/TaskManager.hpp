@@ -90,6 +90,7 @@ class TaskManager {
   ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
 
   void SetOutputDataHeader(DataHeader* dh) {  data_header_ = dh; }
+  void FillOutput() { out_tree_->Fill(); }
 
  protected:
   TaskManager() = default;
