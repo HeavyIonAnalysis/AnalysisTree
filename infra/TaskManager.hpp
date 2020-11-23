@@ -53,12 +53,12 @@ class TaskManager {
   template<class Branch>
   void AddBranch(const std::string& name, Branch** ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kNone) {
     if(!*ptr){
-      *ptr = new Branch;
+      *ptr = new Branch(configuration_->GetLastId());
     }
 //    (*ptr)->Init(config);
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
       chain_->Branch(name.c_str(), ptr);
-      chain_->GetConfiguration()->AddBranchConfig(std::move(config));
+      configuration_->AddBranchConfig(std::move(config));
       update_current_tree_ = true;
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
