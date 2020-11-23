@@ -36,13 +36,13 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
 }
 
 void TaskManager::Init(){
+  assert(!is_init_);
+  is_init_ = true;
 
-  if(true){
-    InitOutChain();
-    configuration_ = new Configuration("Configuration");
-    data_header_ = new DataHeader;
-    chain_ = new Chain(out_tree_, configuration_, data_header_);
-  }
+  InitOutChain();
+  configuration_ = new Configuration("Configuration");
+//  data_header_ = new DataHeader;
+  chain_ = new Chain(out_tree_, configuration_, nullptr);
 
   for(auto* task : tasks_) {
     task->PreInit();

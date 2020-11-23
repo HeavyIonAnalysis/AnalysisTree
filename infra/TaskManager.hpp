@@ -89,6 +89,8 @@ class TaskManager {
   ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
   ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
 
+  void SetOutputDataHeader(DataHeader* dh) {  data_header_ = dh; }
+
  protected:
   TaskManager() = default;
   static TaskManager* manager_;
