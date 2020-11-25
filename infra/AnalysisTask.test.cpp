@@ -83,7 +83,7 @@ auto* man = AnalysisTree::TaskManager::GetInstance();
 auto* var_manager = new AnalysisTaskTest;
 Variable px_sim("SimParticles", "px");
 Variable px_rec("RecTracks", "px");
-Cuts eta_cut("eta_cut", {SimpleCut({"SimParticles", "eta"}, -1, 1)});
+Cuts eta_cut("eta_cut", {RangeCut({"SimParticles", "eta"}, -1, 1)});
 var_manager->AddEntry(AnalysisEntry({px_sim}));
 var_manager->AddEntry(AnalysisEntry({px_rec}));
 var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));

@@ -53,7 +53,7 @@ namespace Utils {
 
 template<typename RetType>
 struct Visitor
-#ifdef ANALYSISTREE_BOOST_VARIANT
+#if !defined(ANALYSISTREE_STD_VARIANT)
     : public boost::static_visitor<RetType>
 #endif// USEBOOST
 {

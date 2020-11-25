@@ -32,10 +32,10 @@ class ToyMC : public Task {
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
     sim_eh.AddField<float>("psi_RP");
 
-    man->AddBranch("SimEventHeader", &sim_event_header_, sim_eh, TaskManager::eBranchWriteMode::kCreateNewTree);
-    man->AddBranch("SimParticles", &particles_, BranchConfig{"SimParticles", DetType::kParticle}, TaskManager::eBranchWriteMode::kCreateNewTree);
-    man->AddBranch("RecTracks", &track_detector_, BranchConfig{"RecTracks", DetType::kTrack}, TaskManager::eBranchWriteMode::kCreateNewTree);
-    man->AddMatching("RecTracks", "SimParticles", &rec_tracks_to_sim_, TaskManager::eBranchWriteMode::kCreateNewTree);
+    man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
+    man->AddBranch("SimParticles", particles_, BranchConfig{"SimParticles", DetType::kParticle});
+    man->AddBranch("RecTracks", track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
+    man->AddMatching("RecTracks", "SimParticles", &rec_tracks_to_sim_);
 
     sim_event_header_->Init(sim_eh);
 

@@ -51,11 +51,10 @@ class TaskManager {
   void AddTask(Task* task) { tasks_.emplace_back(task); }
 
   template<class Branch>
-  void AddBranch(const std::string& name, Branch** ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kNone) {
-    if(!*ptr){
-      *ptr = new Branch(configuration_->GetLastId());
+  void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
+    if(!ptr){
+      ptr = new Branch(configuration_->GetLastId());
     }
-//    (*ptr)->Init(config);
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
 //      chain_->Branch(name.c_str(), ptr);
 //      configuration_->AddBranchConfig(std::move(config));
@@ -63,13 +62,13 @@ class TaskManager {
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      out_tree_->Branch(name.c_str(), ptr);
+      out_tree_->Branch(name.c_str(), &ptr);
       configuration_->AddBranchConfig(std::move(config));
       fill_out_tree_ = true;
     }
   }
 
-  void AddMatching(const std::string& br1, const std::string& br2, Matching** match, eBranchWriteMode mode = eBranchWriteMode::kNone){
+  void AddMatching(const std::string& br1, const std::string& br2, Matching** match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree){
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
 //      chain_->GetConfiguration()->AddMatch(match);
 //      chain_->Branch(chain_->GetConfiguration()->GetMatchName(br1, br2).c_str(), &match);
