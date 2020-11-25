@@ -65,12 +65,7 @@ void TaskManager::Run(long long nEvents){
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     chain_->GetEntry(iEvent);
-    for (auto* task : tasks_) {
-      task->Exec();
-    }
-    if (fill_out_tree_) {
-      out_tree_->Fill();
-    }
+    Exec();
   }// Event loop
 
   auto end = std::chrono::system_clock::now();

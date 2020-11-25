@@ -57,9 +57,9 @@ class TaskManager {
     }
 //    (*ptr)->Init(config);
     if(mode == eBranchWriteMode::kUpdateCurrentTree){
-      chain_->Branch(name.c_str(), ptr);
-      configuration_->AddBranchConfig(std::move(config));
-      update_current_tree_ = true;
+//      chain_->Branch(name.c_str(), ptr);
+//      configuration_->AddBranchConfig(std::move(config));
+//      update_current_tree_ = true;
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
@@ -91,6 +91,17 @@ class TaskManager {
 
   void SetOutputDataHeader(DataHeader* dh) {  data_header_ = dh; }
   void FillOutput() { out_tree_->Fill(); }
+
+  void Exec(){
+    for (auto* task : tasks_) {
+      task->Exec();
+    }
+    if (fill_out_tree_) {
+      out_tree_->Fill();
+    }
+  }
+
+
 
  protected:
   TaskManager() = default;
