@@ -80,6 +80,8 @@ void TaskManager::Finish() {
   if (fill_out_tree_){
     TFile *f = TFile::Open("test.root", "recreate");
     out_tree_->Write();
+    configuration_->Write("Configuration");
+    data_header_->Write("DataHeader");
     f->Close();
   }
 
