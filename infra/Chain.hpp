@@ -43,6 +43,7 @@ class Chain : public TChain {
 
   ANALYSISTREE_ATTR_NODISCARD Configuration* GetConfiguration() const { return configuration_; }
   ANALYSISTREE_ATTR_NODISCARD DataHeader* GetDataHeader() const { return data_header_; }
+  ANALYSISTREE_ATTR_NODISCARD DataHeader* DataHeader() { return data_header_; }
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, BranchPointer>& GetBranchPointers() const { return branches_; }
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, Matching*>& GetMatchPointers() const { return matches_; }
 

@@ -41,7 +41,7 @@ void TaskManager::Init(){
 
   InitOutChain();
   configuration_ = new Configuration("Configuration");
-//  data_header_ = new DataHeader;
+  data_header_ = new DataHeader;
   chain_ = new Chain(out_tree_, configuration_, nullptr);
 
   for(auto* task : tasks_) {
