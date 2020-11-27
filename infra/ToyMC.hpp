@@ -32,8 +32,13 @@ class ToyMC : public Task {
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
     sim_eh.AddField<float>("psi_RP");
 
+    BranchConfig sim_part("SimParticles", DetType::kParticle);
+    sim_part.AddField<float>("float");
+    sim_part.AddField<bool>("bool");
+    sim_part.AddField<int>("int");
+
     man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
-    man->AddBranch("SimParticles", particles_, BranchConfig{"SimParticles", DetType::kParticle});
+    man->AddBranch("SimParticles", particles_, sim_part);
     man->AddBranch("RecTracks", track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
     man->AddMatching("RecTracks", "SimParticles", &rec_tracks_to_sim_);
 
@@ -61,6 +66,7 @@ class ToyMC : public Task {
 
     particles_->ClearChannels();
 
+    const auto& branch = config_->GetBranchConfig("SimParticles");
     const int multiplicity = multiplicity_(generator_);
     particles_->Reserve(multiplicity);
 
@@ -75,6 +81,7 @@ class ToyMC : public Task {
       mom.SetPtEtaPhi(pT, eta, phi);
 
       auto* particle = particles_->AddChannel();
+      particle->Init(branch);
 
       particle->SetMomentum3(mom);
       particle->SetPid(pdg);

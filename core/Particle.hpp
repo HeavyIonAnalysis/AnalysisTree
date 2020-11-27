@@ -55,6 +55,9 @@ class Particle : public Track {
  protected:
   Floating_t mass_{-1000.f};
   PdgCode_t pid_{0};
+
+  ClassDefOverride(Track, 1);
+
 };
 
 }// namespace AnalysisTree

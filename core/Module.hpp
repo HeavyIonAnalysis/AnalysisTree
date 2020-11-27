@@ -47,7 +47,7 @@ class Module : public Container {
   Floating_t signal_{0.f};
   ShortInt_t number_{UndefValueShort};
 
-  //  ClassDefOverride(AnalysisTree::Base::Module, 1)
+  ClassDefOverride(Module, 1)
 };
 
 class ModulePosition : public IndexedObject {

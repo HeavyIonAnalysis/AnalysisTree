@@ -69,6 +69,9 @@ class Hit : public Container {
   Floating_t y_{UndefValueFloat};
   Floating_t z_{UndefValueFloat};
   Floating_t signal_{UndefValueFloat};
+
+  ClassDefOverride(Hit,1)
+
 };
 
 }// namespace AnalysisTree
