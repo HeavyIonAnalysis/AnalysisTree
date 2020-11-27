@@ -50,41 +50,48 @@ class TaskManager {
 
   void AddTask(Task* task) { tasks_.emplace_back(task); }
 
+/**
+* Adding a new branch
+* @param name name of the branch
+* @param ptr reference to a pointer to the branch object. Pointer shoulb be initialized with nullprt, function will allocate the space, but used still needs delete it in the end of the program
+* @param mode write or not the branch to the file
+*/
   template<class Branch>
   void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
-    if(!ptr){
-      ptr = new Branch(configuration_->GetLastId());
-    }
-    if(mode == eBranchWriteMode::kUpdateCurrentTree){
-//      chain_->Branch(name.c_str(), ptr);
-//      configuration_->AddBranchConfig(std::move(config));
-//      update_current_tree_ = true;
-    }
-    else if (mode == eBranchWriteMode::kCreateNewTree){
+    assert(!name.empty() && !ptr);
+    ptr = new Branch(configuration_->GetLastId());
+
+    if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      auto* br = out_tree_->Branch(name.c_str(), &ptr, 320000);
+      out_tree_->Branch(name.c_str(), &ptr, 320000);
       configuration_->AddBranchConfig(std::move(config));
-      temp_map_.emplace(std::make_pair(name, br));
-
       fill_out_tree_ = true;
+    } else {
+      throw std::runtime_error("Not yet implemented...");
     }
   }
 
-  void AddMatching(const std::string& br1, const std::string& br2, Matching** match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree){
-    if(mode == eBranchWriteMode::kUpdateCurrentTree){
-//      chain_->GetConfiguration()->AddMatch(match);
-//      chain_->Branch(chain_->GetConfiguration()->GetMatchName(br1, br2).c_str(), &match);
-//      update_current_tree_ = true;
-    }
-    else if (mode == eBranchWriteMode::kCreateNewTree){
+/**
+* Adding a new Matching branch
+* @param br1 name of the first branch
+* @param br2 name of the second branch
+* @param match reference to a pointer to the Matching object. Pointer shoulb be initialized with nullprt, function will allocate the space, but used still needs delete it in the end of the program
+* @param mode write or not the branch to the file
+*/
+  void AddMatching(const std::string& br1, const std::string& br2, Matching*& match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree){
+    assert(!br1.empty() && !br2.empty() && !match);
+    match = new Matching(configuration_->GetBranchConfig(br1).GetId(),
+                         configuration_->GetBranchConfig(br2).GetId());
+
+    if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      *match = new Matching(configuration_->GetBranchConfig(br1).GetId(), configuration_->GetBranchConfig(br2).GetId());
-      configuration_->AddMatch(*match);
-      auto* br = out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), match);
+      configuration_->AddMatch(match);
+      out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
       fill_out_tree_ = true;
+    } else {
+      throw std::runtime_error("Not yet implemented...");
     }
   }
-
 
   ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
   ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
@@ -98,7 +105,7 @@ class TaskManager {
       task->Exec();
     }
     if (fill_out_tree_) {
-      out_tree_->Fill();
+      FillOutput();
     }
   }
 
@@ -121,10 +128,6 @@ class TaskManager {
 
   bool is_init_{false};
   bool fill_out_tree_{false};
-  bool update_current_tree_{false};
-
-  std::map<std::string, TBranch*> temp_map_{};
-
 };
 
 };// namespace AnalysisTree

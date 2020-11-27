@@ -31,6 +31,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
     return channels_.size();
   }
 
+  ANALYSISTREE_ATTR_DEPRECATED("Please use: T& AddChannel(const BranchConfig& branch)")
   T* AddChannel() {
     channels_.emplace_back(T(channels_.size()));
     return &(channels_.back());

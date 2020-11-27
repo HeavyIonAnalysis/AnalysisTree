@@ -21,7 +21,7 @@ class Chain : public TChain {
 
  public:
 
-  Chain() : TChain() {};
+  Chain() : TChain() {}
 
   Chain(TTree* tree, Configuration* config, DataHeader* data_header) :
       TChain(tree->GetName()),
@@ -39,7 +39,7 @@ class Chain : public TChain {
     InitChain();
     InitConfiguration();
     InitDataHeader();
-  };
+  }
 
   ANALYSISTREE_ATTR_NODISCARD Configuration* GetConfiguration() const { return configuration_; }
   ANALYSISTREE_ATTR_NODISCARD DataHeader* GetDataHeader() const { return data_header_; }

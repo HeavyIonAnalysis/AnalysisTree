@@ -40,10 +40,9 @@ class ToyMC : public Task {
     man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
     man->AddBranch("SimParticles", particles_, sim_part);
     man->AddBranch("RecTracks", track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
-    man->AddMatching("RecTracks", "SimParticles", &rec_tracks_to_sim_);
+    man->AddMatching("RecTracks", "SimParticles", rec_tracks_to_sim_);
 
     sim_event_header_->Init(sim_eh);
-
   }
 
   void Exec() override {
@@ -122,7 +121,7 @@ class ToyMC : public Task {
 
   //event properties
   EventHeader* sim_event_header_{nullptr};
-  std::poisson_distribution<int> multiplicity_{10000};
+  std::poisson_distribution<int> multiplicity_{100};
   std::uniform_real_distribution<float> psi_RP_{-M_PI, M_PI};
   std::vector<float> vn_{0.2, 0.1};
   float cm_rapidity_{0.f};
