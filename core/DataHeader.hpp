@@ -35,7 +35,7 @@ class DataHeader : public TObject {
   ANALYSISTREE_ATTR_NODISCARD std::string GetSystem() const { return system_; }
   ANALYSISTREE_ATTR_NODISCARD const TVector3& GetDetectorPosition(int i) const { return det_pos_.at(i); }
 
-  ANALYSISTREE_ATTR_NODISCARD const ModulePositions& GetModulePositions(Integer_t idet) {
+  ANALYSISTREE_ATTR_NODISCARD const ModulePositions& GetModulePositions(Integer_t idet) const {
     return modules_pos_.at(idet);
   }
 
