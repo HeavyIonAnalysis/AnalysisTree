@@ -62,8 +62,10 @@ class TaskManager {
     }
     else if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      out_tree_->Branch(name.c_str(), &ptr);
+      auto* br = out_tree_->Branch(name.c_str(), &ptr, 320000);
       configuration_->AddBranchConfig(std::move(config));
+      temp_map_.emplace(std::make_pair(name, br));
+
       fill_out_tree_ = true;
     }
   }
@@ -78,7 +80,7 @@ class TaskManager {
       assert(out_tree_);
       *match = new Matching(configuration_->GetBranchConfig(br1).GetId(), configuration_->GetBranchConfig(br2).GetId());
       configuration_->AddMatch(*match);
-      out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), match);
+      auto* br = out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), match);
       fill_out_tree_ = true;
     }
   }
@@ -120,6 +122,9 @@ class TaskManager {
   bool is_init_{false};
   bool fill_out_tree_{false};
   bool update_current_tree_{false};
+
+  std::map<std::string, TBranch*> temp_map_{};
+
 };
 
 };// namespace AnalysisTree
