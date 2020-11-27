@@ -16,6 +16,8 @@ class EventHeader : public Container {
  public:
   EventHeader() = default;
   explicit EventHeader(Integer_t id) : Container(id){};
+  EventHeader(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
+
   EventHeader(const EventHeader& eh) = default;
   EventHeader(EventHeader&& eh) = default;
   EventHeader& operator=(EventHeader&& eh) = default;

@@ -80,11 +80,10 @@ class ToyMC : public Task {
       TVector3 mom;
       mom.SetPtEtaPhi(pT, eta, phi);
 
-      auto* particle = particles_->AddChannel();
-      particle->Init(branch);
+      auto& particle = particles_->AddChannel(branch);
 
-      particle->SetMomentum3(mom);
-      particle->SetPid(pdg);
+      particle.SetMomentum3(mom);
+      particle.SetPid(pdg);
     }
   }
 
@@ -96,11 +95,12 @@ class ToyMC : public Task {
     rec_tracks_to_sim_->Clear();
 
     track_detector_->Reserve(particles_->GetNumberOfChannels());
+    const auto& branch = config_->GetBranchConfig("RecTracks");
 
     for(const auto& particle : *particles_){
-      auto* track = track_detector_->AddChannel();
-      *track = particle;
-      rec_tracks_to_sim_->AddMatch(track->GetId(), particle.GetId());
+      auto& track = track_detector_->AddChannel(branch);
+      track = particle;
+      rec_tracks_to_sim_->AddMatch(track.GetId(), particle.GetId());
     }
   }
 

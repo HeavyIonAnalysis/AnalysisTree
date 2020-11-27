@@ -10,6 +10,8 @@ class Particle : public Track {
  public:
   Particle() = default;
   explicit Particle(Integer_t id) : Track(id) {}
+  Particle(Integer_t id, const BranchConfig& branch) noexcept : Track(id, branch) {}
+
   explicit Particle(const Track& track) : Track(track) {}
 
   Particle(const Particle& particle) = default;

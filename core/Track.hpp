@@ -21,6 +21,7 @@ class Track : public Container {
   Track() noexcept = default;
 
   explicit Track(Integer_t id) noexcept : Container(id) {}
+  Track(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
   Track(const Track& track) = default;
   Track(Track&& track) noexcept = default;
   Track& operator=(Track&&) noexcept = default;

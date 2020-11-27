@@ -20,6 +20,7 @@ class Hit : public Container {
   Hit& operator=(const Hit& part) = default;
 
   explicit Hit(Integer_t id) : Container(id) {}
+  Hit(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
 
   friend bool operator==(const Hit& that, const Hit& other);
 

@@ -16,6 +16,13 @@ class Container : public IndexedObject {
   Container() = default;
 
   explicit Container(Integer_t id) : IndexedObject(id) {}
+  Container(Integer_t id, const BranchConfig& branch)
+      : IndexedObject(id),
+        floats_(branch.GetSize<float>()),
+        ints_(branch.GetSize<int>()),
+        bools_(branch.GetSize<bool>())
+  {}
+
   Container(const Container& container) = default;
   Container(Container&& container) noexcept = default;
   Container& operator=(Container&&) noexcept = default;

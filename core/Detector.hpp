@@ -36,6 +36,11 @@ class Detector : public IndexedObject, protected IndexAccessor {
     return &(channels_.back());
   }
 
+  T& AddChannel(const BranchConfig& branch) {
+    channels_.emplace_back(T(channels_.size(), branch));
+    return channels_.back();
+  }
+
   void ClearChannels() {
       channels_.clear();
   }

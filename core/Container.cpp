@@ -13,9 +13,9 @@ template <> const std::vector<float>& Container::GetVector<float>() const { retu
 template <> const std::vector<bool>& Container::GetVector<bool>() const { return bools_;}
 
 void Container::Init(const AnalysisTree::BranchConfig& branch) {
-   Vector<float>().resize(branch.GetSize<float>());
-   Vector<int>().resize(branch.GetSize<int>());
-   Vector<bool>().resize(branch.GetSize<bool>());
+  floats_.resize(branch.GetSize<float>());
+  ints_.resize(branch.GetSize<int>());
+  bools_.resize(branch.GetSize<bool>());
 }
 
 

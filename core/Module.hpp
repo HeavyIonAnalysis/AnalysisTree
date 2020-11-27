@@ -19,6 +19,7 @@ class Module : public Container {
   Module& operator=(const Module& part) = default;
 
   explicit Module(Integer_t id) : Container(id) {}
+  Module(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
 
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetSignal() const { return signal_; }
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetNumber() const { return number_; }
