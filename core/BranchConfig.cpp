@@ -1,5 +1,7 @@
 #include "BranchConfig.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree {
 
 BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(name)), type_(type) {

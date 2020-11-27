@@ -18,8 +18,8 @@ class Module : public Container {
 
   explicit Module(Integer_t id) : Container(id) {}
 
-  [[nodiscard]] Floating_t GetSignal() const { return signal_; }
-  [[nodiscard]] ShortInt_t GetNumber() const { return number_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetSignal() const { return signal_; }
+  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetNumber() const { return number_; }
 
   void SetSignal(Floating_t signal) { signal_ = signal; }
   void SetNumber(ShortInt_t number) { number_ = number; }
@@ -60,7 +60,7 @@ class ModulePosition : public IndexedObject {
   explicit ModulePosition(Integer_t id) : IndexedObject(id) {}
   ModulePosition(Integer_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
 
-  [[nodiscard]] TVector3 GetPosition() const noexcept {
+  ANALYSISTREE_ATTR_NODISCARD TVector3 GetPosition() const noexcept {
     return TVector3(x_, y_, z_);
   }
 
@@ -76,14 +76,12 @@ class ModulePosition : public IndexedObject {
     z_ = z;
   }
 
-  [[nodiscard]] inline Floating_t GetX() const noexcept { return x_; }
-  [[nodiscard]] inline Floating_t GetY() const noexcept { return y_; }
-  [[nodiscard]] inline Floating_t GetZ() const noexcept { return z_; }
-  [[nodiscard]] inline Floating_t GetPhi() const noexcept { return atan2(y_, x_); }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetX() const noexcept { return x_; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetY() const noexcept { return y_; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetZ() const noexcept { return z_; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPhi() const noexcept { return atan2(y_, x_); }
 
-  void Print() const {
-    std::cout << "  x = " << x_ << "  y = " << y_ << "  z = " << z_ << "  phi = " << GetPhi() << std::endl;
-  }
+  void Print() const;
 
  protected:
   Floating_t x_{UndefValueFloat};

@@ -1,5 +1,7 @@
 #include "Hit.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree {
 
 void Hit::Print() const {

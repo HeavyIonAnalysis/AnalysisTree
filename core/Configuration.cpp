@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 
 #include "Configuration.hpp"
 #include "Matching.hpp"

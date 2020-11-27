@@ -37,15 +37,15 @@ class Hit : public Container {
     signal_ = signal;
   }
 
-  [[nodiscard]] TVector3 GetPosition() const { return TVector3(x_, y_, z_); }
-  [[nodiscard]] Floating_t GetSignal() const { return signal_; }
-  [[nodiscard]] Floating_t GetX() const { return x_; }
-  [[nodiscard]] Floating_t GetY() const { return y_; }
-  [[nodiscard]] Floating_t GetZ() const { return z_; }
-  [[nodiscard]] Floating_t GetPhi() const;
+  ANALYSISTREE_ATTR_NODISCARD TVector3 GetPosition() const { return TVector3(x_, y_, z_); }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetSignal() const { return signal_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetX() const { return x_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetY() const { return y_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetZ() const { return z_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetPhi() const;
 
   template<typename T>
-  [[nodiscard]] T GetField(Integer_t iField) const {
+  ANALYSISTREE_ATTR_NODISCARD T GetField(Integer_t iField) const {
     if (iField >= 0)
       return Container::GetField<T>(iField);
     else {

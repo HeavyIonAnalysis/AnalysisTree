@@ -3,6 +3,7 @@
 
 #include "Container.hpp"
 #include <array>
+#include <stdexcept>
 
 class TVector3;
 
@@ -23,7 +24,7 @@ class EventHeader : public Container {
   /**
    * @return 3D-position of the vertex
    */
-  [[nodiscard]] TVector3 GetVertexPosition3() const;
+  ANALYSISTREE_ATTR_NODISCARD TVector3 GetVertexPosition3() const;
 
   void SetVertexPosition3(const TVector3& pos);
 
@@ -41,13 +42,13 @@ class EventHeader : public Container {
     }
   }
 
-  [[nodiscard]] inline Floating_t GetVertexX() const { return vtx_pos_[Exyz::kX]; }
-  [[nodiscard]] inline Floating_t GetVertexY() const { return vtx_pos_[Exyz::kY]; }
-  [[nodiscard]] inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexX() const { return vtx_pos_[Exyz::kX]; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexY() const { return vtx_pos_[Exyz::kY]; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }
 
   static constexpr size_t GetNumberOfChannels() { return 1; }// needed in order to have EventHeader similar to Detector
 
-  [[nodiscard]] const EventHeader& GetChannel(size_t i) const;// needed in order to have EventHeader similar to Detector
+  ANALYSISTREE_ATTR_NODISCARD const EventHeader& GetChannel(size_t i) const;// needed in order to have EventHeader similar to Detector
 
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};

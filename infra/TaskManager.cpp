@@ -1,5 +1,7 @@
 #include "TaskManager.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree{
 
 TaskManager* TaskManager::manager_= nullptr;
@@ -83,6 +85,7 @@ void TaskManager::Finish() {
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
     f->Close();
+    delete f;
   }
 
   delete manager_;

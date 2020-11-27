@@ -1,4 +1,5 @@
 #include "Module.hpp"
+#include <iostream>
 
 namespace AnalysisTree {
 
@@ -16,4 +17,7 @@ void Module::Print() const {
   std::cout << "  number = " << number_ << "  signal = " << signal_ << std::endl;
 }
 
+void ModulePosition::Print() const {
+  std::cout << "  x = " << x_ << "  y = " << y_ << "  z = " << z_ << "  phi = " << GetPhi() << std::endl;
+}
 }// namespace AnalysisTree

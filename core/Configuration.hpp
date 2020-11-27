@@ -32,17 +32,17 @@ class Configuration : public TObject {
 
   void AddMatch(Matching* match);
 
-  [[nodiscard]] BranchConfig& GetBranchConfig(const std::string& name);
-  [[nodiscard]] const BranchConfig& GetBranchConfig(const std::string& name) const;
-  [[nodiscard]] const BranchConfig& GetBranchConfig(Integer_t i) const { return branches_.at(i); }
-  [[nodiscard]] const std::vector<BranchConfig>& GetBranchConfigs() const { return branches_; }
-  [[nodiscard]] uint GetNumberOfBranches() const { return branches_.size(); }
+  ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
+  ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
+  ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(Integer_t i) const { return branches_.at(i); }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<BranchConfig>& GetBranchConfigs() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD uint GetNumberOfBranches() const { return branches_.size(); }
 
-  [[nodiscard]] uint GetLastId() const { return branches_.empty() ? 0 : branches_.back().GetId(); }
+  ANALYSISTREE_ATTR_NODISCARD uint GetLastId() const { return branches_.empty() ? 0 : branches_.back().GetId(); }
 
-  [[nodiscard]] const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
-  [[nodiscard]] std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
-  [[nodiscard]] const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
+  ANALYSISTREE_ATTR_NODISCARD std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
+  ANALYSISTREE_ATTR_NODISCARD const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_; }
 
   void Print(Option_t* ="") const;
 

@@ -1,5 +1,7 @@
 #include "SimpleCut.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree {
 
 void SimpleCut::Print() const {

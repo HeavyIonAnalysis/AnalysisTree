@@ -1,5 +1,7 @@
 #include "DataHeader.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree {
 
 void DataHeader::Print(Option_t*) const {

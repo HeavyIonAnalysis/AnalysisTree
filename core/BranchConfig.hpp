@@ -33,7 +33,7 @@ class VectorConfig {
     }
   }
 
-  [[nodiscard]] ShortInt_t GetId(const std::string& sField) const {
+  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetId(const std::string& sField) const {
     auto search = map_.find(sField);
     if (search != map_.end()) {
       return search->second;
@@ -42,8 +42,8 @@ class VectorConfig {
     }
   }
 
-  [[nodiscard]] virtual const std::map<std::string, ShortInt_t>& GetMap() const { return map_; }
-  [[nodiscard]] virtual ShortInt_t GetSize() const { return size_; }
+  ANALYSISTREE_ATTR_NODISCARD virtual const std::map<std::string, ShortInt_t>& GetMap() const { return map_; }
+  ANALYSISTREE_ATTR_NODISCARD virtual ShortInt_t GetSize() const { return size_; }
 
  protected:
   MapType map_{};
@@ -64,8 +64,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   void Print() const;
 
-  [[nodiscard]] Types GetFieldType(const std::string& sField) const;
-  [[nodiscard]] ShortInt_t GetFieldId(const std::string& sField) const;
+  ANALYSISTREE_ATTR_NODISCARD Types GetFieldType(const std::string& sField) const;
+  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
 
   // Setters
   void SetId(ShortInt_t id) { id_ = id; }
@@ -76,13 +76,13 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   // Getters
   template<typename T>
-  [[nodiscard]] const std::map<std::string, ShortInt_t>& GetMap() const { return VectorConfig<T>::GetMap(); }
+  ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, ShortInt_t>& GetMap() const { return VectorConfig<T>::GetMap(); }
   template<typename T>
-  [[nodiscard]] ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
+  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 
-  [[nodiscard]] std::string GetName() const { return name_; }
-  [[nodiscard]] ShortInt_t GetId() const { return id_; }
-  [[nodiscard]] DetType GetType() const { return type_; }
+  ANALYSISTREE_ATTR_NODISCARD std::string GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
 
  protected:
   std::string name_;

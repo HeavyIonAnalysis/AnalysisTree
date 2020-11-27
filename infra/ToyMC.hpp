@@ -115,7 +115,7 @@ class ToyMC : public Task {
 
   //event properties
   EventHeader* sim_event_header_{nullptr};
-  std::poisson_distribution<int> multiplicity_{100};
+  std::poisson_distribution<int> multiplicity_{10000};
   std::uniform_real_distribution<float> psi_RP_{-M_PI, M_PI};
   std::vector<float> vn_{0.2, 0.1};
   float cm_rapidity_{0.f};

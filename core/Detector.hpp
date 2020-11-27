@@ -27,7 +27,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
   ~Detector() override = default;
 
-  [[nodiscard]] size_t GetNumberOfChannels() const noexcept {
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfChannels() const noexcept {
     return channels_.size();
   }
 

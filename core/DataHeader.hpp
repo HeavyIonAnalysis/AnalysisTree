@@ -31,15 +31,15 @@ class DataHeader : public TObject {
     det_pos_.emplace_back(pos);
   }
 
-  [[nodiscard]] Floating_t GetBeamRapidity() const { return beam_y_; }
-  [[nodiscard]] std::string GetSystem() const { return system_; }
-  [[nodiscard]] const TVector3& GetDetectorPosition(int i) const { return det_pos_.at(i); }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetBeamRapidity() const { return beam_y_; }
+  ANALYSISTREE_ATTR_NODISCARD std::string GetSystem() const { return system_; }
+  ANALYSISTREE_ATTR_NODISCARD const TVector3& GetDetectorPosition(int i) const { return det_pos_.at(i); }
 
-  [[nodiscard]] const ModulePositions& GetModulePositions(Integer_t idet) {
+  ANALYSISTREE_ATTR_NODISCARD const ModulePositions& GetModulePositions(Integer_t idet) {
     return modules_pos_.at(idet);
   }
 
-  [[nodiscard]] Floating_t GetModulePhi(int det_id, int module_id) const {
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetModulePhi(int det_id, int module_id) const {
     return modules_pos_.at(det_id).GetChannel(module_id).GetPhi();
   }
 

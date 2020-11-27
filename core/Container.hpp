@@ -34,12 +34,12 @@ class Container : public IndexedObject {
   }
 
   template<typename T>
-  [[nodiscard]] T GetField(Integer_t field_id) const {
+  ANALYSISTREE_ATTR_NODISCARD T GetField(Integer_t field_id) const {
     return GetVector<T>().at(field_id);
   }
 
   template<typename T>
-  [[nodiscard]] size_t GetSize() const {
+  ANALYSISTREE_ATTR_NODISCARD size_t GetSize() const {
     return GetVector<T>().size();
   }
 

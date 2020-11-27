@@ -5,6 +5,8 @@
 
 #include "Configuration.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree {
 
 Variable::Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda) : name_(std::move(name)),
