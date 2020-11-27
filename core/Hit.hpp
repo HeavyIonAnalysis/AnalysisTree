@@ -1,6 +1,8 @@
 #ifndef ANALYSISTREE_SRC_HIT_H_
 #define ANALYSISTREE_SRC_HIT_H_
 
+#include <stdexcept>
+
 #include <TVector3.h>
 
 #include "Constants.hpp"

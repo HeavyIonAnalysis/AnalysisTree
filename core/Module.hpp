@@ -1,6 +1,8 @@
 #ifndef ANALYSISTREE_SRC_MODULE_H_
 #define ANALYSISTREE_SRC_MODULE_H_
 
+#include <stdexcept>
+
 #include <TVector3.h>
 
 #include "Container.hpp"

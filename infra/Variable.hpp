@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <stdexcept>
 
 #include "Field.hpp"
 

@@ -2,6 +2,7 @@
 #define ANALYSISTREE_GENERICTRACK_H
 
 #include <cmath>
+#include <stdexcept>
 
 #include <TLorentzVector.h>
 #include <TVector3.h>

@@ -3,6 +3,7 @@
 #define ANALYSISTREE_INFRA_FIELD_H_
 
 #include <string>
+#include <stdexcept>
 
 #include "Constants.hpp"
 #include "Utils.hpp"
