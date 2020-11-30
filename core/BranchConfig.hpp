@@ -15,7 +15,8 @@ namespace AnalysisTree {
 template<typename T>
 class VectorConfig {
  public:
-  typedef std::map<std::string,ShortInt_t> MapType;
+  typedef std::pair<ShortInt_t, std::string> MapElement;
+  typedef std::map<std::string, MapElement> MapType;
 
   VectorConfig() = default;
   VectorConfig(const VectorConfig&) = default;
@@ -24,25 +25,29 @@ class VectorConfig {
   VectorConfig& operator=(const VectorConfig&) = default;
   virtual ~VectorConfig() = default;
 
-  virtual void AddField(const std::string& name) { map_.insert(std::make_pair(name, size_++)); }
-  void AddField(const std::string& name, ShortInt_t id) { map_.insert(std::make_pair(name, id)); }
+  virtual void AddField(const std::string& name, const std::string& title) {
+    map_.insert(std::make_pair(name, std::make_pair(size_++, title)));
+  }
+  void AddField(const std::string& name, ShortInt_t id, const std::string& title = "") {
+    map_.insert(std::make_pair(name, std::make_pair(id, title)));
+  }
 
   virtual void AddFields(const std::vector<std::string>& names) {
     for (const auto& name : names) {
-      map_.insert(std::pair<std::string, ShortInt_t>(name, size_++));
+      map_.insert(std::make_pair(name, std::make_pair(size_++, "")));
     }
   }
 
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetId(const std::string& sField) const {
     auto search = map_.find(sField);
     if (search != map_.end()) {
-      return search->second;
+      return search->second.first;
     } else {
       return UndefValueShort;
     }
   }
 
-  ANALYSISTREE_ATTR_NODISCARD virtual const std::map<std::string, ShortInt_t>& GetMap() const { return map_; }
+  ANALYSISTREE_ATTR_NODISCARD virtual const MapType& GetMap() const { return map_; }
   ANALYSISTREE_ATTR_NODISCARD virtual ShortInt_t GetSize() const { return size_; }
 
  protected:
@@ -70,13 +75,15 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   // Setters
   void SetId(ShortInt_t id) { id_ = id; }
   template<typename T>
-  void AddField(const std::string& name) { VectorConfig<T>::AddField(name); }
+  void AddField(const std::string& name, const std::string& title = "") {
+    VectorConfig<T>::AddField(name, title);
+  }
   template<typename T>
   void AddFields(const std::vector<std::string>& names) { VectorConfig<T>::AddFields(names); }
 
   // Getters
   template<typename T>
-  ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, ShortInt_t>& GetMap() const { return VectorConfig<T>::GetMap(); }
+  ANALYSISTREE_ATTR_NODISCARD const VectorConfig<int>::MapType& GetMap() const { return VectorConfig<T>::GetMap(); }
   template<typename T>
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 
@@ -89,7 +96,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ShortInt_t id_{UndefValueShort};
   DetType type_{DetType(UndefValueShort)};
 
-  ClassDef(AnalysisTree::BranchConfig, 1)
+  ClassDef(AnalysisTree::BranchConfig, 2)
 };
 
 }// namespace AnalysisTree
