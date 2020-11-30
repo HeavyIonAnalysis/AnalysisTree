@@ -121,7 +121,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
     this->SetBranchAddress(match.first.c_str(), &(match.second));
   }
   for (auto& branch : branches_) {
-    ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first.c_str()), branch.second);
+    ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
   }
 }
 
@@ -229,7 +229,7 @@ void Chain::DrawTransform(std::string& expr) const {
 
 Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
   std::string exp{varexp};
-  std::string sel{selection};
+  std::string sel{selection ? selection : ""};
   DrawTransform(exp);
   if(!sel.empty()){
     DrawTransform(sel);

@@ -31,6 +31,15 @@ class Chain : public TChain {
     this->AddFriend(tree);
   }
 
+  Chain(const std::string& filename, const std::string& treename) :
+    TChain(treename.c_str())
+  {
+    TFile* file = TFile::Open(filename.c_str(), "read");
+    configuration_ = (Configuration*) file->Get("Configuration");
+    data_header_ = (DataHeader*) file->Get("DataHeader");
+    this->Add(filename.c_str());
+  }
+
   Chain(std::vector<std::string> filelists, std::vector<std::string> treenames) :
    TChain(treenames.at(0).c_str()),
    filelists_(std::move(filelists)),
@@ -66,6 +75,11 @@ class Chain : public TChain {
   void InitPointersToBranches(std::set<std::string> names);
 
   Long64_t Draw(const char *varexp, const char *selection = nullptr, Option_t *option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
+
+  void Print(Option_t *option="") const override {
+    this->data_header_->Print();
+    this->configuration_->Print();
+  }
 
  protected:
 

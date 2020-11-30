@@ -10,8 +10,7 @@ set(SOURCES
   AnalysisTask.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-  Chain.cpp
-    )
+  Chain.cpp)
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
@@ -64,14 +63,12 @@ target_include_directories(AnalysisTreeInfra
 
 if(AnalysisTree_BUILD_TESTS)
     set(TEST_SOURCES
-
             Variable.test.cpp
             Cuts.test.cpp
             Field.test.cpp
             SimpleCut.test.cpp
 #            PlainTreeFiller.test.cpp
 #            AnalysisTask.test.cpp
-#            ToyMC.test.cpp
             )
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)
