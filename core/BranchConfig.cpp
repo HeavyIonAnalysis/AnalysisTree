@@ -1,6 +1,7 @@
 #include "BranchConfig.hpp"
 
 #include <iostream>
+#include <iomanip>
 
 namespace AnalysisTree {
 
@@ -67,19 +68,31 @@ ShortInt_t BranchConfig::GetFieldId(const std::string& sField) const {
   return UndefValueShort;
 }
 
+template<typename T>
+void VectorConfig<T>::Print() const {
+  if(map_.empty()) return;
+
+  std::cout << std::left << std::setw(10) << std::setfill(' ') << "Id";
+  std::cout << std::left << std::setw(10) << std::setfill(' ') << "Name";
+  std::cout << std::left << std::setw(50) << std::setfill(' ') << "Info";
+  std::cout << std::endl;
+
+  for (const auto& entry : map_){
+    std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.second.first;
+    std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.first;
+    std::cout << std::left << std::setw(50) << std::setfill(' ') << entry.second.second;
+    std::cout << std::endl;
+  }
+}
+
 void BranchConfig::Print() const {
   std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;
-
-  std::cout << "  floating fields:" << std::endl;
-  for (const auto& entry : VectorConfig<float>::GetMap())
-    std::cout << "   " << entry.first << " id=" << entry.second.first << " (" << entry.second.second << ")" << std::endl;
-
-  std::cout << "  integer fields:" << std::endl;
-  for (const auto& entry : VectorConfig<int>::GetMap())
-    std::cout << "   " << entry.first << " id=" << entry.second.first << " (" << entry.second.second << ")" << std::endl;
-
-  std::cout << "  boolean fields:" << std::endl;
-  for (const auto& entry : VectorConfig<bool>::GetMap())
-    std::cout << "   " << entry.first << " id=" << entry.second.first << " (" << entry.second.second << ")" << std::endl;
+  std::cout << "Floating fields:" << std::endl;
+  VectorConfig<float>::Print();
+  std::cout << "Integer fields:" << std::endl;
+  VectorConfig<int>::Print();
+  std::cout << "Boolean fields:" << std::endl;
+  VectorConfig<bool>::Print();
+//  std::cout << std::endl;
 }
 }// namespace AnalysisTree

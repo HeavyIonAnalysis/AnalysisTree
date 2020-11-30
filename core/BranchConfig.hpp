@@ -50,6 +50,8 @@ class VectorConfig {
   ANALYSISTREE_ATTR_NODISCARD virtual const MapType& GetMap() const { return map_; }
   ANALYSISTREE_ATTR_NODISCARD virtual ShortInt_t GetSize() const { return size_; }
 
+  virtual void Print() const;
+
  protected:
   MapType map_{};
   ShortInt_t size_{0};
@@ -67,7 +69,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   explicit BranchConfig(std::string name, DetType type);
 
-  void Print() const;
+  void Print() const override;
 
   ANALYSISTREE_ATTR_NODISCARD Types GetFieldType(const std::string& sField) const;
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
