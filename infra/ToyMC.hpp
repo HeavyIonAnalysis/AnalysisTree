@@ -33,9 +33,9 @@ class ToyMC : public Task {
     sim_eh.AddField<float>("psi_RP");
 
     BranchConfig sim_part("SimParticles", DetType::kParticle);
-    sim_part.AddField<float>("float");
-    sim_part.AddField<bool>("bool");
-    sim_part.AddField<int>("int");
+//    sim_part.AddField<float>("float");
+//    sim_part.AddField<bool>("bool");
+//    sim_part.AddField<int>("int");
 
     man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
     man->AddBranch("SimParticles", particles_, sim_part);

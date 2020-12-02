@@ -52,9 +52,10 @@ class Chain : public TChain {
 
   ANALYSISTREE_ATTR_NODISCARD Configuration* GetConfiguration() const { return configuration_; }
   ANALYSISTREE_ATTR_NODISCARD DataHeader* GetDataHeader() const { return data_header_; }
-  ANALYSISTREE_ATTR_NODISCARD DataHeader* ModifyDataHeader() { return data_header_; }
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, BranchPointer>& GetBranchPointers() const { return branches_; }
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, Matching*>& GetMatchPointers() const { return matches_; }
+
+  void SetDataHeader(DataHeader* dh) { data_header_ = dh; }
 
   BranchPointer GetPointerToBranch(const std::string& name){
     auto br = branches_.find(name);
