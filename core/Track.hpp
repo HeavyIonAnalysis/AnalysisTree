@@ -18,13 +18,13 @@ namespace AnalysisTree {
 
 class Track : public Container {
  public:
-  Track() noexcept = default;
+  Track() = default;
 
   explicit Track(Integer_t id) noexcept : Container(id) {}
   Track(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
   Track(const Track& track) = default;
-  Track(Track&& track) noexcept = default;
-  Track& operator=(Track&&) noexcept = default;
+  Track(Track&& track) = default;
+  Track& operator=(Track&&) = default;
   Track& operator=(const Track& track) = default;
   ~Track() override = default;
 
