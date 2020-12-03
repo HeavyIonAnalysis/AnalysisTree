@@ -219,7 +219,7 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
 
 void Chain::DrawTransform(std::string& expr) const {
   auto fields = FindAndRemoveFields(expr);
-  auto sum{0};
+  int sum{0};
   for(auto& field : fields){
     DrawFieldTransform(field.first);
     expr.insert(field.second+sum, field.first);
