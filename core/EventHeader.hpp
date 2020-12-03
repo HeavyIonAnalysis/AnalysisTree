@@ -55,7 +55,7 @@ class EventHeader : public Container {
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};
 
-  ClassDefOverride(EventHeader,1)
+  ClassDefOverride(EventHeader,2)
 };
 
 }// namespace AnalysisTree

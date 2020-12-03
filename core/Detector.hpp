@@ -100,7 +100,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
  protected:
   std::vector<T> channels_{};
 
- ClassDefOverride(Detector,2)
+ ClassDefOverride(Detector, 2)
 
 };
 

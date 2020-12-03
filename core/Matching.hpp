@@ -46,7 +46,7 @@ class Matching {
   std::map<Integer_t, Integer_t> match_{};
   std::map<Integer_t, Integer_t> match_inverted_{};//TODO is there a better way? Boost.Bimap?
 
-  ClassDef(AnalysisTree::Matching, 1)
+  ClassDef(Matching, 1)
 };
 
 }// namespace AnalysisTree

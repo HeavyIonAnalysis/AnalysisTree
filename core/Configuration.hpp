@@ -51,7 +51,7 @@ class Configuration : public TObject {
   std::vector<BranchConfig> branches_{};
   std::map<std::array<std::string, 2>, std::string> matches_{};
 
-  ClassDef(AnalysisTree::Configuration, 1)
+  ClassDef(Configuration, 2)
 };
 
 }// namespace AnalysisTree

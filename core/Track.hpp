@@ -134,7 +134,7 @@ class Track : public Container {
   Floating_t py_{UndefValueFloat}; ///< y-component of track's momentum
   Floating_t pz_{UndefValueFloat}; ///< z-component of track's momentum
 
-  ClassDefOverride(AnalysisTree::Track, 1);
+  ClassDefOverride(Track, 2);
 };
 
 }// namespace AnalysisTree

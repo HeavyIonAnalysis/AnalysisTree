@@ -52,7 +52,7 @@ class DataHeader : public TObject {
   Floating_t beam_y_{UndefValueFloat};
   Floating_t sqrtsNN_{UndefValueFloat};
 
-  ClassDef(AnalysisTree::DataHeader, 1)
+  ClassDef(DataHeader, 1)
 };
 
 }// namespace AnalysisTree

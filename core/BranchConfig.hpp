@@ -98,7 +98,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ShortInt_t id_{UndefValueShort};
   DetType type_{DetType(UndefValueShort)};
 
-  ClassDef(AnalysisTree::BranchConfig, 2)
+  ClassDef(BranchConfig, 2)
 };
 
 }// namespace AnalysisTree

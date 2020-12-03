@@ -71,7 +71,7 @@ class Hit : public Container {
   Floating_t z_{UndefValueFloat};
   Floating_t signal_{UndefValueFloat};
 
-  ClassDefOverride(Hit,1)
+  ClassDefOverride(Hit,2)
 
 };
 

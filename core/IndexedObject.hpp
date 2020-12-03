@@ -67,7 +67,7 @@ class IndexedObject {
 
   Integer_t id_{-1};
 
-  ClassDef(AnalysisTree::IndexedObject, 1)
+  ClassDef(IndexedObject, 1)
 };
 
 }// namespace AnalysisTree

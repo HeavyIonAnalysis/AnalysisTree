@@ -58,7 +58,7 @@ class Container : public IndexedObject {
   std::vector<int> ints_{};
   std::vector<bool> bools_{};
 
-  ClassDefOverride(AnalysisTree::Container, 2);
+  ClassDefOverride(Container, 2);
 
 };
 
