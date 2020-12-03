@@ -130,7 +130,7 @@ class ToyMC : public Task {
   Particles* particles_{nullptr};
   std::exponential_distribution<float> pT_dist_{1.};
   std::normal_distribution<float> y_dist_{cm_rapidity_, 1.};
-  std::piecewise_linear_distribution<> phi_distr_{1000, 0, 2*M_PI, [&](const double x) { return PhiPdf(x); }};
+  std::piecewise_linear_distribution<> phi_distr_{1000, 0, 2*M_PI, [this](const double x) { return PhiPdf(x); }};
 
   // tracking detector properties
   TrackDetector* track_detector_{nullptr};
