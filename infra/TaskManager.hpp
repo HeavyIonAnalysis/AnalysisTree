@@ -111,6 +111,11 @@ class TaskManager {
     }
   }
 
+  void SetOutputName(std::string file, std::string tree="aTree"){
+    out_file_name_ = std::move(file);
+    out_tree_name_ = std::move(tree);
+  }
+
  protected:
   TaskManager() = default;
   static TaskManager* manager_;
@@ -125,9 +130,13 @@ class TaskManager {
   TTree* out_tree_{nullptr};
   Configuration* configuration_{nullptr};
   DataHeader* data_header_{nullptr};
+  std::string out_tree_name_{"aTree"};
+  std::string out_file_name_{"analysis_tree.root"};
 
   bool is_init_{false};
   bool fill_out_tree_{false};
+  bool read_in_tree_{false};
+
 };
 
 };// namespace AnalysisTree

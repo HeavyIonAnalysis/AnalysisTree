@@ -5,6 +5,9 @@
 
 #include "AnalysisTask.hpp"
 #include "TaskManager.hpp"
+#include "ToyMC.hpp"
+
+#include <random>
 
 namespace{
 
@@ -78,20 +81,38 @@ class AnalysisTaskTest : public AnalysisTask {
 TEST(AnalysisTask, Basics) {
 
 const int n_events = 1000;  // TODO propagate somehow
-auto* man = AnalysisTree::TaskManager::GetInstance();
+std::string filename = "toymc_analysis_task.root";
+std::string treename = "tTree";
+std::string filelist = "fl_toy_mc.txt";
+
+auto* man = TaskManager::GetInstance();
+
+auto* toy_mc = new ToyMC<std::default_random_engine>;
+man->AddTask(toy_mc);
+man->SetOutputName(filename, treename);
+
+man->Init();
+man->Run(n_events);
+man->Finish();
+
+std::ofstream fl(filelist);
+fl << filename << "\n";
+fl.close();
+
+man = TaskManager::GetInstance();
 
 auto* var_manager = new AnalysisTaskTest;
 Variable px_sim("SimParticles", "px");
 Variable px_rec("RecTracks", "px");
-Cuts eta_cut("eta_cut", {RangeCut({"SimParticles", "eta"}, -1, 1)});
+Cuts eta_cut("eta_cut", {RangeCut({"SimParticles.eta"}, -1, 1)});
 var_manager->AddEntry(AnalysisEntry({px_sim}));
 var_manager->AddEntry(AnalysisEntry({px_rec}));
 var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
-var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
+//var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
 
 man->AddTask(var_manager);
 
-man->Init({"fl_toy_mc.txt"}, {"tTree"});
+man->Init({filelist}, {treename});
 man->Run(-1);
 man->Finish();
 

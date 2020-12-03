@@ -52,7 +52,7 @@ std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const AnalysisEntry& var
     }
   }
   entries_.emplace_back(vars);
-  std::iota(var_ids.begin(), var_ids.end(), 0); // var_ids will become: [0..size]
+  std::iota(var_ids.begin(), var_ids.end(), 0); // var_ids will become: [0..size-1]
   return std::make_pair(entries_.size() - 1, var_ids);
 }
 

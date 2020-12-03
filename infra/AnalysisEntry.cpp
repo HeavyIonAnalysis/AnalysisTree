@@ -17,8 +17,8 @@ bool AnalysisEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const B
   return ANALYSISTREE_UTILS_VISIT(apply_cut_2_branches(ch1, ch2, cuts_), br1.GetData(), br2.GetData());
 }
 
-double AnalysisEntry::FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) {
-  return ANALYSISTREE_UTILS_VISIT(fill_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
+double AnalysisEntry::FillVariable(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) {
+  return ANALYSISTREE_UTILS_VISIT(get_value_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
 }
 
 /**
@@ -73,7 +73,7 @@ void AnalysisEntry::FillFromTwoBranches() {
     std::vector<double> temp_vars(vars_.size());
     short i_var{};
     for (const auto& var : vars_) {
-      temp_vars[i_var] = FillVariabe(var, br1, ch1, br2, ch2);
+      temp_vars[i_var] = FillVariable(var, br1, ch1, br2, ch2);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);

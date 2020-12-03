@@ -103,19 +103,6 @@ class ToyMC : public Task {
     }
   }
 
-  void WriteToFile(const std::string& filename, const std::string& filelist="") const {
-//    TFile* file{TFile::Open(filename.c_str(), "recreate")};
-//    config_.Write("Configuration");
-//    dh_.Write("DataHeader");
-//    out_tree_->Write();
-//    file->Close();
-//    if(!filelist.empty()){
-//      std::ofstream fl(filelist);
-//      fl << filename << "\n";
-//      fl.close();
-//    }
-  }
-
  protected:
   RandomEngine generator_;
 
@@ -137,7 +124,6 @@ class ToyMC : public Task {
         value += 2 * vn_[n-1] * std::cos(n * (phi - 0.));
       }
       return value;  
-//   return this->PhiPdf(x); 
     }};
 
   // tracking detector properties
@@ -149,14 +135,6 @@ class ToyMC : public Task {
   float GetPhi(RandomEngine &engine, float psi) {
     return phi_distr_(engine) + psi;
   }
-
-//  double PhiPdf(double phi) {
-//    double value = 1.;
-//    for (unsigned int n=1; n < vn_.size()+1; ++n) {
-//      value += 2 * vn_[n-1] * std::cos(n * (phi - 0.));
-//    }
-//    return value;
-//  }
 
 };
 

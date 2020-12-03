@@ -21,7 +21,7 @@ TaskManager* TaskManager::GetInstance()
 void TaskManager::Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees) {
   assert(!is_init_);
   is_init_ = true;
-
+  read_in_tree_ = true;
   chain_ = new Chain(filelists, in_trees);
 
   std::set<std::string> branch_names{};
@@ -35,6 +35,7 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
     task->PreInit();
     task->Init();
   }
+
 }
 
 void TaskManager::Init(){
@@ -53,7 +54,7 @@ void TaskManager::Init(){
 }
 
 void TaskManager::InitOutChain(){
-  out_tree_ = new TTree("aTree", "");
+  out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
 }
 
 void TaskManager::Run(long long nEvents){
@@ -66,7 +67,9 @@ void TaskManager::Run(long long nEvents){
   }
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
-    chain_->GetEntry(iEvent);
+    if(read_in_tree_){
+      chain_->GetEntry(iEvent);
+    }
     Exec();
   }// Event loop
 
@@ -76,11 +79,8 @@ void TaskManager::Run(long long nEvents){
 }
 
 void TaskManager::Finish() {
-  for (auto* task : tasks_) {
-    task->Finish();
-  }
   if (fill_out_tree_){
-    TFile *f = TFile::Open("test.root", "recreate");
+    TFile *f = TFile::Open(out_file_name_.c_str(), "recreate");
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
@@ -88,7 +88,25 @@ void TaskManager::Finish() {
     delete f;
   }
 
-  delete manager_;
+  for (auto* task : tasks_) {
+    task->Finish();
+    delete task;
+  }
+  tasks_.clear();
+
+  delete chain_;
+
+  if(fill_out_tree_){
+    delete configuration_;
+    delete data_header_;
+    delete out_tree_;
+  }
+
+  out_tree_name_ = "aTree";
+  out_file_name_ = "analysis_tree.root";
+  is_init_ = false;
+  fill_out_tree_ = false;
+  read_in_tree_ = false;
 }
 
 }

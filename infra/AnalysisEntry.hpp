@@ -51,7 +51,7 @@ class AnalysisEntry {
   void FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2);
   ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranch(const BranchReader& br, int i_channel) const;
   ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const;
-  static double FillVariabe(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2);
+  static double FillVariable(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2);
 
   std::vector<Variable> vars_{};
   Cuts* cuts_{nullptr};///< non-owning
