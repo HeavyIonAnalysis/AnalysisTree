@@ -73,13 +73,13 @@ void VectorConfig<T>::Print() const {
   if(map_.empty()) return;
 
   std::cout << std::left << std::setw(10) << std::setfill(' ') << "Id";
-  std::cout << std::left << std::setw(10) << std::setfill(' ') << "Name";
+  std::cout << std::left << std::setw(20) << std::setfill(' ') << "Name";
   std::cout << std::left << std::setw(50) << std::setfill(' ') << "Info";
   std::cout << std::endl;
 
   for (const auto& entry : map_){
     std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.second.first;
-    std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.first;
+    std::cout << std::left << std::setw(20) << std::setfill(' ') << entry.first;
     std::cout << std::left << std::setw(50) << std::setfill(' ') << entry.second.second;
     std::cout << std::endl;
   }
