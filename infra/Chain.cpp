@@ -123,6 +123,11 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
   for (auto& branch : branches_) {
     ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
   }
+
+  this->GetEntry(0);
+//  auto* ptr = std::get<Particles*>(this->branches_.find("SimParticles")->second);
+//  std::cout << "SDFSDF " << ptr->GetNumberOfChannels() << std::endl;
+
 }
 
 void Chain::InitConfiguration(){

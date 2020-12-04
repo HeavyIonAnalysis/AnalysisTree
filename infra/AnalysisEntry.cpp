@@ -18,7 +18,7 @@ bool AnalysisEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const B
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) {
-  return ANALYSISTREE_UTILS_VISIT(get_value_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
+  return ANALYSISTREE_UTILS_VISIT(fill_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
 }
 
 /**

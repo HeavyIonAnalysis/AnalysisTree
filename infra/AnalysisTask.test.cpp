@@ -108,13 +108,13 @@ Cuts eta_cut("eta_cut", {RangeCut({"SimParticles.eta"}, -1, 1)});
 var_manager->AddEntry(AnalysisEntry({px_sim}));
 var_manager->AddEntry(AnalysisEntry({px_rec}));
 var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
-//var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
+var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
 
 man->AddTask(var_manager);
 
 man->Init({filelist}, {treename});
 man->Run(-1);
-man->Finish();
+var_manager->Finish();
 
 auto px_sim_stat = var_manager->GetEntriesTest().at(0).at(0);
 auto px_rec_stat = var_manager->GetEntriesTest().at(1).at(0);
@@ -126,6 +126,8 @@ EXPECT_NEAR(px_sim_stat.sigma_, 1., 0.1);
 EXPECT_NEAR(px_rec_stat.n_entries_, n_events*100, n_events);
 EXPECT_NEAR(px_rec_stat.mean_, 0., 0.05);
 EXPECT_NEAR(px_rec_stat.sigma_, 1., 0.1);
+
+man->Finish();
 }
 
 }

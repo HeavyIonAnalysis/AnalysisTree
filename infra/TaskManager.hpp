@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 #include "Chain.hpp"
 #include "Cuts.hpp"
@@ -58,13 +59,14 @@ class TaskManager {
   template<class Branch>
   void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
     assert(!name.empty() && !ptr);
-    ptr = new Branch(configuration_->GetLastId());
 
     if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      out_tree_->Branch(name.c_str(), &ptr, 320000);
-      configuration_->AddBranchConfig(std::move(config));
       fill_out_tree_ = true;
+
+      configuration_->AddBranchConfig(std::move(config));
+      ptr = new Branch(configuration_->GetLastId());
+      out_tree_->Branch(name.c_str(), &ptr, 320000);
     } else {
       throw std::runtime_error("Not yet implemented...");
     }

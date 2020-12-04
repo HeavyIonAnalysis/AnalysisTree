@@ -22,16 +22,12 @@ struct get_value : public Utils::Visitor<double> {
   int i_channel_;
 };
 
-struct get_value_2_branches : public Utils::Visitor<double> {
-  get_value_2_branches(Variable var, int i_channel_1, int i_channel_2) : var_(std::move(var)), i_channel_1_(i_channel_1), i_channel_2_(i_channel_2) {}
-  template<class Det1, class Det2>
-  double apply(Det1* d1, Det2* d2) const { return var_.GetValue(d1->GetChannel(i_channel_2_), d1->GetId(), d2->GetChannel(i_channel_2_), d2->GetId()); }
-  template<class Det1, class Det2>
-  double operator()(Det1* d1, Det2* d2) const { return apply<Det1, Det2>(d1, d2); }
-  Variable var_;
-  int i_channel_1_, i_channel_2_;
+struct get_id_struct : public Utils::Visitor<int> {
+  template<typename Entity>
+  int get_id(Entity* d) const { return d->GetId(); }
+  template<typename Entity>
+  int operator()(Entity* d) const { return get_id<Entity>(d); }
 };
-
 
 struct apply_cut : public Utils::Visitor<bool> {
   apply_cut(int i_channel, const Cuts* cut) : i_channel_(i_channel), cut_(cut) {}
@@ -82,12 +78,6 @@ struct set_branch_address_struct : public Utils::Visitor<int> {
   std::string name_;
 };
 
-struct get_id_struct : public Utils::Visitor<int> {
-  template<typename Entity>
-  int get_id(Entity* d) const { return d->GetId(); }
-  template<typename Entity>
-  int operator()(Entity* d) const { return get_id<Entity>(d); }
-};
 
 
 }// namespace AnalysisTree
