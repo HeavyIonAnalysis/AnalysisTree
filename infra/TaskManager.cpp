@@ -94,7 +94,7 @@ void TaskManager::Finish() {
   }
   tasks_.clear();
 
-  delete chain_;
+//  delete chain_;
 
   if(fill_out_tree_){
     delete configuration_;
