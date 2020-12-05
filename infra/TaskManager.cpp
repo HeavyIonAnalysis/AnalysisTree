@@ -31,11 +31,14 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   }
   chain_->InitPointersToBranches(branch_names);
 
+  InitTasks();
+}
+
+void TaskManager::InitTasks(){
   for(auto* task : tasks_) {
     task->PreInit();
     task->Init();
   }
-
 }
 
 void TaskManager::Init(){
@@ -43,18 +46,16 @@ void TaskManager::Init(){
   is_init_ = true;
 
   InitOutChain();
-  configuration_ = new Configuration("Configuration");
-  data_header_ = new DataHeader;
-  chain_ = new Chain(out_tree_, configuration_, nullptr);
+  chain_ = new Chain(out_tree_, configuration_, data_header_);
 
-  for(auto* task : tasks_) {
-    task->PreInit();
-    task->Init();
-  }
+  InitTasks();
 }
 
 void TaskManager::InitOutChain(){
+  out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
   out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
+  configuration_ = new Configuration("Configuration");
+  data_header_ = new DataHeader;
 }
 
 void TaskManager::Run(long long nEvents){
@@ -80,12 +81,12 @@ void TaskManager::Run(long long nEvents){
 
 void TaskManager::Finish() {
   if (fill_out_tree_){
-    TFile *f = TFile::Open(out_file_name_.c_str(), "recreate");
+    out_file_->cd();
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
-    f->Close();
-//    delete f;
+    out_file_->Close();
+    delete out_file_;
   }
 
   for (auto* task : tasks_) {

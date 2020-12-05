@@ -66,7 +66,7 @@ class TaskManager {
 
       configuration_->AddBranchConfig(std::move(config));
       ptr = new Branch(configuration_->GetLastId());
-      out_tree_->Branch(name.c_str(), &ptr, 1024000, 0); // otherwise I get segfault at filling in case of large number of Particles
+      out_tree_->Branch(name.c_str(), &ptr); // otherwise I get segfault at filling in case of large number of Particles
     } else {
       throw std::runtime_error("Not yet implemented...");
     }
@@ -123,6 +123,7 @@ class TaskManager {
   static TaskManager* manager_;
 
   void InitOutChain();
+  void InitTasks();
 
 //  std::unique_ptr<Chain> chain_{nullptr};
   Chain* chain_;
@@ -130,6 +131,7 @@ class TaskManager {
 
   // output data members
   TTree* out_tree_{nullptr};
+  TFile* out_file_{nullptr};
   Configuration* configuration_{nullptr};
   DataHeader* data_header_{nullptr};
   std::string out_tree_name_{"aTree"};
