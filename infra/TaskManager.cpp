@@ -100,7 +100,7 @@ void TaskManager::Finish() {
   if(fill_out_tree_){
     delete configuration_;
     delete data_header_;
-    delete out_tree_;
+//    delete out_tree_;
   }
 
   out_tree_name_ = "aTree";
