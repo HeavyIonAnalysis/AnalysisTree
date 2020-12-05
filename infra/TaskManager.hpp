@@ -66,7 +66,7 @@ class TaskManager {
 
       configuration_->AddBranchConfig(std::move(config));
       ptr = new Branch(configuration_->GetLastId());
-      out_tree_->Branch(name.c_str(), &ptr, 320000); // otherwise I get segfault at filling in case of large number of Particles
+      out_tree_->Branch(name.c_str(), &ptr, 256000, 0); // otherwise I get segfault at filling in case of large number of Particles
     } else {
       throw std::runtime_error("Not yet implemented...");
     }
