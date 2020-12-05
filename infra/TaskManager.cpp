@@ -85,7 +85,7 @@ void TaskManager::Finish() {
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
     f->Close();
-    delete f;
+//    delete f;
   }
 
   for (auto* task : tasks_) {
