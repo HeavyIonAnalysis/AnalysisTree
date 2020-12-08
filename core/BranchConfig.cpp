@@ -3,6 +3,8 @@
 #include <iostream>
 #include <iomanip>
 
+ClassImp(AnalysisTree::BranchConfig)
+
 namespace AnalysisTree {
 
 BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(name)), type_(type) {
@@ -78,9 +80,9 @@ void VectorConfig<T>::Print() const {
   std::cout << std::endl;
 
   for (const auto& entry : map_){
-    std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.second.first;
+    std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.second.id_;
     std::cout << std::left << std::setw(20) << std::setfill(' ') << entry.first;
-    std::cout << std::left << std::setw(50) << std::setfill(' ') << entry.second.second;
+    std::cout << std::left << std::setw(50) << std::setfill(' ') << entry.second.title_;
     std::cout << std::endl;
   }
 }

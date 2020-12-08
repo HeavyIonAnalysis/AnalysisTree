@@ -4,6 +4,7 @@
 
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <TObject.h>
@@ -12,11 +13,17 @@
 
 namespace AnalysisTree {
 
+struct ConfigElement {
+  ConfigElement() = default;
+  explicit ConfigElement(ShortInt_t id, std::string title="") : id_(id), title_(std::move(title)) {}
+  ShortInt_t id_{0};
+  std::string title_;
+};
+
 template<typename T>
 class VectorConfig {
  public:
-  typedef std::pair<ShortInt_t, std::string> MapElement;
-  typedef std::map<std::string, MapElement> MapType;
+  typedef std::map<std::string, ConfigElement> MapType;
 
   VectorConfig() = default;
   VectorConfig(const VectorConfig&) = default;
@@ -26,22 +33,22 @@ class VectorConfig {
   virtual ~VectorConfig() = default;
 
   virtual void AddField(const std::string& name, const std::string& title) {
-    map_.insert(std::make_pair(name, std::make_pair(size_++, title)));
+    map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++, title)));
   }
   void AddField(const std::string& name, ShortInt_t id, const std::string& title = "") {
-    map_.insert(std::make_pair(name, std::make_pair(id, title)));
+    map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(id, title)));
   }
 
   virtual void AddFields(const std::vector<std::string>& names) {
     for (const auto& name : names) {
-      map_.insert(std::make_pair(name, std::make_pair(size_++, "")));
+      map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++)));
     }
   }
 
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetId(const std::string& sField) const {
     auto search = map_.find(sField);
     if (search != map_.end()) {
-      return search->second.first;
+      return search->second.id_;
     } else {
       return UndefValueShort;
     }
@@ -55,6 +62,8 @@ class VectorConfig {
  protected:
   MapType map_{};
   ShortInt_t size_{0};
+  ClassDef(VectorConfig, 1)
+
 };
 
 class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, public VectorConfig<bool> {
@@ -98,7 +107,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ShortInt_t id_{UndefValueShort};
   DetType type_{DetType(UndefValueShort)};
 
-  ClassDef(BranchConfig, 2)
+  ClassDefOverride(BranchConfig, 2)
 };
 
 }// namespace AnalysisTree

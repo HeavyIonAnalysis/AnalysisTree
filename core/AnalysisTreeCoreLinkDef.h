@@ -4,6 +4,7 @@
 #pragma link off all functions;
 #pragma link C++ nestedclasses;
 
+
 #pragma link C++ namespace AnalysisTree;
 
 #pragma link C++ class AnalysisTree::IndexedObject+;
@@ -19,6 +20,7 @@
 #pragma link C++ class AnalysisTree::VectorConfig<int>+;
 #pragma link C++ class AnalysisTree::VectorConfig<float>+;
 #pragma link C++ class AnalysisTree::VectorConfig<bool>+;
+#pragma link C++ class AnalysisTree::ConfigElement+;
 #pragma link C++ class AnalysisTree::Configuration+;
 #pragma link C++ class AnalysisTree::BranchConfig+;
 #pragma link C++ class AnalysisTree::DataHeader+;
