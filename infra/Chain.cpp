@@ -176,12 +176,17 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
 }
 
 void Chain::DrawFieldTransform(std::string& expr) const {
+
   auto dot = expr.find('.');
   auto branch = expr.substr(0, dot);
   auto field = expr.substr(dot+1);
-  auto type = configuration_->GetBranchConfig(branch).GetFieldType(field);
-  auto id = configuration_->GetBranchConfig(branch).GetFieldId(field);
+
+  const auto& br = configuration_->GetBranchConfig(branch);
+  auto type = br.GetFieldType(field);
+  auto id = br.GetFieldId(field);
   std::string type_str{};
+
+//  std::cout << "branch " << branch << " field " << field << std::endl;
 
   switch (type) {
     case(Types::kFloat) :   { type_str = "float"; break; }
@@ -200,14 +205,15 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
   int pos = 0;
   while(expr.find('.', pos) != size_t(-1) ){ //TODO fix this
     auto dot = expr.find('.', pos);
-    if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && isdigit(expr[dot+1]) != ' '){  // is not a number like 1.5
+    if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && expr[dot+1] != ' '){  // is not a number like 1.5 or 1.
 
       auto begin = dot;
-      while( begin > 0 && (isalpha(expr[begin-1]) || isdigit(expr[begin-1])) ){
+      auto is_allowed_char = [](char c) { return isalpha(c) || isdigit(c) || c == '_'; };
+      while( begin > 0 && is_allowed_char(expr[begin-1]) ){
         begin--;
       }
       auto end = dot;
-      while( end < expr.size()-1 && (isalpha(expr[end+1]) || isdigit(expr[end+1]))){
+      while( end < expr.size()-1 && is_allowed_char(expr[end+1]) ){
         end++;
       }
       auto field = expr.substr(begin, end - begin + 1);
