@@ -1,8 +1,5 @@
 #include "BranchConfig.hpp"
 
-#include <iostream>
-#include <iomanip>
-
 ClassImp(AnalysisTree::BranchConfig)
 
 namespace AnalysisTree {
@@ -68,23 +65,6 @@ ShortInt_t BranchConfig::GetFieldId(const std::string& sField) const {
   if (id != UndefValueShort) return id;
 
   return UndefValueShort;
-}
-
-template<typename T>
-void VectorConfig<T>::Print() const {
-  if(map_.empty()) return;
-
-  std::cout << std::left << std::setw(10) << std::setfill(' ') << "Id";
-  std::cout << std::left << std::setw(20) << std::setfill(' ') << "Name";
-  std::cout << std::left << std::setw(50) << std::setfill(' ') << "Info";
-  std::cout << std::endl;
-
-  for (const auto& entry : map_){
-    std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.second.id_;
-    std::cout << std::left << std::setw(20) << std::setfill(' ') << entry.first;
-    std::cout << std::left << std::setw(50) << std::setfill(' ') << entry.second.title_;
-    std::cout << std::endl;
-  }
 }
 
 void BranchConfig::Print() const {
