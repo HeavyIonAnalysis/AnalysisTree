@@ -18,6 +18,9 @@ struct ConfigElement {
   explicit ConfigElement(ShortInt_t id, std::string title="") : id_(id), title_(std::move(title)) {}
   ShortInt_t id_{0};
   std::string title_;
+
+ protected:
+ ClassDef(ConfigElement, 1)
 };
 
 template<typename T>
