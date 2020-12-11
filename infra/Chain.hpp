@@ -77,7 +77,7 @@ class Chain : public TChain {
 
   Long64_t Draw(const char *varexp, const char *selection = nullptr, Option_t *option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
 
-  void Print(Option_t *option="") const override {
+  void Print(Option_t*) const override {
     this->data_header_->Print();
     this->configuration_->Print();
   }
