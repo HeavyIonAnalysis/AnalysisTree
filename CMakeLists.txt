@@ -5,6 +5,7 @@ cmake_minimum_required(VERSION 3.5)
 project(AnalysisTree CXX)
 set(PROJECT_VERSION 1.1)
 
+# by default build optimized code
 if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RELEASE)
 endif()
@@ -25,7 +26,6 @@ endif()
 if(Boost_FOUND)
     message(STATUS "Boost version ${Boost_VERSION_STRING} is found!")
     message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
-    add_definitions(-DUSEBOOST)
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
@@ -38,7 +38,8 @@ set(AnalysisTree_BUILD_EXPERIMENTAL OFF CACHE BOOL "Build experimental features 
 # Tests
 include(TestsSetup)
 
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra")
+#set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb -g -DDEBUG -D__DEBUG -Wall -Wextra --coverage")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -ftree-vectorize -ffast-math -DNODEBUG")
 message(STATUS "Using CXX flags for ${CMAKE_BUILD_TYPE}: ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}")
 
@@ -46,7 +47,6 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 list(APPEND CMAKE_PREFIX_PATH ${ROOTSYS})
 
 find_package(ROOT REQUIRED)
-list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 
 message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
 include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
@@ -56,7 +56,9 @@ add_subdirectory(core)
 add_subdirectory(infra)
 
 #if(AnalysisTree_BUILD_EXAMPLES)
-#    add_subdirectory(examples)
+    #    add_subdirectory(examples)
+#    add_executable(example examples/test.cpp)
+#    target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra ${ROOT_LIBRARIES} EG)
 #endif()
 
 #if(AnalysisTree_BUILD_TESTS)

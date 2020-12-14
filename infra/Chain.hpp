@@ -21,7 +21,7 @@ class Chain : public TChain {
 
  public:
 
-  Chain() : TChain() {};
+  Chain() : TChain() {}
 
   Chain(TTree* tree, Configuration* config, DataHeader* data_header) :
       TChain(tree->GetName()),
@@ -29,6 +29,15 @@ class Chain : public TChain {
       data_header_(data_header)
   {
     this->AddFriend(tree);
+  }
+
+  Chain(const std::string& filename, const std::string& treename) :
+    TChain(treename.c_str())
+  {
+    TFile* file = TFile::Open(filename.c_str(), "read");
+    configuration_ = (Configuration*) file->Get("Configuration");
+    data_header_ = (DataHeader*) file->Get("DataHeader");
+    this->Add(filename.c_str());
   }
 
   Chain(std::vector<std::string> filelists, std::vector<std::string> treenames) :
@@ -39,12 +48,14 @@ class Chain : public TChain {
     InitChain();
     InitConfiguration();
     InitDataHeader();
-  };
+  }
 
   ANALYSISTREE_ATTR_NODISCARD Configuration* GetConfiguration() const { return configuration_; }
   ANALYSISTREE_ATTR_NODISCARD DataHeader* GetDataHeader() const { return data_header_; }
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, BranchPointer>& GetBranchPointers() const { return branches_; }
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::string, Matching*>& GetMatchPointers() const { return matches_; }
+
+  void SetDataHeader(DataHeader* dh) { data_header_ = dh; }
 
   BranchPointer GetPointerToBranch(const std::string& name){
     auto br = branches_.find(name);
@@ -65,6 +76,11 @@ class Chain : public TChain {
   void InitPointersToBranches(std::set<std::string> names);
 
   Long64_t Draw(const char *varexp, const char *selection = nullptr, Option_t *option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
+
+  void Print(Option_t*) const override {
+    this->data_header_->Print();
+    this->configuration_->Print();
+  }
 
  protected:
 

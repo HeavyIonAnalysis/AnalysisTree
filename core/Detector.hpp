@@ -27,13 +27,19 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
   ~Detector() override = default;
 
-  [[nodiscard]] size_t GetNumberOfChannels() const noexcept {
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfChannels() const noexcept {
     return channels_.size();
   }
 
+//  ANALYSISTREE_ATTR_DEPRECATED("Please use: T& AddChannel(const BranchConfig& branch)")
   T* AddChannel() {
     channels_.emplace_back(T(channels_.size()));
     return &(channels_.back());
+  }
+
+  T& AddChannel(const BranchConfig& branch) {
+    channels_.emplace_back(T(channels_.size(), branch));
+    return channels_.back();
   }
 
   void ClearChannels() {
@@ -49,7 +55,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
     }
   }
 
-  T GetChannel(size_t number) const {
+  const T& GetChannel(size_t number) const {
     if (number < GetNumberOfChannels()) {
       return channels_.at(number);
     } else {
@@ -69,9 +75,9 @@ class Detector : public IndexedObject, protected IndexAccessor {
     return std::equal(that.channels_.begin(), that.channels_.end(), other.channels_.begin());
   }
 
-  [[deprecated("Please use range-based loops: for(const auto& channel : detector)")]]
+  ANALYSISTREE_ATTR_DEPRECATED("Please use range-based loops: for(const auto& channel : detector)")
   const std::vector<T>* GetChannels() const { return &channels_; }
-  [[deprecated("Please use range-based loops: for(const auto& channel : detector)")]]
+  ANALYSISTREE_ATTR_DEPRECATED("Please use range-based loops: for(const auto& channel : detector)")
   std::vector<T>* Channels() { return &channels_; }
 
   void Reserve(size_t n) {
@@ -94,7 +100,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
  protected:
   std::vector<T> channels_{};
 
- ClassDefOverride(Detector,2)
+ ClassDefOverride(Detector, 2)
 
 };
 
@@ -103,7 +109,7 @@ using ModuleDetector = Detector<Module>;
 using ModulePositions = Detector<ModulePosition>;
 using HitDetector = Detector<Hit>;
 using Particles = Detector<Particle>;
-using GeneralDetector = Detector<Container>;
+using GenericDetector = Detector<Container>;
 
 }// namespace AnalysisTree
 

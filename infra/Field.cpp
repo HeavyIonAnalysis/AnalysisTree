@@ -1,6 +1,8 @@
 #include "Field.hpp"
 #include "Configuration.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree {
 
 void Field::Print() const {

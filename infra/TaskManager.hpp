@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 #include "Chain.hpp"
 #include "Cuts.hpp"
@@ -23,7 +24,6 @@ class TaskManager {
  public:
 
   enum class eBranchWriteMode{
-    kUpdateCurrentTree = 0,
     kCreateNewTree,
     kNone
   };
@@ -50,50 +50,80 @@ class TaskManager {
 
   void AddTask(Task* task) { tasks_.emplace_back(task); }
 
+/**
+* Adding a new branch
+* @param name name of the branch
+* @param ptr reference to a pointer to the branch object. Pointer shoulb be initialized with nullprt, function will allocate the space, but used still needs delete it in the end of the program
+* @param mode write or not the branch to the file
+*/
   template<class Branch>
-  void AddBranch(const std::string& name, Branch** ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kNone) {
-    if(!*ptr){
-      *ptr = new Branch;
-    }
-//    (*ptr)->Init(config);
-    if(mode == eBranchWriteMode::kUpdateCurrentTree){
-      chain_->Branch(name.c_str(), ptr);
-      chain_->GetConfiguration()->AddBranchConfig(std::move(config));
-      update_current_tree_ = true;
-    }
-    else if (mode == eBranchWriteMode::kCreateNewTree){
+  void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
+    assert(!name.empty() && !ptr);
+
+    if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      out_tree_->Branch(name.c_str(), ptr);
+      fill_out_tree_ = true;
+
       configuration_->AddBranchConfig(std::move(config));
-      fill_out_tree_ = true;
+      ptr = new Branch(configuration_->GetLastId());
+      out_tree_->Branch(name.c_str(), &ptr); // otherwise I get segfault at filling in case of large number of Particles
+    } else {
+      throw std::runtime_error("Not yet implemented...");
     }
   }
 
-  void AddMatching(const std::string& br1, const std::string& br2, Matching** match, eBranchWriteMode mode = eBranchWriteMode::kNone){
-    if(mode == eBranchWriteMode::kUpdateCurrentTree){
-//      chain_->GetConfiguration()->AddMatch(match);
-//      chain_->Branch(chain_->GetConfiguration()->GetMatchName(br1, br2).c_str(), &match);
-//      update_current_tree_ = true;
-    }
-    else if (mode == eBranchWriteMode::kCreateNewTree){
+/**
+* Adding a new Matching branch
+* @param br1 name of the first branch
+* @param br2 name of the second branch
+* @param match reference to a pointer to the Matching object. Pointer shoulb be initialized with nullprt, function will allocate the space, but used still needs delete it in the end of the program
+* @param mode write or not the branch to the file
+*/
+  void AddMatching(const std::string& br1, const std::string& br2, Matching*& match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree){
+    assert(!br1.empty() && !br2.empty() && !match);
+    match = new Matching(configuration_->GetBranchConfig(br1).GetId(),
+                         configuration_->GetBranchConfig(br2).GetId());
+
+    if (mode == eBranchWriteMode::kCreateNewTree){
       assert(out_tree_);
-      *match = new Matching(configuration_->GetBranchConfig(br1).GetId(), configuration_->GetBranchConfig(br2).GetId());
-      configuration_->AddMatch(*match);
-      out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), match);
+      configuration_->AddMatch(match);
+      out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
       fill_out_tree_ = true;
+    } else {
+      throw std::runtime_error("Not yet implemented...");
     }
   }
-
 
   ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
   ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
   ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
+
+  void SetOutputDataHeader(DataHeader* dh) {
+    data_header_ = dh;
+    chain_->SetDataHeader(dh); // TODO
+  }
+  void FillOutput() { out_tree_->Fill(); }
+
+  void Exec(){
+    for (auto* task : tasks_) {
+      task->Exec();
+    }
+    if (fill_out_tree_) {
+      FillOutput();
+    }
+  }
+
+  void SetOutputName(std::string file, std::string tree="aTree"){
+    out_file_name_ = std::move(file);
+    out_tree_name_ = std::move(tree);
+  }
 
  protected:
   TaskManager() = default;
   static TaskManager* manager_;
 
   void InitOutChain();
+  void InitTasks();
 
 //  std::unique_ptr<Chain> chain_{nullptr};
   Chain* chain_;
@@ -101,12 +131,16 @@ class TaskManager {
 
   // output data members
   TTree* out_tree_{nullptr};
+  TFile* out_file_{nullptr};
   Configuration* configuration_{nullptr};
   DataHeader* data_header_{nullptr};
+  std::string out_tree_name_{"aTree"};
+  std::string out_file_name_{"analysis_tree.root"};
 
   bool is_init_{false};
   bool fill_out_tree_{false};
-  bool update_current_tree_{false};
+  bool read_in_tree_{false};
+
 };
 
 };// namespace AnalysisTree

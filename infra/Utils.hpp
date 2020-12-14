@@ -15,33 +15,22 @@
 #     define ANALYSISTREE_STD_VARIANT 1
 #     define ANALYSISTREE_UTILS_VARIANT std::variant
 #     define ANALYSISTREE_UTILS_VISIT std::visit
+#     define ANALYSISTREE_UTILS_GET std::get
 #   endif
 #endif
 
-#if !defined(ANALYSISTREE_STD_VARIANT) && defined(ANALYSISTREE_BOOST_FOUND)
+#if __has_include(<boost/variant.hpp>)
+#  define ANALYSISTREE_BOOST_VARIANT 1
+#endif
+
+#if !defined(ANALYSISTREE_STD_VARIANT) && defined(ANALYSISTREE_BOOST_VARIANT)
 #   include <boost/variant.hpp>
 #   include <boost/variant/static_visitor.hpp>
 #   define ANALYSISTREE_BOOST_VARIANT 1
 #   define ANALYSISTREE_UTILS_VARIANT boost::variant
 #   define ANALYSISTREE_UTILS_VISIT boost::apply_visitor
+#   define ANALYSISTREE_UTILS_GET boost::get
 #endif
-
-#ifndef __has_cpp_attribute // if we don't have __has_attribute, ignore it
-#   define __has_cpp_attribute(x) 0
-#endif
-
-#if __has_cpp_attribute(deprecated)
-#   define ANALYSISTREE_ATTR_DEPRECATED(MESSAGE) [[deprecated]]
-#else
-#   define ANALYSISTREE_ATTR_DEPRECATED(MESSAGE)  // attribute "deprecated" not available
-#endif
-
-#if __has_cpp_attribute(nodiscard)
-#   define  ANALYSISTREE_ATTR_NODISCARD [[nodiscard]]
-#else
-#   define  ANALYSISTREE_ATTR_NODISCARD
-#endif
-
 
 namespace AnalysisTree {
 
@@ -49,7 +38,7 @@ namespace Utils {
 
 template<typename RetType>
 struct Visitor
-#ifdef ANALYSISTREE_BOOST_VARIANT
+#if !defined(ANALYSISTREE_STD_VARIANT)
     : public boost::static_visitor<RetType>
 #endif// USEBOOST
 {

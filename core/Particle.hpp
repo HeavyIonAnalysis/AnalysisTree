@@ -10,6 +10,8 @@ class Particle : public Track {
  public:
   Particle() = default;
   explicit Particle(Integer_t id) : Track(id) {}
+  Particle(Integer_t id, const BranchConfig& branch) noexcept : Track(id, branch) {}
+
   explicit Particle(const Track& track) : Track(track) {}
 
   Particle(const Particle& particle) = default;
@@ -18,9 +20,9 @@ class Particle : public Track {
   Particle& operator=(const Particle& particle) = default;
   ~Particle() override = default;
 
-  [[nodiscard]] Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
-  [[nodiscard]] PdgCode_t GetPid() const { return pid_; }
-  [[nodiscard]] Floating_t GetMass() const { return mass_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetRapidity() const { return Track::GetRapidityByMass(mass_); }
+  ANALYSISTREE_ATTR_NODISCARD PdgCode_t GetPid() const { return pid_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetMass() const { return mass_; }
 
   void SetMass(Floating_t mass) {
     mass_ = mass;
@@ -28,8 +30,8 @@ class Particle : public Track {
 
   void SetPid(PdgCode_t pid);
 
-  [[nodiscard]] Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
-  [[nodiscard]] Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
 
   template<typename T>
   T GetField(Integer_t iField) const {
@@ -55,6 +57,9 @@ class Particle : public Track {
  protected:
   Floating_t mass_{-1000.f};
   PdgCode_t pid_{0};
+
+  ClassDefOverride(Particle, 2);
+
 };
 
 }// namespace AnalysisTree

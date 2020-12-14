@@ -1,5 +1,7 @@
 #include "TaskManager.hpp"
 
+#include <iostream>
+
 namespace AnalysisTree{
 
 TaskManager* TaskManager::manager_= nullptr;
@@ -19,7 +21,7 @@ TaskManager* TaskManager::GetInstance()
 void TaskManager::Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees) {
   assert(!is_init_);
   is_init_ = true;
-
+  read_in_tree_ = true;
   chain_ = new Chain(filelists, in_trees);
 
   std::set<std::string> branch_names{};
@@ -29,6 +31,10 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   }
   chain_->InitPointersToBranches(branch_names);
 
+  InitTasks();
+}
+
+void TaskManager::InitTasks(){
   for(auto* task : tasks_) {
     task->PreInit();
     task->Init();
@@ -36,22 +42,20 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
 }
 
 void TaskManager::Init(){
+  assert(!is_init_);
+  is_init_ = true;
 
-  if(true){
-    InitOutChain();
-    configuration_ = new Configuration("Configuration");
-    data_header_ = new DataHeader;
-    chain_ = new Chain(out_tree_, configuration_, data_header_);
-  }
+  InitOutChain();
+  chain_ = new Chain(out_tree_, configuration_, data_header_);
 
-  for(auto* task : tasks_) {
-    task->PreInit();
-    task->Init();
-  }
+  InitTasks();
 }
 
 void TaskManager::InitOutChain(){
-  out_tree_ = new TTree("aTree", "");
+  out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
+  out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
+  configuration_ = new Configuration("Configuration");
+  data_header_ = new DataHeader;
 }
 
 void TaskManager::Run(long long nEvents){
@@ -64,13 +68,10 @@ void TaskManager::Run(long long nEvents){
   }
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
-    chain_->GetEntry(iEvent);
-    for (auto* task : tasks_) {
-      task->Exec();
+    if(read_in_tree_){
+      chain_->GetEntry(iEvent);
     }
-    if (fill_out_tree_) {
-      out_tree_->Fill();
-    }
+    Exec();
   }// Event loop
 
   auto end = std::chrono::system_clock::now();
@@ -79,16 +80,34 @@ void TaskManager::Run(long long nEvents){
 }
 
 void TaskManager::Finish() {
-  for (auto* task : tasks_) {
-    task->Finish();
-  }
   if (fill_out_tree_){
-    TFile *f = TFile::Open("test.root", "recreate");
+    out_file_->cd();
     out_tree_->Write();
-    f->Close();
+    configuration_->Write("Configuration");
+    data_header_->Write("DataHeader");
+    out_file_->Close();
+    delete out_file_;
   }
 
-  delete manager_;
+  for (auto* task : tasks_) {
+    task->Finish();
+    delete task;
+  }
+  tasks_.clear();
+
+//  delete chain_;
+
+  if(fill_out_tree_){
+    delete configuration_;
+    delete data_header_;
+//    delete out_tree_;
+  }
+
+  out_tree_name_ = "aTree";
+  out_file_name_ = "analysis_tree.root";
+  is_init_ = false;
+  fill_out_tree_ = false;
+  read_in_tree_ = false;
 }
 
 }

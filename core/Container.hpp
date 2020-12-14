@@ -16,9 +16,16 @@ class Container : public IndexedObject {
   Container() = default;
 
   explicit Container(Integer_t id) : IndexedObject(id) {}
+  Container(Integer_t id, const BranchConfig& branch)
+      : IndexedObject(id),
+        floats_(branch.GetSize<float>()),
+        ints_(branch.GetSize<int>()),
+        bools_(branch.GetSize<bool>())
+  {}
+
   Container(const Container& container) = default;
-  Container(Container&& container) noexcept = default;
-  Container& operator=(Container&&) noexcept = default;
+  Container(Container&& container) = default;
+  Container& operator=(Container&&) = default;
   Container& operator=(const Container& part) = default;
   ~Container() override = default;
 
@@ -34,12 +41,12 @@ class Container : public IndexedObject {
   }
 
   template<typename T>
-  [[nodiscard]] T GetField(Integer_t field_id) const {
+  ANALYSISTREE_ATTR_NODISCARD T GetField(Integer_t field_id) const {
     return GetVector<T>().at(field_id);
   }
 
   template<typename T>
-  [[nodiscard]] size_t GetSize() const {
+  ANALYSISTREE_ATTR_NODISCARD size_t GetSize() const {
     return GetVector<T>().size();
   }
 
@@ -51,7 +58,7 @@ class Container : public IndexedObject {
   std::vector<int> ints_{};
   std::vector<bool> bools_{};
 
-  ClassDefOverride(AnalysisTree::Container, 2);
+  ClassDefOverride(Container, 2);
 
 };
 

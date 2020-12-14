@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <stdexcept>
 
 #include "Field.hpp"
 
@@ -28,7 +29,8 @@ class Variable {
    * @brief
    * @param name
    */
-  [[deprecated("Use Variable::fromString() instead")]] Variable(std::string name) : name_(std::move(name)) {
+  ANALYSISTREE_ATTR_DEPRECATED("Use Variable::fromString() instead")
+  Variable(std::string name) : name_(std::move(name)) {
     fields_.emplace_back(Field(name_));
   };
 

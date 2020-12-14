@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <stdexcept>
 
 #include "Constants.hpp"
 #include "SimpleCut.hpp"

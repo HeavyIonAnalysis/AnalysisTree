@@ -46,7 +46,7 @@ class IndexedObject {
   IndexedObject& operator=(const IndexedObject& indexedObject) = default;
   virtual ~IndexedObject() = default;
 
-  [[nodiscard]] inline Integer_t GetId() const {
+  ANALYSISTREE_ATTR_NODISCARD inline Integer_t GetId() const {
     return id_;
   }
 
@@ -67,7 +67,7 @@ class IndexedObject {
 
   Integer_t id_{-1};
 
-  ClassDef(AnalysisTree::IndexedObject, 1)
+  ClassDef(IndexedObject, 1)
 };
 
 }// namespace AnalysisTree

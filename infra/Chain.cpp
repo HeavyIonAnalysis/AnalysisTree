@@ -1,11 +1,12 @@
 #include "Chain.hpp"
-
 #include "BranchReader.hpp"
 #include "Matching.hpp"
 
 #include <TChain.h>
 #include <TFileCollection.h>
+
 #include <fstream>
+#include <iostream>
 
 namespace AnalysisTree{
 
@@ -120,8 +121,13 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
     this->SetBranchAddress(match.first.c_str(), &(match.second));
   }
   for (auto& branch : branches_) {
-    ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first.c_str()), branch.second);
+    ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
   }
+
+  this->GetEntry(0);
+//  auto* ptr = std::get<Particles*>(this->branches_.find("SimParticles")->second);
+//  std::cout << "SDFSDF " << ptr->GetNumberOfChannels() << std::endl;
+
 }
 
 void Chain::InitConfiguration(){
@@ -159,7 +165,7 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   if (!line.empty()) {
     std::cout << line << " " << name << std::endl;
     auto* in_file = TFile::Open(line.data(), "infra");
-    object = in_file->Get<T>(name.c_str());
+    object = (T*) in_file->Get(name.c_str());
   }
 
   if (object == nullptr) {
@@ -173,8 +179,10 @@ void Chain::DrawFieldTransform(std::string& expr) const {
   auto dot = expr.find('.');
   auto branch = expr.substr(0, dot);
   auto field = expr.substr(dot+1);
-  auto type = configuration_->GetBranchConfig(branch).GetFieldType(field);
-  auto id = configuration_->GetBranchConfig(branch).GetFieldId(field);
+
+  const auto& br = configuration_->GetBranchConfig(branch);
+  auto type = br.GetFieldType(field);
+  auto id = br.GetFieldId(field);
   std::string type_str{};
 
   switch (type) {
@@ -194,14 +202,15 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
   int pos = 0;
   while(expr.find('.', pos) != size_t(-1) ){ //TODO fix this
     auto dot = expr.find('.', pos);
-    if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && isdigit(expr[dot+1]) != ' '){  // is not a number like 1.5
+    if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && expr[dot+1] != ' '){  // is not a number like 1.5 or 1.
 
       auto begin = dot;
-      while( begin > 0 && (isalpha(expr[begin-1]) || isdigit(expr[begin-1])) ){
+      auto is_allowed_char = [](char c) { return isalpha(c) || isdigit(c) || c == '_'; };
+      while( begin > 0 && is_allowed_char(expr[begin-1]) ){
         begin--;
       }
       auto end = dot;
-      while( end < expr.size()-1 && (isalpha(expr[end+1]) || isdigit(expr[end+1]))){
+      while( end < expr.size()-1 && is_allowed_char(expr[end+1]) ){
         end++;
       }
       auto field = expr.substr(begin, end - begin + 1);
@@ -218,7 +227,7 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
 
 void Chain::DrawTransform(std::string& expr) const {
   auto fields = FindAndRemoveFields(expr);
-  auto sum{0};
+  int sum{0};
   for(auto& field : fields){
     DrawFieldTransform(field.first);
     expr.insert(field.second+sum, field.first);
@@ -228,7 +237,7 @@ void Chain::DrawTransform(std::string& expr) const {
 
 Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
   std::string exp{varexp};
-  std::string sel{selection};
+  std::string sel{selection ? selection : ""};
   DrawTransform(exp);
   if(!sel.empty()){
     DrawTransform(sel);

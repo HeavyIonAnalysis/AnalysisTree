@@ -3,6 +3,7 @@
 
 #include <set>
 
+#include "Constants.hpp"
 #include "Configuration.hpp"
 #include "EventHeader.hpp"
 

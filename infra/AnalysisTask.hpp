@@ -21,6 +21,7 @@ class AnalysisTask : public Task {
 
  public:
   AnalysisTask() = default;
+  ~AnalysisTask() override = default;
 
   std::pair<int, std::vector<int>> AddEntry(const AnalysisEntry& vars);
 

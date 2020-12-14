@@ -32,13 +32,17 @@ class ToyMC : public Task {
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
     sim_eh.AddField<float>("psi_RP");
 
-    man->AddBranch("SimEventHeader", &sim_event_header_, sim_eh, TaskManager::eBranchWriteMode::kCreateNewTree);
-    man->AddBranch("SimParticles", &particles_, BranchConfig{"SimParticles", DetType::kParticle}, TaskManager::eBranchWriteMode::kCreateNewTree);
-    man->AddBranch("RecTracks", &track_detector_, BranchConfig{"RecTracks", DetType::kTrack}, TaskManager::eBranchWriteMode::kCreateNewTree);
-    man->AddMatching("RecTracks", "SimParticles", &rec_tracks_to_sim_, TaskManager::eBranchWriteMode::kCreateNewTree);
+    BranchConfig sim_part("SimParticles", DetType::kParticle);
+//    sim_part.AddField<float>("float");
+//    sim_part.AddField<bool>("bool");
+//    sim_part.AddField<int>("int");
+
+    man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
+    man->AddBranch("SimParticles", particles_, sim_part);
+    man->AddBranch("RecTracks", track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
+    man->AddMatching("RecTracks", "SimParticles", rec_tracks_to_sim_);
 
     sim_event_header_->Init(sim_eh);
-
   }
 
   void Exec() override {
@@ -61,6 +65,7 @@ class ToyMC : public Task {
 
     particles_->ClearChannels();
 
+    const auto& branch = config_->GetBranchConfig("SimParticles");
     const int multiplicity = multiplicity_(generator_);
     particles_->Reserve(multiplicity);
 
@@ -74,10 +79,10 @@ class ToyMC : public Task {
       TVector3 mom;
       mom.SetPtEtaPhi(pT, eta, phi);
 
-      auto* particle = particles_->AddChannel();
+      auto& particle = particles_->AddChannel(branch);
 
-      particle->SetMomentum3(mom);
-      particle->SetPid(pdg);
+      particle.SetMomentum3(mom);
+      particle.SetPid(pdg);
     }
   }
 
@@ -89,25 +94,13 @@ class ToyMC : public Task {
     rec_tracks_to_sim_->Clear();
 
     track_detector_->Reserve(particles_->GetNumberOfChannels());
+    const auto& branch = config_->GetBranchConfig("RecTracks");
 
     for(const auto& particle : *particles_){
-      auto* track = track_detector_->AddChannel();
-      *track = particle;
-      rec_tracks_to_sim_->AddMatch(track->GetId(), particle.GetId());
+      auto& track = track_detector_->AddChannel(branch);
+      track = particle;
+      rec_tracks_to_sim_->AddMatch(track.GetId(), particle.GetId());
     }
-  }
-
-  void WriteToFile(const std::string& filename, const std::string& filelist="") const {
-//    TFile* file{TFile::Open(filename.c_str(), "recreate")};
-//    config_.Write("Configuration");
-//    dh_.Write("DataHeader");
-//    out_tree_->Write();
-//    file->Close();
-//    if(!filelist.empty()){
-//      std::ofstream fl(filelist);
-//      fl << filename << "\n";
-//      fl.close();
-//    }
   }
 
  protected:
@@ -124,7 +117,14 @@ class ToyMC : public Task {
   Particles* particles_{nullptr};
   std::exponential_distribution<float> pT_dist_{1.};
   std::normal_distribution<float> y_dist_{cm_rapidity_, 1.};
-  std::piecewise_linear_distribution<> phi_distr_{1000, 0, 2*M_PI, [&](const double x) { return PhiPdf(x); }};
+  std::piecewise_linear_distribution<> phi_distr_{1000, 0, 2*M_PI, 
+    [&](const double phi) { 
+      double value = 1.;
+      for (unsigned int n=1; n < vn_.size()+1; ++n) {
+        value += 2 * vn_[n-1] * std::cos(n * (phi - 0.));
+      }
+      return value;  
+    }};
 
   // tracking detector properties
   TrackDetector* track_detector_{nullptr};
@@ -134,14 +134,6 @@ class ToyMC : public Task {
 
   float GetPhi(RandomEngine &engine, float psi) {
     return phi_distr_(engine) + psi;
-  }
-
-  double PhiPdf(double phi) {
-    double value = 1.;
-    for (unsigned int n=1; n < vn_.size()+1; ++n) {
-      value += 2 * vn_[n-1] * std::cos(n * (phi - 0.));
-    }
-    return value;
   }
 
 };

@@ -2,6 +2,7 @@
 #define ANALYSISTREE_GENERICTRACK_H
 
 #include <cmath>
+#include <stdexcept>
 
 #include <TLorentzVector.h>
 #include <TVector3.h>
@@ -17,12 +18,13 @@ namespace AnalysisTree {
 
 class Track : public Container {
  public:
-  Track() noexcept = default;
+  Track() = default;
 
   explicit Track(Integer_t id) noexcept : Container(id) {}
+  Track(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
   Track(const Track& track) = default;
-  Track(Track&& track) noexcept = default;
-  Track& operator=(Track&&) noexcept = default;
+  Track(Track&& track) = default;
+  Track& operator=(Track&&) = default;
   Track& operator=(const Track& track) = default;
   ~Track() override = default;
 
@@ -31,7 +33,7 @@ class Track : public Container {
   * @param mass - track mass hypotesis in GeV/c^2
   * @return 4d-momentum of track
   */
-  [[nodiscard]] inline TLorentzVector Get4MomentumByMass(Floating_t mass) const noexcept {
+  ANALYSISTREE_ATTR_NODISCARD inline TLorentzVector Get4MomentumByMass(Floating_t mass) const noexcept {
     return TLorentzVector({px_, py_, pz_}, sqrt(px_ * px_ + py_ * py_ + pz_ * pz_ + mass * mass));
   }
 
@@ -40,7 +42,7 @@ class Track : public Container {
   * @param pdg - pdg code hypotesis
   * @return 4d-momentum of track. If pdg is not found - exeption should be thrown.
   */
-  [[nodiscard]] inline TLorentzVector Get4Momentum(PdgCode_t pdg) const {
+  ANALYSISTREE_ATTR_NODISCARD inline TLorentzVector Get4Momentum(PdgCode_t pdg) const {
     const float mass = GetMassByPdgId(pdg);
     return Get4MomentumByMass(mass);
   }
@@ -57,18 +59,18 @@ class Track : public Container {
     pz_ = momentum.Pz();
   }
 
-  [[nodiscard]] inline Floating_t GetPx() const noexcept { return px_; }
-  [[nodiscard]] inline Floating_t GetPy() const noexcept { return py_; }
-  [[nodiscard]] inline Floating_t GetPz() const noexcept { return pz_; }
-  [[nodiscard]] inline Floating_t GetPt() const noexcept { return sqrt(px_ * px_ + py_ * py_); }
-  [[nodiscard]] inline Floating_t GetPhi() const noexcept { return atan2(py_, px_); }
-  [[nodiscard]] inline Floating_t GetEta() const noexcept { return 0.5 * log((GetP() + pz_) / (GetP() - pz_)); }
-  [[nodiscard]] inline Floating_t GetP() const noexcept { return sqrt(px_ * px_ + py_ * py_ + pz_ * pz_); }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPx() const noexcept { return px_; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPy() const noexcept { return py_; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPz() const noexcept { return pz_; }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPt() const noexcept { return sqrt(px_ * px_ + py_ * py_); }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPhi() const noexcept { return atan2(py_, px_); }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetEta() const noexcept { return 0.5 * log((GetP() + pz_) / (GetP() - pz_)); }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetP() const noexcept { return sqrt(px_ * px_ + py_ * py_ + pz_ * pz_); }
 
   /**
   * @return 3d-momentum of a track
   */
-  [[nodiscard]] inline TVector3 GetMomentum3() const noexcept { return TVector3(px_, py_, pz_); }
+  ANALYSISTREE_ATTR_NODISCARD inline TVector3 GetMomentum3() const noexcept { return TVector3(px_, py_, pz_); }
 
   /**
   * Compares 2 tracks
@@ -81,7 +83,7 @@ class Track : public Container {
   * @param pdg - pdg code hypotesis
   * @return rapidity of the track. If pdg is not found - exeption should be thrown.
   */
-  [[nodiscard]] Floating_t GetRapidity(PdgCode_t pdg) const {
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetRapidity(PdgCode_t pdg) const {
     const float mass = GetMassByPdgId(pdg);
     return GetRapidityByMass(mass);
   }
@@ -91,7 +93,7 @@ class Track : public Container {
   * @param mass - track mass hypotesis in GeV/c^2
   * @return rapidity of the track
   */
-  [[nodiscard]] Floating_t GetRapidityByMass(float mass) const noexcept {
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetRapidityByMass(float mass) const noexcept {
     const float e = sqrt(mass * mass + GetP() * GetP());
     return 0.5 * log((e + GetPz()) / (e - GetPz()));
   }
@@ -132,7 +134,7 @@ class Track : public Container {
   Floating_t py_{UndefValueFloat}; ///< y-component of track's momentum
   Floating_t pz_{UndefValueFloat}; ///< z-component of track's momentum
 
-  ClassDefOverride(AnalysisTree::Track, 1);
+  ClassDefOverride(Track, 2);
 };
 
 }// namespace AnalysisTree
