@@ -15,6 +15,7 @@
 #     define ANALYSISTREE_STD_VARIANT 1
 #     define ANALYSISTREE_UTILS_VARIANT std::variant
 #     define ANALYSISTREE_UTILS_VISIT std::visit
+#     define ANALYSISTREE_UTILS_GET std::get
 #   endif
 #endif
 
@@ -28,6 +29,7 @@
 #   define ANALYSISTREE_BOOST_VARIANT 1
 #   define ANALYSISTREE_UTILS_VARIANT boost::variant
 #   define ANALYSISTREE_UTILS_VISIT boost::apply_visitor
+#   define ANALYSISTREE_UTILS_GET boost::get
 #endif
 
 namespace AnalysisTree {
