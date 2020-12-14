@@ -4,7 +4,6 @@
 #pragma link off all functions;
 #pragma link C++ nestedclasses;
 
-
 #pragma link C++ namespace AnalysisTree;
 
 #pragma link C++ class AnalysisTree::IndexedObject+;
