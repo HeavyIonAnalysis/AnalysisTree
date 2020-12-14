@@ -176,7 +176,6 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
 }
 
 void Chain::DrawFieldTransform(std::string& expr) const {
-
   auto dot = expr.find('.');
   auto branch = expr.substr(0, dot);
   auto field = expr.substr(dot+1);
@@ -185,8 +184,6 @@ void Chain::DrawFieldTransform(std::string& expr) const {
   auto type = br.GetFieldType(field);
   auto id = br.GetFieldId(field);
   std::string type_str{};
-
-//  std::cout << "branch " << branch << " field " << field << std::endl;
 
   switch (type) {
     case(Types::kFloat) :   { type_str = "float"; break; }
