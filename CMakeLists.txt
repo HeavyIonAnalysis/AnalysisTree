@@ -57,8 +57,8 @@ add_subdirectory(infra)
 
 #if(AnalysisTree_BUILD_EXAMPLES)
     #    add_subdirectory(examples)
-    add_executable(example examples/test.cpp)
-    target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra ${ROOT_LIBRARIES} EG)
+#    add_executable(example examples/test.cpp)
+#    target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra ${ROOT_LIBRARIES} EG)
 #endif()
 
 #if(AnalysisTree_BUILD_TESTS)
