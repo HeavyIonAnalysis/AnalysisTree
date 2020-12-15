@@ -19,7 +19,7 @@ struct ConfigElement {
   ConfigElement() = default;
   virtual ~ConfigElement() = default;
 
-  explicit ConfigElement(ShortInt_t id, std::string title="") : id_(id), title_(std::move(title)) {}
+  explicit ConfigElement(ShortInt_t id, std::string title) : id_(id), title_(std::move(title)) {}
   ShortInt_t id_{0};
   std::string title_;
 
@@ -46,9 +46,9 @@ class VectorConfig {
     map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(id, title)));
   }
 
-  virtual void AddFields(const std::vector<std::string>& names) {
+  virtual void AddFields(const std::vector<std::string>& names, const std::string& title) {
     for (const auto& name : names) {
-      map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++)));
+      map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++, title)));
     }
   }
 
@@ -111,7 +111,9 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
     VectorConfig<T>::AddField(name, title);
   }
   template<typename T>
-  void AddFields(const std::vector<std::string>& names) { VectorConfig<T>::AddFields(names); }
+  void AddFields(const std::vector<std::string>& names, const std::string& title="") {
+    VectorConfig<T>::AddFields(names, title);
+  }
 
   // Getters
   template<typename T>
