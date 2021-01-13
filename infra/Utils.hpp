@@ -46,7 +46,7 @@ struct Visitor
 #if !defined(ANALYSISTREE_BOOST_VARIANT)
   typedef RetType result_type;
 #endif
-  virtual ~Visitor() {}
+  virtual ~Visitor() = default;
 };
 
 

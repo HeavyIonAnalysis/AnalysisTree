@@ -24,8 +24,8 @@ class Container : public IndexedObject {
   {}
 
   Container(const Container& container) = default;
-  Container(Container&& container) noexcept = default;
-  Container& operator=(Container&&) noexcept = default;
+  Container(Container&& container) = default;
+  Container& operator=(Container&&) = default;
   Container& operator=(const Container& part) = default;
   ~Container() override = default;
 
