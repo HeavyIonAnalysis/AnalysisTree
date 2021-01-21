@@ -19,7 +19,7 @@ struct ConfigElement {
   ConfigElement() = default;
   virtual ~ConfigElement() = default;
 
-  explicit ConfigElement(ShortInt_t id, std::string title="") : id_(id), title_(std::move(title)) {}
+  explicit ConfigElement(ShortInt_t id, std::string title) : id_(id), title_(std::move(title)) {}
   ShortInt_t id_{0};
   std::string title_;
 
@@ -46,9 +46,9 @@ class VectorConfig {
     map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(id, title)));
   }
 
-  virtual void AddFields(const std::vector<std::string>& names) {
+  virtual void AddFields(const std::vector<std::string>& names, const std::string& title) {
     for (const auto& name : names) {
-      map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++)));
+      map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++, title)));
     }
   }
 
@@ -67,16 +67,16 @@ class VectorConfig {
   virtual void Print() const {
     if(map_.empty()) return;
 
-    std::cout << std::left << std::setw(10) << std::setfill(' ') << "Id";
-    std::cout << std::left << std::setw(20) << std::setfill(' ') << "Name";
-    std::cout << std::left << std::setw(50) << std::setfill(' ') << "Info";
-    std::cout << std::endl;
-
-    for (const auto& entry : map_){
-      std::cout << std::left << std::setw(10) << std::setfill(' ') << entry.second.id_;
-      std::cout << std::left << std::setw(20) << std::setfill(' ') << entry.first;
-      std::cout << std::left << std::setw(50) << std::setfill(' ') << entry.second.title_;
+    auto print_row = [](const std::vector<std::pair<std::string, int>>& elements){
+      for(const auto& el : elements){
+        std::cout << std::left << std::setw(el.second) << std::setfill(' ') << el.first;
+      }
       std::cout << std::endl;
+    };
+
+    print_row({{"Id", 10}, {"Name", 20}, {"Info", 50}});
+    for (const auto& entry : map_){
+      print_row({{std::to_string(entry.second.id_), 10}, {entry.first, 20}, {entry.second.title_, 50}});
     }
   }
 
@@ -84,7 +84,6 @@ class VectorConfig {
   MapType map_{};
   ShortInt_t size_{0};
   ClassDef(VectorConfig, 1)
-
 };
 
 class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, public VectorConfig<bool> {
@@ -111,7 +110,9 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
     VectorConfig<T>::AddField(name, title);
   }
   template<typename T>
-  void AddFields(const std::vector<std::string>& names) { VectorConfig<T>::AddFields(names); }
+  void AddFields(const std::vector<std::string>& names, const std::string& title="") {
+    VectorConfig<T>::AddFields(names, title);
+  }
 
   // Getters
   template<typename T>
