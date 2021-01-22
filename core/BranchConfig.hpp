@@ -2,12 +2,12 @@
 #ifndef ANALYSISTREE_BRANCHCONFIG_H
 #define ANALYSISTREE_BRANCHCONFIG_H
 
+#include <iomanip>
+#include <iostream>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
-#include <iostream>
-#include <iomanip>
 
 #include <TObject.h>
 
@@ -24,7 +24,7 @@ struct ConfigElement {
   std::string title_;
 
  protected:
- ClassDef(ConfigElement, 1)
+  ClassDef(ConfigElement, 1)
 };
 
 template<typename T>
@@ -65,17 +65,17 @@ class VectorConfig {
   ANALYSISTREE_ATTR_NODISCARD virtual ShortInt_t GetSize() const { return size_; }
 
   virtual void Print() const {
-    if(map_.empty()) return;
+    if (map_.empty()) return;
 
-    auto print_row = [](const std::vector<std::pair<std::string, int>>& elements){
-      for(const auto& el : elements){
+    auto print_row = [](const std::vector<std::pair<std::string, int>>& elements) {
+      for (const auto& el : elements) {
         std::cout << std::left << std::setw(el.second) << std::setfill(' ') << el.first;
       }
       std::cout << std::endl;
     };
 
     print_row({{"Id", 10}, {"Name", 20}, {"Info", 50}});
-    for (const auto& entry : map_){
+    for (const auto& entry : map_) {
       print_row({{std::to_string(entry.second.id_), 10}, {entry.first, 20}, {entry.second.title_, 50}});
     }
   }
@@ -110,7 +110,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
     VectorConfig<T>::AddField(name, title);
   }
   template<typename T>
-  void AddFields(const std::vector<std::string>& names, const std::string& title="") {
+  void AddFields(const std::vector<std::string>& names, const std::string& title = "") {
     VectorConfig<T>::AddFields(names, title);
   }
 

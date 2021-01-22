@@ -3,8 +3,8 @@
 
 #include <set>
 
-#include "Constants.hpp"
 #include "Configuration.hpp"
+#include "Constants.hpp"
 #include "EventHeader.hpp"
 
 #include "Cuts.hpp"
@@ -42,7 +42,6 @@ class Task {
   }
 
  protected:
-
   const Configuration* config_{nullptr};
   const DataHeader* data_header_{nullptr};
 

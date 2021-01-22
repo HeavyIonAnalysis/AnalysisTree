@@ -60,8 +60,8 @@ Variable Variable::FromString(const std::string& full_name) {
   std::smatch match;
   auto search_ok = std::regex_search(full_name, match, name_regex);
   if (search_ok) {
-    std::string branch_name {match.str(1)};
-    std::string field_name  {match.str(2)};
+    std::string branch_name{match.str(1)};
+    std::string field_name{match.str(2)};
     return Variable(branch_name, field_name);
   }
   throw std::runtime_error("Field name must be in the format <branch>.<name>");

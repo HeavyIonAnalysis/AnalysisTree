@@ -4,8 +4,8 @@
 #include <gtest/gtest.h>
 
 #include "IndexedObject.hpp"
-#include <TTree.h>
 #include <TFile.h>
+#include <TTree.h>
 
 namespace {
 
@@ -31,5 +31,5 @@ TEST(IndexedObject, Write) {
 
   EXPECT_EQ(*indexedObject1, *indexedObject);
 }
-}
+}// namespace
 #endif//ANALYSISTREE_TEST_CORE_INDEXEDOBJECT_TEST_HPP_

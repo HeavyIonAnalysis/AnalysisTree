@@ -5,9 +5,9 @@
 #include <fstream>
 #include <random>
 
-#include "TTree.h"
-#include "TFile.h"
 #include "TF1.h"
+#include "TFile.h"
+#include "TTree.h"
 
 #include "Configuration.hpp"
 #include "DataHeader.hpp"
@@ -17,7 +17,7 @@
 #include "Task.hpp"
 #include "TaskManager.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 template<class RandomEngine>
 class ToyMC : public Task {
@@ -33,9 +33,9 @@ class ToyMC : public Task {
     sim_eh.AddField<float>("psi_RP");
 
     BranchConfig sim_part("SimParticles", DetType::kParticle);
-//    sim_part.AddField<float>("float");
-//    sim_part.AddField<bool>("bool");
-//    sim_part.AddField<int>("int");
+    //    sim_part.AddField<float>("float");
+    //    sim_part.AddField<bool>("bool");
+    //    sim_part.AddField<int>("int");
 
     man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
     man->AddBranch("SimParticles", particles_, sim_part);
@@ -52,16 +52,14 @@ class ToyMC : public Task {
   }
 
   void Finish() override {
-
   }
 
-
-  void FillEventInfo(){
-    sim_event_header_->SetVertexPosition3({0,0,0});
+  void FillEventInfo() {
+    sim_event_header_->SetVertexPosition3({0, 0, 0});
     sim_event_header_->SetField(psi_RP_(generator_), 0);
   }
 
-  void FillMcParticles(){
+  void FillMcParticles() {
 
     particles_->ClearChannels();
 
@@ -69,7 +67,7 @@ class ToyMC : public Task {
     const int multiplicity = multiplicity_(generator_);
     particles_->Reserve(multiplicity);
 
-    for(int i=0; i<multiplicity; ++i){
+    for (int i = 0; i < multiplicity; ++i) {
 
       const float phi = GetPhi(generator_, sim_event_header_->GetField<float>(0));
       const float pT = pT_dist_(generator_);
@@ -86,9 +84,9 @@ class ToyMC : public Task {
     }
   }
 
-  void FillRecoTracks(){
+  void FillRecoTracks() {
     assert(particles_);
-//    assert(efficiency_map_);
+    //    assert(efficiency_map_);
 
     track_detector_->ClearChannels();
     rec_tracks_to_sim_->Clear();
@@ -96,7 +94,7 @@ class ToyMC : public Task {
     track_detector_->Reserve(particles_->GetNumberOfChannels());
     const auto& branch = config_->GetBranchConfig("RecTracks");
 
-    for(const auto& particle : *particles_){
+    for (const auto& particle : *particles_) {
       auto& track = track_detector_->AddChannel(branch);
       track = particle;
       rec_tracks_to_sim_->AddMatch(track.GetId(), particle.GetId());
@@ -117,14 +115,14 @@ class ToyMC : public Task {
   Particles* particles_{nullptr};
   std::exponential_distribution<float> pT_dist_{1.};
   std::normal_distribution<float> y_dist_{cm_rapidity_, 1.};
-  std::piecewise_linear_distribution<> phi_distr_{1000, 0, 2*M_PI, 
-    [&](const double phi) { 
-      double value = 1.;
-      for (unsigned int n=1; n < vn_.size()+1; ++n) {
-        value += 2 * vn_[n-1] * std::cos(n * (phi - 0.));
-      }
-      return value;  
-    }};
+  std::piecewise_linear_distribution<> phi_distr_{1000, 0, 2 * M_PI,
+                                                  [&](const double phi) {
+                                                    double value = 1.;
+                                                    for (unsigned int n = 1; n < vn_.size() + 1; ++n) {
+                                                      value += 2 * vn_[n - 1] * std::cos(n * (phi - 0.));
+                                                    }
+                                                    return value;
+                                                  }};
 
   // tracking detector properties
   TrackDetector* track_detector_{nullptr};
@@ -132,13 +130,11 @@ class ToyMC : public Task {
 
   TH2* efficiency_map_{nullptr};
 
-  float GetPhi(RandomEngine &engine, float psi) {
+  float GetPhi(RandomEngine& engine, float psi) {
     return phi_distr_(engine) + psi;
   }
-
 };
 
+}// namespace AnalysisTree
 
-}
-
-#endif //ANALYSISTREE_INFRA_TOYMC_HPP_
+#endif//ANALYSISTREE_INFRA_TOYMC_HPP_

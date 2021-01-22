@@ -20,8 +20,7 @@ class Container : public IndexedObject {
       : IndexedObject(id),
         floats_(branch.GetSize<float>()),
         ints_(branch.GetSize<int>()),
-        bools_(branch.GetSize<bool>())
-  {}
+        bools_(branch.GetSize<bool>()) {}
 
   Container(const Container& container) = default;
   Container(Container&& container) noexcept = default;
@@ -36,7 +35,7 @@ class Container : public IndexedObject {
   const std::vector<T>& GetVector() const;
 
   template<typename T>
-  void SetField(T value, Integer_t field_id){
+  void SetField(T value, Integer_t field_id) {
     Vector<T>().at(field_id) = value;
   }
 
@@ -53,13 +52,11 @@ class Container : public IndexedObject {
   void Init(const BranchConfig& branch);
 
  protected:
-
   std::vector<float> floats_{};
   std::vector<int> ints_{};
   std::vector<bool> bools_{};
 
   ClassDefOverride(Container, 2);
-
 };
 
 }// namespace AnalysisTree

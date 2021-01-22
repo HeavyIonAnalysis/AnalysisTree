@@ -107,7 +107,7 @@ class Track : public Container {
   T GetField(Integer_t id) const {
     if (id >= 0)
       return Container::GetField<T>(id);
-    else { //TODO fix for T=int
+    else {//TODO fix for T=int
       switch (id) {
         case TrackFields::kPhi: return GetPhi();
         case TrackFields::kPt: return GetPt();
@@ -127,12 +127,11 @@ class Track : public Container {
   void Print() const noexcept;
 
  protected:
-
   static float GetMassByPdgId(PdgCode_t pdg);
 
-  Floating_t px_{UndefValueFloat}; ///< x-component of track's momentum
-  Floating_t py_{UndefValueFloat}; ///< y-component of track's momentum
-  Floating_t pz_{UndefValueFloat}; ///< z-component of track's momentum
+  Floating_t px_{UndefValueFloat};///< x-component of track's momentum
+  Floating_t py_{UndefValueFloat};///< y-component of track's momentum
+  Floating_t pz_{UndefValueFloat};///< z-component of track's momentum
 
   ClassDefOverride(Track, 2);
 };

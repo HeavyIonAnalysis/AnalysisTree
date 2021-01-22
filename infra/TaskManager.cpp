@@ -2,17 +2,16 @@
 
 #include <iostream>
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
-TaskManager* TaskManager::manager_= nullptr;
+TaskManager* TaskManager::manager_ = nullptr;
 
-TaskManager* TaskManager::GetInstance()
-{
+TaskManager* TaskManager::GetInstance() {
   /**
    * This is a safer way to create an instance. instance = new Singleton is
    * dangeruous in case two instance threads wants to access at the same time
    */
-  if(manager_==nullptr){
+  if (manager_ == nullptr) {
     manager_ = new TaskManager;
   }
   return manager_;
@@ -34,14 +33,14 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   InitTasks();
 }
 
-void TaskManager::InitTasks(){
-  for(auto* task : tasks_) {
+void TaskManager::InitTasks() {
+  for (auto* task : tasks_) {
     task->PreInit();
     task->Init();
   }
 }
 
-void TaskManager::Init(){
+void TaskManager::Init() {
   assert(!is_init_);
   is_init_ = true;
 
@@ -51,24 +50,24 @@ void TaskManager::Init(){
   InitTasks();
 }
 
-void TaskManager::InitOutChain(){
+void TaskManager::InitOutChain() {
   out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
   out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
   configuration_ = new Configuration("Configuration");
   data_header_ = new DataHeader;
 }
 
-void TaskManager::Run(long long nEvents){
+void TaskManager::Run(long long nEvents) {
 
   std::cout << "AnalysisTree::Manager::Run" << std::endl;
   auto start = std::chrono::system_clock::now();
 
-  if(chain_->GetEntries() > 0){
+  if (chain_->GetEntries() > 0) {
     nEvents = nEvents < 0 || nEvents > chain_->GetEntries() ? chain_->GetEntries() : nEvents;
   }
 
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
-    if(read_in_tree_){
+    if (read_in_tree_) {
       chain_->GetEntry(iEvent);
     }
     Exec();
@@ -80,7 +79,7 @@ void TaskManager::Run(long long nEvents){
 }
 
 void TaskManager::Finish() {
-  if (fill_out_tree_){
+  if (fill_out_tree_) {
     out_file_->cd();
     out_tree_->Write();
     configuration_->Write("Configuration");
@@ -95,12 +94,12 @@ void TaskManager::Finish() {
   }
   tasks_.clear();
 
-//  delete chain_;
+  //  delete chain_;
 
-  if(fill_out_tree_){
+  if (fill_out_tree_) {
     delete configuration_;
     delete data_header_;
-//    delete out_tree_;
+    //    delete out_tree_;
   }
 
   out_tree_name_ = "aTree";
@@ -110,4 +109,4 @@ void TaskManager::Finish() {
   read_in_tree_ = false;
 }
 
-}
+}// namespace AnalysisTree

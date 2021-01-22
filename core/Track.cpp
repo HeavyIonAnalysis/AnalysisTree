@@ -21,10 +21,9 @@ bool operator==(const Track& that, const Track& other) noexcept {
   return that.px_ == other.px_ && that.py_ == other.py_ && that.pz_ == other.pz_;
 }
 
-
 float Track::GetMassByPdgId(PdgCode_t pdg) {
 
-  if (pdg > 1000000000) { //100ZZZAAA0
+  if (pdg > 1000000000) {//100ZZZAAA0
     auto A = (pdg % 10000) / 10;
     return A * 0.938f /* GeV */;
   }

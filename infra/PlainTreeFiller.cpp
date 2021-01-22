@@ -11,7 +11,7 @@ void PlainTreeFiller::AddBranch(const std::string& branch_name) {
 
 void PlainTreeFiller::Init() {
 
-  if(!branch_name_.empty()){
+  if (!branch_name_.empty()) {
     const auto& branch_config = config_->GetBranchConfig(branch_name_);
     for (const auto& field : branch_config.GetMap<float>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
@@ -26,14 +26,14 @@ void PlainTreeFiller::Init() {
 
   AnalysisTask::Init();
 
-  if(entries_.size() != 1){
+  if (entries_.size() != 1) {
     throw std::runtime_error("Only 1 output branch");
   }
   const auto& vars = entries_[0].GetVariables();
   vars_.resize(vars.size());
 
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
-  for (size_t i=0; i<vars.size(); ++i) {
+  for (size_t i = 0; i < vars.size(); ++i) {
     std::string leaf_name = vars[i].GetName();
     plain_tree_->Branch(vars[i].GetName().c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
   }
@@ -42,9 +42,9 @@ void PlainTreeFiller::Init() {
 void PlainTreeFiller::Exec() {
   AnalysisTask::Exec();
   const auto& values = entries_[0].GetValues();
-  for(const auto& channel : values){
-    assert (channel.size() == vars_.size());
-    for (size_t i=0; i<channel.size(); ++i) {
+  for (const auto& channel : values) {
+    assert(channel.size() == vars_.size());
+    for (size_t i = 0; i < channel.size(); ++i) {
       vars_.at(i) = channel.at(i);
     }
     plain_tree_->Fill();

@@ -59,7 +59,6 @@ class Particle : public Track {
   PdgCode_t pid_{0};
 
   ClassDefOverride(Particle, 2);
-
 };
 
 }// namespace AnalysisTree

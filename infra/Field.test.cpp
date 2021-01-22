@@ -5,11 +5,11 @@
 
 #include <infra/Field.hpp>
 
-#include <core/Track.hpp>
 #include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
+#include <core/Track.hpp>
 
-namespace{
+namespace {
 
 using namespace AnalysisTree;
 
@@ -49,11 +49,8 @@ TEST(Field, Basics) {
   EXPECT_FLOAT_EQ(99.f, field_f.GetValue(track));
   EXPECT_EQ(99, field_i.GetValue(track));
   EXPECT_EQ(true, field_b.GetValue(track));
-
 }
 
-}
+}// namespace
 
-
-
-#endif //ANALYSISTREE_INFRA_FIELD_TEST_HPP_
+#endif//ANALYSISTREE_INFRA_FIELD_TEST_HPP_

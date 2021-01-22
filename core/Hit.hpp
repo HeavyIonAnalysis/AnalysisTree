@@ -71,8 +71,7 @@ class Hit : public Container {
   Floating_t z_{UndefValueFloat};
   Floating_t signal_{UndefValueFloat};
 
-  ClassDefOverride(Hit,2)
-
+  ClassDefOverride(Hit, 2)
 };
 
 }// namespace AnalysisTree

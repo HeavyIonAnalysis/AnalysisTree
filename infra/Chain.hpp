@@ -8,43 +8,36 @@
 #include <utility>
 #include <vector>
 
-#include <TFile.h>
 #include <TChain.h>
+#include <TFile.h>
 
 #include "BranchReader.hpp"
 #include "Configuration.hpp"
 #include "DataHeader.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 class Chain : public TChain {
 
  public:
-
   Chain() : TChain() {}
 
-  Chain(TTree* tree, Configuration* config, DataHeader* data_header) :
-      TChain(tree->GetName()),
-      configuration_(config),
-      data_header_(data_header)
-  {
+  Chain(TTree* tree, Configuration* config, DataHeader* data_header) : TChain(tree->GetName()),
+                                                                       configuration_(config),
+                                                                       data_header_(data_header) {
     this->AddFriend(tree);
   }
 
-  Chain(const std::string& filename, const std::string& treename) :
-    TChain(treename.c_str())
-  {
+  Chain(const std::string& filename, const std::string& treename) : TChain(treename.c_str()) {
     TFile* file = TFile::Open(filename.c_str(), "read");
     configuration_ = (Configuration*) file->Get("Configuration");
     data_header_ = (DataHeader*) file->Get("DataHeader");
     this->Add(filename.c_str());
   }
 
-  Chain(std::vector<std::string> filelists, std::vector<std::string> treenames) :
-   TChain(treenames.at(0).c_str()),
-   filelists_(std::move(filelists)),
-   treenames_(std::move(treenames))
-  {
+  Chain(std::vector<std::string> filelists, std::vector<std::string> treenames) : TChain(treenames.at(0).c_str()),
+                                                                                  filelists_(std::move(filelists)),
+                                                                                  treenames_(std::move(treenames)) {
     InitChain();
     InitConfiguration();
     InitDataHeader();
@@ -57,17 +50,16 @@ class Chain : public TChain {
 
   void SetDataHeader(DataHeader* dh) { data_header_ = dh; }
 
-  BranchPointer GetPointerToBranch(const std::string& name){
+  BranchPointer GetPointerToBranch(const std::string& name) {
     auto br = branches_.find(name);
-    if(br != branches_.end()){
+    if (br != branches_.end()) {
       return br->second;
-    }
-    else{
+    } else {
       throw std::runtime_error("Branch " + name + " is not found!");
     }
   }
 
-/**
+  /**
  * @brief Loads selected list of branches from TTree
  * @param t
  * @param config
@@ -75,7 +67,7 @@ class Chain : public TChain {
  */
   void InitPointersToBranches(std::set<std::string> names);
 
-  Long64_t Draw(const char *varexp, const char *selection = nullptr, Option_t *option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
+  Long64_t Draw(const char* varexp, const char* selection = nullptr, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
 
   void Print(Option_t*) const override {
     this->data_header_->Print();
@@ -83,7 +75,6 @@ class Chain : public TChain {
   }
 
  protected:
-
   void InitChain();
   void InitConfiguration();
   void InitDataHeader();
@@ -116,8 +107,7 @@ class Chain : public TChain {
   std::map<std::string, Matching*> matches_{};
 
   ClassDefOverride(AnalysisTree::Chain, 1)
-
 };
 
-}
+}// namespace AnalysisTree
 #endif//ANALYSISTREE_INFRA_CHAIN_HPP_

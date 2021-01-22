@@ -2,7 +2,7 @@
 
 #include <TVector3.h>
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 TVector3 EventHeader::GetVertexPosition3() const {
   return TVector3(vtx_pos_[Exyz::kX], vtx_pos_[Exyz::kY], vtx_pos_[Exyz::kZ]);
@@ -21,4 +21,4 @@ const EventHeader& EventHeader::GetChannel(size_t i) const {
   throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
 }
 
-}
+}// namespace AnalysisTree
