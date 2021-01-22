@@ -2,10 +2,10 @@
 #ifndef ANALYSISTREE_CONFIGURATION_H
 #define ANALYSISTREE_CONFIGURATION_H
 
+#include <array>
 #include <map>
 #include <string>
 #include <vector>
-#include <array>
 
 #include <TObject.h>
 
@@ -44,7 +44,7 @@ class Configuration : public TObject {
   ANALYSISTREE_ATTR_NODISCARD std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
   ANALYSISTREE_ATTR_NODISCARD const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_; }
 
-  void Print(Option_t* ="") const;
+  void Print(Option_t* = "") const;
 
  protected:
   std::string name_;

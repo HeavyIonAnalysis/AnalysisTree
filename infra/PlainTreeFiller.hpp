@@ -3,8 +3,8 @@
 
 #include <utility>
 
-#include "Detector.hpp"
 #include "AnalysisTask.hpp"
+#include "Detector.hpp"
 #include "Variable.hpp"
 
 namespace AnalysisTree {

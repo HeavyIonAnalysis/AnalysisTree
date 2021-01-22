@@ -31,7 +31,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
     return channels_.size();
   }
 
-//  ANALYSISTREE_ATTR_DEPRECATED("Please use: T& AddChannel(const BranchConfig& branch)")
+  //  ANALYSISTREE_ATTR_DEPRECATED("Please use: T& AddChannel(const BranchConfig& branch)")
   T* AddChannel() {
     channels_.emplace_back(T(channels_.size()));
     return &(channels_.back());
@@ -43,7 +43,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
   }
 
   void ClearChannels() {
-      channels_.clear();
+    channels_.clear();
   }
 
   T& Channel(size_t number)// needed in converter to modify tracks id
@@ -92,16 +92,15 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
   auto begin() -> typename std::vector<T>::iterator { return channels_.begin(); }
   auto end() -> typename std::vector<T>::iterator { return channels_.end(); }
-  auto cbegin() const -> typename std::vector<T>::const_iterator  { return channels_.begin(); }
-  auto cend() const -> typename std::vector<T>::const_iterator  { return channels_.end(); }
-  auto begin() const -> typename std::vector<T>::const_iterator  { return channels_.begin(); }
-  auto end() const -> typename std::vector<T>::const_iterator  { return channels_.end(); }
+  auto cbegin() const -> typename std::vector<T>::const_iterator { return channels_.begin(); }
+  auto cend() const -> typename std::vector<T>::const_iterator { return channels_.end(); }
+  auto begin() const -> typename std::vector<T>::const_iterator { return channels_.begin(); }
+  auto end() const -> typename std::vector<T>::const_iterator { return channels_.end(); }
 
  protected:
   std::vector<T> channels_{};
 
- ClassDefOverride(Detector, 2)
-
+  ClassDefOverride(Detector, 2)
 };
 
 using TrackDetector = Detector<Track>;

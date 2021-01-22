@@ -8,7 +8,7 @@
 #include <fstream>
 #include <iostream>
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 //void Chain::InitChain(){
 //  assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
@@ -34,7 +34,7 @@ namespace AnalysisTree{
 
 TChain* Chain::MakeChain(const std::string& filelist, const std::string& treename) {
   auto chain = new TChain(treename.c_str());
-  TFileCollection fc("fc","",filelist.c_str());
+  TFileCollection fc("fc", "", filelist.c_str());
   chain->AddFileInfoList(reinterpret_cast<TCollection*>(fc.GetList()));
   chain->ls();
   return chain;
@@ -54,7 +54,7 @@ void Chain::InitChain() {
   /* TODO remove assert, throw exceptions */
   assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
 
-  TFileCollection fc("fc","",filelists_[0].c_str());
+  TFileCollection fc("fc", "", filelists_[0].c_str());
   this->AddFileInfoList(reinterpret_cast<TCollection*>(fc.GetList()));
 
   std::vector<std::string> aliases;
@@ -74,16 +74,14 @@ void Chain::InitChain() {
   std::cout << "Nentries = " << this->GetEntries() << "\n";
 }
 
-
-
-void Chain::InitPointersToBranches(std::set<std::string> names){
+void Chain::InitPointersToBranches(std::set<std::string> names) {
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto& branch : configuration_->GetBranchConfigs()) {
       names.insert(branch.GetName());
     }
   }
 
-  for (const auto& branch : names) { // Init all pointers to branches
+  for (const auto& branch : names) {// Init all pointers to branches
     BranchPointer branch_ptr;
     const auto& branch_config = configuration_->GetBranchConfig(branch);
     std::cout << "Adding branch pointer: " << branch << std::endl;
@@ -112,7 +110,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
     branches_.emplace(branch, branch_ptr);
   }
 
-  for (const auto& match : configuration_->GetMatches()) { // Init all pointers to matching //TODO exclude unused
+  for (const auto& match : configuration_->GetMatches()) {// Init all pointers to matching //TODO exclude unused
     std::cout << "Adding branch pointer: " << match.second << std::endl;
     matches_.emplace(match.second, new Matching);
   }
@@ -125,12 +123,11 @@ void Chain::InitPointersToBranches(std::set<std::string> names){
   }
 
   this->GetEntry(0);
-//  auto* ptr = std::get<Particles*>(this->branches_.find("SimParticles")->second);
-//  std::cout << "SDFSDF " << ptr->GetNumberOfChannels() << std::endl;
-
+  //  auto* ptr = std::get<Particles*>(this->branches_.find("SimParticles")->second);
+  //  std::cout << "SDFSDF " << ptr->GetNumberOfChannels() << std::endl;
 }
 
-void Chain::InitConfiguration(){
+void Chain::InitConfiguration() {
   assert(!filelists_.empty());
   std::string name = "Configuration";
   configuration_ = GetObjectFromFileList<Configuration>(filelists_.at(0), name);
@@ -143,11 +140,10 @@ void Chain::InitConfiguration(){
   }
 }
 
-void Chain::InitDataHeader(){
-  try{
+void Chain::InitDataHeader() {
+  try {
     data_header_ = GetObjectFromFileList<DataHeader>(filelists_.at(0), "DataHeader");
-  }
-  catch (const std::runtime_error& err) {
+  } catch (const std::runtime_error& err) {
     std::cout << err.what() << std::endl;
   }
 }
@@ -178,7 +174,7 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
 void Chain::DrawFieldTransform(std::string& expr) const {
   auto dot = expr.find('.');
   auto branch = expr.substr(0, dot);
-  auto field = expr.substr(dot+1);
+  auto field = expr.substr(dot + 1);
 
   const auto& br = configuration_->GetBranchConfig(branch);
   auto type = br.GetFieldType(field);
@@ -186,10 +182,21 @@ void Chain::DrawFieldTransform(std::string& expr) const {
   std::string type_str{};
 
   switch (type) {
-    case(Types::kFloat) :   { type_str = "float"; break; }
-    case(Types::kInteger) : { type_str = "int";   break; }
-    case(Types::kBool) :    { type_str = "bool";  break; }
-    default: { throw std::runtime_error("Field type is not defined"); }
+    case (Types::kFloat): {
+      type_str = "float";
+      break;
+    }
+    case (Types::kInteger): {
+      type_str = "int";
+      break;
+    }
+    case (Types::kBool): {
+      type_str = "bool";
+      break;
+    }
+    default: {
+      throw std::runtime_error("Field type is not defined");
+    }
   }
 
   expr = Form("%s.channels_.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
@@ -200,26 +207,25 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
   std::vector<std::pair<std::string, int>> fields{};
 
   int pos = 0;
-  while(expr.find('.', pos) != size_t(-1) ){ //TODO fix this
+  while (expr.find('.', pos) != size_t(-1)) {//TODO fix this
     auto dot = expr.find('.', pos);
-    if( (!isdigit(expr[dot-1]) || !isdigit(expr[dot+1])) && expr[dot+1] != ' '){  // is not a number like 1.5 or 1.
+    if ((!isdigit(expr[dot - 1]) || !isdigit(expr[dot + 1])) && expr[dot + 1] != ' ') {// is not a number like 1.5 or 1.
 
       auto begin = dot;
       auto is_allowed_char = [](char c) { return isalpha(c) || isdigit(c) || c == '_'; };
-      while( begin > 0 && is_allowed_char(expr[begin-1]) ){
+      while (begin > 0 && is_allowed_char(expr[begin - 1])) {
         begin--;
       }
       auto end = dot;
-      while( end < expr.size()-1 && is_allowed_char(expr[end+1]) ){
+      while (end < expr.size() - 1 && is_allowed_char(expr[end + 1])) {
         end++;
       }
       auto field = expr.substr(begin, end - begin + 1);
       fields.emplace_back(std::make_pair(field, begin));
-      expr.erase(begin, end-begin+1);
+      expr.erase(begin, end - begin + 1);
       pos = begin;
-    }
-    else{
-      pos = dot+1;
+    } else {
+      pos = dot + 1;
     }
   }
   return fields;
@@ -228,9 +234,9 @@ std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string&
 void Chain::DrawTransform(std::string& expr) const {
   auto fields = FindAndRemoveFields(expr);
   int sum{0};
-  for(auto& field : fields){
+  for (auto& field : fields) {
     DrawFieldTransform(field.first);
-    expr.insert(field.second+sum, field.first);
+    expr.insert(field.second + sum, field.first);
     sum += field.first.size();
   }
 }
@@ -239,10 +245,10 @@ Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option
   std::string exp{varexp};
   std::string sel{selection ? selection : ""};
   DrawTransform(exp);
-  if(!sel.empty()){
+  if (!sel.empty()) {
     DrawTransform(sel);
   }
   return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
 
-}
+}// namespace AnalysisTree

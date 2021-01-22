@@ -2,8 +2,8 @@
 #ifndef ANALYSISTREE_INFRA_FIELD_H_
 #define ANALYSISTREE_INFRA_FIELD_H_
 
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #include "Constants.hpp"
 #include "Utils.hpp"

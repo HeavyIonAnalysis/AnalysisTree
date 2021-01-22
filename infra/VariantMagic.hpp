@@ -6,8 +6,8 @@
 
 #include "TTree.h"
 
-#include "Utils.hpp"
 #include "Cuts.hpp"
+#include "Utils.hpp"
 #include "Variable.hpp"
 
 namespace AnalysisTree {
@@ -78,9 +78,6 @@ struct set_branch_address_struct : public Utils::Visitor<int> {
   std::string name_;
 };
 
-
-
 }// namespace AnalysisTree
-
 
 #endif//ANALYSISTREE_INFRA_VARIANTMAGIC_HPP_

@@ -1,15 +1,15 @@
 #ifndef ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
 #define ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
 
+#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
-#include <iostream>
 
 #include "Chain.hpp"
 #include "Cuts.hpp"
-#include "Task.hpp"
 #include "Matching.hpp"
+#include "Task.hpp"
 
 class TTree;
 class TFile;
@@ -22,19 +22,18 @@ class Configuration;
 class TaskManager {
 
  public:
-
-  enum class eBranchWriteMode{
+  enum class eBranchWriteMode {
     kCreateNewTree,
     kNone
   };
 
   static TaskManager* GetInstance();
 
-  TaskManager(TaskManager&other) = delete;
+  TaskManager(TaskManager& other) = delete;
   void operator=(const TaskManager&) = delete;
   virtual ~TaskManager() = default;
 
- /**
+  /**
  * Initialization in case of reading AnalysisTree
  * @param filelists vector of filelists -> text files with paths to all root files
  * @param in_trees vector ot TTree names
@@ -50,7 +49,7 @@ class TaskManager {
 
   void AddTask(Task* task) { tasks_.emplace_back(task); }
 
-/**
+  /**
 * Adding a new branch
 * @param name name of the branch
 * @param ptr reference to a pointer to the branch object. Pointer shoulb be initialized with nullprt, function will allocate the space, but used still needs delete it in the end of the program
@@ -60,31 +59,31 @@ class TaskManager {
   void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
     assert(!name.empty() && !ptr);
 
-    if (mode == eBranchWriteMode::kCreateNewTree){
+    if (mode == eBranchWriteMode::kCreateNewTree) {
       assert(out_tree_);
       fill_out_tree_ = true;
 
       configuration_->AddBranchConfig(std::move(config));
       ptr = new Branch(configuration_->GetLastId());
-      out_tree_->Branch(name.c_str(), &ptr); // otherwise I get segfault at filling in case of large number of Particles
+      out_tree_->Branch(name.c_str(), &ptr);// otherwise I get segfault at filling in case of large number of Particles
     } else {
       throw std::runtime_error("Not yet implemented...");
     }
   }
 
-/**
+  /**
 * Adding a new Matching branch
 * @param br1 name of the first branch
 * @param br2 name of the second branch
 * @param match reference to a pointer to the Matching object. Pointer shoulb be initialized with nullprt, function will allocate the space, but used still needs delete it in the end of the program
 * @param mode write or not the branch to the file
 */
-  void AddMatching(const std::string& br1, const std::string& br2, Matching*& match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree){
+  void AddMatching(const std::string& br1, const std::string& br2, Matching*& match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
     assert(!br1.empty() && !br2.empty() && !match);
     match = new Matching(configuration_->GetBranchConfig(br1).GetId(),
                          configuration_->GetBranchConfig(br2).GetId());
 
-    if (mode == eBranchWriteMode::kCreateNewTree){
+    if (mode == eBranchWriteMode::kCreateNewTree) {
       assert(out_tree_);
       configuration_->AddMatch(match);
       out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
@@ -100,11 +99,11 @@ class TaskManager {
 
   void SetOutputDataHeader(DataHeader* dh) {
     data_header_ = dh;
-    chain_->SetDataHeader(dh); // TODO
+    chain_->SetDataHeader(dh);// TODO
   }
   void FillOutput() { out_tree_->Fill(); }
 
-  void Exec(){
+  void Exec() {
     for (auto* task : tasks_) {
       task->Exec();
     }
@@ -113,7 +112,7 @@ class TaskManager {
     }
   }
 
-  void SetOutputName(std::string file, std::string tree="aTree"){
+  void SetOutputName(std::string file, std::string tree = "aTree") {
     out_file_name_ = std::move(file);
     out_tree_name_ = std::move(tree);
   }
@@ -125,7 +124,7 @@ class TaskManager {
   void InitOutChain();
   void InitTasks();
 
-//  std::unique_ptr<Chain> chain_{nullptr};
+  //  std::unique_ptr<Chain> chain_{nullptr};
   Chain* chain_;
   std::vector<Task*> tasks_{};
 
@@ -140,7 +139,6 @@ class TaskManager {
   bool is_init_{false};
   bool fill_out_tree_{false};
   bool read_in_tree_{false};
-
 };
 
 };// namespace AnalysisTree

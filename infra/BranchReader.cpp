@@ -4,12 +4,10 @@
 
 namespace AnalysisTree {
 
-BranchReader::BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts) :
-  name_(std::move(name)),
-  data_(data),
-  cuts_(cuts),
-  type_(type)
-{
+BranchReader::BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts) : name_(std::move(name)),
+                                                                                             data_(data),
+                                                                                             cuts_(cuts),
+                                                                                             type_(type) {
   id_ = ANALYSISTREE_UTILS_VISIT(get_id_struct(), data_);
 }
 

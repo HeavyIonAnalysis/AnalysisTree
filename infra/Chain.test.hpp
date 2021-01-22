@@ -5,11 +5,11 @@
 
 #include <infra/Chain.hpp>
 
-namespace{
+namespace {
 
 using namespace AnalysisTree;
 
-TEST(Test_AnalysisTreeInfra, Test_Chain){
+TEST(Test_AnalysisTreeInfra, Test_Chain) {
 
   auto* chain = new Chain({"fl_toy_mc.txt"}, {"tTree"});
 
@@ -24,7 +24,7 @@ TEST(Test_AnalysisTreeInfra, Test_Chain){
   auto* particles = std::get<Particles*>(chain->GetPointerToBranch("SimParticles"));
   auto* tracks = std::get<TrackDetector*>(chain->GetPointerToBranch("RecTracks"));
 
-  for(ULong64_t i=0; i<10; ++i){
+  for (ULong64_t i = 0; i < 10; ++i) {
     chain->GetEntry(i);
 
     const auto Ms = particles->GetNumberOfChannels();
@@ -35,9 +35,6 @@ TEST(Test_AnalysisTreeInfra, Test_Chain){
   }
 }
 
-}
-
-
-
+}// namespace
 
 #endif//ANALYSISTREE_INFRA_CHAIN_TEST_HPP_

@@ -8,12 +8,8 @@
 #include <set>
 #include <sstream>
 #include <utility>
-#include <set>
-
 
 using namespace AnalysisTree;
-
-
 
 AnalysisTree::BranchViewPtr AnalysisTree::IBranchView::Select(const std::string& field_name) const {
   return Select(std::vector<std::string>({field_name}));
@@ -43,20 +39,20 @@ void IBranchView::PrintEntry(std::ostream& os) {
 
   std::vector<FieldPtr> field_ptrs;
   field_ptrs.reserve(GetFields().size());
-  for (auto &field_name : GetFields()) {
+  for (auto& field_name : GetFields()) {
     field_ptrs.emplace_back(GetFieldPtr(field_name));
   }
 
   TextTable t('-', '|', '+');
   t.add("#ch");
-  for (auto &field : GetFields()) {
+  for (auto& field : GetFields()) {
     t.add(field);
   }
   t.endOfRow();
 
   for (size_t i_channel = 0; i_channel < GetNumberOfChannels(); ++i_channel) {
     t.add(std::to_string(i_channel));
-    for (auto &field : field_ptrs) {
+    for (auto& field : field_ptrs) {
       t.add(std::to_string(field->GetValue(i_channel)));
     }
     t.endOfRow();
@@ -77,7 +73,7 @@ bool IBranchView::HasField(const std::string& name) const {
 }
 BranchViewPtr IBranchView::AddPrefix(const std::string& prefix) const {
   std::map<std::string, std::string> rename_map;
-  for (auto &field : GetFields()) {
+  for (auto& field : GetFields()) {
     rename_map.emplace(field, prefix + field);
   }
   return RenameFields(rename_map);
@@ -107,8 +103,9 @@ void BranchViewAction::Details::ThrowMissingArgs(const std::vector<std::string>&
   }
   std::stringstream stream;
   stream << "Args ";
-  for (auto &arg : missing_args) {
-    stream << "'" << arg << "'" << " ";
+  for (auto& arg : missing_args) {
+    stream << "'" << arg << "'"
+           << " ";
   }
   stream << "missing";
   throw std::out_of_range(stream.str());

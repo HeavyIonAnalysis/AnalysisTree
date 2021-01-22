@@ -22,15 +22,13 @@ bool operator==(const SimpleCut& that, const SimpleCut& other) {
   return that.vars_ == other.vars_ && that.title_ == other.title_;
 }
 
-SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title){
+SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title) {
   return SimpleCut(Variable::FromString(variable_name), lo, hi, title);
 }
 
-SimpleCut EqualsCut(const std::string &variable_name, int value, const std::string &title){
+SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title) {
   return SimpleCut(Variable::FromString(variable_name), value, title);
 }
-
-
 
 //SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title) {
 //  return SimpleCut(Variable::FromString(variable_name), lo, hi, title);

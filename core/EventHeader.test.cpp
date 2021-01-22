@@ -7,7 +7,6 @@
 
 #include "EventHeader.hpp"
 
-
 namespace {
 
 using namespace AnalysisTree;
@@ -28,4 +27,4 @@ TEST(EventHeader, Basics) {
 }
 }// namespace
 
-#endif //ANALYSISTREE_CORE_EVENTHEADER_TEST_HPP_
+#endif//ANALYSISTREE_CORE_EVENTHEADER_TEST_HPP_

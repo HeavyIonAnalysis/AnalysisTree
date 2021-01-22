@@ -8,8 +8,8 @@
 #include <vector>
 
 #include "Constants.hpp"
-#include "Variable.hpp"
 #include "Utils.hpp"
+#include "Variable.hpp"
 
 namespace AnalysisTree {
 
@@ -32,10 +32,10 @@ class SimpleCut {
   * @param lambda function of fields, returns bool
   */
   SimpleCut(std::vector<std::string> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
-                                                                                                                    lambda_(std::move(lambda)) {
+                                                                                                                       lambda_(std::move(lambda)) {
     std::transform(vars.begin(), vars.end(),
                    std::back_inserter(vars_),
-                   [] (const std::string& arg_name) { return Variable::FromString(arg_name); });
+                   [](const std::string& arg_name) { return Variable::FromString(arg_name); });
 
     FillBranchNames();
   }
@@ -74,18 +74,17 @@ class SimpleCut {
 
   friend bool operator==(const SimpleCut& that, const SimpleCut& other);
 
-  friend SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title);
-  friend SimpleCut EqualsCut(const std::string &variable_name, int value, const std::string &title);
+  friend SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title);
+  friend SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title);
 
  protected:
-
   /**
 * Constructor for range cut: min <= field <= max
 * @param field name of the field
 * @param min minimal accepted value
 * @param max maximal accepted value
 */
-//  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::RangeCut instead")
+  //  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::RangeCut instead")
   SimpleCut(const Variable& var, float min, float max, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
@@ -96,7 +95,7 @@ class SimpleCut {
   * @param field name of the field
   * @param value only objects with field == value will be accepted
   */
-//  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::EqualsCut")
+  //  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::EqualsCut")
   SimpleCut(const Variable& var, int value, std::string title = "") : title_(std::move(title)) {
     vars_.emplace_back(var);
     lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
@@ -113,9 +112,8 @@ class SimpleCut {
   ClassDef(AnalysisTree::SimpleCut, 1)
 };
 
-SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title = "");
-SimpleCut EqualsCut(const std::string &variable_name, int value, const std::string &title = "");
-
+SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title = "");
+SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title = "");
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_SIMPLECUT_H

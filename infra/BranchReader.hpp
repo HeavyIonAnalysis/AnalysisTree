@@ -8,9 +8,9 @@
 #include "Constants.hpp"
 #include "Detector.hpp"
 #include "EventHeader.hpp"
+#include "Utils.hpp"
 #include "Variable.hpp"
 #include "VariantMagic.hpp"
-#include "Utils.hpp"
 
 namespace AnalysisTree {
 

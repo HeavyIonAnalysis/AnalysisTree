@@ -57,8 +57,6 @@ TEST(Configuration, Match) {
   EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
 }
 
-
-
 }// namespace
 
 #endif//ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_

@@ -44,7 +44,7 @@ std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const AnalysisEntry& var
 
   for (size_t ivar = 0; ivar < entries_.size(); ++ivar) {
 
-    if (vars.GetBranchNames() == entries_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), entries_[ivar].GetCuts())) { //branch exists
+    if (vars.GetBranchNames() == entries_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), entries_[ivar].GetCuts())) {//branch exists
       for (size_t i = 0; i < vars.GetVariables().size(); ++i) {
         var_ids[i] = entries_[ivar].AddVariable(vars.GetVariables()[i]);
       }
@@ -52,7 +52,7 @@ std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const AnalysisEntry& var
     }
   }
   entries_.emplace_back(vars);
-  std::iota(var_ids.begin(), var_ids.end(), 0); // var_ids will become: [0..size-1]
+  std::iota(var_ids.begin(), var_ids.end(), 0);// var_ids will become: [0..size-1]
   return std::make_pair(entries_.size() - 1, var_ids);
 }
 

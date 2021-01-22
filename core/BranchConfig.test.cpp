@@ -11,8 +11,8 @@ using namespace AnalysisTree;
 
 TEST(BranchConfig, Basics) {
 
-  auto det_types = {DetType::kTrack, DetType::kModule, DetType::kParticle, DetType::kHit, DetType::kEventHeader };
-  for(auto det_type : det_types){
+  auto det_types = {DetType::kTrack, DetType::kModule, DetType::kParticle, DetType::kHit, DetType::kEventHeader};
+  for (auto det_type : det_types) {
     BranchConfig branch_config("RecTrack", det_type);
     branch_config.AddField<float>("test_f");
     branch_config.AddField<int>("test_i");

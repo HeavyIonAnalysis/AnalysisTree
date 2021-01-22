@@ -237,7 +237,5 @@ TEST(BranchViewAction, Merge) {
   merge_result = vtx_tracks_branch.Merge(sim_tracks_branch, "rec_", "sim_");
   merge_result->SetEntry(0);
   std::cout << *(merge_result) << std::endl;
-
-
 }
 }// namespace

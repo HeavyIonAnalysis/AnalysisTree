@@ -2,10 +2,10 @@
 #define ANALYSISTREE_CUTS_H
 
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
-#include <stdexcept>
 
 #include "Constants.hpp"
 #include "SimpleCut.hpp"
@@ -15,7 +15,6 @@
 namespace AnalysisTree {
 
 class Configuration;
-
 
 /**
  * @brief Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts
