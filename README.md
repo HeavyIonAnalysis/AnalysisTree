@@ -14,23 +14,37 @@ This is a dataformat to store information in configurable objects. Basic objects
  - Hit (position and signal)
  - Module (id and signal)
  - EventHeader (vertex position)
+ - DataHeader (common information for all events)
 
 Additionaly to mandatory information, each object can contain any number of integer, floating or boolean fields.
 Information about all fields in all branches is stored in Configuration object.
 
 ## Installation
 
-ROOT6 is needed for installation:
+ROOT6 is needed for installation. Version compiled with c++17 flag is preferred, otherwise CMAKE_CXX_STANDARD flag needs to be implicitly specified (see below).
 
-https://root.cern.ch/building-root
-
-    git clone 
+    git clone https://github.com/HeavyIonAnalysis/AnalysisTree.git
+    cd AnalysisTree
     mkdir build install
     cd build
     source /path/to/your/thisroot.sh
     cmake ../
     make -j install
   
+### List of CMake options:
+
+To apply the flag use -D{Name}={value}, for example, if you want to compile using c++11:
+    
+    cmake -DCMAKE_CXX_STANDARD=11 ../
+
+| Name  | Default value | Possible values |
+| ------------- | ------------- | ---------- |
+| CMAKE_BUILD_TYPE  | RELEASE  | RELEASE/DEBUG |
+| CMAKE_CXX_STANDARD  | 17  | 11/14/17 |
+| AnalysisTree_BUILD_TESTS  | OFF  | ON/OFF |
+| AnalysisTree_BUILD_EXAMPLES  | ON  | ON/OFF |
+| AnalysisTree_BUILD_EXPERIMENTAL  | OFF  | ON/OFF |
+
 ## Reading AnalysisTree 
 
 ### Load AnalysisTree libraries
@@ -67,7 +81,9 @@ You should see something like:
 
 Draw any field you like:
 
-    aTree->Draw("BranchName.channels_.GetField<typename>(id)")
+    aTree->Draw("BranchName.FieldName")
+
+All standart TTree::Draw operations are supported.
 
 For a QA of the file(s) please use the dedicated package AnalysisTreeQA:
 
