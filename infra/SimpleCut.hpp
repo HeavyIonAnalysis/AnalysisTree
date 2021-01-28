@@ -109,7 +109,7 @@ class SimpleCut {
   std::set<std::string> branch_names_{};
   std::function<bool(std::vector<double>&)> lambda_;///< function used to evaluate the cut.
 
-  ClassDef(SimpleCut, 1)
+  ClassDef(SimpleCut, 1);
 };
 
 SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title = "");

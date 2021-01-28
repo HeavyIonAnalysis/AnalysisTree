@@ -81,6 +81,8 @@ class Field {
   DetType branch_type_{DetType(UndefValueShort)};
 
   bool is_init_{false};
+
+  ClassDef(Field, 1);
 };
 
 }// namespace AnalysisTree
