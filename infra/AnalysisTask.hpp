@@ -42,6 +42,9 @@ class AnalysisTask : public Task {
   std::vector<AnalysisEntry> entries_{};
   std::vector<BranchReader> branches_{};
   std::map<std::string, Cuts*> cuts_map_{};
+
+  ClassDef(AnalysisTask, 1)
+
 };
 
 }// namespace AnalysisTree

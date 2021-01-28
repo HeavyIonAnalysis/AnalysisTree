@@ -49,6 +49,8 @@ class BranchReader {
   Cuts* cuts_{nullptr};
   int id_{-1};
   DetType type_{DetType(-1)};
+
+  ClassDef(BranchReader, 1);
 };
 
 }// namespace AnalysisTree

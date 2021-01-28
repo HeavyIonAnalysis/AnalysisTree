@@ -63,6 +63,9 @@ class AnalysisEntry {
   bool is_inverted_matching_{false};
 
   array2D values_{};///< channels<variables>
+
+  ClassDef(AnalysisEntry, 1);
+
 };
 
 }// namespace AnalysisTree

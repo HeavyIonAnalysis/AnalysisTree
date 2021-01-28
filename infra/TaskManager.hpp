@@ -125,7 +125,7 @@ class TaskManager {
   void InitTasks();
 
   //  std::unique_ptr<Chain> chain_{nullptr};
-  Chain* chain_;
+  Chain* chain_{nullptr};
   std::vector<Task*> tasks_{};
 
   // output data members
@@ -139,6 +139,8 @@ class TaskManager {
   bool is_init_{false};
   bool fill_out_tree_{false};
   bool read_in_tree_{false};
+
+  ClassDef(TaskManager, 1);
 };
 
 };// namespace AnalysisTree
