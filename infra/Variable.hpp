@@ -95,6 +95,8 @@ class Variable {
   short id_{-999};
 
   bool is_init_{false};
+  ClassDef(Variable, 1)
+
 };
 
 template<class T>

@@ -96,7 +96,7 @@ class Cuts {
 
   bool is_init_{false};
 
-  ClassDef(AnalysisTree::Cuts, 1)
+  ClassDef(Cuts, 1)
 };
 
 }// namespace AnalysisTree
