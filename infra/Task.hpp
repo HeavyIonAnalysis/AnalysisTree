@@ -49,6 +49,8 @@ class Task {
 
   std::set<std::string> in_branches_{};
   bool is_init_{false};
+
+  ClassDef(Task, 1);
 };
 
 }// namespace AnalysisTree
