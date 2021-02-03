@@ -28,6 +28,7 @@ class BranchReader {
  public:
   BranchReader() = default;
   BranchReader(std::string name, BranchPointer data, DetType type, Cuts* cuts = nullptr);
+  virtual ~BranchReader() = default;
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
   ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
