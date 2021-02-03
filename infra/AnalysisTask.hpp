@@ -43,7 +43,7 @@ class AnalysisTask : public Task {
   std::vector<BranchReader> branches_{};
   std::map<std::string, Cuts*> cuts_map_{};
 
-  ClassDef(AnalysisTask, 1);
+  ClassDefOverride(AnalysisTask, 1);
 
 };
 

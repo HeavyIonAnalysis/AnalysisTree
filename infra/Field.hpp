@@ -22,7 +22,7 @@ class Field {
   Field(Field&&) = default;
   Field& operator=(Field&&) = default;
   Field& operator=(const Field&) = default;
-  ~Field() = default;
+  virtual ~Field() = default;
 
   Field(std::string name) : field_(std::move(name)){};
 

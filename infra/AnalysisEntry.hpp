@@ -20,6 +20,7 @@ class AnalysisEntry {
 
  public:
   AnalysisEntry() = default;
+  virtual ~AnalysisEntry() = default;
 
   explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr) : vars_(std::move(vars)),
                                                                              cuts_(cuts) {
