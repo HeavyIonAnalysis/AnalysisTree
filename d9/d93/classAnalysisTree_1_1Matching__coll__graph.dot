@@ -1,0 +1,6 @@
+digraph "AnalysisTree::Matching"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::Matching\n|# branch1_id_\l# branch2_id_\l# match_\l# match_inverted_\l|+ Matching()\l+ Matching()\l+ ~Matching()\l+ AddMatch()\l+ GetMatchDirect()\l+ GetMatchInverted()\l+ GetMatch()\l+ GetMatches()\l+ Clear()\l+ GetBranch1Id()\l+ GetBranch2Id()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

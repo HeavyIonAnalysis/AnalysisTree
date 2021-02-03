@@ -1,0 +1,7 @@
+digraph "Graphical Class Hierarchy"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="AnalysisTree::BranchView\lAction::Details::FunctionTraits\l\< R(*)(Args...)\>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$da/da5/structAnalysisTree_1_1BranchViewAction_1_1Details_1_1FunctionTraits_3_01R_07_5_08_07Args_8_8_8_08_4.html"];
+}

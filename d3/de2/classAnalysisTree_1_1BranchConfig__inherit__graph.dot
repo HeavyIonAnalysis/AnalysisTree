@@ -1,0 +1,12 @@
+digraph "AnalysisTree::BranchConfig"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::BranchConfig\n|# name_\l# id_\l# type_\l|+ BranchConfig()\l+ BranchConfig()\l+ BranchConfig()\l+ operator=()\l+ operator=()\l+ ~BranchConfig()\l+ BranchConfig()\l+ Print()\l+ GetFieldType()\l+ GetFieldId()\land 8 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{AnalysisTree::VectorConfig\l\< int \>\n|# map_\l# size_\l|+ VectorConfig()\l+ VectorConfig()\l+ VectorConfig()\l+ operator=()\l+ operator=()\l+ ~VectorConfig()\l+ AddField()\l+ AddField()\l+ AddFields()\l+ GetId()\l+ GetMap()\l+ GetSize()\l+ Print()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d3/df5/classAnalysisTree_1_1VectorConfig.html"];
+  Node3 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{AnalysisTree::VectorConfig\l\< float \>\n|# map_\l# size_\l|+ VectorConfig()\l+ VectorConfig()\l+ VectorConfig()\l+ operator=()\l+ operator=()\l+ ~VectorConfig()\l+ AddField()\l+ AddField()\l+ AddFields()\l+ GetId()\l+ GetMap()\l+ GetSize()\l+ Print()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d3/df5/classAnalysisTree_1_1VectorConfig.html"];
+  Node4 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node4 [label="{AnalysisTree::VectorConfig\l\< bool \>\n|# map_\l# size_\l|+ VectorConfig()\l+ VectorConfig()\l+ VectorConfig()\l+ operator=()\l+ operator=()\l+ ~VectorConfig()\l+ AddField()\l+ AddField()\l+ AddFields()\l+ GetId()\l+ GetMap()\l+ GetSize()\l+ Print()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d3/df5/classAnalysisTree_1_1VectorConfig.html"];
+}

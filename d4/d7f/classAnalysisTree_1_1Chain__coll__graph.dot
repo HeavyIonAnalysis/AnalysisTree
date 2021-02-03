@@ -1,0 +1,15 @@
+digraph "AnalysisTree::Chain"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::Chain\n|# filelists_\l# treenames_\l# branches_\l# matches_\l|+ Chain()\l+ Chain()\l+ Chain()\l+ Chain()\l+ GetConfiguration()\l+ GetDataHeader()\l+ GetBranchPointers()\l+ GetMatchPointers()\l+ SetDataHeader()\l+ GetPointerToBranch()\l+ InitPointersToBranches()\l+ Draw()\l+ Print()\l# InitChain()\l# InitConfiguration()\l# InitDataHeader()\l# DrawTransform()\l# DrawFieldTransform()\l# LookupAlias()\l# FindAndRemoveFields()\l# MakeChain()\l# GetObjectFromFileList()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{TChain\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node3 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #configuration_" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node3 [label="{AnalysisTree::Configuration\n|# name_\l# branches_\l# matches_\l|+ Configuration()\l+ Configuration()\l+ Configuration()\l+ Configuration()\l+ operator=()\l+ operator=()\l+ AddBranchConfig()\l+ AddMatch()\l+ GetBranchConfig()\l+ GetBranchConfig()\land 8 more...\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d8/dee/classAnalysisTree_1_1Configuration.html"];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node4 [label="{TObject\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node5 -> Node1 [color="grey25",fontsize="10",style="solid",label=" #data_header_" ,arrowhead="odiamond",fontname="Helvetica"];
+  Node5 [label="{AnalysisTree::DataHeader\n|# modules_pos_\l# det_pos_\l# system_\l# beam_mom_\l# beam_y_\l# sqrtsNN_\l|+ DataHeader()\l+ DataHeader()\l+ DataHeader()\l+ operator=()\l+ operator=()\l+ AddDetector()\l+ Print()\l+ SetSystem()\l+ SetBeamMomentum()\l+ SetDetectorPosition()\l+ GetBeamRapidity()\l+ GetSystem()\l+ GetDetectorPosition()\l+ GetModulePositions()\l+ GetModulePhi()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d8/d77/classAnalysisTree_1_1DataHeader.html"];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+}

@@ -1,0 +1,14 @@
+digraph "AnalysisTree::IAction"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::IAction\n||+ ~IAction()\l+ ApplyAction()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{AnalysisTree::BranchView\lAction::BranchViewDefineAction\l\< Function \>\n||+ BranchViewDefineAction()\l+ ApplyAction()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d3/d32/classAnalysisTree_1_1BranchViewAction_1_1BranchViewDefineAction.html"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{AnalysisTree::BranchView\lAction::BranchViewFilterAction\l\< Function \>\n||+ BranchViewFilterAction()\l+ ApplyAction()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d9/de2/classAnalysisTree_1_1BranchViewAction_1_1BranchViewFilterAction.html"];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node4 [label="{AnalysisTree::BranchView\lAction::CombiningMergeAction\n||+ CombiningMergeAction()\l+ ApplyAction()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d8/d15/classAnalysisTree_1_1BranchViewAction_1_1CombiningMergeAction.html"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node5 [label="{AnalysisTree::BranchView\lAction::RenameFieldsAction\n||+ RenameFieldsAction()\l+ ApplyAction()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d8/d17/classAnalysisTree_1_1BranchViewAction_1_1RenameFieldsAction.html"];
+}

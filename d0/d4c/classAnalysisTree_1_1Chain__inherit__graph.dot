@@ -1,0 +1,8 @@
+digraph "AnalysisTree::Chain"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::Chain\n|# filelists_\l# treenames_\l# configuration_\l# data_header_\l# branches_\l# matches_\l|+ Chain()\l+ Chain()\l+ Chain()\l+ Chain()\l+ GetConfiguration()\l+ GetDataHeader()\l+ GetBranchPointers()\l+ GetMatchPointers()\l+ SetDataHeader()\l+ GetPointerToBranch()\l+ InitPointersToBranches()\l+ Draw()\l+ Print()\l# InitChain()\l# InitConfiguration()\l# InitDataHeader()\l# DrawTransform()\l# DrawFieldTransform()\l# LookupAlias()\l# FindAndRemoveFields()\l# MakeChain()\l# GetObjectFromFileList()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{TChain\n||}",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+}

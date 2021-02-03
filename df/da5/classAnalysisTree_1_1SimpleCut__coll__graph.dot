@@ -1,0 +1,6 @@
+digraph "AnalysisTree::SimpleCut"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::SimpleCut\n|# title_\l# vars_\l# branch_names_\l# lambda_\l|+ SimpleCut()\l+ SimpleCut()\l+ SimpleCut()\l+ operator=()\l+ operator=()\l+ ~SimpleCut()\l+ SimpleCut()\l+ Apply()\l+ Apply()\l+ Print()\l+ Variables()\l+ GetVariables()\l+ GetBranches()\l# SimpleCut()\l# SimpleCut()\l# FillBranchNames()\l# ClassDef()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

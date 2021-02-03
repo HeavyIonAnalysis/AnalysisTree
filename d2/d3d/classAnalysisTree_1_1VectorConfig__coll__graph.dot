@@ -1,0 +1,6 @@
+digraph "AnalysisTree::VectorConfig&lt; T &gt;"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::VectorConfig\< T \>\n|# map_\l# size_\l|+ VectorConfig()\l+ VectorConfig()\l+ VectorConfig()\l+ operator=()\l+ operator=()\l+ ~VectorConfig()\l+ AddField()\l+ AddField()\l+ AddFields()\l+ GetId()\l+ GetMap()\l+ GetSize()\l+ Print()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+}

@@ -1,0 +1,10 @@
+digraph "AnalysisTree::Hit"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::Hit\n|# x_\l# y_\l# z_\l# signal_\l|+ Hit()\l+ Hit()\l+ Hit()\l+ operator=()\l+ operator=()\l+ Hit()\l+ Hit()\l+ SetPosition()\l+ SetPosition()\l+ SetSignal()\land 8 more...\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{AnalysisTree::Container\n|# floats_\l# ints_\l# bools_\l|+ Container()\l+ Container()\l+ Container()\l+ Container()\l+ Container()\l+ operator=()\l+ operator=()\l+ ~Container()\l+ Vector()\l+ GetVector()\land 10 more...\l# ClassDefOverride()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d2/d0f/classAnalysisTree_1_1Container.html",tooltip="A class to store any number of integers, floats and bools. "];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{AnalysisTree::IndexedObject\n||+ IndexedObject()\l+ IndexedObject()\l+ IndexedObject()\l+ IndexedObject()\l+ operator=()\l+ operator=()\l+ ~IndexedObject()\l+ GetId()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$df/dee/classAnalysisTree_1_1IndexedObject.html"];
+}

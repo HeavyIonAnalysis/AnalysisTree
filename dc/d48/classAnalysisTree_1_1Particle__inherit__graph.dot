@@ -1,0 +1,12 @@
+digraph "AnalysisTree::Particle"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="{AnalysisTree::Particle\n|# mass_\l# pid_\l|+ Particle()\l+ Particle()\l+ Particle()\l+ Particle()\l+ Particle()\l+ Particle()\l+ operator=()\l+ operator=()\l+ ~Particle()\l+ GetRapidity()\land 7 more...\l# ClassDefOverride()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node2 [label="{AnalysisTree::Track\n|# px_\l# py_\l# pz_\l|+ Track()\l+ Track()\l+ Track()\l+ Track()\l+ Track()\l+ operator=()\l+ operator=()\l+ ~Track()\l+ Get4MomentumByMass()\l+ Get4Momentum()\land 14 more...\l# ClassDefOverride()\l# GetMassByPdgId()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$da/d0a/classAnalysisTree_1_1Track.html",tooltip="A class for a generic track with determined momentum. "];
+  Node3 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node3 [label="{AnalysisTree::Container\n|# floats_\l# ints_\l# bools_\l|+ Container()\l+ Container()\l+ Container()\l+ Container()\l+ Container()\l+ operator=()\l+ operator=()\l+ ~Container()\l+ Vector()\l+ GetVector()\land 10 more...\l# ClassDefOverride()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d2/d0f/classAnalysisTree_1_1Container.html",tooltip="A class to store any number of integers, floats and bools. "];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",arrowtail="onormal",fontname="Helvetica"];
+  Node4 [label="{AnalysisTree::IndexedObject\n||+ IndexedObject()\l+ IndexedObject()\l+ IndexedObject()\l+ IndexedObject()\l+ operator=()\l+ operator=()\l+ ~IndexedObject()\l+ GetId()\l}",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$df/dee/classAnalysisTree_1_1IndexedObject.html"];
+}
