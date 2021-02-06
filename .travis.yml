@@ -15,12 +15,12 @@ script: |
   set -x # trace for debug
   source /opt/rh/devtoolset-8/enable
   cd AnalysisTree
+  doxygen docs/Doxyfile.in
   mkdir build
   cd build
   cmake ../ -DCMAKE_BUILD_TYPE=Debug -DAnalysisTree_BUILD_TESTS=ON
   make
   ctest'
-  doxygen docs/Doxyfile.in
 
 branches:
   only:
