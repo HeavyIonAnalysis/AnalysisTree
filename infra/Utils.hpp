@@ -5,21 +5,19 @@
 #ifndef ANALYSISTREE_INFRA_UTILS_HPP
 #define ANALYSISTREE_INFRA_UTILS_HPP
 
+#include <version>
+
 #ifndef __has_include
   #define __has_include(MACRO) 0
 #endif
 
-#if __has_include(<variant>) && defined(__cpp_lib_variant)
+#if __has_include(<variant>) && __cpp_lib_variant
   #include <variant>
   #define ANALYSISTREE_STD_VARIANT 1
   #define ANALYSISTREE_UTILS_VARIANT std::variant
   #define ANALYSISTREE_UTILS_VISIT std::visit
   #define ANALYSISTREE_UTILS_GET std::get
 #elif __has_include(<boost/variant.hpp>)
-  #define ANALYSISTREE_BOOST_VARIANT 1
-#endif
-
-#if defined(ANALYSISTREE_BOOST_VARIANT)
   #include <boost/variant.hpp>
   #include <boost/variant/static_visitor.hpp>
   #define ANALYSISTREE_BOOST_VARIANT 1
