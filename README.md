@@ -2,6 +2,12 @@
 [![Build Status](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree.svg?branch=master)](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/HeavyIonAnalysis/AnalysisTree?sort=semver)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/HeavyIonAnalysis/AnalysisTree)
+
+## Important note on AnalysisTree versions
+
+Different MAJOR version means incompatible API changes. 
+Neither API nor data compatibility is preserved between MAJOR versions.
+
 ## Doxygen documentation:
 
 https://heavyionanalysis.github.io/AnalysisTree/
