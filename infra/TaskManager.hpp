@@ -31,7 +31,13 @@ class TaskManager {
 
   TaskManager(TaskManager& other) = delete;
   void operator=(const TaskManager&) = delete;
-  virtual ~TaskManager() = default;
+  virtual ~TaskManager();
+
+  /**
+   * @brief If TaskManager owns its tasks, they will be deleted on TaskManager' destruction
+   * @param owns_flag
+   */
+  void SetOwnsTasks(bool owns_flag = true) { is_owns_tasks = owns_flag; }
 
   /**
  * Initialization in case of reading AnalysisTree
@@ -139,6 +145,7 @@ class TaskManager {
   bool is_init_{false};
   bool fill_out_tree_{false};
   bool read_in_tree_{false};
+  bool is_owns_tasks{true};
 
   ClassDef(TaskManager, 1);
 };

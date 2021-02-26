@@ -87,13 +87,6 @@ void TaskManager::Finish() {
     out_file_->Close();
     delete out_file_;
   }
-
-  for (auto* task : tasks_) {
-    task->Finish();
-    delete task;
-  }
-  tasks_.clear();
-
   //  delete chain_;
 
   if (fill_out_tree_) {
@@ -109,4 +102,12 @@ void TaskManager::Finish() {
   read_in_tree_ = false;
 }
 
+TaskManager::~TaskManager() {
+  if (is_owns_tasks) {
+    for (auto task_ptr : tasks_) {
+      delete task_ptr;
+    }
+  }
+  tasks_.clear();
+}
 }// namespace AnalysisTree
