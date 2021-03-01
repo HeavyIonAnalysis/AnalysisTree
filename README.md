@@ -68,32 +68,30 @@ After that one can open ROOT session and load libraries:
 
 Open a ROOT-file and check its content:
     
-    root -l filename.root
+    root -l
     [0] gSystem->Load("libAnalysisTreeBase.so")
-    [1] .ls
-    
-You should see something like:
-
-    aTree;
-    Configuration;
-    DataHeader;
-    
+    [1] gSystem->Load("libAnalysisTreeInfra.so")
+    [2] AnalysisTree::Chain t("filename.root", "tree_name")
+     
 Print the information about AnalysisTree structure:
 
-    Configuration->Print()
+    t.Print()
 
 You should see something like:
-     blahblahblah
 
-Draw any field you like:
+![Test Image 1](https://github.com/HeavyIonAnalysis/AnalysisTree/blob/master/docs/pics/Config.png)
 
-    aTree->Draw("BranchName.FieldName")
 
-All standart TTree::Draw operations are supported.
+Draw any field you like with all TTree::Draw operations:
+
+    t.Draw("BranchName.FieldName")
+    t.Draw("log(BranchName.FieldName) * sin(BranchName.OtherFieldName)")
+    t.Draw("log(BranchName.FieldName) : sin(BranchName.OtherFieldName)")
+     ...
 
 For a QA of the file(s) please use the dedicated package AnalysisTreeQA:
 
-https://git.cbm.gsi.de/pwg-c2f/data/analysis_tree_qa/
+https://github.com/HeavyIonAnalysis/AnalysisTreeQA
 
 ## Cuts
 
@@ -106,4 +104,3 @@ Coming soon =)
 ## Known problems (features)
  - BranchConfig::GetFieldId() is slow -> should not be used for every event/track/hit/module
  - Branch name and title of the corresponding object should be the same
- - For every new (Container-based) object Init(BranchConfig) should be called to initialize internal structure 
