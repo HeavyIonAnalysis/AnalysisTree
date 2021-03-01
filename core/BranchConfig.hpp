@@ -83,7 +83,7 @@ class VectorConfig {
  protected:
   MapType map_{};
   ShortInt_t size_{0};
-  ClassDef(VectorConfig, 1)
+  ClassDef(VectorConfig, 2)
 };
 
 class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, public VectorConfig<bool> {
