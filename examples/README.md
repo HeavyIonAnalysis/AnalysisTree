@@ -1,5 +1,9 @@
 # Getting started with AnalysisTree
 
+## Disclaimer
+This is an example for version 1. All files under following link are also generated with version 1. 
+At the moment latest version is version 2, examples with more advanced ways to use AnalysisTree are under preparation
+
 ## Input files
 Filelists of reco files (copy of CBMROOT reco):
 
