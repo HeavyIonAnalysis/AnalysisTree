@@ -68,7 +68,7 @@ if(AnalysisTree_BUILD_TESTS)
             Field.test.cpp
             SimpleCut.test.cpp
 #            PlainTreeFiller.test.cpp
-            AnalysisTask.test.cpp
+#            AnalysisTask.test.cpp
             )
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)
