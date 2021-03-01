@@ -16,9 +16,9 @@
 
 #include <infra/Cuts.test.cpp>
 #include <infra/Field.test.cpp>
-#include <infra/PlainTreeFiller.test.cpp>
+//#include <infra/PlainTreeFiller.test.cpp>
 #include <infra/SimpleCut.test.cpp>
-#include <infra/VarManager.test.cpp>
+//#include <infra/VarManager.test.cpp>
 
 int main(int argc, char **argv) {
 
