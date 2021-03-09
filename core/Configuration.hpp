@@ -46,6 +46,27 @@ class Configuration : public TObject {
 
   void Print(Option_t* ="") const;
 
+  /**
+   * @brief Merge two configurations without reindexing of the branches
+   * @param other
+   */
+  void Merge(const Configuration& other) {
+    for (auto & other_branch : other.branches_) {
+      const auto other_id = other_branch.GetId();
+      const auto other_name = other_branch.GetName();
+      for (auto &local_branch : branches_) {
+        if (other_id == local_branch.GetId()) {
+          throw std::runtime_error("Configurations contain branches with the same id-s");
+        }
+        if (other_name == local_branch.GetName()) {
+          throw std::runtime_error("Configurations contain branches with the same names");
+        }
+      }
+      /// DO NOT REINDEX
+      branches_.emplace_back(other_branch);
+    }
+  }
+
  protected:
   std::string name_;
   std::vector<BranchConfig> branches_{};
