@@ -34,17 +34,44 @@ class Configuration : public TObject {
 
   [[nodiscard]] BranchConfig& GetBranchConfig(const std::string& name);
   [[nodiscard]] const BranchConfig& GetBranchConfig(const std::string& name) const;
-  [[nodiscard]] const BranchConfig& GetBranchConfig(Integer_t i) const { return branches_.at(i); }
+  [[nodiscard]] const BranchConfig& GetBranchConfig(Integer_t i) const {
+    for (auto & branch_config : branches_) {
+      if (branch_config.GetId() == i)
+        return branch_config;
+    }
+    throw std::runtime_error("Branch with id = " + std::to_string(i) + " not found");
+  }
   [[nodiscard]] const std::vector<BranchConfig>& GetBranchConfigs() const { return branches_; }
   [[nodiscard]] uint GetNumberOfBranches() const { return branches_.size(); }
 
-  [[nodiscard]] uint GetLastId() const { return branches_.empty() ? 0 : branches_.back().GetId(); }
+  [[nodiscard]] uint GetLastId() const { throw std::runtime_error("This function works not as expected"); }
 
   [[nodiscard]] const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
   [[nodiscard]] std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
   [[nodiscard]] const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_; }
 
   void Print(Option_t* ="") const;
+
+  /**
+   * @brief Merge two configurations without reindexing of the branches
+   * @param other
+   */
+  void Merge(const Configuration& other) {
+    for (auto & other_branch : other.branches_) {
+      const auto other_id = other_branch.GetId();
+      const auto other_name = other_branch.GetName();
+      for (auto &local_branch : branches_) {
+        if (other_id == local_branch.GetId()) {
+          throw std::runtime_error("Configurations contain branches with the same id-s");
+        }
+        if (other_name == local_branch.GetName()) {
+          throw std::runtime_error("Configurations contain branches with the same names");
+        }
+      }
+      /// DO NOT REINDEX
+      branches_.emplace_back(other_branch);
+    }
+  }
 
  protected:
   std::string name_;

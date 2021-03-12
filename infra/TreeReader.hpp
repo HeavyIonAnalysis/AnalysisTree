@@ -76,10 +76,8 @@ static inline Configuration* GetConfigurationFromFileList(const std::vector<std:
   Configuration* config{GetObjectFromFileList<Configuration>(filelists.at(0), name)};
 
   for (uint i = 1; i < filelists.size(); ++i) {
-    auto* config_i = GetObjectFromFileList<Configuration>(filelists.at(i), name);
-    for (uint j = 0; j < config_i->GetNumberOfBranches(); ++j) {
-      config->AddBranchConfig(config_i->GetBranchConfig(j));
-    }
+    auto config_i = GetObjectFromFileList<Configuration>(filelists.at(i), name);
+    config->Merge(*config_i);
   }
   return config;
 }
