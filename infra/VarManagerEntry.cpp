@@ -1,37 +1,24 @@
 #include "VarManagerEntry.hpp"
 
 #include "Configuration.hpp"
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
 bool VarManagerEntry::ApplyCutOnBranch(BranchReader* br, int i_channel) const {
   if (!cuts_) return true;
-#ifdef USEBOOST
-  return boost::apply_visitor(apply_cut(i_channel, cuts_), br->GetData());
-#else
-  return std::visit([this, i_channel](auto&& arg) { return cuts_->Apply(arg->GetChannel(i_channel)); }, br->GetData());
-#endif
+  return ANALYSISTREE_UTILS_VISIT(apply_cut(i_channel, cuts_), br->GetData());
 }
 
 bool VarManagerEntry::ApplyCutOnBranches(BranchReader* br1, int ch1, BranchReader* br2, int ch2) const {
   if (!cuts_) return true;
   if (!br1->ApplyCut(ch1)) return false;
   if (!br2->ApplyCut(ch2)) return false;
-#ifdef USEBOOST
-  return boost::apply_visitor(apply_cut_2_branches(ch1, ch2, cuts_), br1->GetData(), br2->GetData());
-#else
-  auto cut_func = [this, ch1, ch2](auto&& arg1, auto&& arg2) { return cuts_->Apply(arg1->GetChannel(ch1), arg1->GetId(), arg2->GetChannel(ch2), arg2->GetId()); };
-  return std::visit(cut_func, br1->GetData(), br2->GetData());
-#endif
+  return ANALYSISTREE_UTILS_VISIT(apply_cut_2_branches(ch1, ch2, cuts_), br1->GetData(), br2->GetData());
 }
 
 double VarManagerEntry::FillVariabe(const Variable& var, BranchReader* br1, int ch1, BranchReader* br2, int ch2) {
-#ifdef USEBOOST
-  return boost::apply_visitor(fill_2_branches(var, ch1, ch2), br1->GetData(), br2->GetData());
-#else
-  auto func = [var, ch1, ch2](auto&& arg1, auto&& arg2) { return var.GetValue(arg1->GetChannel(ch1), arg1->GetId(), arg2->GetChannel(ch2), arg2->GetId()); };
-  return std::visit(func, br1->GetData(), br2->GetData());
-#endif
+  return ANALYSISTREE_UTILS_VISIT(fill_2_branches(var, ch1, ch2), br1->GetData(), br2->GetData());
 }
 
 /**
