@@ -30,6 +30,10 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   }
   chain_->InitPointersToBranches(branch_names);
 
+  if(fill_out_tree_){
+    InitOutChain();
+  }
+
   InitTasks();
 }
 
@@ -79,6 +83,11 @@ void TaskManager::Run(long long nEvents) {
 }
 
 void TaskManager::Finish() {
+
+  for (auto* task : tasks_) {
+    task->Finish();
+  }
+
   if (fill_out_tree_) {
     out_file_->cd();
     out_tree_->Write();

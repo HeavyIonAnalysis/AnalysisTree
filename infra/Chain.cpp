@@ -110,7 +110,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
     branches_.emplace(branch, branch_ptr);
   }
 
-  for (const auto& match : configuration_->GetMatches()) {// Init all pointers to matching //TODO exclude unused
+  for (const auto& match : configuration_->GetMatches()) { // Init all pointers to matching //TODO exclude unused
     std::cout << "Adding branch pointer: " << match.second << std::endl;
     matches_.emplace(match.second, new Matching);
   }

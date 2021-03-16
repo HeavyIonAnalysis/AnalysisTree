@@ -100,8 +100,8 @@ class Chain : public TChain {
   std::vector<std::string> filelists_{};
   std::vector<std::string> treenames_{};
 
-  Configuration* configuration_;
-  DataHeader* data_header_;
+  Configuration* configuration_{nullptr};
+  DataHeader* data_header_{nullptr};
 
   std::map<std::string, BranchPointer> branches_{};
   std::map<std::string, Matching*> matches_{};

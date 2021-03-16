@@ -34,7 +34,7 @@ ROOT6 is needed for installation. Version compiled with c++17 flag is preferred,
     mkdir build install
     cd build
     source /path/to/your/thisroot.sh
-    cmake ../
+    cmake -DCMAKE_INSTALL_PREFIX=../install ../
     make -j install
   
 ### List of CMake options:

@@ -66,8 +66,10 @@ class TaskManager {
     assert(!name.empty() && !ptr);
 
     if (mode == eBranchWriteMode::kCreateNewTree) {
-      assert(out_tree_);
-      fill_out_tree_ = true;
+      if(!out_tree_){
+        InitOutChain();
+        fill_out_tree_ = true;
+      }
 
       configuration_->AddBranchConfig(std::move(config));
       ptr = new Branch(configuration_->GetLastId());
@@ -117,6 +119,8 @@ class TaskManager {
       FillOutput();
     }
   }
+
+  std::vector<Task*>& Tasks() { return tasks_; }
 
   void SetOutputName(std::string file, std::string tree = "aTree") {
     out_file_name_ = std::move(file);
