@@ -34,6 +34,7 @@ class VectorConfig {
 
   VectorConfig() = default;
   VectorConfig(const VectorConfig&) = default;
+  explicit VectorConfig(const MapType& map) : map_(map), size_(map.size()) {}
   VectorConfig(VectorConfig&&) noexcept(std::is_nothrow_move_constructible<MapType>::value) = default;
   VectorConfig& operator=(VectorConfig&&) noexcept(std::is_nothrow_move_assignable<MapType>::value) = default;
   VectorConfig& operator=(const VectorConfig&) = default;
@@ -98,13 +99,21 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   explicit BranchConfig(std::string name, DetType type);
 
+  BranchConfig(std::string name, DetType type, const VectorConfig<int>::MapType& ints, const VectorConfig<float>::MapType& floats, const VectorConfig<bool>::MapType& bools) :
+    VectorConfig<int>::VectorConfig<int>(ints),
+    VectorConfig<float>::VectorConfig<float>(floats),
+    VectorConfig<bool>::VectorConfig<bool>(bools),
+    name_(std::move(name)),
+    type_(type)
+  {}
+
   void Print() const override;
 
   ANALYSISTREE_ATTR_NODISCARD Types GetFieldType(const std::string& sField) const;
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
 
   // Setters
-  void SetId(ShortInt_t id) { id_ = id; }
+  void SetId(size_t id) { id_ = id; }
   template<typename T>
   void AddField(const std::string& name, const std::string& title = "") {
     VectorConfig<T>::AddField(name, title);
@@ -121,15 +130,18 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 
   ANALYSISTREE_ATTR_NODISCARD std::string GetName() const { return name_; }
-  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetId() const { return id_; }
   ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
+  ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const {
+    return BranchConfig(name, type, VectorConfig<int>::map_, VectorConfig<float>::map_, VectorConfig<bool>::map_);
+  }
 
  protected:
   std::string name_;
-  ShortInt_t id_{UndefValueShort};
+  size_t id_{0};
   DetType type_{DetType(UndefValueShort)};
 
-  ClassDefOverride(BranchConfig, 2)
+  ClassDefOverride(BranchConfig, 3);
 };
 
 }// namespace AnalysisTree

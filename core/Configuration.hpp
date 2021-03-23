@@ -25,8 +25,8 @@ class Configuration : public TObject {
   Configuration& operator=(Configuration&&) = default;
   Configuration& operator=(const Configuration&) = default;
 
-  void AddBranchConfig(BranchConfig branch) {
-    branch.SetId(branches_.size());
+  void AddBranchConfig(BranchConfig branch, size_t id=0) {
+    branch.SetId(id == 0 ? branches_.size() : id);
     branches_.emplace_back(branch);
   }
 

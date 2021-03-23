@@ -5,6 +5,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <functional> //for std::hash
 
 #include "Chain.hpp"
 #include "Cuts.hpp"
@@ -63,17 +64,23 @@ class TaskManager {
 */
   template<class Branch>
   void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
-    assert(!name.empty() && !ptr);
+    if(name.empty()){
+      throw std::runtime_error("name is empty");
+    }
+    if(ptr){
+      throw std::runtime_error("ptr is not nullptr! The memory should be allocated inside this function with proper id!");
+    }
 
     if (mode == eBranchWriteMode::kCreateNewTree) {
       if(!out_tree_){
         InitOutChain();
         fill_out_tree_ = true;
       }
-
-      configuration_->AddBranchConfig(std::move(config));
-      ptr = new Branch(configuration_->GetLastId());
-      out_tree_->Branch(name.c_str(), &ptr);// otherwise I get segfault at filling in case of large number of Particles
+      std::hash<std::string> id_hasher;
+      auto id = id_hasher(name);
+      configuration_->AddBranchConfig(std::move(config), id);
+      ptr = new Branch(id);
+      out_tree_->Branch(name.c_str(), &ptr);
     } else {
       throw std::runtime_error("Not yet implemented...");
     }
@@ -104,6 +111,9 @@ class TaskManager {
   ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
   ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
   ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
+
+  ANALYSISTREE_ATTR_NODISCARD const Configuration* GetOutConfig() const { return configuration_; }
+  ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetOutDataHeader() const { return data_header_; }
 
   void SetOutputDataHeader(DataHeader* dh) {
     data_header_ = dh;

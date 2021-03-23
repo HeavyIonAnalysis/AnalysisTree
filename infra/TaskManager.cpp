@@ -89,19 +89,16 @@ void TaskManager::Finish() {
   }
 
   if (fill_out_tree_) {
+    std::cout << "Output file is " << out_file_name_ << std::endl;
+    std::cout << "Output tree is " << out_tree_name_ << std::endl;
     out_file_->cd();
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
     out_file_->Close();
     delete out_file_;
-  }
-  //  delete chain_;
-
-  if (fill_out_tree_) {
     delete configuration_;
     delete data_header_;
-    //    delete out_tree_;
   }
 
   out_tree_name_ = "aTree";

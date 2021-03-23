@@ -1,8 +1,8 @@
 #include "BranchConfig.hpp"
 
-ClassImp(AnalysisTree::BranchConfig)
+ClassImp(AnalysisTree::BranchConfig);
 
-    namespace AnalysisTree {
+namespace AnalysisTree {
 
   BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(name)), type_(type) {
 
