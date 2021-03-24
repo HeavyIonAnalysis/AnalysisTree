@@ -24,7 +24,7 @@ namespace AnalysisTree {
 //    }
 //  }
 //
-//  for (uint i = 1; i < filelists_.size(); i++) {
+//  for (size_t i = 1; i < filelists_.size(); i++) {
 //    this->AddFriend(MakeChain(filelists_.at(i), treenames_.at(i)));
 //  }
 //
@@ -63,7 +63,7 @@ void Chain::InitChain() {
     aliases.emplace_back(LookupAlias(aliases, tree_name));
   }
 
-  for (uint i = 1; i < filelists_.size(); i++) {
+  for (size_t i = 1; i < filelists_.size(); i++) {
     if (aliases.at(i) != treenames_.at(i)) {
       std::cout << "Tree '" << treenames_.at(i) << "' will be friended under the alias '" << aliases.at(i) << "'" << std::endl;
     }
@@ -77,11 +77,11 @@ void Chain::InitChain() {
 void Chain::InitPointersToBranches(std::set<std::string> names) {
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto& branch : configuration_->GetBranchConfigs()) {
-      names.insert(branch.GetName());
+      names.insert(branch.second.GetName());
     }
   }
 
-  for (const auto& branch : names) {// Init all pointers to branches
+  for (const auto& branch : names) { // Init all pointers to branches
     BranchPointer branch_ptr;
     const auto& branch_config = configuration_->GetBranchConfig(branch);
     std::cout << "Adding branch pointer: " << branch << std::endl;
@@ -110,7 +110,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
     branches_.emplace(branch, branch_ptr);
   }
 
-  for (const auto& match : configuration_->GetMatches()) {// Init all pointers to matching //TODO exclude unused
+  for (const auto& match : configuration_->GetMatches()) { // Init all pointers to matching //TODO exclude unused
     std::cout << "Adding branch pointer: " << match.second << std::endl;
     matches_.emplace(match.second, new Matching);
   }
@@ -132,9 +132,9 @@ void Chain::InitConfiguration() {
   std::string name = "Configuration";
   configuration_ = GetObjectFromFileList<Configuration>(filelists_.at(0), name);
 
-  for (uint i = 1; i < filelists_.size(); ++i) {
+  for (size_t i = 1; i < filelists_.size(); ++i) {
     auto* config_i = GetObjectFromFileList<Configuration>(filelists_.at(i), name);
-    for (uint j = 0; j < config_i->GetNumberOfBranches(); ++j) {
+    for (size_t j = 0; j < config_i->GetNumberOfBranches(); ++j) {
       configuration_->AddBranchConfig(config_i->GetBranchConfig(j));
     }
   }

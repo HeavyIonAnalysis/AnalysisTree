@@ -42,7 +42,7 @@ class Field {
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return field_; }
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetBranchName() const { return branch_; }
 
-  ANALYSISTREE_ATTR_NODISCARD short GetBranchId() const { return branch_id_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetBranchId() const { return branch_id_; }
   ANALYSISTREE_ATTR_NODISCARD short GetFieldId() const { return field_id_; }
 
   ANALYSISTREE_ATTR_NODISCARD DetType GetBranchType() const { return branch_type_; }
@@ -77,12 +77,12 @@ class Field {
   short field_id_{};
   Types field_type_{};
 
-  short branch_id_{UndefValueShort};
+  size_t branch_id_{0};
   DetType branch_type_{DetType(UndefValueShort)};
 
   bool is_init_{false};
 
-  ClassDef(Field, 1);
+  ClassDef(Field, 2);
 };
 
 }// namespace AnalysisTree

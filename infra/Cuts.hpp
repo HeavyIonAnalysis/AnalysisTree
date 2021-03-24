@@ -58,7 +58,7 @@ class Cuts {
   }
 
   template<class A, class B>
-  bool Apply(const A& a, int a_id, const B& b, int b_id) const {
+  bool Apply(const A& a, size_t a_id, const B& b, size_t b_id) const {
     if (!is_init_) {
       throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
     }

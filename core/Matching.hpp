@@ -3,6 +3,7 @@
 
 #include "Constants.hpp"
 #include <map>
+#include <utility>
 
 namespace AnalysisTree {
 
@@ -11,9 +12,18 @@ namespace AnalysisTree {
  */
 
 class Matching {
+
+  typedef std::map<Integer_t, Integer_t> MapType;
+
  public:
   Matching() = default;
-  Matching(ShortInt_t id1, ShortInt_t id2) : branch1_id_(id1), branch2_id_(id2){};
+  Matching(size_t id1, size_t id2) : branch1_id_(id1), branch2_id_(id2){};
+  Matching(size_t id1, size_t id2, MapType match, MapType match_inverted) :
+      branch1_id_(id1),
+      branch2_id_(id2),
+      match_(std::move(match)),
+      match_inverted_(std::move(match_inverted)){};
+
   virtual ~Matching() = default;
 
   void AddMatch(Integer_t id1, Integer_t id2) {
@@ -27,7 +37,7 @@ class Matching {
     return is_inverted ? GetMatchInverted(id) : GetMatchDirect(id);
   }
 
-  ANALYSISTREE_ATTR_NODISCARD const std::map<Integer_t, Integer_t>& GetMatches(bool is_inv = false) const {
+  ANALYSISTREE_ATTR_NODISCARD const MapType& GetMatches(bool is_inv = false) const {
     return is_inv ? match_inverted_ : match_;
   }
 
@@ -36,17 +46,22 @@ class Matching {
     match_inverted_.clear();
   }
 
-  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetBranch1Id() const { return branch1_id_; }
-  ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetBranch2Id() const { return branch2_id_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetBranch1Id() const { return branch1_id_; }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetBranch2Id() const { return branch2_id_; }
+
+  void SetMatches(MapType match, MapType match_inv){
+    match_ = std::move(match);
+    match_inverted_ = std::move(match_inv);
+  }
 
  protected:
-  ShortInt_t branch1_id_{UndefValueShort};
-  ShortInt_t branch2_id_{UndefValueShort};
+  size_t branch1_id_{0};
+  size_t branch2_id_{0};
 
-  std::map<Integer_t, Integer_t> match_{};
-  std::map<Integer_t, Integer_t> match_inverted_{};//TODO is there a better way? Boost.Bimap?
+  MapType match_{};
+  MapType match_inverted_{};//TODO is there a better way? Boost.Bimap?
 
-  ClassDef(Matching, 1)
+  ClassDef(Matching, 2)
 };
 
 }// namespace AnalysisTree

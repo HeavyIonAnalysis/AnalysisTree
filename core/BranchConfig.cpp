@@ -1,10 +1,18 @@
 #include "BranchConfig.hpp"
 
-ClassImp(AnalysisTree::BranchConfig)
+#include <functional> //for std::hash
 
-    namespace AnalysisTree {
+ClassImp(AnalysisTree::BranchConfig);
+
+namespace AnalysisTree {
+
+  void BranchConfig::GenerateId(){
+    std::hash<std::string> id_hasher;
+    id_ = id_hasher(name_);
+  }
 
   BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(name)), type_(type) {
+    GenerateId();
 
     if (type_ == DetType::kTrack) {
       VectorConfig<float>::AddField("px", TrackFields::kPx, "GeV/c");

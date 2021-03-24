@@ -19,7 +19,7 @@ class Detector : public IndexedObject, protected IndexAccessor {
 
  public:
   Detector() = default;
-  explicit Detector(Integer_t id) : IndexedObject(id) {}
+  explicit Detector(size_t id) : IndexedObject(id) {}
   Detector(const Detector& otherDetector) = default;
   Detector(Detector&& otherDetector) noexcept = default;
   Detector& operator=(Detector&&) noexcept = default;

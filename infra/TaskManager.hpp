@@ -62,16 +62,23 @@ class TaskManager {
 * @param mode write or not the branch to the file
 */
   template<class Branch>
-  void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
-    assert(!name.empty() && !ptr);
+  void AddBranch(const std::string& name, Branch*& ptr, const BranchConfig& config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
+    if(name.empty()){
+      throw std::runtime_error("name is empty");
+    }
+    if(ptr){
+      throw std::runtime_error("ptr is not nullptr! The memory should be allocated inside this function with proper id!");
+    }
 
     if (mode == eBranchWriteMode::kCreateNewTree) {
-      assert(out_tree_);
-      fill_out_tree_ = true;
-
-      configuration_->AddBranchConfig(std::move(config));
-      ptr = new Branch(configuration_->GetLastId());
-      out_tree_->Branch(name.c_str(), &ptr);// otherwise I get segfault at filling in case of large number of Particles
+      if(!out_tree_){
+        InitOutChain();
+        fill_out_tree_ = true;
+      }
+      configuration_->AddBranchConfig(config);
+      chain_->GetConfiguration()->AddBranchConfig(config);
+      ptr = new Branch(config.GetId());
+      out_tree_->Branch(name.c_str(), &ptr);
     } else {
       throw std::runtime_error("Not yet implemented...");
     }
@@ -86,12 +93,13 @@ class TaskManager {
 */
   void AddMatching(const std::string& br1, const std::string& br2, Matching*& match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
     assert(!br1.empty() && !br2.empty() && !match);
-    match = new Matching(configuration_->GetBranchConfig(br1).GetId(),
-                         configuration_->GetBranchConfig(br2).GetId());
+    match = new Matching(chain_->GetConfiguration()->GetBranchConfig(br1).GetId(),
+                         chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     if (mode == eBranchWriteMode::kCreateNewTree) {
       assert(out_tree_);
       configuration_->AddMatch(match);
+      chain_->GetConfiguration()->AddMatch(match);
       out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
       fill_out_tree_ = true;
     } else {
@@ -102,6 +110,9 @@ class TaskManager {
   ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
   ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetDataHeader() const { return chain_->GetDataHeader(); }
   ANALYSISTREE_ATTR_NODISCARD Chain* GetChain() const { return chain_; }
+
+  ANALYSISTREE_ATTR_NODISCARD const Configuration* GetOutConfig() const { return configuration_; }
+  ANALYSISTREE_ATTR_NODISCARD const DataHeader* GetOutDataHeader() const { return data_header_; }
 
   void SetOutputDataHeader(DataHeader* dh) {
     data_header_ = dh;
@@ -117,6 +128,8 @@ class TaskManager {
       FillOutput();
     }
   }
+
+  std::vector<Task*>& Tasks() { return tasks_; }
 
   void SetOutputName(std::string file, std::string tree = "aTree") {
     out_file_name_ = std::move(file);

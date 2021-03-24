@@ -25,20 +25,23 @@ class Configuration : public TObject {
   Configuration& operator=(Configuration&&) = default;
   Configuration& operator=(const Configuration&) = default;
 
-  void AddBranchConfig(BranchConfig branch) {
-    branch.SetId(branches_.size());
-    branches_.emplace_back(branch);
+  void AddBranchConfig(const BranchConfig& branch) {
+    branches_.emplace(branch.GetId(), branch);
   }
 
   void AddMatch(Matching* match);
 
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
-  ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(Integer_t i) const { return branches_.at(i); }
-  ANALYSISTREE_ATTR_NODISCARD const std::vector<BranchConfig>& GetBranchConfigs() const { return branches_; }
-  ANALYSISTREE_ATTR_NODISCARD uint GetNumberOfBranches() const { return branches_.size(); }
-
-  ANALYSISTREE_ATTR_NODISCARD uint GetLastId() const { return branches_.empty() ? 0 : branches_.back().GetId(); }
+  ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
+    auto it = branches_.find(i);
+    if(it == branches_.end()){
+      throw std::runtime_error("Branch with id = " + std::to_string(i) + " not found");
+    }
+    return it->second;
+  }
+  ANALYSISTREE_ATTR_NODISCARD const std::map<size_t, BranchConfig>& GetBranchConfigs() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD unsigned int GetNumberOfBranches() const { return branches_.size(); }
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
   ANALYSISTREE_ATTR_NODISCARD std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
@@ -48,10 +51,10 @@ class Configuration : public TObject {
 
  protected:
   std::string name_;
-  std::vector<BranchConfig> branches_{};
+  std::map<size_t, BranchConfig> branches_{};
   std::map<std::array<std::string, 2>, std::string> matches_{};
 
-  ClassDef(Configuration, 2)
+  ClassDef(Configuration, 3)
 };
 
 }// namespace AnalysisTree
