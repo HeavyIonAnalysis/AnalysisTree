@@ -35,7 +35,7 @@ TEST(Field, Basics) {
   field_b.Init(configuration);
 
   EXPECT_EQ(0, field_f.GetFieldId());
-  EXPECT_EQ(0, field_f.GetBranchId());
+  EXPECT_EQ(branch_config.GetId(), field_f.GetBranchId());
   EXPECT_EQ(Types::kFloat, field_f.GetFieldType());
   EXPECT_EQ(Types::kInteger, field_i.GetFieldType());
   EXPECT_EQ(Types::kBool, field_b.GetFieldType());

@@ -5,7 +5,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <functional> //for std::hash
 
 #include "Chain.hpp"
 #include "Cuts.hpp"
@@ -63,7 +62,7 @@ class TaskManager {
 * @param mode write or not the branch to the file
 */
   template<class Branch>
-  void AddBranch(const std::string& name, Branch*& ptr, BranchConfig config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
+  void AddBranch(const std::string& name, Branch*& ptr, const BranchConfig& config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
     if(name.empty()){
       throw std::runtime_error("name is empty");
     }
@@ -76,11 +75,9 @@ class TaskManager {
         InitOutChain();
         fill_out_tree_ = true;
       }
-      std::hash<std::string> id_hasher;
-      auto id = id_hasher(name);
-      configuration_->AddBranchConfig(config, id);
-      chain_->GetConfiguration()->AddBranchConfig(std::move(config), id);
-      ptr = new Branch(id);
+      configuration_->AddBranchConfig(config);
+      chain_->GetConfiguration()->AddBranchConfig(config);
+      ptr = new Branch(config.GetId());
       out_tree_->Branch(name.c_str(), &ptr);
     } else {
       throw std::runtime_error("Not yet implemented...");

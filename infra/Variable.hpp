@@ -75,7 +75,7 @@ class Variable {
   double GetValue(const T& object) const;
 
   template<class A, class B>
-  double GetValue(const A& a, int a_id, const B& b, int b_id) const;
+  double GetValue(const A& a, size_t a_id, const B& b, size_t b_id) const;
 
   void SetName(std::string name) { name_ = std::move(name); }
   void SetSize(short size) { size_ = size; }
@@ -109,7 +109,7 @@ double Variable::GetValue(const T& object) const {
 }
 
 template<class A, class B>
-double Variable::GetValue(const A& a, int a_id, const B& b, int b_id) const {
+double Variable::GetValue(const A& a, size_t a_id, const B& b, size_t b_id) const {
   //    assert(branch_ids_.size() == 2);
   vars_.clear();
   for (const auto& field : fields_) {

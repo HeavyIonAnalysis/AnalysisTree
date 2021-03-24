@@ -105,7 +105,11 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
     VectorConfig<bool>::VectorConfig<bool>(bools),
     name_(std::move(name)),
     type_(type)
-  {}
+  {
+    GenerateId();
+  }
+
+  void GenerateId();
 
   void Print() const override;
 
@@ -113,7 +117,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
 
   // Setters
-  void SetId(size_t id) { id_ = id; }
+//  void SetId(size_t id) { id_ = id; }
   template<typename T>
   void AddField(const std::string& name, const std::string& title = "") {
     VectorConfig<T>::AddField(name, title);

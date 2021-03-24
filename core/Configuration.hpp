@@ -25,10 +25,8 @@ class Configuration : public TObject {
   Configuration& operator=(Configuration&&) = default;
   Configuration& operator=(const Configuration&) = default;
 
-  void AddBranchConfig(BranchConfig branch, size_t id=0) {
-    id = id == 0 ? branches_.size() : id;
-    branch.SetId(id);
-    branches_.emplace(id, branch);
+  void AddBranchConfig(const BranchConfig& branch) {
+    branches_.emplace(branch.GetId(), branch);
   }
 
   void AddMatch(Matching* match);
@@ -36,7 +34,11 @@ class Configuration : public TObject {
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
-    return branches_.find(i)->second;
+    auto it = branches_.find(i);
+    if(it == branches_.end()){
+      throw std::runtime_error("Branch with id = " + std::to_string(i) + " not found");
+    }
+    return it->second;
   }
   ANALYSISTREE_ATTR_NODISCARD const std::map<size_t, BranchConfig>& GetBranchConfigs() const { return branches_; }
   ANALYSISTREE_ATTR_NODISCARD uint GetNumberOfBranches() const { return branches_.size(); }
