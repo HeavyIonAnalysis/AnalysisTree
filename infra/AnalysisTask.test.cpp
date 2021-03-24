@@ -38,12 +38,12 @@ class AnalysisTaskTest : public AnalysisTask {
   void Exec() override {
     AnalysisTask::Exec();
 
-    for (uint i = 0; i < entries_.size(); ++i) {
+    for (size_t i = 0; i < entries_.size(); ++i) {
       const auto& channels = entries_.at(i).GetValues();
       auto& test_vars = entries_test_.at(i);
 
       for (const auto& channel : channels) {
-        for (uint j = 0; j < channel.size(); ++j) {// vars
+        for (size_t j = 0; j < channel.size(); ++j) {// vars
           auto& tvar = test_vars.at(j);
           auto var = channel.at(j);
 
