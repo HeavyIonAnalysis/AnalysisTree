@@ -25,7 +25,7 @@ TEST(Configuration, Basics) {
   config.AddBranchConfig(branch_config);
 
   EXPECT_EQ(config.GetNumberOfBranches(), 1);
-  EXPECT_EQ(config.GetLastId(), 0);
+//  EXPECT_EQ(config.GetLastId(), 0);
 
   const auto& br1 = config.GetBranchConfig("RecTrack");
   EXPECT_EQ(br1.GetId(), 0);

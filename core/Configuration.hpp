@@ -26,19 +26,20 @@ class Configuration : public TObject {
   Configuration& operator=(const Configuration&) = default;
 
   void AddBranchConfig(BranchConfig branch, size_t id=0) {
-    branch.SetId(id == 0 ? branches_.size() : id);
-    branches_.emplace_back(branch);
+    id = id == 0 ? branches_.size() : id;
+    branch.SetId(id);
+    branches_.emplace(id, branch);
   }
 
   void AddMatch(Matching* match);
 
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
-  ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(Integer_t i) const { return branches_.at(i); }
-  ANALYSISTREE_ATTR_NODISCARD const std::vector<BranchConfig>& GetBranchConfigs() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
+    return branches_.find(i)->second;
+  }
+  ANALYSISTREE_ATTR_NODISCARD const std::map<size_t, BranchConfig>& GetBranchConfigs() const { return branches_; }
   ANALYSISTREE_ATTR_NODISCARD uint GetNumberOfBranches() const { return branches_.size(); }
-
-  ANALYSISTREE_ATTR_NODISCARD uint GetLastId() const { return branches_.empty() ? 0 : branches_.back().GetId(); }
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
   ANALYSISTREE_ATTR_NODISCARD std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
@@ -48,10 +49,10 @@ class Configuration : public TObject {
 
  protected:
   std::string name_;
-  std::vector<BranchConfig> branches_{};
+  std::map<size_t, BranchConfig> branches_{};
   std::map<std::array<std::string, 2>, std::string> matches_{};
 
-  ClassDef(Configuration, 2)
+  ClassDef(Configuration, 3)
 };
 
 }// namespace AnalysisTree

@@ -8,16 +8,16 @@ namespace AnalysisTree {
 
 BranchConfig& Configuration::GetBranchConfig(const std::string& name) {
   for (auto& branch : branches_) {
-    if (branch.GetName() == name)
-      return branch;
+    if (branch.second.GetName() == name)
+      return branch.second;
   }
   throw std::runtime_error("Configuration::GetBranchConfig - no branch " + name);
 }
 
 const BranchConfig& Configuration::GetBranchConfig(const std::string& name) const {
-  for (const auto& branch : branches_) {
-    if (branch.GetName() == name)
-      return branch;
+  for (auto& branch : branches_) {
+    if (branch.second.GetName() == name)
+      return branch.second;
   }
   throw std::runtime_error("Configuration::GetBranchConfig - no branch " + name);
 }
@@ -27,7 +27,7 @@ void Configuration::Print(Option_t*) const {
   std::cout << "The Tree has the following branches:" << std::endl;
   for (const auto& branch : branches_) {
     std::cout << std::endl;
-    branch.Print();
+    branch.second.Print();
   }
   std::cout << std::endl;
   std::cout << "Matching between branches available" << std::endl;

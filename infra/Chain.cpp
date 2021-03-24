@@ -77,11 +77,11 @@ void Chain::InitChain() {
 void Chain::InitPointersToBranches(std::set<std::string> names) {
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto& branch : configuration_->GetBranchConfigs()) {
-      names.insert(branch.GetName());
+      names.insert(branch.second.GetName());
     }
   }
 
-  for (const auto& branch : names) {// Init all pointers to branches
+  for (const auto& branch : names) { // Init all pointers to branches
     BranchPointer branch_ptr;
     const auto& branch_config = configuration_->GetBranchConfig(branch);
     std::cout << "Adding branch pointer: " << branch << std::endl;

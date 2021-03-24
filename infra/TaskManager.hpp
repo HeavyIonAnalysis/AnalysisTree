@@ -78,7 +78,8 @@ class TaskManager {
       }
       std::hash<std::string> id_hasher;
       auto id = id_hasher(name);
-      configuration_->AddBranchConfig(std::move(config), id);
+      configuration_->AddBranchConfig(config, id);
+      chain_->GetConfiguration()->AddBranchConfig(std::move(config), id);
       ptr = new Branch(id);
       out_tree_->Branch(name.c_str(), &ptr);
     } else {
@@ -95,12 +96,13 @@ class TaskManager {
 */
   void AddMatching(const std::string& br1, const std::string& br2, Matching*& match, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
     assert(!br1.empty() && !br2.empty() && !match);
-    match = new Matching(configuration_->GetBranchConfig(br1).GetId(),
-                         configuration_->GetBranchConfig(br2).GetId());
+    match = new Matching(chain_->GetConfiguration()->GetBranchConfig(br1).GetId(),
+                         chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     if (mode == eBranchWriteMode::kCreateNewTree) {
       assert(out_tree_);
       configuration_->AddMatch(match);
+      chain_->GetConfiguration()->AddMatch(match);
       out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
       fill_out_tree_ = true;
     } else {
