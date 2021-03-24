@@ -15,8 +15,8 @@ class Container : public IndexedObject {
  public:
   Container() = default;
 
-  explicit Container(Integer_t id) : IndexedObject(id) {}
-  Container(Integer_t id, const BranchConfig& branch)
+  explicit Container(size_t id) : IndexedObject(id) {}
+  Container(size_t id, const BranchConfig& branch)
       : IndexedObject(id),
         floats_(branch.GetSize<float>()),
         ints_(branch.GetSize<int>()),

@@ -110,7 +110,8 @@ void TaskManager::Finish() {
 
 TaskManager::~TaskManager() {
   if (is_owns_tasks) {
-    for (auto task_ptr : tasks_) {
+    for (auto* task_ptr : tasks_) {
+      std::cout << "removing task" << std::endl;
       delete task_ptr;
     }
   }

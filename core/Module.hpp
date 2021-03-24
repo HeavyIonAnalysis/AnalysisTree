@@ -18,8 +18,8 @@ class Module : public Container {
   Module& operator=(Module&&) = default;
   Module& operator=(const Module& part) = default;
 
-  explicit Module(Integer_t id) : Container(id) {}
-  Module(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
+  explicit Module(size_t id) : Container(id) {}
+  Module(size_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
 
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetSignal() const { return signal_; }
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetNumber() const { return number_; }
@@ -60,8 +60,8 @@ class ModulePosition : public IndexedObject {
   ModulePosition& operator=(ModulePosition&&) noexcept = default;
   ModulePosition& operator=(const ModulePosition& part) = default;
 
-  explicit ModulePosition(Integer_t id) : IndexedObject(id) {}
-  ModulePosition(Integer_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
+  explicit ModulePosition(size_t id) : IndexedObject(id) {}
+  ModulePosition(size_t id, Double_t x, Double_t y, Double_t z) : IndexedObject(id), x_(x), y_(y), z_(z) {}
 
   ANALYSISTREE_ATTR_NODISCARD TVector3 GetPosition() const noexcept {
     return TVector3(x_, y_, z_);
