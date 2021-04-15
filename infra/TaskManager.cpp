@@ -4,13 +4,29 @@
 
 namespace AnalysisTree {
 
+struct TaskManager::EventCuts {
+  std::vector<std::pair<Cuts, EventHeader*>> factorized_cuts;
+
+  bool EvalCuts() const {
+    if (factorized_cuts.empty()) {
+      return true;
+    }
+    for (auto &cuts_pair : factorized_cuts) {
+      if (!cuts_pair.first.Apply(*cuts_pair.second)) {
+        return false;
+      }
+    }
+    return true;
+  }
+};
+
 void TaskManager::Init() {
 
   std::cout << "AnalysisTree::Manager::Init" << std::endl;
   auto start = std::chrono::system_clock::now();
 
   std::set<std::string> branch_names{};
-  for (auto* task : tasks_) {
+  for (auto *task : tasks_) {
     auto br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
   }
@@ -31,11 +47,29 @@ void TaskManager::Init() {
     }
   }
 
+  /* Here we will split AnalysisTree::Cuts to the parts with one branch per part */
   if (event_cuts_) {
-    event_cuts_->Init(*in_config_);
+    event_cuts_new_ = new EventCuts;
+    std::map<std::string, AnalysisTree::Cuts> single_branch_cuts;
+    for (auto &simple_cut : event_cuts_->GetCuts()) {
+      assert(simple_cut.GetBranches().size() == 1);
+      // TODO test if all branches are EventHeaders
+      auto simple_cut_branch_name = *(simple_cut.GetBranches().begin());
+      auto emplace_result = single_branch_cuts.emplace(simple_cut_branch_name, Cuts());
+      auto &cuts = emplace_result.first->second;
+      cuts.GetCuts().emplace_back(simple_cut);
+    }
+    for (auto &single_branch_cut_entry : single_branch_cuts) {
+      auto &branch_name = single_branch_cut_entry.first;
+      auto &cuts = single_branch_cut_entry.second;
+      cuts.Init(*in_config_);
+      auto data_ptr = (EventHeader *) branches_map_.at(single_branch_cut_entry.first);
+      event_cuts_new_->factorized_cuts.emplace_back(std::make_pair(cuts, data_ptr));
+    }
+//    event_cuts_->Init(*in_config_);
   }
 
-  for (auto* task : tasks_) {
+  for (auto *task : tasks_) {
     task->SetInChain(in_tree_);
     task->SetInConfiguration(in_config_);
     task->SetDataHeader(data_header_);
@@ -64,20 +98,12 @@ void TaskManager::Run(long long nEvents) {
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     in_tree_->GetEntry(iEvent);
 
-    if (event_cuts_) {
-      auto it = branches_map_.find(event_cuts_->GetBranchName());
-      if (it == branches_map_.end()) {
-        throw std::runtime_error("EventHeader " + event_cuts_->GetBranchName() + " is not found to apply event cuts");
-      }
-      bool is_good_event = event_cuts_->Apply(*((EventHeader*) (it->second)));
-      if (!is_good_event) {
+    if (event_cuts_new_) {
+      if (!event_cuts_new_->EvalCuts()) {
         continue;
       }
     }
-    //    if ((iEvent + 1) % 100 == 0) {
-    //      std::cout << "Event # " << iEvent + 1 << " out of " << nEvents << "\r" << std::flush;
-    //    }
-    for (auto* task : tasks_) {
+    for (auto *task : tasks_) {
       task->Exec();
     }
     if (out_tree_) {
@@ -87,7 +113,8 @@ void TaskManager::Run(long long nEvents) {
 
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;
-  std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count() / nEvents << "s\n";
+  std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count() / nEvents
+            << "s\n";
 }
 
 void TaskManager::Finish() {
@@ -95,7 +122,7 @@ void TaskManager::Finish() {
   if (out_file_)
     out_file_->cd();
 
-  for (auto* task : tasks_) {
+  for (auto *task : tasks_) {
     task->Finish();
   }
 

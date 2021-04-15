@@ -68,6 +68,9 @@ class TaskManager {
   AnalysisTree::DataHeader* data_header_{nullptr};
   Cuts* event_cuts_{nullptr};
 
+  struct EventCuts;
+  EventCuts *event_cuts_new_{nullptr};
+
   std::vector<FillTask*> tasks_{};
 
   std::map<std::string, void*> branches_map_{};
