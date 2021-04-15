@@ -53,8 +53,8 @@ void TaskManager::Init() {
     std::map<std::string, AnalysisTree::Cuts> single_branch_cuts;
     for (auto &simple_cut : event_cuts_->GetCuts()) {
       assert(simple_cut.GetBranches().size() == 1);
-      // TODO test if all branches are EventHeaders
       auto simple_cut_branch_name = *(simple_cut.GetBranches().begin());
+      assert(in_config_->GetBranchConfig(simple_cut_branch_name).GetType() == DetType::kEventHeader);
       auto emplace_result = single_branch_cuts.emplace(simple_cut_branch_name, Cuts());
       auto &cuts = emplace_result.first->second;
       cuts.GetCuts().emplace_back(simple_cut);
