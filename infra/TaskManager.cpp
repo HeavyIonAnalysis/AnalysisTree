@@ -20,6 +20,10 @@ struct TaskManager::EventCuts {
   }
 };
 
+TaskManager::~TaskManager() {
+  delete event_cuts_new_;
+}
+
 void TaskManager::Init() {
 
   std::cout << "AnalysisTree::Manager::Init" << std::endl;
@@ -116,7 +120,6 @@ void TaskManager::Run(long long nEvents) {
   std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count() / nEvents
             << "s\n";
 }
-
 void TaskManager::Finish() {
 
   if (out_file_)

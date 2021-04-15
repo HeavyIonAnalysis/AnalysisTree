@@ -37,7 +37,7 @@ class TaskManager {
 
   void AddTask(FillTask* task) { tasks_.emplace_back(task); }
 
-  virtual ~TaskManager() = default;
+  virtual ~TaskManager();
 
   void SetOutFileName(std::string name) {
     out_file_name_ = std::move(name);
