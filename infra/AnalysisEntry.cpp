@@ -5,15 +5,16 @@
 namespace AnalysisTree {
 
 bool AnalysisEntry::ApplyCutOnBranch(const BranchReader& br, int i_channel) const {
+  if (!br.ApplyCut(i_channel)) return false;
   if (!cuts_) return true;
-  return br.ApplyCut(i_channel);
+  return ANALYSISTREE_UTILS_VISIT(apply_cut(i_channel, cuts_), br.GetData());
 }
 
 bool AnalysisEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const {
-  if (!cuts_) return true;
   if (!br1.ApplyCut(ch1)) return false;
   if (!br2.ApplyCut(ch2)) return false;
 
+  if (!cuts_) return true;
   return ANALYSISTREE_UTILS_VISIT(apply_cut_2_branches(ch1, ch2, cuts_), br1.GetData(), br2.GetData());
 }
 
@@ -32,7 +33,6 @@ void AnalysisEntry::FillFromOneBranch() {
   values_.reserve(n_channels);
 
   for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
-    if (!br.ApplyCut(i_channel)) continue;
     if (!ApplyCutOnBranch(br, i_channel)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{0};
