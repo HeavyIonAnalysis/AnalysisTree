@@ -122,6 +122,7 @@ class TaskManager {
 
   void Exec() {
     for (auto* task : tasks_) {
+      if(!task->IsGoodEvent(*chain_)) continue;
       task->Exec();
     }
     if (fill_out_tree_) {
