@@ -50,7 +50,7 @@ class Chain : public TChain {
 
   void SetDataHeader(DataHeader* dh) { data_header_ = dh; }
 
-  BranchPointer GetPointerToBranch(const std::string& name) {
+  BranchPointer GetPointerToBranch(const std::string& name) const {
     auto br = branches_.find(name);
     if (br != branches_.end()) {
       return br->second;
