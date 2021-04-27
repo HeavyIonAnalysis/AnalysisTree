@@ -18,12 +18,8 @@ template<class T>
 class Detector : public IndexedObject, protected IndexAccessor {
 
  public:
-  Detector() {
-    channels_ = new std::vector<T>;
-  }
-  explicit Detector(Integer_t id) : IndexedObject(id) {
-    channels_ = new std::vector<T>;
-  }
+  Detector() {}
+  explicit Detector(Integer_t id) : IndexedObject(id) {}
 
   Detector(const Detector<T>& other) : IndexedObject(other) {
     if (!other.channels_->empty()) {
@@ -37,9 +33,8 @@ class Detector : public IndexedObject, protected IndexAccessor {
     if (this == &other) {
       return *this;
     }
-
+    channels_->clear();
     if (!other.channels_->empty()) {
-      channels_->clear();
       channels_->reserve(other.channels_->size());
       std::copy(other.channels_->begin(), other.channels_->end(), std::back_inserter(*this->channels_));
     }
