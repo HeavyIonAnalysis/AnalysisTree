@@ -45,8 +45,9 @@ class Task {
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const Chain& t) const {
     if(!event_cuts_) return true;
     auto br_name = event_cuts_->GetBranches().begin();
-    auto* eh = ANALYSISTREE_UTILS_GET<EventHeader*>(t.GetPointerToBranch(*br_name));
-    return event_cuts_->Apply(*eh);
+    // Here EventHeader expected
+    //TODO throw exeption otherwise
+    return ANALYSISTREE_UTILS_VISIT(apply_cut(0, event_cuts_), t.GetPointerToBranch(*br_name));
   }
 
   void SetEventCuts(Cuts* cuts){
