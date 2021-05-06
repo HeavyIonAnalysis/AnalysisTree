@@ -91,11 +91,11 @@ TEST(AnalysisTask, Basics) {
   man->Run(n_events);
   man->Finish();
 
+  man->ClearTasks();
+
   std::ofstream fl(filelist);
   fl << filename << "\n";
   fl.close();
-
-  man = TaskManager::GetInstance();
 
   auto* var_manager = new AnalysisTaskTest;
   Variable px_sim("SimParticles", "px");
@@ -110,7 +110,7 @@ TEST(AnalysisTask, Basics) {
 
   man->Init({filelist}, {treename});
   man->Run(-1);
-  var_manager->Finish();
+  man->Finish();
 
   auto px_sim_stat = var_manager->GetEntriesTest().at(0).at(0);
   auto px_rec_stat = var_manager->GetEntriesTest().at(1).at(0);

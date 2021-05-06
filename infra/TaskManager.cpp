@@ -115,6 +115,6 @@ TaskManager::~TaskManager() {
       delete task_ptr;
     }
   }
-  tasks_.clear();
+  ClearTasks();
 }
 }// namespace AnalysisTree

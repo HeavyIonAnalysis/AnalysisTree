@@ -137,6 +137,8 @@ class TaskManager {
     out_tree_name_ = std::move(tree);
   }
 
+  void ClearTasks() { tasks_.clear(); }
+
  protected:
   TaskManager() = default;
   static TaskManager* manager_;
