@@ -23,6 +23,7 @@
 #pragma link C++ class AnalysisTree::Configuration+;
 #pragma link C++ class AnalysisTree::BranchConfig+;
 #pragma link C++ class AnalysisTree::DataHeader+;
+#pragma link C++ class AnalysisTree::StringArray+;
 
 #pragma link C++ class AnalysisTree::Container+;
 
