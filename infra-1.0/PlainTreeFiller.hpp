@@ -7,7 +7,7 @@
 #include "VarManager.hpp"
 #include "Variable.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 class PlainTreeFiller : public VarManager {
  public:
@@ -29,6 +29,6 @@ class PlainTreeFiller : public VarManager {
 
 };
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
 #endif//ANALYSISTREE_PLAINTREEFILLER_H_

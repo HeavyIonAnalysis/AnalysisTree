@@ -8,7 +8,7 @@
 #include "Matching.hpp"
 #include "Variable.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 /**
  * @brief VarManager entry keeps list of Variables from one or more branches.
@@ -26,7 +26,7 @@ class VarManagerEntry {
     FillBranchNames();
   };
 
-  void Init(const Configuration& conf, std::map<std::string, void*>& pointers_map);
+  void Init(const AnalysisTree::Configuration& conf, std::map<std::string, void*>& pointers_map);
   void FillValues();
 
   size_t AddVariable(const Variable& var);
@@ -65,5 +65,5 @@ class VarManagerEntry {
   array2D values_{};///< channels<variables>
 };
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_INFRA_VARMANAGERENTRY_HPP_

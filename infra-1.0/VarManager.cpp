@@ -1,7 +1,7 @@
 #include "VarManager.hpp"
 #include <numeric>
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 void VarManager::Init(std::map<std::string, void*>& pointers_map) {
 
@@ -68,4 +68,4 @@ BranchReader* VarManager::GetBranch(const std::string& name) {
   throw std::runtime_error("Branch " + name + " is not found");
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

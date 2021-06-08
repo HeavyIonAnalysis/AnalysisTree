@@ -8,7 +8,7 @@
 
 namespace{
 
-using namespace AnalysisTree;
+using namespace AnalysisTree::Version1;
 
 struct VarManagerTestValue{
   int n_entries_{0};

@@ -19,7 +19,7 @@
 #include <AnalysisTree/BranchConfig.hpp>
 #include <AnalysisTree/Detector.hpp>
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 /* fwd declatarions */
 class IBranchView;
@@ -848,5 +848,5 @@ BranchViewPtr IBranchView::Filter(std::vector<std::string>&& arg_names, Predicat
   BranchViewAction::BranchViewFilterAction action(arg_names, std::forward<Predicate>(predicate));
   return Apply(action);
 };
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_INFRA_BRANCHVIEW_HPP

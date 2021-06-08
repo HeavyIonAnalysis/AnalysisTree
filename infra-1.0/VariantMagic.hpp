@@ -8,7 +8,7 @@
 #include "Cuts.hpp"
 #include "Variable.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 struct get_value : public Utils::Visitor<double> {
   get_value(Variable var, int i_channel) : var_(std::move(var)), i_channel_(i_channel) {}
@@ -67,7 +67,7 @@ struct get_id_struct : public Utils::Visitor<int> {
 };
 
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
 
 #endif//ANALYSISTREE_INFRA_VARIANTMAGIC_HPP_

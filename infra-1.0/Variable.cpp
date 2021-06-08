@@ -4,7 +4,7 @@
 
 #include "Configuration.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 Variable::Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda) : name_(std::move(name)),
                                                                                                                       fields_(std::move(fields)),
@@ -34,14 +34,14 @@ void Variable::Print() const {
   std::cout << "  size: " << size_ << std::endl;
 }
 
-bool operator==(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
+bool operator==(const Variable& that, const Variable& other) {
   if (&that == &other) {
     return true;
   }
   return that.name_ == other.name_ && that.fields_ == other.fields_;
 }
 
-bool operator>(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
+bool operator>(const Variable& that, const Variable& other) {
   //  std::string field_that, field_other;
   //  for (const auto &field : that.fields_) {
   //    field_that += field.GetName();
@@ -52,7 +52,7 @@ bool operator>(const AnalysisTree::Variable& that, const AnalysisTree::Variable&
   return that.name_ > other.name_;
 }
 
-bool operator<(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
+bool operator<(const Variable& that, const Variable& other) {
   //  std::string field_that, field_other;
   //  for (const auto &field : that.fields_) {
   //    field_that += field.GetName();
@@ -75,4 +75,4 @@ Variable Variable::FromString(const std::string& full_name) {
   throw std::runtime_error("Field name must be in the format <branch>.<name>");
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

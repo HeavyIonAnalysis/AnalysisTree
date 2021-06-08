@@ -2,6 +2,10 @@
 
 #include <TChain.h>
 
-void AnalysisTree::FillTask::SetInChain(TChain* in_chain) {
+namespace AnalysisTree::Version1{
+
+void FillTask::SetInChain(TChain* in_chain) {
   in_chain_ = in_chain;
+}
+
 }

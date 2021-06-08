@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 #include <core/Track.hpp>
-#include <infra/Variable.hpp>
+#include <infra-1.0/Variable.hpp>
 
 #include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
@@ -12,7 +12,7 @@
 
 namespace{
 
-using namespace AnalysisTree;
+using namespace AnalysisTree::Version1;
 
 TEST(Variable, FromString) {
 
@@ -31,12 +31,12 @@ TEST(Variable, FromString) {
 
 TEST(Variable, Basics) {
 
-  BranchConfig branch_config("RecTrack", DetType::kTrack);
+  AnalysisTree::BranchConfig branch_config("RecTrack", AnalysisTree::DetType::kTrack);
   branch_config.AddField<float>("test_f");
   branch_config.AddField<int>("test_i");
   branch_config.AddField<bool>("test_b");
 
-  Configuration configuration;
+  AnalysisTree::Configuration configuration;
   configuration.AddBranchConfig(branch_config);
 
   Variable var1("RecTrack", "test_f");
@@ -45,7 +45,7 @@ TEST(Variable, Basics) {
   var1.Init(configuration);
   var2.Init(configuration);
 
-  Track track;
+  AnalysisTree::Track track;
   track.Init(branch_config);
   track.SetField(99.f, 0);
   track.SetField(99, 0);

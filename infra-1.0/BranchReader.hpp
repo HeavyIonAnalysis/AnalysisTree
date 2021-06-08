@@ -11,7 +11,7 @@
 #include "Variable.hpp"
 #include "VariantMagic.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 class Variable;
 class Cuts;
@@ -50,6 +50,6 @@ class BranchReader {
   DetType type_{DetType(-1)};
 };
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
 #endif//ANALYSISTREEQA_SRC_BRANCHREADER_H_

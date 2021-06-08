@@ -29,17 +29,17 @@ list(APPEND HEADERS
         )
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
-add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
-target_compile_definitions(AnalysisTreeInfra PUBLIC
+add_library(AnalysisTreeInfraVersion1 SHARED ${SOURCES} G__AnalysisTreeInfraVersion1.cxx)
+target_compile_definitions(AnalysisTreeInfraVersion1 PUBLIC
         $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
         
-ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS}
+ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfraVersion1 ${HEADERS}
         LINKDEF AnalysisTreeInfraLinkDef.h
         OPTIONS
             -I${CMAKE_BINARY_DIR}/include
             $<$<BOOL:${Boost_FOUND}>:-DANALYSISTREE_BOOST_FOUND>
         )
-target_link_libraries(AnalysisTreeInfra
+target_link_libraries(AnalysisTreeInfraVersion1
         PUBLIC
             ${ROOT_LIBRARIES}
             AnalysisTreeBase
@@ -50,13 +50,13 @@ foreach(HEADER ${HEADERS})
     set(HEADER_ABS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${HEADER})
     set(HEADERS_BINARY_DIR ${CMAKE_BINARY_DIR}/include/AnalysisTree)
     set(HEADER_SYMLINK_PATH ${HEADERS_BINARY_DIR}/${HEADER})
-    add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
+    add_custom_command(TARGET AnalysisTreeInfraVersion1 PRE_BUILD
         COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${HEADERS_BINARY_DIR}
         COMMAND ${CMAKE_COMMAND} ARGS -E create_symlink ${HEADER_ABS_PATH} ${HEADER_SYMLINK_PATH}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
 endforeach()
-target_include_directories(AnalysisTreeInfra
+target_include_directories(AnalysisTreeInfraVersion1
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
             $<INSTALL_INTERFACE:include>
@@ -78,28 +78,28 @@ if(AnalysisTree_BUILD_TESTS)
         list(APPEND TEST_SOURCES BranchView.test.cpp)
     endif()
 
-    add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
-    target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
-    gtest_discover_tests(AnalysisTreeInfra_UnitTests TEST_PREFIX AnalysisTreeInfra_)
+    add_executable(AnalysisTreeInfraVersion1_UnitTests ${TEST_SOURCES})
+    target_link_libraries(AnalysisTreeInfraVersion1_UnitTests PRIVATE AnalysisTreeInfraVersion1 gtest_main)
+    gtest_discover_tests(AnalysisTreeInfraVersion1_UnitTests TEST_PREFIX AnalysisTreeInfraVersion1_)
 endif()
 
-install(TARGETS AnalysisTreeInfra EXPORT AnalysisTreeTargets
+install(TARGETS AnalysisTreeInfraVersion1 EXPORT AnalysisTreeTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
-        INCLUDES DESTINATION include/AnalysisTree
+        INCLUDES DESTINATION include/AnalysisTree/Version1
         )
 
 install(
         FILES
         ${HEADERS}
         DESTINATION
-        include/AnalysisTree
+        include/AnalysisTree/Version1
         COMPONENT
         Devel
 )
 
-set(PCM_FILE_NAME libAnalysisTreeInfra)
+set(PCM_FILE_NAME libAnalysisTreeInfraVersion1)
 
 install(
         FILES

@@ -11,11 +11,11 @@
 
 // Logical AND is applied for all Cuts in the vector
 
-namespace AnalysisTree {
-
+namespace AnalysisTree{
 class Configuration;
+}
 
-
+namespace AnalysisTree::Version1 {
 /**
  * @brief Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts
  */
@@ -69,7 +69,7 @@ class Cuts {
     return true;
   }
 
-  void Init(const Configuration& conf);
+  void Init(const AnalysisTree::Configuration& conf);
   void Print() const;
 
   ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
@@ -96,8 +96,8 @@ class Cuts {
 
   bool is_init_{false};
 
-  ClassDef(AnalysisTree::Cuts, 1)
+  ClassDef(AnalysisTree::Version1::Cuts, 1)
 };
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_CUTS_H

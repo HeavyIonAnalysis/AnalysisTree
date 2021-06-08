@@ -2,7 +2,7 @@
 #include "BranchReader.hpp"
 #include "Cuts.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 BranchReader::BranchReader(std::string name, void* data, DetType type, Cuts* cuts) : name_(std::move(name)), cuts_(cuts), type_(type) {
   switch (type) {
@@ -47,4 +47,4 @@ double BranchReader::GetValue(const Variable& var, int i_channel) {
   return ANALYSISTREE_UTILS_VISIT(get_value(var, i_channel), data_);
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

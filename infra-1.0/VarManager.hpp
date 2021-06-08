@@ -9,7 +9,7 @@
 #include "VarManagerEntry.hpp"
 #include "Variable.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 /**
  * @brief VarManager is a FillTask which keeps list of VarManagerEntry-s
@@ -48,5 +48,5 @@ class VarManager : public FillTask {
   std::map<std::string, Cuts*> cuts_map_{};
 };
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 #endif//ANALYSISTREEQA_SRC_VARMANAGER_H_

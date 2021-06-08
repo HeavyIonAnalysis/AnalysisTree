@@ -3,14 +3,16 @@
 #define ANALYSISTREE_INFRA_FIELD_H_
 
 #include <string>
+#include <stdexcept>
 
 #include "Constants.hpp"
 #include "Utils.hpp"
 
-namespace AnalysisTree {
-
+namespace AnalysisTree{
 class Configuration;
+}
 
+namespace AnalysisTree::Version1 {
 /**
  * @brief Field is a _pointer_ in a branch/field structure.
  */
@@ -36,7 +38,7 @@ class Field {
    * @brief Initializes branchId and fieldId
    * @param conf Configuration
    */
-  void Init(const Configuration& conf);
+  void Init(const AnalysisTree::Configuration& conf);
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return field_; }
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetBranchName() const { return branch_; }
@@ -82,6 +84,6 @@ class Field {
   bool is_init_{false};
 };
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
 #endif//ANALYSISTREE_INFRA_FIELD_H_

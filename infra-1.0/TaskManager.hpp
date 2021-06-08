@@ -12,20 +12,22 @@ class TTree;
 class TFile;
 class TChain;
 
-namespace AnalysisTree {
-
+namespace AnalysisTree{
 class Configuration;
+class DataHeader;
+}
 
+namespace AnalysisTree::Version1 {
 
 class TaskManager {
 
  public:
   TaskManager() = default;
   TaskManager(const std::vector<std::string>& filelists,
-              const std::vector<std::string>& in_trees) : in_tree_(AnalysisTree::MakeChain(filelists, in_trees)),
+              const std::vector<std::string>& in_trees) : in_tree_(MakeChain(filelists, in_trees)),
                                                           in_config_(GetConfigurationFromFileList(filelists, in_config_name_)) {
     try {
-      data_header_ = GetObjectFromFileList<DataHeader>(filelists[0], data_header_name_);
+      data_header_ = GetObjectFromFileList<AnalysisTree::DataHeader>(filelists[0], data_header_name_);
     } catch (std::runtime_error& error) {
       std::cout << error.what() << std::endl;
     }
@@ -77,6 +79,6 @@ class TaskManager {
   std::map<std::string, Cuts*> cuts_map_{};
 };
 
-};// namespace AnalysisTree
+};// namespace AnalysisTree::Version1
 
 #endif//ANALYSISTREE_INFRA_TASKMANAGER_H_

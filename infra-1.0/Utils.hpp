@@ -43,7 +43,7 @@
 #endif
 
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 namespace Utils {
 
@@ -63,6 +63,6 @@ struct Visitor
 
 }// namespace Utils
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
 #endif//ANALYSISTREE_INFRA_UTILS_HPP

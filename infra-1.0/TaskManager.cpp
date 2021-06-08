@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 struct TaskManager::EventCuts {
   std::vector<std::pair<Cuts, EventHeader*>> factorized_cuts;
@@ -40,7 +40,7 @@ void TaskManager::Init() {
   }
 
   if (in_tree_ && in_config_) {
-    branches_map_ = AnalysisTree::GetPointersToBranches(in_tree_, *in_config_, branch_names);
+    branches_map_ = GetPointersToBranches(in_tree_, *in_config_, branch_names);
   }
   if (!out_file_name_.empty()) {
     out_file_ = TFile::Open(out_file_name_.c_str(), "RECREATE");
@@ -54,7 +54,7 @@ void TaskManager::Init() {
   /* Here we will split AnalysisTree::Cuts to the parts with one branch per part */
   if (event_cuts_) {
     event_cuts_new_ = new EventCuts;
-    std::map<std::string, AnalysisTree::Cuts> single_branch_cuts;
+    std::map<std::string, Cuts> single_branch_cuts;
     for (auto &simple_cut : event_cuts_->GetCuts()) {
       assert(simple_cut.GetBranches().size() == 1);
       auto simple_cut_branch_name = *(simple_cut.GetBranches().begin());
@@ -135,4 +135,4 @@ void TaskManager::Finish() {
     out_file_->Close();
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

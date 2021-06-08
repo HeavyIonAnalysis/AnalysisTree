@@ -14,7 +14,7 @@
 #include "EventHeader.hpp"
 #include "Matching.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 TChain* MakeChain(const std::string& filelist, const std::string& treename);
 
@@ -70,13 +70,13 @@ static inline T* GetObjectFromFileList(const std::string& filelist, const std::s
  * @param name name of Configuration object
  * @return pointer to Configuration object
  */
-static inline Configuration* GetConfigurationFromFileList(const std::vector<std::string>& filelists, const std::string& name = "Configuration") {
+static inline AnalysisTree::Configuration* GetConfigurationFromFileList(const std::vector<std::string>& filelists, const std::string& name = "Configuration") {
   assert(!filelists.empty());
 
-  Configuration* config{GetObjectFromFileList<Configuration>(filelists.at(0), name)};
+  auto* config{GetObjectFromFileList<AnalysisTree::Configuration>(filelists.at(0), name)};
 
   for (uint i = 1; i < filelists.size(); ++i) {
-    auto config_i = GetObjectFromFileList<Configuration>(filelists.at(i), name);
+    auto config_i = GetObjectFromFileList<AnalysisTree::Configuration>(filelists.at(i), name);
     config->Merge(*config_i);
   }
   return config;
@@ -93,5 +93,5 @@ std::map<std::string, void*>
 GetPointersToBranches(TChain* t, const Configuration& config,
                       std::set<std::string> names = {});
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_TREEREADER_H

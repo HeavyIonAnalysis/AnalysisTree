@@ -2,12 +2,11 @@
 #define ANALYSISTREE_INFRA_SIMPLECUT_TEST_HPP_
 
 #include <gtest/gtest.h>
-#include <infra/SimpleCut.hpp>
+#include <infra-1.0/SimpleCut.hpp>
 
 namespace{
 
-using namespace AnalysisTree;
-
+using namespace AnalysisTree::Version1;
 
 }
 

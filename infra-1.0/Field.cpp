@@ -1,7 +1,7 @@
 #include "Field.hpp"
 #include "Configuration.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 void Field::Print() const {
   std::cout << "Field::Print():" << std::endl;
@@ -31,7 +31,7 @@ bool operator<(const Field& that, const Field& other) {
   return that.branch_ + that.field_ < other.branch_ + other.field_;
 }
 
-void Field::Init(const Configuration& conf) {
+void Field::Init(const AnalysisTree::Configuration& conf) {
   const auto& branch_conf = conf.GetBranchConfig(branch_);
   branch_id_ = branch_conf.GetId();
   branch_type_ = branch_conf.GetType();
@@ -43,4 +43,4 @@ void Field::Init(const Configuration& conf) {
   is_init_ = true;
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

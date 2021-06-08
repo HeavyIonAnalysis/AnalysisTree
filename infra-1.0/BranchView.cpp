@@ -9,7 +9,7 @@
 #include <utility>
 
 
-using namespace AnalysisTree;
+using namespace AnalysisTree::Version1;
 
 
 

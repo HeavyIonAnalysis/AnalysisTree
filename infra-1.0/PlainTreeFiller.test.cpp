@@ -9,7 +9,7 @@
 
 namespace {
 
-using namespace AnalysisTree;
+using namespace AnalysisTree::Version1;
 
 TEST(PlainTreeFiller, Basics) {
 

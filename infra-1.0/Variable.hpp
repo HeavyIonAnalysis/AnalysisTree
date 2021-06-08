@@ -10,7 +10,7 @@
 
 #include "Field.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 /**
  * @brief Variable is a wrapper object for Field. In contrary to Field Variable is not bound to the data.
@@ -124,6 +124,6 @@ double Variable::GetValue(const A& a, int a_id, const B& b, int b_id) const {
   return lambda_(vars);
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
 #endif

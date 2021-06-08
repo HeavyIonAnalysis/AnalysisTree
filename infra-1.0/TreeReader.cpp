@@ -2,7 +2,9 @@
 #include <TFileCollection.h>
 #include <THashList.h>
 
-TChain* AnalysisTree::MakeChain(const std::string& filelist, const std::string& treename) {
+namespace AnalysisTree::Version1{
+
+TChain* MakeChain(const std::string& filelist, const std::string& treename) {
   auto chain = new TChain(treename.c_str());
   TFileCollection fc("fc","",filelist.c_str());
   chain->AddFileInfoList(fc.GetList());
@@ -10,7 +12,7 @@ TChain* AnalysisTree::MakeChain(const std::string& filelist, const std::string& 
   return chain;
 }
 
-std::string AnalysisTree::LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy) {
+std::string LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy) {
   auto full_name = name + "_" + std::to_string(copy);
   auto it = std::find(names.begin(), names.end(), full_name);
   /* not found */
@@ -20,7 +22,7 @@ std::string AnalysisTree::LookupAlias(const std::vector<std::string>& names, con
   return LookupAlias(names, name, copy + 1);
 }
 
-TChain* AnalysisTree::MakeChain(const std::vector<std::string>& filelists, const std::vector<std::string>& treenames) {
+TChain* MakeChain(const std::vector<std::string>& filelists, const std::vector<std::string>& treenames) {
   /* TODO remove assert, throw exceptions */
   assert(!filelists.empty() && !treenames.empty() && filelists.size() == treenames.size());
   auto* chain = MakeChain(filelists.at(0), treenames.at(0));
@@ -43,14 +45,14 @@ TChain* AnalysisTree::MakeChain(const std::vector<std::string>& filelists, const
   return chain;
 }
 
-std::map<std::string, void*> AnalysisTree::GetPointersToBranches(TChain* t, const AnalysisTree::Configuration& config, std::set<std::string> names) {
+std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree::Configuration& config, std::set<std::string> names) {
 
   std::cout << "GetPointersToBranches" << std::endl;
   std::map<std::string, void*> ret;
 
   if (names.empty()) {// all branches by default, if not implicitly specified
     for (const auto& branch : config.GetBranchConfigs()) {
-      names.insert(branch.GetName());
+      names.insert(branch.second.GetName());
     }
   }
 
@@ -100,4 +102,6 @@ std::map<std::string, void*> AnalysisTree::GetPointersToBranches(TChain* t, cons
 
   t->GetEntry(0);//init pointers
   return ret;
+}
+
 }

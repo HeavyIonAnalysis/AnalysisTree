@@ -1,7 +1,7 @@
 #include "Cuts.hpp"
 #include "Configuration.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 void Cuts::Init(const AnalysisTree::Configuration& conf) {
   for (auto& cut : cuts_) {
@@ -37,4 +37,4 @@ bool Cuts::Equal(const Cuts* that, const Cuts* other) {
   return false;
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

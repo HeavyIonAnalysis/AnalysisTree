@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include <infra/Field.hpp>
+#include <infra-1.0/Field.hpp>
 
 #include <core/Track.hpp>
 #include <core/BranchConfig.hpp>
@@ -11,16 +11,16 @@
 
 namespace{
 
-using namespace AnalysisTree;
+using namespace AnalysisTree::Version1;
 
 TEST(Field, Basics) {
 
-  BranchConfig branch_config("RecTrack", DetType::kTrack);
+  AnalysisTree::BranchConfig branch_config("RecTrack", AnalysisTree::DetType::kTrack);
   branch_config.AddField<float>("test_f");
   branch_config.AddField<int>("test_i");
   branch_config.AddField<bool>("test_b");
 
-  Configuration configuration;
+  AnalysisTree::Configuration configuration;
   configuration.AddBranchConfig(branch_config);
 
   Field field_f("RecTrack", "test_f");
@@ -35,12 +35,12 @@ TEST(Field, Basics) {
   field_b.Init(configuration);
 
   EXPECT_EQ(0, field_f.GetFieldId());
-  EXPECT_EQ(0, field_f.GetBranchId());
-  EXPECT_EQ(Types::kFloat, field_f.GetFieldType());
-  EXPECT_EQ(Types::kInteger, field_i.GetFieldType());
-  EXPECT_EQ(Types::kBool, field_b.GetFieldType());
+//  EXPECT_EQ(0, field_f.GetBranchId());
+  EXPECT_EQ(AnalysisTree::Types::kFloat, field_f.GetFieldType());
+  EXPECT_EQ(AnalysisTree::Types::kInteger, field_i.GetFieldType());
+  EXPECT_EQ(AnalysisTree::Types::kBool, field_b.GetFieldType());
 
-  Track track;
+  AnalysisTree::Track track;
   track.Init(branch_config);
   track.SetField(99.f, 0);
   track.SetField(99, 0);

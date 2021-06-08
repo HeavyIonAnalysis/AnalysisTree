@@ -2,7 +2,7 @@
 
 #include "PlainTreeFiller.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 void PlainTreeFiller::AddBranch(const std::string& branch_name) {
   branch_name_ = branch_name;
@@ -56,4 +56,4 @@ void PlainTreeFiller::Finish() {
   VarManager::Finish();
   plain_tree_->Write();
 }
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

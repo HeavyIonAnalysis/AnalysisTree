@@ -3,7 +3,7 @@
 #include "Configuration.hpp"
 #include "Utils.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 bool VarManagerEntry::ApplyCutOnBranch(BranchReader* br, int i_channel) const {
   if (!cuts_) return true;
@@ -133,4 +133,4 @@ size_t VarManagerEntry::AddVariable(const Variable& var) {
   }
 }
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1

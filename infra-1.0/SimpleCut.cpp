@@ -1,6 +1,8 @@
 #include "SimpleCut.hpp"
 
-namespace AnalysisTree {
+#include <iostream>
+
+namespace AnalysisTree::Version1 {
 
 void SimpleCut::Print() const {
   std::cout << title_ << std::endl;
@@ -26,6 +28,6 @@ SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const s
 SimpleCut EqualsCut(const std::string& variable_name, float value, const std::string& title) {
   return SimpleCut(Variable::FromString(variable_name), value, title);
 }
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 
-ClassImp(AnalysisTree::SimpleCut)
+ClassImp(AnalysisTree::Version1::SimpleCut)

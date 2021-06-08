@@ -10,7 +10,7 @@
 
 namespace {
 
-using namespace AnalysisTree;
+using namespace AnalysisTree::Version1;
 
 TEST(AnalysisTreeBranch, GetFields) {
   BranchConfig c("test", DetType::kEventHeader);

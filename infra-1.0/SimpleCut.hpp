@@ -10,7 +10,7 @@
 #include "Variable.hpp"
 #include "Utils.hpp"
 
-namespace AnalysisTree {
+namespace AnalysisTree::Version1 {
 
 /**
  * @brief SimpleCut keeps predicate (lambda function with vector of arguments) and list of Variables.
@@ -104,12 +104,12 @@ class SimpleCut {
   std::set<std::string> branch_names_{};
   std::function<bool(std::vector<double>&)> lambda_;///< function used to evaluate the cut.
 
-  ClassDef(AnalysisTree::SimpleCut, 1)
+  ClassDef(AnalysisTree::Version1::SimpleCut, 1)
 };
 
 
 SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title = "");
 SimpleCut EqualsCut(const std::string &variable_name, float value, const std::string &title = "");
 
-}// namespace AnalysisTree
+}// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_SIMPLECUT_H
