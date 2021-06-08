@@ -42,4 +42,6 @@
 
 #pragma link C++ defined_in "Constants.h";
 
+//#pragma read sourceClass="map<array<string,2>,string>" targetClass="map<AnalysisTree::StringArray, string>";
+
 #endif

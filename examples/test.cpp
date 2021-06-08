@@ -1,50 +1,63 @@
-#include <iostream>
-#include <random>
+#include "map"
+#include "array"
+#include "iostream"
 
-#include <AnalysisTree/ToyMC.hpp>
-#include <AnalysisTree/AnalysisTask.hpp>
+#include "TObject.h"
+#include "TFile.h"
 
-using namespace AnalysisTree;
+struct StringArray : public std::array<std::string, 2>
+{
+  StringArray() = default;
+  StringArray(std::string f, std::string s) {
+    this->at(0) = std::move(f);
+    this->at(0) = std::move(s);
+  }
+  ~StringArray() = default;
+ private:
+  ClassDef(StringArray, 1);
+};
+ClassImp(StringArray)
+
+class TestClass : public TObject {
+ public:
+  TestClass(){
+    StringArray test_array("aaaaaa", "bbbb");
+//    std::array<std::string, 2> test_array{"aaaaaa", "bbbb"};
+    test_map_[test_array] = "cccc";
+  }
+
+  void Print(Option_t *option="") const {
+    for(const auto& element : test_map_){
+      std::cout << element.first[0] << " " << element.first[1] << " " << element.second << std::endl;
+    }
+  }
+ private:
+  std::map<StringArray, std::string> test_map_{};
+//  std::map<std::array<std::string, 2>, std::string> test_map_{};
+  ClassDef(TestClass, 1);
+};
+ClassImp(TestClass)
+
+void test(){
+  auto* test_obj = new TestClass;
+  test_obj->Print();
+
+  auto* file = TFile::Open("test.root", "recreate");
+  test_obj->Write("obj");
+  file->Close();
+
+  delete file;
+  delete test_obj;
+
+  file = TFile::Open("test.root", "read");
+  test_obj = file->Get<TestClass>("obj");
+  test_obj->Print();
+
+  file->Close();
+  delete file;
+}
 
 int main(int argc, char* argv[]) {
-
-  AnalysisTree::Chain t("/home/vklochkov/Data/cbm/test_prod_all/1.analysistree.root", "rTree");
-  t.Draw("TrdTracks.energy_loss_total");
-
-//  const int n_events = 1000;  // TODO propagate somehow
-//  std::string filename = "toymc_analysis_task.root";
-//  std::string treename = "tTree";
-//  std::string filelist = "fl_toy_mc.txt";
-//
-//  auto* man = TaskManager::GetInstance();
-//
-//  auto* toy_mc = new ToyMC<std::default_random_engine>;
-//  man->AddTask(toy_mc);
-//  man->SetOutputName(filename, treename);
-//
-//  man->Init();
-//  man->Run(n_events);
-//  man->Finish();
-
-//  std::ofstream fl(filelist);
-//  fl << filename << "\n";
-//  fl.close();
-//
-//  man = TaskManager::GetInstance();
-//
-//  auto* var_manager = new AnalysisTask;
-//  Variable px_sim("SimParticles", "px");
-//  Variable px_rec("RecTracks", "px");
-//  Cuts eta_cut("eta_cut", {RangeCut({"SimParticles.eta"}, -1, 1)});
-//  var_manager->AddEntry(AnalysisEntry({px_sim}));
-//  var_manager->AddEntry(AnalysisEntry({px_rec}));
-//  var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
-//  var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
-//
-//  man->AddTask(var_manager);
-//
-//  man->Init({filelist}, {treename});
-//  man->Run(-1);
-//  man->Finish();
-
+  test();
+  return 0;
 }

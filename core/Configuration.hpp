@@ -16,27 +16,34 @@ namespace AnalysisTree {
 
 class Matching;
 
-struct StringArray
+struct StringArray : public std::array<std::string, 2>
 {
   StringArray() = default;
-  StringArray(std::string f, std::string s) : first(std::move(f)), second(std::move(s)) {}
-  virtual ~StringArray() = default;
-
-  std::string first;
-  std::string second;
-
-  bool operator<(const StringArray &c2) const {
-    return first < c2.first && second < c2.second;
+  StringArray(std::string f, std::string s) {
+    this->at(0) = std::move(f);
+    this->at(0) = std::move(s);
   }
-  const std::string& operator[](std::size_t idx) const {
-    if(idx > 1){
-      throw std::range_error("");
-    }
-    return idx == 0 ? first : second;
-  }
+  ~StringArray() = default;
  private:
  ClassDef(StringArray, 1);
 };
+
+//struct StringArray
+//{
+//  StringArray() = default;
+//  StringArray(std::string f, std::string s) {
+//    array_[0] = std::move(f);
+//    array_[1] = std::move(s);
+//  }
+//
+//  bool operator<(const StringArray &c2) const {
+//    return array_ < c2.array_;
+//  }
+//  const std::string& operator[](std::size_t idx) const {
+//    return array_[idx];
+//  }
+//  std::array<std::string, 2> array_{};
+//};
 
 class Configuration : public TObject {
 
@@ -77,7 +84,7 @@ class Configuration : public TObject {
   std::map<size_t, BranchConfig> branches_{};
   std::map<StringArray, std::string> matches_{};
 
-  ClassDef(Configuration, 4)
+  ClassDef(Configuration, 3)
 };
 
 }// namespace AnalysisTree
