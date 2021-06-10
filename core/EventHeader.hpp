@@ -44,6 +44,24 @@ class EventHeader : public Container {
     }
   }
 
+  template<typename T>
+  void SetField(T value, Integer_t field_id) {
+    using AnalysisTree::EventHeaderFields::EventHeaderFields;
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      if (field_id == EventHeaderFields::kVertexX) {
+        vtx_pos_[Exyz::kX] = value;
+      } else if (field_id == EventHeaderFields::kVertexY) {
+        vtx_pos_[Exyz::kY] = value;
+      } else if (field_id == EventHeaderFields::kVertexZ) {
+        vtx_pos_[Exyz::kZ] = value;
+      } else {
+        throw std::runtime_error("Invalid field id");
+      }
+    }
+  }
+  
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexX() const { return vtx_pos_[Exyz::kX]; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexY() const { return vtx_pos_[Exyz::kY]; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }

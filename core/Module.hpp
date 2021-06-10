@@ -42,6 +42,19 @@ class Module : public Container {
     }
   }
 
+  template<typename T>
+  void SetField(T value, Int_t field_id) {
+    if (field_id >= 0) {
+       Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case ModuleFields::kSignal: signal_ = value; break;
+        case ModuleFields::kNumber: number_ = value; break;
+        default: throw std::runtime_error("Unknown field");
+      }
+    }
+  }
+
   void Print() const;
 
  protected:
