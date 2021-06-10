@@ -54,6 +54,28 @@ class Particle : public Track {
     }
   }
 
+
+  template<typename T>
+  void SetField(T value, Int_t field_id) {
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case ParticleFields::kPx: px_ = value; break;
+        case ParticleFields::kPy: py_ = value; break;
+        case ParticleFields::kPz: pz_ = value; break;
+        case ParticleFields::kPid: pid_ = value; break;
+        case ParticleFields::kP: throw std::runtime_error("Cannot set transient fields");
+        case ParticleFields::kPt: throw std::runtime_error("Cannot set transient fields");
+        case ParticleFields::kEta: throw std::runtime_error("Cannot set transient fields");
+        case ParticleFields::kPhi: throw std::runtime_error("Cannot set transient fields");
+        case ParticleFields::kRapidity: throw std::runtime_error("Cannot set transient fields");
+        default: throw std::runtime_error("Unknown field");
+      }
+    }
+
+  }
+
  protected:
   Floating_t mass_{-1000.f};
   PdgCode_t pid_{0};

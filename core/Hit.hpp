@@ -63,6 +63,22 @@ class Hit : public Container {
     }
   }
 
+  template<typename T>
+  void SetField(T value, Int_t field_id) {
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case HitFields::kX: x_ = value; break;
+        case HitFields::kY: y_ = value; break;
+        case HitFields::kZ: z_ = value; break;
+        case HitFields::kSignal: signal_ = value; break;
+        case HitFields::kPhi: throw std::runtime_error("Cannot set transient fields");
+        default: throw std::runtime_error("Unknown field");
+      }
+    }
+  }
+
   void Print() const;
 
  protected:
