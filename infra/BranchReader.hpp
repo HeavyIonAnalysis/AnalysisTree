@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREEQA_SRC_BRANCHREADER_H_
 #define ANALYSISTREEQA_SRC_BRANCHREADER_H_
 
