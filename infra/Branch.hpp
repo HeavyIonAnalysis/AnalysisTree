@@ -7,51 +7,47 @@
 
 #include <AnalysisTree/BranchConfig.hpp>
 #include <AnalysisTree/Configuration.hpp>
-#include <AnalysisTree/EventHeader.hpp>
 #include <AnalysisTree/Detector.hpp>
+#include <AnalysisTree/EventHeader.hpp>
 
+#include <cassert>
 #include <map>
 #include <vector>
-#include <cassert>
 
 #include "BranchChannel.hpp"
 
 class TTree;
 
-namespace ATI2 {
-
-
+namespace AnalysisTree {
 
 struct BranchChannelsIter {
-  BranchChannelsIter(Branch *branch, size_t i_channel) :
-      branch(branch), i_channel(i_channel) {
+  BranchChannelsIter(Branch* branch, size_t i_channel) : branch(branch), i_channel(i_channel) {
     current_channel.reset(new BranchChannel(branch, i_channel));
   }
 
-  bool operator==(const BranchChannelsIter &rhs) const {
-    return i_channel == rhs.i_channel &&
-        branch == rhs.branch;
+  bool operator==(const BranchChannelsIter& rhs) const {
+    return i_channel == rhs.i_channel && branch == rhs.branch;
   }
-  bool operator!=(const BranchChannelsIter &rhs) const {
+  bool operator!=(const BranchChannelsIter& rhs) const {
     return !(rhs == *this);
   }
   BranchChannel operator*() const {
     return current_channel.operator*();
   }
-  BranchChannel &operator*() {
+  BranchChannel& operator*() {
     return current_channel.operator*();
   }
-  BranchChannelsIter &operator++();
+  BranchChannelsIter& operator++();
 
   std::unique_ptr<BranchChannel> current_channel;
-  Branch *branch;
+  Branch* branch;
   size_t i_channel;
 };
 
 struct Branch {
   struct BranchChannelsLoop {
-    explicit BranchChannelsLoop(Branch *branch) : branch(branch) {}
-    Branch *branch{nullptr};
+    explicit BranchChannelsLoop(Branch* branch) : branch(branch) {}
+    Branch* branch{nullptr};
 
     inline BranchChannelsIter begin() const { return branch->ChannelsBegin(); };
     inline BranchChannelsIter end() const { return branch->ChannelsEnd(); };
@@ -65,36 +61,36 @@ struct Branch {
 
  private:
   AnalysisTree::BranchConfig config;
-  void *data{nullptr}; /// owns object
+  void* data{nullptr};/// owns object
   bool is_mutable{false};
   bool is_frozen{false};
   std::size_t config_hash{0};
 
  public:
-  AnalysisTree::Configuration *parent_config{nullptr};
+  AnalysisTree::Configuration* parent_config{nullptr};
   bool is_connected_to_input{false};
   bool is_connected_to_output{false};
 
-  std::map<const Branch * /* other branch */, FieldsMapping> copy_fields_mapping;
+  std::map<const Branch* /* other branch */, FieldsMapping> copy_fields_mapping;
 
   /* c-tors */
   explicit Branch(AnalysisTree::BranchConfig config) : config(std::move(config)) {
     InitDataPtr();
     UpdateConfigHash();
   }
-  Branch(AnalysisTree::BranchConfig config, void *data) : config(std::move(config)), data(data) {
+  Branch(AnalysisTree::BranchConfig config, void* data) : config(std::move(config)), data(data) {
     UpdateConfigHash();
   }
 
   /* Accessors to branch' main parameters, used very often */
   inline auto GetBranchName() const { return config.GetName(); }
   inline auto GetBranchType() const { return config.GetType(); }
-  inline const AnalysisTree::BranchConfig &GetConfig() const { return config; }
+  inline const AnalysisTree::BranchConfig& GetConfig() const { return config; }
 
   void InitDataPtr();
-  void ConnectOutputTree(TTree *tree);
+  void ConnectOutputTree(TTree* tree);
 
-  Field GetFieldVar(const std::string &field_name);
+  Field GetFieldVar(const std::string& field_name);
   /**
    * @brief Gets variables according to variable names specified in the arguments.
    * Returns tuple of variables which is suitable for unpacking with std::tie()
@@ -102,7 +98,8 @@ struct Branch {
    * @param field_name variable names convertible to std::string
    * @return tuple of variables
    */
-  template<typename ... Args> auto GetVars(Args ... field_name) {
+  template<typename... Args>
+  auto GetVars(Args... field_name) {
     return GetVarsImpl(std::array<std::string, sizeof...(Args)>{{std::string(field_name)...}},
                        std::make_index_sequence<sizeof...(Args)>());
   }
@@ -110,12 +107,12 @@ struct Branch {
    * @brief Initializes ATI2::Field objects
    * @param vars - vector of pairs with name and reference to the ATI2::Field object
    */
-  void UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>> &&vars, bool ignore_missing = false);
-  bool HasField(const std::string &field_name) const;
+  void UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars, bool ignore_missing = false);
+  bool HasField(const std::string& field_name) const;
   std::vector<std::string> GetFieldNames() const;
 
   /* Getting value */
-  inline ValueHolder Value(const Field &v) const {
+  inline ValueHolder Value(const Field& v) const {
     assert(v.IsInitialized());
     assert(v.GetParentBranch() == this);
     if (config.GetType() == AnalysisTree::DetType::kEventHeader) {
@@ -124,7 +121,7 @@ struct Branch {
     throw std::runtime_error("Not implemented for iterable branch");
   }
 
-  inline ValueHolder operator[](const Field &v) const { return Value(v); };
+  inline ValueHolder operator[](const Field& v) const { return Value(v); };
 
   /* iterating */
   size_t size() const;
@@ -147,17 +144,17 @@ struct Branch {
   }
   BranchChannel NewChannel();
   void ClearChannels();
-  Field NewVariable(const std::string &field_name, AnalysisTree::Types type);
+  Field NewVariable(const std::string& field_name, AnalysisTree::Types type);
   void CloneVariables(const AnalysisTree::BranchConfig& other);
-  void CopyContents(Branch *br);
+  void CopyContents(Branch* br);
 
   /**
    * @brief Copies contents from other branch 'as-is'. Faster than CopyContents() since it creates no mapping
    * @param other
    */
-  void CopyContentsRaw(Branch *other);
+  void CopyContentsRaw(Branch* other);
 
-  void CreateMapping(Branch *other);
+  void CreateMapping(Branch* other);
 
   void UpdateConfigHash();
 
@@ -166,19 +163,19 @@ struct Branch {
       std::is_same_v<AnalysisTree::EventHeader, std::remove_const_t<std::remove_pointer_t<EntityPtr>>>;
 
   template<typename Functor>
-  auto ApplyT(Functor &&f) {
+  auto ApplyT(Functor&& f) {
     using AnalysisTree::DetType;
 
     if (config.GetType() == DetType::kParticle) {
-      return f((AnalysisTree::Particles *) data);
+      return f((AnalysisTree::Particles*) data);
     } else if (config.GetType() == DetType::kTrack) {
-      return f((AnalysisTree::TrackDetector *) data);
+      return f((AnalysisTree::TrackDetector*) data);
     } else if (config.GetType() == DetType::kModule) {
-      return f((AnalysisTree::ModuleDetector *) data);
+      return f((AnalysisTree::ModuleDetector*) data);
     } else if (config.GetType() == DetType::kHit) {
-      return f((AnalysisTree::HitDetector *) data);
+      return f((AnalysisTree::HitDetector*) data);
     } else if (config.GetType() == DetType::kEventHeader) {
-      return f((AnalysisTree::EventHeader *) data);
+      return f((AnalysisTree::EventHeader*) data);
     }
     /* unreachable */
     __builtin_unreachable();
@@ -186,19 +183,19 @@ struct Branch {
   }
 
   template<typename Functor>
-  auto ApplyT(Functor &&f) const {
+  auto ApplyT(Functor&& f) const {
     using AnalysisTree::DetType;
 
     if (config.GetType() == DetType::kParticle) {
-      return f((const AnalysisTree::Particles *) data);
+      return f((const AnalysisTree::Particles*) data);
     } else if (config.GetType() == DetType::kTrack) {
-      return f((const AnalysisTree::TrackDetector *) data);
+      return f((const AnalysisTree::TrackDetector*) data);
     } else if (config.GetType() == DetType::kModule) {
-      return f((const AnalysisTree::ModuleDetector *) data);
+      return f((const AnalysisTree::ModuleDetector*) data);
     } else if (config.GetType() == DetType::kHit) {
-      return f((const AnalysisTree::HitDetector *) data);
+      return f((const AnalysisTree::HitDetector*) data);
     } else if (config.GetType() == DetType::kEventHeader) {
-      return f((const AnalysisTree::EventHeader *) data);
+      return f((const AnalysisTree::EventHeader*) data);
     }
     /* unreachable */
     __builtin_unreachable();
@@ -209,15 +206,14 @@ struct Branch {
     const auto hasher = std::hash<std::string>();
     return AnalysisTree::ShortInt_t(hasher(config.GetName()));
   }
- private:
 
-  template<size_t ... Idx>
-  auto GetVarsImpl(std::array<std::string, sizeof ... (Idx)> && field_names, std::index_sequence<Idx...>) {
+ private:
+  template<size_t... Idx>
+  auto GetVarsImpl(std::array<std::string, sizeof...(Idx)>&& field_names, std::index_sequence<Idx...>) {
     return std::make_tuple(GetFieldVar(field_names[Idx])...);
   }
-
 };
 
-} // namespace ATI2
+}// namespace AnalysisTree
 
-#endif //ATTASKSKELETON_ATI2_BRANCH_HPP_
+#endif//ATTASKSKELETON_ATI2_BRANCH_HPP_

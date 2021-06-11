@@ -5,12 +5,14 @@
 #ifndef ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
 #define ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
 
-
-#include "ATI2_fwd.hpp"
-#include "Field.hpp"
 #include <type_traits>
 
-namespace ATI2 {
+#include "Field.hpp"
+
+namespace AnalysisTree {
+
+class Branch;
+class BranchChannel;
 
 class ValueHolder {
  public:
@@ -35,23 +37,22 @@ class ValueHolder {
     SetVal(int(new_val));
     return *this;
   }
-  inline
-  ValueHolder &operator=(bool new_val) {
+  inline ValueHolder& operator=(bool new_val) {
     SetVal(bool(new_val));
     return *this;
   }
-  ValueHolder &operator=(const ValueHolder &other);
+  ValueHolder& operator=(const ValueHolder& other);
 
  private:
   friend Branch;
   friend BranchChannel;
 
-  ValueHolder(const Field &v, void *data_ptr)
+  ValueHolder(const AnalysisTree::Field& v, void* data_ptr)
       : v(v), data_ptr(data_ptr) {}
 
-  const Field &v;
-  void *data_ptr;
+  const AnalysisTree::Field& v;
+  void* data_ptr;
 };
 
-}
-#endif //ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
+}// namespace AnalysisTree
+#endif//ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
