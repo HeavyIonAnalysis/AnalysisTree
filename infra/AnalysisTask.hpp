@@ -38,12 +38,12 @@ class AnalysisTask : public Task {
   ANALYSISTREE_ATTR_NODISCARD const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
   ANALYSISTREE_ATTR_NODISCARD std::vector<AnalysisEntry>& VarEntries() { return entries_; }
 
-  void AddBranchCut(Cuts* cut){
-    if(cut->GetBranches().size() != 1){
+  void AddBranchCut(Cuts* cut) {
+    if (cut->GetBranches().size() != 1) {
       throw std::runtime_error("Branch cuts on only 1 branch are allowed at the moment!");
     }
     std::string br_name = *(cut->GetBranches().begin());
-    if(cuts_map_.find(br_name) != cuts_map_.end()){
+    if (cuts_map_.find(br_name) != cuts_map_.end()) {
       throw std::runtime_error("Branch cut on " + br_name + " already exists");
     }
     cuts_map_[br_name] = cut;
@@ -55,7 +55,6 @@ class AnalysisTask : public Task {
   std::map<std::string, Cuts*> cuts_map_{};
 
   ClassDefOverride(AnalysisTask, 1);
-
 };
 
 }// namespace AnalysisTree

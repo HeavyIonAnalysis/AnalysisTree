@@ -8,7 +8,7 @@ void Task::PreInit() {
   config_ = man->GetConfig();
   data_header_ = man->GetDataHeader();
 
-  if(event_cuts_){
+  if (event_cuts_) {
     event_cuts_->Init(*config_);
   }
 }

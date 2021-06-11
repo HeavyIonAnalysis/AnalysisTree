@@ -66,7 +66,6 @@ class AnalysisEntry {
   array2D values_{};///< channels<variables>
 
   ClassDef(AnalysisEntry, 1);
-
 };
 
 }// namespace AnalysisTree

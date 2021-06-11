@@ -88,7 +88,7 @@ class Variable {
   std::vector<Field> fields_{};
   std::set<std::string> branch_names_{};
   std::set<size_t> branch_ids_{};
-  mutable std::vector<double> vars_{}; //!
+  mutable std::vector<double> vars_{};                                                                    //!
   std::function<double(std::vector<double>&)> lambda_{[](std::vector<double>& var) { return var.at(0); }};//!
 
   short size_{1};

@@ -43,15 +43,15 @@ class Task {
   }
 
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const Chain& t) const {
-    if(!event_cuts_) return true;
+    if (!event_cuts_) return true;
     auto br_name = event_cuts_->GetBranches().begin();
     // Here EventHeader expected
     //TODO throw exeption otherwise
     return ANALYSISTREE_UTILS_VISIT(apply_cut(0, event_cuts_), t.GetPointerToBranch(*br_name));
   }
 
-  void SetEventCuts(Cuts* cuts){
-    if(cuts->GetBranches().size() != 1){
+  void SetEventCuts(Cuts* cuts) {
+    if (cuts->GetBranches().size() != 1) {
       throw std::runtime_error("Event cuts on only 1 branch are allowed at the moment!");
     }
     event_cuts_ = cuts;

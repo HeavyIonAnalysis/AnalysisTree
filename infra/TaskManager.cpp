@@ -30,7 +30,7 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   }
   chain_->InitPointersToBranches(branch_names);
 
-  if(fill_out_tree_){
+  if (fill_out_tree_) {
     InitOutChain();
   }
 
