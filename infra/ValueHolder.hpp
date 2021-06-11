@@ -2,8 +2,8 @@
 // Created by eugene on 13/03/2021.
 //
 
-#ifndef ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
-#define ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
+#ifndef ANALYSISTREE_INFRA_VALUEHOLDER_HPP_
+#define ANALYSISTREE_INFRA_VALUEHOLDER_HPP_
 
 #include <type_traits>
 
@@ -55,4 +55,4 @@ class ValueHolder {
 };
 
 }// namespace AnalysisTree
-#endif//ATTASKSKELETON_ATI2_VALUEHOLDER_HPP_
+#endif//ANALYSISTREE_INFRA_VALUEHOLDER_HPP_

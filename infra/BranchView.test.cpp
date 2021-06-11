@@ -1,7 +1,3 @@
-//
-// Created by eugene on 25/09/2020.
-//
-
 #include <BranchConfig.hpp>
 #include <BranchView.hpp>
 #include <EventHeader.hpp>

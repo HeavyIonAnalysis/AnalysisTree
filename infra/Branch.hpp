@@ -1,14 +1,10 @@
-//
-// Created by eugene on 13/03/2021.
-//
+#ifndef ANALYSISTREE_INFRA_BRANCH_HPP_
+#define ANALYSISTREE_INFRA_BRANCH_HPP_
 
-#ifndef ATTASKSKELETON_ATI2_BRANCH_HPP_
-#define ATTASKSKELETON_ATI2_BRANCH_HPP_
-
-#include <AnalysisTree/BranchConfig.hpp>
-#include <AnalysisTree/Configuration.hpp>
-#include <AnalysisTree/Detector.hpp>
-#include <AnalysisTree/EventHeader.hpp>
+#include <BranchConfig.hpp>
+#include <Configuration.hpp>
+#include <Detector.hpp>
+#include <EventHeader.hpp>
 
 #include <cassert>
 #include <map>
@@ -216,4 +212,4 @@ struct Branch {
 
 }// namespace AnalysisTree
 
-#endif//ATTASKSKELETON_ATI2_BRANCH_HPP_
+#endif//ANALYSISTREE_INFRA_BRANCH_HPP_

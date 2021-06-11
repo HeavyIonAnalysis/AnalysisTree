@@ -1,7 +1,3 @@
-//
-// Created by eugene on 24/09/2020.
-//
-
 #ifndef ANALYSISTREE_INFRA_BRANCHVIEW_HPP
 #define ANALYSISTREE_INFRA_BRANCHVIEW_HPP
 

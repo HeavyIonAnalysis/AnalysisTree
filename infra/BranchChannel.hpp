@@ -1,9 +1,5 @@
-//
-// Created by eugene on 13/03/2021.
-//
-
-#ifndef ATTASKSKELETON_ATI2_BRANCHCHANNEL_HPP_
-#define ATTASKSKELETON_ATI2_BRANCHCHANNEL_HPP_
+#ifndef ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
+#define ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 
 #include "Field.hpp"
 #include "ValueHolder.hpp"
@@ -60,4 +56,4 @@ class BranchChannel {
 
 }// namespace AnalysisTree
 
-#endif//ATTASKSKELETON_ATI2_BRANCHCHANNEL_HPP_
+#endif//ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
