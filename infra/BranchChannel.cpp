@@ -5,7 +5,7 @@
 #include "BranchChannel.hpp"
 #include "Branch.hpp"
 
-using namespace ATI2;
+using namespace AnalysisTree;
 
 void BranchChannel::UpdateChannel(size_t new_channel) {
   i_channel = new_channel;
@@ -13,7 +13,7 @@ void BranchChannel::UpdateChannel(size_t new_channel) {
 }
 void BranchChannel::UpdatePointer() {
   if (i_channel < branch->size()) {
-    data_ptr = branch->ApplyT([this](auto entity_ptr) -> void * {
+    data_ptr = branch->ApplyT([this](auto entity_ptr) -> void* {
       if constexpr (Branch::is_event_header_v<decltype(entity_ptr)>) {
         throw std::runtime_error("Getting channel of the EventHeader is not implemented");
       } else {
@@ -24,7 +24,7 @@ void BranchChannel::UpdatePointer() {
     data_ptr = nullptr;
   }
 }
-void BranchChannel::CopyContents(const BranchChannel &other) {
+void BranchChannel::CopyContents(const BranchChannel& other) {
   branch->CheckMutable();
 
   auto mapping_it = branch->copy_fields_mapping.find(other.branch);
@@ -34,14 +34,13 @@ void BranchChannel::CopyContents(const BranchChannel &other) {
   }
 
   /* Eval mapping */
-  const auto &field_pairs = mapping_it->second.field_pairs;
+  const auto& field_pairs = mapping_it->second.field_pairs;
 
-  for (auto &field_pair /* src : dst */ : field_pairs) {
+  for (auto& field_pair /* src : dst */ : field_pairs) {
     this->Value(field_pair.second) = other.Value(field_pair.first);
   }
-
 }
-void BranchChannel::CopyContents(Branch &other) {
+void BranchChannel::CopyContents(Branch& other) {
   branch->CheckMutable();
 
   if (other.GetBranchType() != AnalysisTree::DetType::kEventHeader) {
@@ -55,15 +54,14 @@ void BranchChannel::CopyContents(Branch &other) {
   }
 
   /* Eval mapping */
-  const auto &field_pairs = mapping_it->second.field_pairs;
+  const auto& field_pairs = mapping_it->second.field_pairs;
 
-  for (auto &field_pair /* src : dst */ : field_pairs) {
+  for (auto& field_pair /* src : dst */ : field_pairs) {
     this->Value(field_pair.second) = other.Value(field_pair.first);
   }
-
 }
 
-BranchChannel::BranchChannel(Branch *branch, std::size_t i_channel) : branch(branch), i_channel(i_channel) {
+BranchChannel::BranchChannel(Branch* branch, std::size_t i_channel) : branch(branch), i_channel(i_channel) {
   UpdatePointer();
 }
 
@@ -71,7 +69,7 @@ BranchChannel Branch::operator[](size_t i_channel) { return BranchChannel(this, 
 BranchChannel Branch::NewChannel() {
   CheckMutable(true);
   ApplyT([this](auto entity_ptr) {
-    if constexpr (is_event_header_v < decltype(entity_ptr) >) {
+    if constexpr (is_event_header_v<decltype(entity_ptr)>) {
       throw std::runtime_error("Not applicable for EventHeader");
     } else {
       auto channel = entity_ptr->AddChannel();
@@ -82,6 +80,6 @@ BranchChannel Branch::NewChannel() {
   return operator[](size() - 1);
 }
 
-void BranchChannel::Print(std::ostream &os) const {
+void BranchChannel::Print(std::ostream& os) const {
   os << "Branch " << branch->GetBranchName() << " channel #" << i_channel << std::endl;
 }

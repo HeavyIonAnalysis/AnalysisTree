@@ -10,7 +10,12 @@ set(SOURCES
   AnalysisTask.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-  Chain.cpp)
+  Chain.cpp
+
+  ValueHolder.cpp
+  Branch.cpp
+  BranchChannel.cpp
+        )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
