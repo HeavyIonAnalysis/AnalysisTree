@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Eugeny Kashirin, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_TEST_CORE_INDEXEDOBJECT_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_INDEXEDOBJECT_TEST_HPP_
 
