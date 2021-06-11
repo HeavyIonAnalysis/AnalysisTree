@@ -1,7 +1,3 @@
-//
-// Created by eugene on 13/03/2021.
-//
-
 #include "BranchChannel.hpp"
 #include "Branch.hpp"
 

@@ -1,17 +1,10 @@
-//
-// Created by eugene on 13/03/2021.
-//
-
 #include "ValueHolder.hpp"
 #include "Branch.hpp"
-#include "BranchChannel.hpp"
 
-#include "ATI2_ATHelper.hpp"
-
-#include <AnalysisTree/Hit.hpp>
-#include <AnalysisTree/Module.hpp>
-#include <AnalysisTree/Particle.hpp>
-#include <AnalysisTree/Track.hpp>
+#include <Hit.hpp>
+#include <Module.hpp>
+#include <Particle.hpp>
+#include <Track.hpp>
 #include <cassert>
 
 using namespace AnalysisTree;
@@ -66,13 +59,13 @@ inline void SetValue(const Field& v, Entity* e, ValueType new_value) {
   using AnalysisTree::Types;
 
   if (v.GetFieldType() == Types::kFloat) {
-    ATHelper::SetField(e, v.GetFieldId(), float(new_value));
+    e->SetField(Floating_t (new_value), v.GetFieldId());
     return;
   } else if (v.GetFieldType() == Types::kInteger) {
-    ATHelper::SetField(e, v.GetFieldId(), int(new_value));
+    e->SetField(Integer_t (new_value), v.GetFieldId());
     return;
   } else if (v.GetFieldType() == Types::kBool) {
-    ATHelper::SetField(e, v.GetFieldId(), bool(new_value));
+    e->SetField(bool(new_value), v.GetFieldId());
     return;
   }
   /* unreachable */

@@ -1,7 +1,3 @@
-//
-// Created by eugene on 24/09/2020.
-//
-
 #include "BranchView.hpp"
 #include "TextTable.h"
 
