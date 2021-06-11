@@ -35,7 +35,7 @@ class Configuration : public TObject {
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
     auto it = branches_.find(i);
-    if(it == branches_.end()){
+    if (it == branches_.end()) {
       throw std::runtime_error("Branch with id = " + std::to_string(i) + " not found");
     }
     return it->second;

@@ -99,13 +99,11 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   explicit BranchConfig(std::string name, DetType type);
 
-  BranchConfig(std::string name, DetType type, const VectorConfig<int>::MapType& ints, const VectorConfig<float>::MapType& floats, const VectorConfig<bool>::MapType& bools) :
-    VectorConfig<int>::VectorConfig<int>(ints),
-    VectorConfig<float>::VectorConfig<float>(floats),
-    VectorConfig<bool>::VectorConfig<bool>(bools),
-    name_(std::move(name)),
-    type_(type)
-  {
+  BranchConfig(std::string name, DetType type, const VectorConfig<int>::MapType& ints, const VectorConfig<float>::MapType& floats, const VectorConfig<bool>::MapType& bools) : VectorConfig<int>::VectorConfig<int>(ints),
+                                                                                                                                                                               VectorConfig<float>::VectorConfig<float>(floats),
+                                                                                                                                                                               VectorConfig<bool>::VectorConfig<bool>(bools),
+                                                                                                                                                                               name_(std::move(name)),
+                                                                                                                                                                               type_(type) {
     GenerateId();
   }
 
@@ -117,7 +115,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
 
   // Setters
-//  void SetId(size_t id) { id_ = id; }
+  //  void SetId(size_t id) { id_ = id; }
   template<typename T>
   void AddField(const std::string& name, const std::string& title = "") {
     VectorConfig<T>::AddField(name, title);
