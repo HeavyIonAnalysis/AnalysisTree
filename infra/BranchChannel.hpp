@@ -5,7 +5,13 @@
 #define ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 
 #include "Field.hpp"
-#include "ValueHolder.hpp"
+//#include "ValueHolder.hpp"
+
+#include <Track.hpp>
+#include <Particle.hpp>
+#include <Module.hpp>
+#include <Hit.hpp>
+#include <EventHeader.hpp>
 
 #include <cassert>
 #include <iostream>
@@ -17,22 +23,24 @@ class BranchChannelsIter;
 
 class BranchChannel {
  public:
-  /* Getting value */
-  inline ValueHolder Value(const Field& v) const {
-    assert(v.GetParentBranch() == branch);
-    assert(v.IsInitialized());
-    return ValueHolder(v, data_ptr);
-  }
-  inline ValueHolder operator[](const Field& v) const { return Value(v); };
-  inline std::size_t GetNChannel() const { return i_channel; }
+  using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
 
-  /* usage of this functions is highly discouraged */
-  void* Data() { return data_ptr; }
-  const void* Data() const { return data_ptr; }
-  template<typename T>
-  T* DataT() { return reinterpret_cast<T*>(data_ptr); }
-  template<typename T>
-  const T* DataT() const { return reinterpret_cast<T*>(data_ptr); }
+//  /* Getting value */
+//  inline ValueHolder Value(const Field& v) const {
+//    assert(v.GetParentBranch() == branch);
+//    assert(v.IsInitialized());
+//    return ValueHolder(v, data_ptr);
+//  }
+//  inline ValueHolder operator[](const Field& v) const { return Value(v); };
+//  inline std::size_t GetNChannel() const { return i_channel; }
+//
+//  /* usage of this functions is highly discouraged */
+//  ChannelPointer Data() { return data_ptr; }
+//  const ChannelPointer Data() const { return data_ptr; }
+//  template<typename T>
+//  T* DataT() { return reinterpret_cast<T*>(data_ptr); }
+//  template<typename T>
+//  const T* DataT() const { return reinterpret_cast<T*>(data_ptr); }
 
   /**
    * @brief Copy contents of other branch channel
@@ -46,13 +54,12 @@ class BranchChannel {
 
  private:
   friend Branch;
-  friend BranchChannelsIter;
 
   BranchChannel(Branch* branch, std::size_t i_channel);
   void UpdatePointer();
   void UpdateChannel(std::size_t new_channel);
 
-  void* data_ptr{nullptr};
+  ChannelPointer data_ptr;
   Branch* branch;
   std::size_t i_channel;
 };

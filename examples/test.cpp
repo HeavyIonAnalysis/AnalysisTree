@@ -4,49 +4,42 @@
 #include <iostream>
 #include <random>
 
-#include <AnalysisTree/AnalysisTask.hpp>
 #include <AnalysisTree/ToyMC.hpp>
+#include <AnalysisTree/Branch.hpp>
 
 using namespace AnalysisTree;
 
 int main(int argc, char* argv[]) {
 
-  AnalysisTree::Chain t("/home/vklochkov/Data/cbm/test_prod_all/1.analysistree.root", "rTree");
-  t.Draw("TrdTracks.energy_loss_total");
+  RunToyMC(1000);
+  Chain t("toymc_analysis_task.root", "tTree");
+  t.InitPointersToBranches({"SimParticles"});
 
-  //  const int n_events = 1000;  // TODO propagate somehow
-  //  std::string filename = "toymc_analysis_task.root";
-  //  std::string treename = "tTree";
-  //  std::string filelist = "fl_toy_mc.txt";
-  //
-  //  auto* man = TaskManager::GetInstance();
-  //
-  //  auto* toy_mc = new ToyMC<std::default_random_engine>;
-  //  man->AddTask(toy_mc);
-  //  man->SetOutputName(filename, treename);
-  //
-  //  man->Init();
-  //  man->Run(n_events);
-  //  man->Finish();
+  auto config = t.GetConfiguration();
 
-  //  std::ofstream fl(filelist);
-  //  fl << filename << "\n";
-  //  fl.close();
-  //
-  //  man = TaskManager::GetInstance();
-  //
-  //  auto* var_manager = new AnalysisTask;
-  //  Variable px_sim("SimParticles", "px");
-  //  Variable px_rec("RecTracks", "px");
-  //  Cuts eta_cut("eta_cut", {RangeCut({"SimParticles.eta"}, -1, 1)});
-  //  var_manager->AddEntry(AnalysisEntry({px_sim}));
-  //  var_manager->AddEntry(AnalysisEntry({px_rec}));
-  //  var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
-  //  var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
-  //
-  //  man->AddTask(var_manager);
-  //
-  //  man->Init({filelist}, {treename});
-  //  man->Run(-1);
-  //  man->Finish();
+  const auto& ptrs = t.GetBranchPointers();
+
+  auto particles_var = ptrs.find("SimParticles")->second;
+  auto particles = std::get<Particles*>(particles_var);
+
+  Branch branch(config->GetBranchConfig("SimParticles"), particles);
+
+  for(int i=0; i<1; ++i){
+    t.GetEntry(i);
+    std::cout << branch.size() << std::endl;
+
+    using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
+    ChannelPointer ch;
+
+    for(int j=0; j<branch.size(); ++j){
+      auto ch = branch[j];
+      ch.Print();
+    }
+
+//    for(const auto& channel : branch){
+//
+//    }
+  }
+
+
 }

@@ -6,6 +6,8 @@
 
 #include <type_traits>
 
+#include "EventHeader.hpp"
+#include "Detector.hpp"
 #include "Field.hpp"
 
 namespace AnalysisTree {
@@ -15,6 +17,8 @@ class BranchChannel;
 
 class ValueHolder {
  public:
+  using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
+
   float GetVal() const;
   int GetInt() const;
   bool GetBool() const;
@@ -46,11 +50,12 @@ class ValueHolder {
   friend Branch;
   friend BranchChannel;
 
-  ValueHolder(const AnalysisTree::Field& v, void* data_ptr)
+//  template<class T>
+  ValueHolder(const AnalysisTree::Field& v, ChannelPointer data_ptr)
       : v(v), data_ptr(data_ptr) {}
 
   const AnalysisTree::Field& v;
-  void* data_ptr;
+  ChannelPointer data_ptr;
 };
 
 }// namespace AnalysisTree
