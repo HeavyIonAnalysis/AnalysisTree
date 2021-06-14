@@ -82,7 +82,7 @@ class Hit : public Container {
     }
   }
 
-  void Print() const;
+  void Print() const noexcept override;
 
  protected:
   Floating_t x_{UndefValueFloat};

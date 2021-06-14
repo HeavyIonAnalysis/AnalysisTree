@@ -58,7 +58,7 @@ class Module : public Container {
     }
   }
 
-  void Print() const;
+  void Print() const noexcept override;
 
  protected:
   Floating_t signal_{0.f};

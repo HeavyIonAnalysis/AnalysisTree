@@ -70,9 +70,15 @@ class EventHeader : public Container {
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }
 
   static constexpr size_t GetNumberOfChannels() { return 1; }// needed in order to have EventHeader similar to Detector
+  EventHeader* begin() { return this; }
+  EventHeader* end() { return this; }
+  const EventHeader* cbegin() const { return this; }
+  const EventHeader* cend() const { return this; }
 
   ANALYSISTREE_ATTR_NODISCARD const EventHeader& GetChannel(size_t i) const;// needed in order to have EventHeader similar to Detector
+  ANALYSISTREE_ATTR_NODISCARD EventHeader& Channel(size_t i);// needed in order to have EventHeader similar to Detector
 
+  void Print() const noexcept override;
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};
 

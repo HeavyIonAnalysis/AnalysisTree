@@ -12,6 +12,7 @@ namespace AnalysisTree {
 void Track::Print() const noexcept {
   std::cout << " Px = " << px_ << "  Py = " << py_ << "  Pz = " << pz_
             << "  phi = " << GetPhi() << "  pT = " << GetPt() << "  eta = " << GetEta() << std::endl;
+  Container::Print();
 }
 
 bool operator==(const Track& that, const Track& other) noexcept {
