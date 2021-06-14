@@ -53,6 +53,7 @@ class Container : public IndexedObject {
   }
 
   void Init(const BranchConfig& branch);
+  virtual void Print() const noexcept;
 
  protected:
   std::vector<float> floats_{};

@@ -24,4 +24,16 @@ const EventHeader& EventHeader::GetChannel(size_t i) const {
   throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
 }
 
+EventHeader& EventHeader::Channel(size_t i) {
+  if (i == 0) {
+    return *this;
+  }
+  throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
+}
+
+void EventHeader::Print() const noexcept {
+  std::cout << vtx_pos_[Exyz::kX] << " " << vtx_pos_[Exyz::kX] << " " << vtx_pos_[Exyz::kX] << std::endl;
+  Container::Print();
+}
+
 }// namespace AnalysisTree

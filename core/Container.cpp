@@ -27,4 +27,29 @@ void Container::Init(const AnalysisTree::BranchConfig& branch) {
   bools_.resize(branch.GetSize<bool>());
 }
 
+void Container::Print() const noexcept{
+  if(!ints_.empty()){
+    std::cout << "Integer fields: ";
+    for(auto i : ints_){
+      std::cout << i << " ";
+    }
+    std::cout << std::endl;
+  }
+  if(!floats_.empty()){
+    std::cout << "Floating fields: ";
+    for(auto f : floats_){
+      std::cout << f << " ";
+    }
+    std::cout << std::endl;
+  }
+  if(!bools_.empty()){
+    std::cout << "Boolean fields: ";
+    for(auto b : bools_){
+      std::cout << b << " ";
+    }
+    std::cout << std::endl;
+  }
+}
+
+
 }// namespace AnalysisTree

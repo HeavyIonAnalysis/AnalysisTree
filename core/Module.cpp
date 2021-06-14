@@ -16,8 +16,9 @@ bool operator==(const AnalysisTree::Module& that, const AnalysisTree::Module& ot
   return that.number_ == other.number_ && that.signal_ == other.signal_;
 }
 
-void Module::Print() const {
+void Module::Print() const noexcept {
   std::cout << "  number = " << number_ << "  signal = " << signal_ << std::endl;
+  Container::Print();
 }
 
 void ModulePosition::Print() const {
