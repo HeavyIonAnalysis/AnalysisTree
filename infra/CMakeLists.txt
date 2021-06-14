@@ -12,9 +12,10 @@ set(SOURCES
   PlainTreeFiller.cpp
   Chain.cpp
 
-  ValueHolder.cpp
   Branch.cpp
   BranchChannel.cpp
+#        ValueHolder.cpp
+
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
@@ -78,6 +79,7 @@ if(AnalysisTree_BUILD_TESTS)
             SimpleCut.test.cpp
             PlainTreeFiller.test.cpp
             AnalysisTask.test.cpp
+            Branch.test.cpp
             )
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)

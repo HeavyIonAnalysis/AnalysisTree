@@ -21,21 +21,22 @@ inline const Entity* DataT(const void* data_ptr) { return reinterpret_cast<const
 
 template<typename Functor, typename DataPtr>
 auto ApplyToEntity(AnalysisTree::DetType det_type, DataPtr ptr, Functor&& functor) {
-  using AnalysisTree::DetType;
-  if (DetType::kParticle == det_type) {
-    return functor(DataT<AnalysisTree::Particle>(ptr));
-  } else if (DetType::kTrack == det_type) {
-    return functor(DataT<AnalysisTree::Track>(ptr));
-  } else if (DetType::kModule == det_type) {
-    return functor(DataT<AnalysisTree::Module>(ptr));
-  } else if (DetType::kHit == det_type) {
-    return functor(DataT<AnalysisTree::Hit>(ptr));
-  } else if (DetType::kEventHeader == det_type) {
-    return functor(DataT<AnalysisTree::EventHeader>(ptr));
-  }
-  /* unreachable */
-  __builtin_unreachable();
-  assert(false);
+  return std::visit(functor, ptr);
+//  using AnalysisTree::DetType;
+//  if (DetType::kParticle == det_type) {
+//    return functor(DataT<AnalysisTree::Particle>(ptr));
+//  } else if (DetType::kTrack == det_type) {
+//    return functor(DataT<AnalysisTree::Track>(ptr));
+//  } else if (DetType::kModule == det_type) {
+//    return functor(DataT<AnalysisTree::Module>(ptr));
+//  } else if (DetType::kHit == det_type) {
+//    return functor(DataT<AnalysisTree::Hit>(ptr));
+//  } else if (DetType::kEventHeader == det_type) {
+//    return functor(DataT<AnalysisTree::EventHeader>(ptr));
+//  }
+//  /* unreachable */
+//  __builtin_unreachable();
+//  assert(false);
 }
 
 template<typename Entity, typename ValueType>

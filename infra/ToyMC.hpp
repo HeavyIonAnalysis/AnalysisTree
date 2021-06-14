@@ -138,6 +138,31 @@ class ToyMC : public Task {
   }
 };
 
+void inline RunToyMC(int n_events = 1000, const std::string& filelist = ""){
+  std::string filename = "toymc_analysis_task.root";
+  std::string treename = "tTree";
+
+  auto* man = TaskManager::GetInstance();
+
+  auto* toy_mc = new ToyMC<std::default_random_engine>;
+  man->AddTask(toy_mc);
+  man->SetOutputName(filename, treename);
+
+  man->Init();
+  man->Run(n_events);
+  man->Finish();
+  man->ClearTasks();
+
+//  delete man;
+
+  if(!filelist.empty()){
+    std::ofstream fl(filelist);
+    fl << filename << "\n";
+    fl.close();
+  }
+}
+
+
 }// namespace AnalysisTree
 
 #endif//ANALYSISTREE_INFRA_TOYMC_HPP_
