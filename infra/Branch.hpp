@@ -61,12 +61,9 @@ class Branch {
     return BranchChannel(this, i_channel);
   }
 
-//  BranchChannel begin() { return BranchChannel(std::visit([](auto&& arg){ return arg.begin(); }, data_);)  }
-//  BranchChannel end() { return std::visit([](auto&& arg){ return arg.end(); }, data_); }
-//  auto cbegin() const -> typename std::vector<T>::const_iterator { return channels_.begin(); }
-//  auto cend() const -> typename std::vector<T>::const_iterator { return channels_.end(); }
-//  auto begin() const -> typename std::vector<T>::const_iterator { return channels_.begin(); }
-//  auto end() const -> typename std::vector<T>::const_iterator { return channels_.end(); }
+  size_t GetId() const {
+    return std::visit([](auto&& b) { return b->GetId(); }, data_);
+  }
 
   [[nodiscard]] BranchPointer GetData() const { return data_; }
 

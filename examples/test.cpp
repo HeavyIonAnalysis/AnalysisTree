@@ -23,16 +23,15 @@ int main(int argc, char* argv[]) {
   auto particles = std::get<Particles*>(particles_var);
 
   Branch branch(config->GetBranchConfig("SimParticles"), particles);
+  Field pT("SimParticles", "pT");
+  pT.Init(*config);
 
   for(int i=0; i<1; ++i){
     t.GetEntry(i);
-    std::cout << branch.size() << std::endl;
-
-    using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
-    ChannelPointer ch;
 
     for(int j=0; j<branch.size(); ++j){
       auto ch = branch[j];
+      std::cout << ch[pT] << std::endl;
       ch.Print();
     }
 

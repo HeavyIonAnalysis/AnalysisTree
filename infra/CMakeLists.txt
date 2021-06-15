@@ -14,8 +14,7 @@ set(SOURCES
 
   Branch.cpp
   BranchChannel.cpp
-#        ValueHolder.cpp
-
+#  ValueHolder.cpp
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)

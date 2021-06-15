@@ -10,6 +10,7 @@ void BranchChannel::UpdateChannel(size_t new_channel) {
   i_channel = new_channel;
   UpdatePointer();
 }
+
 void BranchChannel::UpdatePointer() {
   if (i_channel < branch->size()) {
     data_ptr = std::visit([this](auto&& v){ return ChannelPointer( &(v->Channel(i_channel)) ); }, branch->GetData());
@@ -76,3 +77,22 @@ BranchChannel Branch::NewChannel() {
 void BranchChannel::Print(std::ostream& os) const {
   os << "Branch " << branch->GetBranchName() << " channel #" << i_channel << std::endl;
 }
+
+double BranchChannel::Value(const Field& v) const {
+  assert(v.GetBranchId() == branch->GetId());
+  assert(v.IsInitialized());
+
+  using AnalysisTree::Types;
+  if (v.GetFieldType() == Types::kFloat) {
+    return std::visit([v](auto&& ch){ return ch->template GetField<float>(v.GetFieldId()); }, data_ptr);
+  } else if (v.GetFieldType() == Types::kInteger) {
+    return std::visit([v](auto&& ch){ return ch->template GetField<int>(v.GetFieldId()); }, data_ptr);
+  } else if (v.GetFieldType() == Types::kBool) {
+    return std::visit([v](auto&& ch){ return ch->template GetField<bool>(v.GetFieldId()); }, data_ptr);
+  } else if (v.GetFieldType() == Types::kNumberOfTypes) {
+    /* Types::kNumberOfTypes */
+    assert(false);
+  }
+}
+
+double BranchChannel::operator[](const Field& v) const { return Value(v); }
