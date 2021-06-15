@@ -25,22 +25,26 @@ class BranchChannel {
  public:
   using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
 
-//  /* Getting value */
+/* Getting value */
+  [[nodiscard]] double Value(const Field& v) const;
+  double operator[](const Field& v) const;;
+
+  /* Getting value */
 //  inline ValueHolder Value(const Field& v) const {
 //    assert(v.GetParentBranch() == branch);
 //    assert(v.IsInitialized());
 //    return ValueHolder(v, data_ptr);
 //  }
 //  inline ValueHolder operator[](const Field& v) const { return Value(v); };
-//  inline std::size_t GetNChannel() const { return i_channel; }
-//
-//  /* usage of this functions is highly discouraged */
-//  ChannelPointer Data() { return data_ptr; }
-//  const ChannelPointer Data() const { return data_ptr; }
-//  template<typename T>
-//  T* DataT() { return reinterpret_cast<T*>(data_ptr); }
-//  template<typename T>
-//  const T* DataT() const { return reinterpret_cast<T*>(data_ptr); }
+  inline std::size_t GetNChannel() const { return i_channel; }
+
+  /* usage of this functions is highly discouraged */
+  ChannelPointer Data() { return data_ptr; }
+  const ChannelPointer Data() const { return data_ptr; }
+  template<typename T>
+  T* DataT() { return std::get<T*>(data_ptr); }
+  template<typename T>
+  const T* DataT() const { return std::get<T*>(data_ptr); }
 
   /**
    * @brief Copy contents of other branch channel
