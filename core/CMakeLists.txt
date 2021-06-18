@@ -28,6 +28,7 @@ target_include_directories(AnalysisTreeBase
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/AnalysisTree>
             $<INSTALL_INTERFACE:include>
         )
 
