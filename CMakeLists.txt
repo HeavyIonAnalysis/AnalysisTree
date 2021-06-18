@@ -62,9 +62,13 @@ message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
 include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
 include(${ROOT_USE_FILE})
 
+# libraries
 add_subdirectory(core)
 add_subdirectory(infra)
 add_subdirectory(infra-1.0)
+
+# header with version
+configure_file(cmake/AnalysisTreeVersion.hpp.in ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
