@@ -65,6 +65,7 @@ include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}
 include(${ROOT_USE_FILE})
 
 
+# libraries
 add_subdirectory(core)
 add_subdirectory(infra)
 
@@ -77,6 +78,9 @@ endif()
 #    enable_testing()
 #    add_subdirectory(test)
 #endif()
+
+# header with version
+configure_file(cmake/AnalysisTreeVersion.hpp.in ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
