@@ -48,7 +48,7 @@ target_link_libraries(AnalysisTreeInfraVersion1
 
 foreach(HEADER ${HEADERS})
     set(HEADER_ABS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${HEADER})
-    set(HEADERS_BINARY_DIR ${CMAKE_BINARY_DIR}/include/AnalysisTree)
+    set(HEADERS_BINARY_DIR ${CMAKE_BINARY_DIR}/include/AnalysisTree/infra-1.0)
     set(HEADER_SYMLINK_PATH ${HEADERS_BINARY_DIR}/${HEADER})
     add_custom_command(TARGET AnalysisTreeInfraVersion1 PRE_BUILD
         COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${HEADERS_BINARY_DIR}
@@ -87,14 +87,14 @@ install(TARGETS AnalysisTreeInfraVersion1 EXPORT AnalysisTreeTargets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
-        INCLUDES DESTINATION include/AnalysisTree/Version1
+        INCLUDES DESTINATION include/AnalysisTree/infra-1.0
         )
 
 install(
         FILES
         ${HEADERS}
         DESTINATION
-        include/AnalysisTree/Version1
+        include/AnalysisTree/infra-1.0
         COMPONENT
         Devel
 )
