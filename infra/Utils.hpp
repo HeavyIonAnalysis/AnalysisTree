@@ -23,7 +23,18 @@
 #define ANALYSISTREE_UTILS_GET boost::get
 #endif
 
+#include "Detector.hpp"
+
 namespace AnalysisTree {
+
+class Track;
+class Particle;
+class Module;
+class Hit;
+class EventHeader;
+
+using BranchPointer = ANALYSISTREE_UTILS_VARIANT<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
+using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
 
 namespace Utils {
 

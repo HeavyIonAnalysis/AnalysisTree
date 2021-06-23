@@ -27,6 +27,7 @@ class TaskManager {
  public:
   enum class eBranchWriteMode {
     kCreateNewTree,
+    kUpdateTree,
     kNone
   };
 
@@ -82,7 +83,11 @@ class TaskManager {
       chain_->GetConfiguration()->AddBranchConfig(config);
       ptr = new Branch(config.GetId());
       out_tree_->Branch(name.c_str(), &ptr);
-    } else {
+    }
+    else if(mode == eBranchWriteMode::kUpdateTree){
+
+    }
+    else {
       throw std::runtime_error("Not yet implemented...");
     }
   }

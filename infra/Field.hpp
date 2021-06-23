@@ -42,6 +42,7 @@ class Field {
    * @param conf Configuration
    */
   void Init(const Configuration& conf);
+  void Init(const BranchConfig& conf);
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return field_; }
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetBranchName() const { return branch_; }

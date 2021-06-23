@@ -6,11 +6,10 @@
 
 #include <BranchConfig.hpp>
 #include <Configuration.hpp>
-#include <Detector.hpp>
-#include <EventHeader.hpp>
 
 #include <cassert>
 #include <map>
+#include <utility>
 #include <vector>
 
 #include "BranchChannel.hpp"
@@ -22,16 +21,18 @@ namespace AnalysisTree {
 class Branch {
  public:
 
-  using BranchPointer = ANALYSISTREE_UTILS_VARIANT<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-
   /* c-tors */
-  explicit Branch(AnalysisTree::BranchConfig config) : config_(std::move(config)) {
+  explicit Branch(BranchConfig config) : config_(std::move(config)) {
     InitDataPtr();
     UpdateConfigHash();
   }
 
   template<class T>
-  Branch(AnalysisTree::BranchConfig config, T* data) : config_(std::move(config)), data_(data) {
+  Branch(BranchConfig config, T* data) : config_(std::move(config)), data_(data) {
+    UpdateConfigHash();
+  }
+
+  Branch(BranchConfig config, BranchPointer ptr) : config_(std::move(config)), data_(ptr) {
     UpdateConfigHash();
   }
 
@@ -56,16 +57,22 @@ class Branch {
   void CopyContents(Branch* br);
 
   //  /* iterating */
-  size_t size() const;
+  [[nodiscard]] size_t size() const;
+
   BranchChannel operator[](size_t i_channel) {
     return BranchChannel(this, i_channel);
   }
 
-  size_t GetId() const {
+  [[nodiscard]] size_t GetId() const {
     return std::visit([](auto&& b) { return b->GetId(); }, data_);
   }
 
   [[nodiscard]] BranchPointer GetData() const { return data_; }
+  [[nodiscard]] Field GetField(std::string field_name) const {
+    Field field(config_.GetName(), std::move(field_name));
+    field.Init(config_);
+    return field;
+  }
 
  private:
   AnalysisTree::BranchConfig config_;
@@ -116,17 +123,6 @@ class Branch {
   std::vector<std::string> GetFieldNames() const;
 
 //  /* Getting value */
-//  inline ValueHolder Value(const Field& v) const {
-//    assert(v.IsInitialized());
-//    assert(v.GetParentBranch() == this);
-//    if (config.GetType() == AnalysisTree::DetType::kEventHeader) {
-//      return ValueHolder(v, data);
-//    }
-//    throw std::runtime_error("Not implemented for iterable branch");
-//  }
-//  inline ValueHolder operator[](const Field& v) const { return Value(v); };
-
-
 
   /**
    * @brief Copies contents from other branch 'as-is'. Faster than CopyContents() since it creates no mapping

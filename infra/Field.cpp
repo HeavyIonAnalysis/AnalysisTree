@@ -38,6 +38,10 @@ bool operator<(const Field& that, const Field& other) {
 
 void Field::Init(const Configuration& conf) {
   const auto& branch_conf = conf.GetBranchConfig(branch_);
+  Init(branch_conf);
+}
+
+void Field::Init(const BranchConfig& branch_conf) {
   branch_id_ = branch_conf.GetId();
   branch_type_ = branch_conf.GetType();
   field_id_ = branch_conf.GetFieldId(field_);

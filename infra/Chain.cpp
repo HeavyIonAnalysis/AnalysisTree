@@ -13,28 +13,6 @@
 
 namespace AnalysisTree {
 
-//void Chain::InitChain(){
-//  assert(!filelists_.empty() && !treenames_.empty() && filelists_.size() == treenames_.size());
-//
-//  std::ifstream in;
-//  in.open(filelists_.at(0));
-//  std::string line;
-//  std::cout << "Adding files to chain:" << std::endl;
-//  while ((in >> line).good()) {
-//    std::cout << line << std::endl;
-//    if (!line.empty()) {
-//      this->AddFile(line.data());
-//    }
-//  }
-//
-//  for (size_t i = 1; i < filelists_.size(); i++) {
-//    this->AddFriend(MakeChain(filelists_.at(i), treenames_.at(i)));
-//  }
-//
-//  std::cout << "Ntrees = " << this->GetNtrees() << "\n";
-//  std::cout << "Nentries = " << this->GetEntries() << "\n";
-//}
-
 TChain* Chain::MakeChain(const std::string& filelist, const std::string& treename) {
   auto chain = new TChain(treename.c_str());
   TFileCollection fc("fc", "", filelist.c_str());
