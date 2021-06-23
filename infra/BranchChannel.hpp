@@ -23,7 +23,6 @@ class BranchChannelsIter;
 
 class BranchChannel {
  public:
-  using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
 
 /* Getting value */
   [[nodiscard]] double Value(const Field& v) const;

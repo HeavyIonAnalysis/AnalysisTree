@@ -20,8 +20,6 @@ namespace AnalysisTree {
 class Variable;
 class Cuts;
 
-using BranchPointer = ANALYSISTREE_UTILS_VARIANT<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-
 /**
  * @brief BranchReader keeps data-object associated with tree branch and list of cuts for this branch
  * lots of visitor boilerplate

@@ -14,9 +14,10 @@
 #include <TChain.h>
 #include <TFile.h>
 
-#include "BranchReader.hpp"
 #include "Configuration.hpp"
 #include "DataHeader.hpp"
+#include "Utils.hpp"
+#include "Branch.hpp"
 
 namespace AnalysisTree {
 
@@ -75,6 +76,23 @@ class Chain : public TChain {
   void Print(Option_t*) const override {
     this->data_header_->Print();
     this->configuration_->Print();
+  }
+
+  class Branch GetBranch(const std::string& name) const {
+    auto it = branches_.find(name);
+    if(it == branches_.end()){
+      throw std::runtime_error("Branch " + name + " is not found!");
+    }
+    auto ptr = branches_.find(name)->second;
+    return AnalysisTree::Branch(configuration_->GetBranchConfig("SimParticles"), ptr);
+  }
+
+  template<class BranchT>
+  class Branch AddBranch(BranchT* ptr, const BranchConfig& config) {
+    configuration_->AddBranchConfig(config);
+    ptr = new BranchT(config.GetId());
+    this->Branch(config.GetName().c_str(), &ptr);
+    return AnalysisTree::Branch(config, ptr);
   }
 
  protected:

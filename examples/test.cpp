@@ -15,16 +15,12 @@ int main(int argc, char* argv[]) {
   Chain t("toymc_analysis_task.root", "tTree");
   t.InitPointersToBranches({"SimParticles"});
 
-  auto config = t.GetConfiguration();
+  auto branch = t.GetBranch("SimParticles");
+  Field pT = branch.GetField("pT");
 
-  const auto& ptrs = t.GetBranchPointers();
-
-  auto particles_var = ptrs.find("SimParticles")->second;
-  auto particles = std::get<Particles*>(particles_var);
-
-  Branch branch(config->GetBranchConfig("SimParticles"), particles);
-  Field pT("SimParticles", "pT");
-  pT.Init(*config);
+  Particles* ptr{nullptr};
+  BranchConfig test("test", DetType::kParticle);
+  auto test_br = t.AddBranch(ptr, test);
 
   for(int i=0; i<1; ++i){
     t.GetEntry(i);
@@ -32,13 +28,7 @@ int main(int argc, char* argv[]) {
     for(int j=0; j<branch.size(); ++j){
       auto ch = branch[j];
       std::cout << ch[pT] << std::endl;
-      ch.Print();
     }
-
-//    for(const auto& channel : branch){
-//
-//    }
   }
-
 
 }
