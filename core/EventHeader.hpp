@@ -53,14 +53,11 @@ class EventHeader : public Container {
     if (field_id >= 0) {
       Container::SetField(value, field_id);
     } else {
-      if (field_id == EventHeaderFields::kVertexX) {
-        vtx_pos_[Exyz::kX] = value;
-      } else if (field_id == EventHeaderFields::kVertexY) {
-        vtx_pos_[Exyz::kY] = value;
-      } else if (field_id == EventHeaderFields::kVertexZ) {
-        vtx_pos_[Exyz::kZ] = value;
-      } else {
-        throw std::runtime_error("Invalid field id");
+      switch (field_id) {
+        case EventHeaderFields::kVertexX: vtx_pos_[Exyz::kX] = value; break;
+        case EventHeaderFields::kVertexY: vtx_pos_[Exyz::kY] = value; break;
+        case EventHeaderFields::kVertexZ: vtx_pos_[Exyz::kZ] = value; break;
+        default: throw std::runtime_error("Invalid field id");
       }
     }
   }
