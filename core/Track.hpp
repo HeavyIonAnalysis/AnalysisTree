@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_GENERICTRACK_H
 #define ANALYSISTREE_GENERICTRACK_H
 
@@ -117,6 +120,24 @@ class Track : public Container {
         case TrackFields::kPy: return GetPy();
         case TrackFields::kPz: return GetPz();
         default: throw std::out_of_range("Track::GetField - Index " + std::to_string(id) + " is not found");
+      }
+    }
+  }
+
+  template<typename T>
+  void SetField(T value, Int_t field_id) {
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case TrackFields::kPx: px_ = value; break;
+        case TrackFields::kPy: py_ = value; break;
+        case TrackFields::kPz: pz_ = value; break;
+        case TrackFields::kP: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case TrackFields::kPt: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case TrackFields::kEta: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case TrackFields::kPhi: /*throw std::runtime_error("Cannot set transient fields")*/;
+        default: throw std::runtime_error("Unknown field");
       }
     }
   }

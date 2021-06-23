@@ -5,6 +5,12 @@
 
 ## Important note on AnalysisTree versions
 
+**Current version is development version, compatibility with C++11 is not guaranteed!**
+
+Last tested version: v2.1.1
+
+Last release version: v.1.0.9
+
 Different MAJOR version means incompatible API changes. 
 Neither API nor data compatibility is preserved between MAJOR versions.
 

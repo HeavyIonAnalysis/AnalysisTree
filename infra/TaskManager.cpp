@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "TaskManager.hpp"
 
 #include <iostream>
@@ -30,7 +33,7 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   }
   chain_->InitPointersToBranches(branch_names);
 
-  if(fill_out_tree_){
+  if (fill_out_tree_) {
     InitOutChain();
   }
 

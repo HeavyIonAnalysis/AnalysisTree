@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_BASEEVENTHEADER_H
 #define ANALYSISTREE_BASEEVENTHEADER_H
 
@@ -40,6 +43,21 @@ class EventHeader : public Container {
         case EventHeaderFields::kVertexY: return GetVertexY();
         case EventHeaderFields::kVertexZ: return GetVertexZ();
         default: throw std::out_of_range("EventHeader::GetField - Index " + std::to_string(iField) + " is not found");
+      }
+    }
+  }
+
+  template<typename T>
+  void SetField(T value, Integer_t field_id) {
+    using AnalysisTree::EventHeaderFields::EventHeaderFields;
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case EventHeaderFields::kVertexX: vtx_pos_[Exyz::kX] = value; break;
+        case EventHeaderFields::kVertexY: vtx_pos_[Exyz::kY] = value; break;
+        case EventHeaderFields::kVertexZ: vtx_pos_[Exyz::kZ] = value; break;
+        default: throw std::runtime_error("Invalid field id");
       }
     }
   }

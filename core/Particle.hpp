@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_SRC_PARTICLE_H_
 #define ANALYSISTREE_SRC_PARTICLE_H_
 
@@ -50,6 +53,26 @@ class Particle : public Track {
         case ParticleFields::kPy: return GetPy();
         case ParticleFields::kPz: return GetPz();
         default: throw std::out_of_range("Particle::GetField - Index " + std::to_string(iField) + " is not found");
+      }
+    }
+  }
+
+  template<typename T>
+  void SetField(T value, Int_t field_id) {
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case ParticleFields::kPx: px_ = value; break;
+        case ParticleFields::kPy: py_ = value; break;
+        case ParticleFields::kPz: pz_ = value; break;
+        case ParticleFields::kPid: pid_ = value; break;
+        case ParticleFields::kP: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case ParticleFields::kPt: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case ParticleFields::kEta: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case ParticleFields::kPhi: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case ParticleFields::kRapidity: /*throw std::runtime_error("Cannot set transient fields")*/;
+        default: throw std::runtime_error("Unknown field");
       }
     }
   }

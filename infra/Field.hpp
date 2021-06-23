@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 
 #ifndef ANALYSISTREE_INFRA_FIELD_H_
 #define ANALYSISTREE_INFRA_FIELD_H_
@@ -11,6 +14,7 @@
 namespace AnalysisTree {
 
 class Configuration;
+class Branch;
 
 /**
  * @brief Field is a _pointer_ in a branch/field structure.
@@ -70,7 +74,15 @@ class Field {
 
   void Print() const;
 
+  ANALYSISTREE_ATTR_NODISCARD Branch* GetParentBranch() const { return parent_branch; }
+  ANALYSISTREE_ATTR_NODISCARD bool IsInitialized() const { return is_init_; }
+  explicit operator bool() const { return IsInitialized(); }
+
  private:
+  friend Branch;
+
+  Branch* parent_branch{nullptr};///!
+
   std::string branch_;
   std::string field_;
 

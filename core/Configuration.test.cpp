@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 #define ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 
@@ -25,10 +28,10 @@ TEST(Configuration, Basics) {
   config.AddBranchConfig(branch_config);
 
   EXPECT_EQ(config.GetNumberOfBranches(), 1);
-//  EXPECT_EQ(config.GetLastId(), 0);
+  //  EXPECT_EQ(config.GetLastId(), 0);
 
   const auto& br1 = config.GetBranchConfig("RecTrack");
-//  EXPECT_EQ(br1.GetId(), 0);
+  //  EXPECT_EQ(br1.GetId(), 0);
 }
 
 TEST(Configuration, Match) {
