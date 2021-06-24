@@ -21,29 +21,12 @@ struct StringArray : public std::array<std::string, 2>
   StringArray() = default;
   StringArray(std::string f, std::string s) {
     this->at(0) = std::move(f);
-    this->at(0) = std::move(s);
+    this->at(1) = std::move(s);
   }
   ~StringArray() = default;
  private:
  ClassDef(StringArray, 1);
 };
-
-//struct StringArray
-//{
-//  StringArray() = default;
-//  StringArray(std::string f, std::string s) {
-//    array_[0] = std::move(f);
-//    array_[1] = std::move(s);
-//  }
-//
-//  bool operator<(const StringArray &c2) const {
-//    return array_ < c2.array_;
-//  }
-//  const std::string& operator[](std::size_t idx) const {
-//    return array_[idx];
-//  }
-//  std::array<std::string, 2> array_{};
-//};
 
 class Configuration : public TObject {
 
