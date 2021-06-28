@@ -5,6 +5,7 @@
 #include <array>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include <TObject.h>
@@ -14,6 +15,18 @@
 namespace AnalysisTree {
 
 class Matching;
+
+struct StringArray : public std::array<std::string, 2>
+{
+  StringArray() = default;
+  StringArray(std::string f, std::string s) {
+    this->at(0) = std::move(f);
+    this->at(1) = std::move(s);
+  }
+  ~StringArray() = default;
+ private:
+ ClassDef(StringArray, 1);
+};
 
 class Configuration : public TObject {
 
@@ -45,14 +58,14 @@ class Configuration : public TObject {
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
   ANALYSISTREE_ATTR_NODISCARD std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
-  ANALYSISTREE_ATTR_NODISCARD const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::map<StringArray, std::string>& GetMatches() const { return matches_; }
 
   void Print(Option_t* = "") const;
 
  protected:
   std::string name_;
   std::map<size_t, BranchConfig> branches_{};
-  std::map<std::array<std::string, 2>, std::string> matches_{};
+  std::map<StringArray, std::string> matches_{};
 
   ClassDef(Configuration, 3)
 };

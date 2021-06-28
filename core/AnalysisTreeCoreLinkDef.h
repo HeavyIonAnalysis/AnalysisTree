@@ -23,6 +23,7 @@
 #pragma link C++ class AnalysisTree::Configuration+;
 #pragma link C++ class AnalysisTree::BranchConfig+;
 #pragma link C++ class AnalysisTree::DataHeader+;
+#pragma link C++ class AnalysisTree::StringArray+;
 
 #pragma link C++ class AnalysisTree::Container+;
 
@@ -40,5 +41,7 @@
 #pragma link C++ typedef AnalysisTree::ModulePositions;
 
 #pragma link C++ defined_in "Constants.h";
+
+//#pragma read sourceClass="map<array<string,2>,string>" targetClass="map<AnalysisTree::StringArray, string>";
 
 #endif

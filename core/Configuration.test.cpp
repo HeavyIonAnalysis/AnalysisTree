@@ -1,6 +1,7 @@
 #ifndef ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 #define ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 
+#include <TFile.h>
 #include <gtest/gtest.h>
 
 #include "Configuration.hpp"
@@ -25,10 +26,8 @@ TEST(Configuration, Basics) {
   config.AddBranchConfig(branch_config);
 
   EXPECT_EQ(config.GetNumberOfBranches(), 1);
-//  EXPECT_EQ(config.GetLastId(), 0);
 
   const auto& br1 = config.GetBranchConfig("RecTrack");
-//  EXPECT_EQ(br1.GetId(), 0);
 }
 
 TEST(Configuration, Match) {
@@ -59,6 +58,34 @@ TEST(Configuration, Match) {
   EXPECT_STREQ(match_info.first.c_str(), "RecTrack2SimTrack");
   EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
 }
+
+TEST(Configuration, Write){
+
+  auto* config = new Configuration("test");
+
+  auto rec = BranchConfig("RecTrack", DetType::kParticle);
+  auto sim = BranchConfig("SimTrack", DetType::kParticle);
+
+  config->AddBranchConfig(rec);
+  config->AddBranchConfig(sim);
+
+  auto* match = new Matching(rec.GetId(), sim.GetId());
+  config->AddMatch(match);
+
+  auto* file = TFile::Open("Test_WriteConfiguration.root", "recreate");
+  config->Write("Configuration");
+  file->Close();
+
+//  delete file;
+//  delete match;
+//  delete config;
+
+  file = TFile::Open("Test_WriteConfiguration.root", "read");
+  config = file->Get<Configuration>("Configuration");
+  config->Print();
+
+}
+
 
 }// namespace
 

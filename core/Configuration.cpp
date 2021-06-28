@@ -4,6 +4,9 @@
 #include "Configuration.hpp"
 #include "Matching.hpp"
 
+ClassImp(AnalysisTree::StringArray)
+ClassImp(AnalysisTree::Configuration)
+
 namespace AnalysisTree {
 
 BranchConfig& Configuration::GetBranchConfig(const std::string& name) {
@@ -68,7 +71,8 @@ void Configuration::AddMatch(Matching* match) {
   const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
   const std::string name = br1 + "2" + br2;
 
-  matches_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
+  matches_[{br1, br2}] = name;
+//  matches_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
 }
 
 }// namespace AnalysisTree
