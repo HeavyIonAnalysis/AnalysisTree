@@ -4,8 +4,10 @@ install_c++17/*
 build_c++17/*
 .project
 .idea/*
+examples/.idea/*
 Doxygen/*
-
+temp*
+examples/test.cpp
 
 ### Linux template
 *~
