@@ -15,7 +15,7 @@ class IndexedObject;
 class IndexAccessor {
 
  public:
-  static void InitIndexedObject(IndexedObject* indexedObject, Integer_t newID);
+  static void InitIndexedObject(IndexedObject* indexedObject, size_t newID);
 };
 
 /**
@@ -33,7 +33,7 @@ class IndexedObject {
    * anymore in the lifecycle
    * @param id_
    */
-  explicit IndexedObject(Integer_t id) : id_(id) {}
+  explicit IndexedObject(size_t id) : id_(id) {}
 
   /**
    * Copy ctor for IndexedObject
@@ -46,7 +46,7 @@ class IndexedObject {
   IndexedObject& operator=(const IndexedObject& indexedObject) = default;
   virtual ~IndexedObject() = default;
 
-  ANALYSISTREE_ATTR_NODISCARD inline Integer_t GetId() const {
+  ANALYSISTREE_ATTR_NODISCARD inline size_t GetId() const {
     return id_;
   }
 
@@ -65,9 +65,9 @@ class IndexedObject {
  private:
   friend class IndexAccessor;
 
-  Integer_t id_{-1};
+  size_t id_{0};
 
-  ClassDef(IndexedObject, 1)
+  ClassDef(IndexedObject, 2)
 };
 
 }// namespace AnalysisTree

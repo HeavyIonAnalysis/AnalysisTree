@@ -30,6 +30,10 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
   }
   chain_->InitPointersToBranches(branch_names);
 
+  if(fill_out_tree_){
+    InitOutChain();
+  }
+
   InitTasks();
 }
 
@@ -79,27 +83,22 @@ void TaskManager::Run(long long nEvents) {
 }
 
 void TaskManager::Finish() {
+
+  for (auto* task : tasks_) {
+    task->Finish();
+  }
+
   if (fill_out_tree_) {
+    std::cout << "Output file is " << out_file_name_ << std::endl;
+    std::cout << "Output tree is " << out_tree_name_ << std::endl;
     out_file_->cd();
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
     out_file_->Close();
     delete out_file_;
-  }
-
-  for (auto* task : tasks_) {
-    task->Finish();
-    delete task;
-  }
-  tasks_.clear();
-
-  //  delete chain_;
-
-  if (fill_out_tree_) {
     delete configuration_;
     delete data_header_;
-    //    delete out_tree_;
   }
 
   out_tree_name_ = "aTree";
@@ -109,4 +108,13 @@ void TaskManager::Finish() {
   read_in_tree_ = false;
 }
 
+TaskManager::~TaskManager() {
+  if (is_owns_tasks) {
+    for (auto* task_ptr : tasks_) {
+      std::cout << "removing task" << std::endl;
+      delete task_ptr;
+    }
+  }
+  ClearTasks();
+}
 }// namespace AnalysisTree

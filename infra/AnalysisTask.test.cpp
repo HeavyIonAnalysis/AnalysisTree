@@ -38,12 +38,12 @@ class AnalysisTaskTest : public AnalysisTask {
   void Exec() override {
     AnalysisTask::Exec();
 
-    for (uint i = 0; i < entries_.size(); ++i) {
+    for (size_t i = 0; i < entries_.size(); ++i) {
       const auto& channels = entries_.at(i).GetValues();
       auto& test_vars = entries_test_.at(i);
 
       for (const auto& channel : channels) {
-        for (uint j = 0; j < channel.size(); ++j) {// vars
+        for (size_t j = 0; j < channel.size(); ++j) {// vars
           auto& tvar = test_vars.at(j);
           auto var = channel.at(j);
 
@@ -91,11 +91,11 @@ TEST(AnalysisTask, Basics) {
   man->Run(n_events);
   man->Finish();
 
+  man->ClearTasks();
+
   std::ofstream fl(filelist);
   fl << filename << "\n";
   fl.close();
-
-  man = TaskManager::GetInstance();
 
   auto* var_manager = new AnalysisTaskTest;
   Variable px_sim("SimParticles", "px");
@@ -110,7 +110,7 @@ TEST(AnalysisTask, Basics) {
 
   man->Init({filelist}, {treename});
   man->Run(-1);
-  var_manager->Finish();
+  man->Finish();
 
   auto px_sim_stat = var_manager->GetEntriesTest().at(0).at(0);
   auto px_rec_stat = var_manager->GetEntriesTest().at(1).at(0);

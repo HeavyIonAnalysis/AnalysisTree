@@ -63,7 +63,7 @@ class ToyMC : public Task {
 
     particles_->ClearChannels();
 
-    const auto& branch = config_->GetBranchConfig("SimParticles");
+    const auto& branch = config_->GetBranchConfig(particles_->GetId());
     const int multiplicity = multiplicity_(generator_);
     particles_->Reserve(multiplicity);
 
@@ -92,7 +92,7 @@ class ToyMC : public Task {
     rec_tracks_to_sim_->Clear();
 
     track_detector_->Reserve(particles_->GetNumberOfChannels());
-    const auto& branch = config_->GetBranchConfig("RecTracks");
+    const auto& branch = config_->GetBranchConfig(track_detector_->GetId());
 
     for (const auto& particle : *particles_) {
       auto& track = track_detector_->AddChannel(branch);

@@ -20,8 +20,8 @@ class Track : public Container {
  public:
   Track() = default;
 
-  explicit Track(Integer_t id) noexcept : Container(id) {}
-  Track(Integer_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
+  explicit Track(size_t id) noexcept : Container(id) {}
+  Track(size_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
   Track(const Track& track) = default;
   Track(Track&& track) = default;
   Track& operator=(Track&&) = default;

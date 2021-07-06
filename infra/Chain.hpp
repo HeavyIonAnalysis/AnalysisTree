@@ -50,7 +50,7 @@ class Chain : public TChain {
 
   void SetDataHeader(DataHeader* dh) { data_header_ = dh; }
 
-  BranchPointer GetPointerToBranch(const std::string& name) {
+  BranchPointer GetPointerToBranch(const std::string& name) const {
     auto br = branches_.find(name);
     if (br != branches_.end()) {
       return br->second;
@@ -100,8 +100,8 @@ class Chain : public TChain {
   std::vector<std::string> filelists_{};
   std::vector<std::string> treenames_{};
 
-  Configuration* configuration_;
-  DataHeader* data_header_;
+  Configuration* configuration_{nullptr};
+  DataHeader* data_header_{nullptr};
 
   std::map<std::string, BranchPointer> branches_{};
   std::map<std::string, Matching*> matches_{};

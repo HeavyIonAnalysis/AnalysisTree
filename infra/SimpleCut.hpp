@@ -57,7 +57,7 @@ class SimpleCut {
   }
 
   template<class A, class B>
-  bool Apply(const A& a, int a_id, const B& b, int b_id) const {
+  bool Apply(const A& a, size_t a_id, const B& b, size_t b_id) const {
     std::vector<double> variables;
     variables.reserve(vars_.size());
     for (const auto& var : vars_) {
