@@ -63,10 +63,23 @@ TEST(Configuration, Match) {
 
 TEST(Configuration, ReadWrite) {
   Configuration config("c");
+  config.AddBranchConfig(BranchConfig("test1", AnalysisTree::DetType::kParticle));
+  config.AddBranchConfig(BranchConfig("test2", AnalysisTree::DetType::kParticle));
+  config.AddMatch(new Matching(
+      config.GetBranchConfig("test1").GetId(),
+      config.GetBranchConfig("test2").GetId()));
 
-  TFile f("configuration_io.root","recreate");
-  config.Write();
-  f.Close();
+  {
+    TFile f("configuration_io.root", "recreate");
+    config.Write("Configuration");
+    f.Close();
+  }
+
+  {
+    TFile f("configuration_io.root", "read");
+    auto config_new = f.Get<Configuration>("Configuration");
+    ASSERT_TRUE(config_new);
+  }
 }
 
 }// namespace

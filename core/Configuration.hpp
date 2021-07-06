@@ -76,7 +76,7 @@ class Configuration : public TObject {
     for (auto &match: matches) {
       std::array<std::string, 2> map_key{match.GetFirstBranchName(), match.GetSecondBranchName()};
       auto emplace_result = result.emplace(map_key, match.GetDataBranchName());
-      if (emplace_result.second) {
+      if (!emplace_result.second) {
         throw std::runtime_error("Two matches with same first and second branch added");
       }
     }

@@ -10,10 +10,10 @@ namespace AnalysisTree {
 void Configuration::Streamer(TBuffer & rb) {
   if (rb.IsReading()) {
     Configuration::Class()->ReadBuffer(rb, this);
-    std::cout << "Reading configuration class" << std::endl;
+    this->matches_index_ = MakeMatchingIndex(matches_);
   } else {
+    this->matches_ = MakeMatchConfigsFromIndex(matches_index_);
     Configuration::Class()->WriteBuffer(rb, this);
-    std::cout << "Writing configuration class" << std::endl;
   }
 }
 
