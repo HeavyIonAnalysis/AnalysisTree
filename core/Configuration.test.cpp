@@ -82,6 +82,12 @@ TEST(Configuration, ReadWrite) {
   }
 }
 
+TEST(Configuration, Read_v2) {
+  TFile f("/home/eugene/CLionProjects/AnalysisTree/test_resources/v2_at_example.root", "read");
+  auto configuration = f.Get<Configuration>("Configuration");
+  configuration->Print();
+}
+
 }// namespace
 
 #endif//ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_

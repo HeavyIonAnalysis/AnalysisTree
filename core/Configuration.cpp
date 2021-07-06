@@ -1,15 +1,32 @@
 #include <cassert>
 #include <iostream>
+#include <string>
 
 #include "Configuration.hpp"
 #include "Matching.hpp"
+
+#include <TROOT.h>
 #include <TBuffer.h>
+#include <TVirtualStreamerInfo.h>
 
 namespace AnalysisTree {
 
 void Configuration::Streamer(TBuffer & rb) {
   if (rb.IsReading()) {
-    Configuration::Class()->ReadBuffer(rb, this);
+    UInt_t rs = 0, rc = 0;
+    auto config_version = rb.ReadVersion(&rs, &rc, Configuration::Class());
+    if (config_version == Class()->GetClassVersion()) {
+      Configuration::Class()->ReadBuffer(rb, this, config_version, rs, rc);
+
+    } else if (config_version == 3) {
+      //      below structure description for version 3 of this class
+      Configuration_v3 conf_v3;
+      Configuration_v3::Class()->ReadBuffer(rb, &conf_v3, 1, rs, rc);
+      this->name_ = conf_v3.name_;
+      this->branches_ = conf_v3.branches_;
+      this->matches_ = MakeMatchConfigsFromIndex(conf_v3.matches_);
+    }
+    // populate the transient field
     this->matches_index_ = MakeMatchingIndex(matches_);
   } else {
     this->matches_ = MakeMatchConfigsFromIndex(matches_index_);

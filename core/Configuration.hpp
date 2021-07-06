@@ -35,6 +35,16 @@ class MatchingConfig {
   ClassDefNV(MatchingConfig, 2);
 };
 
+
+class Configuration_v3 : public TObject {
+ public:
+  std::string name_;
+  std::map<size_t, BranchConfig> branches_{};
+  std::map<std::array<std::string, 2>, std::string> matches_{};
+
+  ClassDef(Configuration_v3, 1);
+};
+
 class Configuration : public TObject {
 
  public:
@@ -96,13 +106,12 @@ class Configuration : public TObject {
 
  protected:
   std::string name_;
-
   std::map<size_t, BranchConfig> branches_{};
   std::vector<MatchingConfig> matches_{};
 
   MatchingIndex matches_index_{}; //! transient field in this version
 
-  ClassDef(Configuration, 3)
+  ClassDef(Configuration, 4)
 };
 
 }// namespace AnalysisTree
