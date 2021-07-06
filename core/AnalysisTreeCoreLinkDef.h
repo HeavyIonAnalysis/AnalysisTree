@@ -20,8 +20,9 @@
 #pragma link C++ class AnalysisTree::VectorConfig<float>+;
 #pragma link C++ class AnalysisTree::VectorConfig<bool>+;
 #pragma link C++ class AnalysisTree::ConfigElement+;
-#pragma link C++ class AnalysisTree::Configuration+;
+#pragma link C++ class AnalysisTree::Configuration-;
 #pragma link C++ class AnalysisTree::BranchConfig+;
+#pragma link C++ class AnalysisTree::MatchingConfig+;
 #pragma link C++ class AnalysisTree::DataHeader+;
 
 #pragma link C++ class AnalysisTree::Container+;

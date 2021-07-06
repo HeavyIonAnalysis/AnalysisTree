@@ -1,6 +1,7 @@
 #ifndef ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 #define ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 
+#include <TFile.h>
 #include <gtest/gtest.h>
 
 #include "Configuration.hpp"
@@ -55,6 +56,14 @@ TEST(Configuration, Match) {
 
   EXPECT_STREQ(match_info.first.c_str(), "RecTrack2SimTrack");
   EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
+}
+
+TEST(Configuration, ReadWrite) {
+  Configuration config("c");
+
+  TFile f("configuration_io.root","recreate");
+  config.Write();
+  f.Close();
 }
 
 }// namespace

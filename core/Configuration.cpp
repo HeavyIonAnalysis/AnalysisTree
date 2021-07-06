@@ -3,8 +3,19 @@
 
 #include "Configuration.hpp"
 #include "Matching.hpp"
+#include <TBuffer.h>
 
 namespace AnalysisTree {
+
+void Configuration::Streamer(TBuffer & rb) {
+  if (rb.IsReading()) {
+    Configuration::Class()->ReadBuffer(rb, this);
+    std::cout << "Reading configuration class" << std::endl;
+  } else {
+    Configuration::Class()->WriteBuffer(rb, this);
+    std::cout << "Writing configuration class" << std::endl;
+  }
+}
 
 BranchConfig& Configuration::GetBranchConfig(const std::string& name) {
   for (auto& branch : branches_) {
@@ -31,15 +42,15 @@ void Configuration::Print(Option_t*) const {
   }
   std::cout << std::endl;
   std::cout << "Matching between branches available" << std::endl;
-  for (const auto& match : matches_) {
+  for (const auto& match : matches_index_) {
     std::cout << "  " << match.first[0] << " " << match.first[1]
               << " in branch " << match.second << std::endl;
   }
 }
 
 const std::string& Configuration::GetMatchName(const std::string& br1, const std::string& br2) const {
-  auto search = matches_.find({br1, br2});
-  if (search != matches_.end()) {
+  auto search = matches_index_.find({br1, br2});
+  if (search != matches_index_.end()) {
     return search->second;
   } else {
     throw std::runtime_error("Configuration::GetMatchName - Not found for branches " + br1 + " and " + br2);
@@ -48,12 +59,12 @@ const std::string& Configuration::GetMatchName(const std::string& br1, const std
 
 //TODO fix this logic, looks ugly
 std::pair<std::string, bool> Configuration::GetMatchInfo(const std::string& br1, const std::string& br2) const {
-  auto search = matches_.find({br1, br2});
-  if (search != matches_.end()) {
+  auto search = matches_index_.find({br1, br2});
+  if (search != matches_index_.end()) {
     return std::make_pair(search->second, false);
   } else {
-    auto search_1 = matches_.find({br2, br1});
-    if (search_1 != matches_.end()) {
+    auto search_1 = matches_index_.find({br2, br1});
+    if (search_1 != matches_index_.end()) {
       return std::make_pair(search_1->second, true);
     } else {
       throw std::runtime_error("Configuration::GetMatchInfo - Not found for branches " + br1 + " and " + br2);
@@ -68,7 +79,7 @@ void Configuration::AddMatch(Matching* match) {
   const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
   const std::string name = br1 + "2" + br2;
 
-  matches_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
+  matches_index_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
 }
 
 }// namespace AnalysisTree
