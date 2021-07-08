@@ -111,9 +111,19 @@ void Configuration::AddMatch(Matching* match) {
 
   const std::string br1 = GetBranchConfig(match->GetBranch1Id()).GetName();
   const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
-  const std::string name = br1 + "2" + br2;
+  const std::string data_branch = br1 + "2" + br2;
 
-  matches_index_.insert(std::make_pair(std::array<std::string, 2>{br1, br2}, name));
+  bool is_matching_exists = std::find_if(begin(matches_), end(matches_), \
+                                         [br1, br2] (const MatchingConfig& m) -> bool {
+                                         return (br1 == m.GetFirstBranchName() && br2 == m.GetSecondBranchName()) ||
+                                             (br2 == m.GetFirstBranchName() && br1 == m.GetSecondBranchName());
+                                         }) != end(matches_);
+  if (is_matching_exists) {
+    throw std::runtime_error("Matching between this pair of branches already exists in this Configuration");
+  }
+  matches_.emplace_back(br1, br2, data_branch);
+  /* refresh index */
+  matches_index_ = MakeMatchingIndex(matches_);
 }
 
 }// namespace AnalysisTree
