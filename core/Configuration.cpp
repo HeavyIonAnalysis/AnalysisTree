@@ -1,11 +1,13 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <map>
 
 #include "Configuration.hpp"
 #include "Matching.hpp"
 
 #include <TROOT.h>
+#include <TClass.h>
 #include <TBuffer.h>
 #include <TVirtualStreamerInfo.h>
 
