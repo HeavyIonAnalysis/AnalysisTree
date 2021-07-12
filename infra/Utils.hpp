@@ -15,9 +15,9 @@
   #define ANALYSISTREE_UTILS_VARIANT std::variant
   #define ANALYSISTREE_UTILS_VISIT std::visit
   #define ANALYSISTREE_UTILS_GET std::get
-#elif __has_include(<boost/variant.hpp>)
+#elif defined(ANALYSISTREE_BOOST_FOUND)
+// all variant-related classes involving visitors definitions are here
   #include <boost/variant.hpp>
-  #include <boost/variant/static_visitor.hpp>
   #define ANALYSISTREE_BOOST_VARIANT 1
   #define ANALYSISTREE_UTILS_VARIANT boost::variant
   #define ANALYSISTREE_UTILS_VISIT boost::apply_visitor
