@@ -11,7 +11,6 @@
 #include "EventHeader.hpp"
 
 #include "Chain.hpp"
-#include "VariantMagic.hpp"
 #include "Cuts.hpp"
 
 class TChain;
