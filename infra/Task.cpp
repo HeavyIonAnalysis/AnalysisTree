@@ -3,6 +3,7 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "Task.hpp"
 #include "TaskManager.hpp"
+#include "VariantMagic.hpp"
 
 namespace AnalysisTree {
 
