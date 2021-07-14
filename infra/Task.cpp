@@ -9,7 +9,8 @@ ANALYSISTREE_ATTR_NODISCARD bool Task::IsGoodEvent(const Chain& t) const {
   // Here EventHeader expected
   //TODO throw exeption otherwise
   const auto cut = apply_cut(0, event_cuts_);
-  return ANALYSISTREE_UTILS_VISIT(cut, t.GetPointerToBranch(*br_name));
+  const auto data_ptr = t.GetPointerToBranch(*br_name);
+  return ANALYSISTREE_UTILS_VISIT(cut, data_ptr);
 }
 
 void Task::PreInit() {
