@@ -8,8 +8,8 @@
 #include <gtest/gtest.h>
 
 #include "PlainTreeFiller.hpp"
-#include "TaskManager.hpp"
 #include "ToyMC.hpp"
+#include "TaskManager.hpp"
 
 namespace {
 
@@ -17,26 +17,12 @@ using namespace AnalysisTree;
 
 TEST(PlainTreeFiller, Basics) {
 
-  const int n_events = 1000;// TODO propagate somehow
-  std::string filename = "toymc_analysis_task.root";
-  std::string treename = "tTree";
-  std::string filelist = "fl_toy_mc.txt";
+  const int n_events = 1000;
+  const std::string filelist = "fl_toy_mc.txt";
 
-  auto* man = TaskManager::GetInstance();
+  RunToyMC(n_events, filelist);
 
-  auto* toy_mc = new ToyMC<std::default_random_engine>;
-  man->AddTask(toy_mc);
-  man->SetOutputName(filename, treename);
-
-  man->Init();
-  man->Run(n_events);
-  man->Finish();
-
-  man->ClearTasks();
-
-  std::ofstream fl(filelist);
-  fl << filename << "\n";
-  fl.close();
+  TaskManager* man = TaskManager::GetInstance();
 
   auto* plain_tree = new PlainTreeFiller;
   plain_tree->AddBranch("SimParticles");
