@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include "PlainTreeFiller.hpp"
+#include "ToyMC.hpp"
 #include "TaskManager.hpp"
 
 namespace {
@@ -12,6 +13,11 @@ namespace {
 using namespace AnalysisTree;
 
 TEST(PlainTreeFiller, Basics) {
+
+  const int n_events = 1000;
+  const std::string filelist = "fl_toy_mc.txt";
+
+  RunToyMC(n_events, filelist);
 
   TaskManager* man = TaskManager::GetInstance();
 
