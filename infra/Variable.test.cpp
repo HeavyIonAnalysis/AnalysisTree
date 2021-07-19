@@ -1,8 +1,8 @@
 /* Copyright (C) 2019-2021 GSI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
-#ifndef ANALYSISTREE_INFRA_VARIABLE_TEST_СPP_
-#define ANALYSISTREE_INFRA_VARIABLE_TEST_СPP_
+#ifndef ANALYSISTREE_INFRA_VARIABLE_TEST_CPP_
+#define ANALYSISTREE_INFRA_VARIABLE_TEST_CPP_
 
 #include <gtest/gtest.h>
 
