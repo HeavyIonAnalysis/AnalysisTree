@@ -1,6 +1,7 @@
 #ifndef ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 #define ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 
+#include <TFile.h>
 #include <gtest/gtest.h>
 
 #include "Configuration.hpp"
@@ -59,6 +60,38 @@ TEST(Configuration, Match) {
   EXPECT_STREQ(match_info.first.c_str(), "RecTrack2SimTrack");
   EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
 }
+
+TEST(Configuration, ReadWrite) {
+  Configuration config("c");
+  config.AddBranchConfig(BranchConfig("test1", AnalysisTree::DetType::kParticle));
+  config.AddBranchConfig(BranchConfig("test2", AnalysisTree::DetType::kParticle));
+  auto matching_to_add = new Matching(
+      config.GetBranchConfig("test1").GetId(),
+      config.GetBranchConfig("test2").GetId());
+  auto matching_swapped_branches = new Matching(
+      config.GetBranchConfig("test2").GetId(),
+      config.GetBranchConfig("test1").GetId()
+      );
+  EXPECT_NO_THROW(config.AddMatch(matching_to_add));
+  EXPECT_THROW(config.AddMatch(matching_to_add), std::runtime_error); // Attempt to add existing branch
+  EXPECT_THROW(config.AddMatch(matching_swapped_branches), std::runtime_error); // Attempt to add existing branch
+
+  {
+    TFile f("configuration_io.root", "recreate");
+    config.Write("Configuration");
+    f.Close();
+  }
+
+  {
+    TFile f("configuration_io.root", "read");
+    auto config_new = f.Get<Configuration>("Configuration");
+    ASSERT_TRUE(config_new);
+  }
+
+  delete matching_to_add;
+  delete matching_swapped_branches;
+}
+
 
 }// namespace
 
