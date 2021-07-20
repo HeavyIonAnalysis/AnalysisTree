@@ -32,6 +32,7 @@ void PlainTreeFiller::Init() {
   const auto& vars = entries_[0].GetVariables();
   vars_.resize(vars.size());
 
+  file_ = TFile::Open(file_name_.c_str(), "recreate");
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
   for (size_t i = 0; i < vars.size(); ++i) {
     std::string leaf_name = vars[i].GetName();
@@ -53,6 +54,10 @@ void PlainTreeFiller::Exec() {
 
 void PlainTreeFiller::Finish() {
   AnalysisTask::Finish();
+  file_->cd();
   plain_tree_->Write();
+  file_->Close();
+  delete file_;
+//  delete plain_tree_;
 }
 }// namespace AnalysisTree
