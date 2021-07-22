@@ -11,6 +11,7 @@ set(SOURCES
   TaskManager.cpp
   PlainTreeFiller.cpp
   Chain.cpp
+  ChainDrawHelper.cpp
 
   Branch.cpp
   BranchChannel.cpp
@@ -28,7 +29,7 @@ endif ()
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp")
+list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp" "BranchHashHelper.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)

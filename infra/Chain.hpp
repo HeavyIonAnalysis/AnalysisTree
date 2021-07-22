@@ -84,25 +84,13 @@ class Chain : public TChain {
       throw std::runtime_error("Branch " + name + " is not found!");
     }
     auto ptr = branches_.find(name)->second;
-    return AnalysisTree::Branch(configuration_->GetBranchConfig("SimParticles"), ptr);
-  }
-
-  template<class BranchT>
-  class Branch AddBranch(BranchT* ptr, const BranchConfig& config) {
-    configuration_->AddBranchConfig(config);
-    ptr = new BranchT(config.GetId());
-    this->Branch(config.GetName().c_str(), &ptr);
-    return AnalysisTree::Branch(config, ptr);
+    return AnalysisTree::Branch(configuration_->GetBranchConfig(name), ptr);
   }
 
  protected:
   void InitChain();
   void InitConfiguration();
   void InitDataHeader();
-
-  void DrawTransform(std::string& expr) const;
-  static std::vector<std::pair<std::string, int>> FindAndRemoveFields(std::string& expr);
-  void DrawFieldTransform(std::string& expr) const;
 
   static TChain* MakeChain(const std::string& filelist, const std::string& treename);
 

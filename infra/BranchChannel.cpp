@@ -19,59 +19,38 @@ void BranchChannel::UpdatePointer() {
   }
 }
 void BranchChannel::CopyContents(const BranchChannel& other) {
-//  branch->CheckMutable();
-//
-//  auto mapping_it = branch->copy_fields_mapping.find(other.branch);
-//  if (mapping_it == branch->copy_fields_mapping.end()) {
-//    branch->CreateMapping(other.branch);
-//    mapping_it = branch->copy_fields_mapping.find(other.branch);
-//  }
-//
-//  /* Eval mapping */
-//  const auto& field_pairs = mapping_it->second.field_pairs;
-//
-//  for (auto& field_pair /* src : dst */ : field_pairs) {
-//    this->Value(field_pair.second) = other.Value(field_pair.first);
-//  }
-}
-void BranchChannel::CopyContents(Branch& other) {
-//  branch->CheckMutable();
-//
-//  if (other.GetBranchType() != AnalysisTree::DetType::kEventHeader) {
-//    throw std::runtime_error("This operation is allowed only between iterable and non-iterable types");
-//  }
-//
-//  auto mapping_it = branch->copy_fields_mapping.find(&other);
-//  if (mapping_it == branch->copy_fields_mapping.end()) {
-//    branch->CreateMapping(&other);
-//    mapping_it = branch->copy_fields_mapping.find(&other);
-//  }
-//
-//  /* Eval mapping */
-//  const auto& field_pairs = mapping_it->second.field_pairs;
-//
-//  for (auto& field_pair /* src : dst */ : field_pairs) {
-//    this->Value(field_pair.second) = other.Value(field_pair.first);
-//  }
+  branch->CheckMutable();
+
+  auto mapping_it = branch->copy_fields_mapping.find(other.branch);
+  if (mapping_it == branch->copy_fields_mapping.end()) {
+    branch->CreateMapping(other.branch);
+    mapping_it = branch->copy_fields_mapping.find(other.branch);
+  }
+
+  /* Eval mapping */
+  const auto& field_pairs = mapping_it->second.field_pairs;
+
+  for (auto& field_pair /* src : dst */ : field_pairs) {
+    this->SetValue(field_pair.second, other.Value(field_pair.first));
+  }
 }
 
 BranchChannel::BranchChannel(Branch* branch, std::size_t i_channel) : branch(branch), i_channel(i_channel) {
   UpdatePointer();
 }
 
-//BranchChannel Branch::operator[](size_t i_channel) { return BranchChannel(this, i_channel); }
 BranchChannel Branch::NewChannel() {
-//  CheckMutable(true);
-//  ApplyT([this](auto entity_ptr) {
-//    if constexpr (is_event_header_v<decltype(entity_ptr)>) {
-//      throw std::runtime_error("Not applicable for EventHeader");
-//    } else {
-//      auto channel = entity_ptr->AddChannel();
-//      channel->Init(this->config_);
-//      Freeze();
-//    }
-//  });
-//  return operator[](size() - 1);
+  CheckMutable(true);
+  ApplyT([this](auto entity_ptr) {
+    if constexpr (is_event_header_v<decltype(entity_ptr)>) {
+      throw std::runtime_error("Not applicable for EventHeader");
+    } else {
+      auto channel = entity_ptr->AddChannel();
+      channel->Init(this->config_);
+      Freeze();
+    }
+  });
+  return operator[](size() - 1);
 }
 
 void BranchChannel::Print(std::ostream& os) const {
@@ -83,15 +62,21 @@ double BranchChannel::Value(const Field& v) const {
   assert(v.IsInitialized());
 
   using AnalysisTree::Types;
-  if (v.GetFieldType() == Types::kFloat) {
-    return std::visit([v](auto&& ch){ return ch->template GetField<float>(v.GetFieldId()); }, data_ptr);
-  } else if (v.GetFieldType() == Types::kInteger) {
-    return std::visit([v](auto&& ch){ return ch->template GetField<int>(v.GetFieldId()); }, data_ptr);
-  } else if (v.GetFieldType() == Types::kBool) {
-    return std::visit([v](auto&& ch){ return ch->template GetField<bool>(v.GetFieldId()); }, data_ptr);
-  } else if (v.GetFieldType() == Types::kNumberOfTypes) {
-    /* Types::kNumberOfTypes */
-    assert(false);
+  switch (v.GetFieldType()) {
+    case Types::kFloat :   return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<float>(v.GetFieldId()); }, data_ptr);
+    case Types::kInteger : return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<int>(v.GetFieldId()); }, data_ptr);
+    case Types::kBool :    return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<bool>(v.GetFieldId()); }, data_ptr);
+    default: throw std::runtime_error("Field type is not correct!");
+  }
+}
+
+void BranchChannel::SetValue(const Field& v, double value) {
+  using AnalysisTree::Types;
+  switch (v.GetFieldType()) {
+    case Types::kFloat :   ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<float>(v.GetFieldId(), value); }, data_ptr);
+    case Types::kInteger : ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<int>(v.GetFieldId(), value); }, data_ptr);
+    case Types::kBool :    ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<bool>(v.GetFieldId(), value); }, data_ptr);
+    default: throw std::runtime_error("Field type is not correct!");
   }
 }
 

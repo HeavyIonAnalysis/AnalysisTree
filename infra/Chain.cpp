@@ -2,6 +2,7 @@
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "Chain.hpp"
+#include "ChainDrawHelper.hpp"
 #include "BranchReader.hpp"
 #include "Matching.hpp"
 
@@ -102,10 +103,6 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
   for (auto& branch : branches_) {
     ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
   }
-
-  this->GetEntry(0);
-  //  auto* ptr = std::get<Particles*>(this->branches_.find("SimParticles")->second);
-  //  std::cout << "SDFSDF " << ptr->GetNumberOfChannels() << std::endl;
 }
 
 void Chain::InitConfiguration() {
@@ -152,82 +149,14 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   return object;
 }
 
-void Chain::DrawFieldTransform(std::string& expr) const {
-  auto dot = expr.find('.');
-  auto branch = expr.substr(0, dot);
-  auto field = expr.substr(dot + 1);
-
-  const auto& br = configuration_->GetBranchConfig(branch);
-  auto type = br.GetFieldType(field);
-  auto id = br.GetFieldId(field);
-  std::string type_str{};
-
-  switch (type) {
-    case (Types::kFloat): {
-      type_str = "float";
-      break;
-    }
-    case (Types::kInteger): {
-      type_str = "int";
-      break;
-    }
-    case (Types::kBool): {
-      type_str = "bool";
-      break;
-    }
-    default: {
-      throw std::runtime_error("Field type is not defined");
-    }
-  }
-
-  expr = Form("%s.channels_.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
-}
-
-std::vector<std::pair<std::string, int>> Chain::FindAndRemoveFields(std::string& expr) {
-
-  std::vector<std::pair<std::string, int>> fields{};
-
-  int pos = 0;
-  while (expr.find('.', pos) != size_t(-1)) {//TODO fix this
-    auto dot = expr.find('.', pos);
-    if ((!isdigit(expr[dot - 1]) || !isdigit(expr[dot + 1])) && expr[dot + 1] != ' ') {// is not a number like 1.5 or 1.
-
-      auto begin = dot;
-      auto is_allowed_char = [](char c) { return isalpha(c) || isdigit(c) || c == '_'; };
-      while (begin > 0 && is_allowed_char(expr[begin - 1])) {
-        begin--;
-      }
-      auto end = dot;
-      while (end < expr.size() - 1 && is_allowed_char(expr[end + 1])) {
-        end++;
-      }
-      auto field = expr.substr(begin, end - begin + 1);
-      fields.emplace_back(std::make_pair(field, begin));
-      expr.erase(begin, end - begin + 1);
-      pos = begin;
-    } else {
-      pos = dot + 1;
-    }
-  }
-  return fields;
-}
-
-void Chain::DrawTransform(std::string& expr) const {
-  auto fields = FindAndRemoveFields(expr);
-  int sum{0};
-  for (auto& field : fields) {
-    DrawFieldTransform(field.first);
-    expr.insert(field.second + sum, field.first);
-    sum += field.first.size();
-  }
-}
-
 Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
   std::string exp{varexp};
   std::string sel{selection ? selection : ""};
-  DrawTransform(exp);
+
+  auto helper = ChainDrawHelper(configuration_);
+  helper.DrawTransform(exp);
   if (!sel.empty()) {
-    DrawTransform(sel);
+    helper.DrawTransform(sel);
   }
   return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
