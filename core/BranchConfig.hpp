@@ -118,7 +118,6 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
 
   // Setters
-  //  void SetId(size_t id) { id_ = id; }
   template<typename T>
   void AddField(const std::string& name, const std::string& title = "") {
     VectorConfig<T>::AddField(name, title);
@@ -140,6 +139,9 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const {
     return BranchConfig(name, type, VectorConfig<int>::map_, VectorConfig<float>::map_, VectorConfig<bool>::map_);
   }
+
+  bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
+
 
  protected:
   std::string name_;

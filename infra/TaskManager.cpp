@@ -53,15 +53,24 @@ void TaskManager::Init() {
 
   InitOutChain();
   chain_ = new Chain(out_tree_, configuration_, data_header_);
+  fill_out_tree_ = true;
 
   InitTasks();
 }
 
 void TaskManager::InitOutChain() {
+  fill_out_tree_ = true;
   out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
-  out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
-  configuration_ = new Configuration("Configuration");
-  data_header_ = new DataHeader;
+  if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
+    out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
+    configuration_ = new Configuration("Configuration");
+    data_header_ = new DataHeader;
+  }
+  else if(write_mode_ == eBranchWriteMode::kCopyTree){
+    out_tree_ = chain_->CloneTree(0);
+    configuration_ = chain_->GetConfiguration();
+    data_header_ = chain_->GetDataHeader();
+  }
 }
 
 void TaskManager::Run(long long nEvents) {
@@ -78,7 +87,7 @@ void TaskManager::Run(long long nEvents) {
       chain_->GetEntry(iEvent);
     }
     Exec();
-  }// Event loop
+  } // Event loop
 
   auto end = std::chrono::system_clock::now();
   std::chrono::duration<double> elapsed_seconds = end - start;
@@ -99,6 +108,7 @@ void TaskManager::Finish() {
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
     out_file_->Close();
+    out_tree_ = nullptr;
     delete out_file_;
     delete configuration_;
     delete data_header_;
@@ -112,7 +122,7 @@ void TaskManager::Finish() {
 }
 
 TaskManager::~TaskManager() {
-  if (is_owns_tasks) {
+  if (is_owns_tasks_) {
     for (auto* task_ptr : tasks_) {
       std::cout << "removing task" << std::endl;
       delete task_ptr;

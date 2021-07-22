@@ -40,9 +40,9 @@ class ToyMC : public Task {
     //    sim_part.AddField<bool>("bool");
     //    sim_part.AddField<int>("int");
 
-    man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
-    man->AddBranch("SimParticles", particles_, sim_part);
-    man->AddBranch("RecTracks", track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
+    man->AddBranch(sim_event_header_, sim_eh);
+    man->AddBranch(particles_, sim_part);
+    man->AddBranch(track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
     man->AddMatching("RecTracks", "SimParticles", rec_tracks_to_sim_);
 
     sim_event_header_->Init(sim_eh);

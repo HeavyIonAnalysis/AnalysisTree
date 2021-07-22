@@ -5,7 +5,6 @@
 #define ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 
 #include "Field.hpp"
-//#include "ValueHolder.hpp"
 
 #include <Track.hpp>
 #include <Particle.hpp>
@@ -19,31 +18,21 @@
 namespace AnalysisTree {
 
 class Branch;
-class BranchChannelsIter;
 
 class BranchChannel {
  public:
 
 /* Getting value */
   [[nodiscard]] double Value(const Field& v) const;
-  double operator[](const Field& v) const;;
+  [[nodiscard]] double operator[](const Field& v) const;
+  [[nodiscard]] inline std::size_t GetChannelNumber() const { return i_channel; }
 
-  /* Getting value */
-//  inline ValueHolder Value(const Field& v) const {
-//    assert(v.GetParentBranch() == branch);
-//    assert(v.IsInitialized());
-//    return ValueHolder(v, data_ptr);
-//  }
-//  inline ValueHolder operator[](const Field& v) const { return Value(v); };
-  inline std::size_t GetNChannel() const { return i_channel; }
+  void SetValue(const Field& v, double value);
 
-  /* usage of this functions is highly discouraged */
-  ChannelPointer Data() { return data_ptr; }
-  const ChannelPointer Data() const { return data_ptr; }
   template<typename T>
-  T* DataT() { return std::get<T*>(data_ptr); }
+  T* Data() { return ANALYSISTREE_UTILS_GET<T*>(data_ptr); }
   template<typename T>
-  const T* DataT() const { return std::get<T*>(data_ptr); }
+  const T* Data() const { return ANALYSISTREE_UTILS_GET<T*>(data_ptr); }
 
   /**
    * @brief Copy contents of other branch channel
@@ -51,7 +40,7 @@ class BranchChannel {
    * @return
    */
   void CopyContents(const BranchChannel& other);
-  void CopyContents(Branch& other);
+//  void CopyContents(Branch& other);
 
   void Print(std::ostream& os = std::cout) const;
 

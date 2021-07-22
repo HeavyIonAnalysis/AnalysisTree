@@ -33,8 +33,14 @@ class Module;
 class Hit;
 class EventHeader;
 
-using BranchPointer = ANALYSISTREE_UTILS_VARIANT<TrackDetector*, Particles*, ModuleDetector*, HitDetector*, EventHeader*>;
-using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Track*, Particle*, Module*, Hit*, EventHeader*>;
+using BranchPointer = ANALYSISTREE_UTILS_VARIANT<HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*>;
+using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Hit*, Module*, Track*, EventHeader*, Particle*>;
+
+enum class eBranchWriteMode {
+  kCreateNewTree,
+  kCopyTree,
+  kNone
+};
 
 namespace Utils {
 

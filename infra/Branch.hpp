@@ -43,9 +43,9 @@ class Branch {
   };
 
   /* Accessors to branch' main parameters, used very often */
-  inline auto GetBranchName() const { return config_.GetName(); }
-  inline auto GetBranchType() const { return config_.GetType(); }
-  inline const AnalysisTree::BranchConfig& GetConfig() const { return config_; }
+  [[nodiscard]] auto GetBranchName() const { return config_.GetName(); }
+  [[nodiscard]] auto GetBranchType() const { return config_.GetType(); }
+  [[nodiscard]] const BranchConfig& GetConfig() const { return config_; }
 
   void InitDataPtr();
   void ConnectOutputTree(TTree* tree);
@@ -68,6 +68,9 @@ class Branch {
   }
 
   [[nodiscard]] BranchPointer GetData() const { return data_; }
+  template<class T>
+  [[nodiscard]] T& GetDataRaw() { return ANALYSISTREE_UTILS_GET<T>(data_); }
+
   [[nodiscard]] Field GetField(std::string field_name) const {
     Field field(config_.GetName(), std::move(field_name));
     field.Init(config_);
@@ -90,7 +93,8 @@ class Branch {
 
   /* Modification */
   void Freeze(bool freeze = true) { is_frozen_ = freeze; };
-  void SetMutable(bool is_mutable_ = true) { Branch::is_mutable_ = is_mutable_; }
+  void SetMutable(bool is_mutable = true) { Branch::is_mutable_ = is_mutable; }
+
   /* Checks are used very often */
   inline void CheckFrozen(bool expected = true) const {
     if (is_frozen_ != expected)
@@ -119,10 +123,8 @@ class Branch {
    * @param vars - vector of pairs with name and reference to the ATI2::Field object
    */
   void UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars, bool ignore_missing = false);
-  bool HasField(const std::string& field_name) const;
-  std::vector<std::string> GetFieldNames() const;
-
-//  /* Getting value */
+  [[nodiscard]] bool HasField(const std::string& field_name) const;
+//  [[nodiscard]] std::vector<std::string> GetFieldNames() const;
 
   /**
    * @brief Copies contents from other branch 'as-is'. Faster than CopyContents() since it creates no mapping
@@ -139,14 +141,9 @@ class Branch {
       std::is_same_v<AnalysisTree::EventHeader, std::remove_const_t<std::remove_pointer_t<EntityPtr>>>;
 
   template<typename Functor>
-  auto ApplyT(Functor&& f) {
-    return std::visit(f, data_);
-  }
-
+  auto ApplyT(Functor&& f) { return ANALYSISTREE_UTILS_VISIT(f, data_); }
   template<typename Functor>
-  auto ApplyT(Functor&& f) const {
-    return std::visit(f, data_);
-  }
+  auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
 
   AnalysisTree::ShortInt_t Hash() const {
     const auto hasher = std::hash<std::string>();
