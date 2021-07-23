@@ -2,38 +2,25 @@
 #define ANALYSISTREE_EXAMPLES_USERTASKWRITE_HPP_
 
 #include <AnalysisTree/Branch.hpp>
+#include <AnalysisTree/Task.hpp>
+#include <AnalysisTree/Detector.hpp>
 
-using namespace AnalysisTree;
-
-class WriteTask : public Task {
+class UserTaskWrite : public AnalysisTree::Task {
 
  public:
-  WriteTask() = default;
+  UserTaskWrite() = default;
+  ~UserTaskWrite() override;
 
-  void Init() override {
-    auto man = TaskManager::GetInstance();
-    auto chain = man->GetChain();
+  void Init() override;
+  void Exec() override;
 
-    auto ptr = chain->GetPointerToBranch("SimParticles");
-    auto br_conf = chain->GetConfiguration()->GetBranchConfig("SimParticles");
-
-    particles_ = new Branch(br_conf, ptr);
-    in_branches_.emplace("SimParticles");
-
-    auto new_conf = br_conf.Clone("NewParticles", DetType::kParticle);
-    man->AddBranch("NewParticles", ptr_, new_conf, eBranchWriteMode::kCopyTree);
-  }
-  void Exec() override {
-//    ptr = std::get<Particles*>(particles_.GetData());
-//    std::cout << particles_->size() << std::endl;
-  }
   void Finish() override {
   }
 
  private:
-  Branch* particles_;
-  Branch* new_particles_;
-  Particles* ptr_{nullptr};
-};
+  AnalysisTree::Branch particles_;
+  AnalysisTree::Branch new_particles_;
 
+  AnalysisTree::Particles* new_particles_ptr_{nullptr};
+};
 #endif//ANALYSISTREE_EXAMPLES_USERTASKWRITE_HPP_
