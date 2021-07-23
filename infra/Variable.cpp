@@ -70,4 +70,19 @@ Variable Variable::FromString(const std::string& full_name) {
   throw std::runtime_error("Field name must be in the format <branch>.<name>");
 }
 
+double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+  vars_.clear();
+  for (const auto& field : fields_) {
+    if (field.GetBranchId() == a_id)
+      vars_.emplace_back(a[field]);
+    else if (field.GetBranchId() == b_id)
+      vars_.emplace_back(b[field]);
+    else {
+      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
+    }
+  }
+  return lambda_(vars_);
+}
+
+
 }// namespace AnalysisTree

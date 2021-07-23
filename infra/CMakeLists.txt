@@ -16,10 +16,12 @@ set(SOURCES
   Branch.cpp
   BranchChannel.cpp
 #  ValueHolder.cpp
+#   ../examples/UserTaskWrite.cpp
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
-    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
+#    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
+    list(APPEND SOURCES "AnalysisTask.cpp" "AnalysisEntry.cpp")
 endif()
 
 if (AnalysisTree_BUILD_EXPERIMENTAL)

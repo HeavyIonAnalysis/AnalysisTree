@@ -78,14 +78,7 @@ class Chain : public TChain {
     this->configuration_->Print();
   }
 
-  class Branch GetBranch(const std::string& name) const {
-    auto it = branches_.find(name);
-    if(it == branches_.end()){
-      throw std::runtime_error("Branch " + name + " is not found!");
-    }
-    auto ptr = branches_.find(name)->second;
-    return AnalysisTree::Branch(configuration_->GetBranchConfig(name), ptr);
-  }
+  class Branch GetBranch(const std::string& name) const;
 
  protected:
   void InitChain();

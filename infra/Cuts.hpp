@@ -48,8 +48,8 @@ class Cuts {
     }
   }
 
-  template<class T>
-  bool Apply(const T& ob) const {
+//  template<class T>
+  bool Apply(const BranchChannel& ob) const {
     if (!is_init_) {
       throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
     }
@@ -60,11 +60,12 @@ class Cuts {
     return true;
   }
 
-  template<class A, class B>
-  bool Apply(const A& a, size_t a_id, const B& b, size_t b_id) const {
+//  template<class A, class B>
+  bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
     if (!is_init_) {
       throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
     }
+//    std::all_of(cuts_.begin(), cuts_.end(), Apply(a, a_id, b, b_id)); //TODO
     for (const auto& cut : cuts_) {
       if (!cut.Apply(a, a_id, b, b_id))
         return false;

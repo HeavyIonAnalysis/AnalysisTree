@@ -42,7 +42,7 @@ class Task {
   ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetInputBranchNames() const { return in_branches_; }
 
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const EventHeader& event_header) const {
-    return event_cuts_ ? event_cuts_->Apply(event_header) : true;
+//    return event_cuts_ ? event_cuts_->Apply(event_header) : true; //TODO
   }
 
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const Chain& t) const;

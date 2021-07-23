@@ -61,8 +61,13 @@ class TaskManager {
 */
   template<class BranchPtr>
   void AddBranch(BranchPtr*& ptr, const BranchConfig& config) {
-    if (ptr && ptr->GetId() != config.GetId()) {
-      throw std::runtime_error("ptr is not nullptr! The memory should be allocated inside this function with proper id!");
+
+    if(!ptr){
+      ptr = new BranchPtr(config.GetId());
+    }
+    else if (ptr->GetId() != config.GetId()) {
+      std::cout << "WARNING! ptr->GetId() != config.GetId()!" << std::endl;
+      ptr = new BranchPtr(config.GetId());
     }
     if (!out_tree_) {
       InitOutChain();
@@ -72,7 +77,6 @@ class TaskManager {
       chain_->GetConfiguration()->AddBranchConfig(config);
     }
 
-    ptr = new BranchPtr(config.GetId());
     out_tree_->Branch(config.GetName().c_str(), &ptr);
   }
 

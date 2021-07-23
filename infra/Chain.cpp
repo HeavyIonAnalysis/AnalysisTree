@@ -3,13 +3,12 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "Chain.hpp"
 #include "ChainDrawHelper.hpp"
-#include "BranchReader.hpp"
+#include "VariantMagic.hpp"
 #include "Matching.hpp"
 
 #include <TChain.h>
 #include <TFileCollection.h>
 
-#include <fstream>
 #include <iostream>
 
 namespace AnalysisTree {
@@ -147,6 +146,15 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   }
 
   return object;
+}
+
+class Branch Chain::GetBranch(const std::string& name) const {
+  auto it = branches_.find(name);
+  if(it == branches_.end()){
+    throw std::runtime_error("Branch " + name + " is not found!");
+  }
+  auto ptr = branches_.find(name)->second;
+  return AnalysisTree::Branch(configuration_->GetBranchConfig(name), ptr);
 }
 
 Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {

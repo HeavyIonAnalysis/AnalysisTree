@@ -11,6 +11,7 @@
 #include <string>
 #include <utility>
 
+#include "BranchChannel.hpp"
 #include "Field.hpp"
 
 namespace AnalysisTree {
@@ -74,11 +75,16 @@ class Variable {
 
   ANALYSISTREE_ATTR_NODISCARD std::string GetBranchName() const { return *branch_names_.begin(); }
 
-  template<class T>
-  double GetValue(const T& object) const;
+  double GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
 
-  template<class A, class B>
-  double GetValue(const A& a, size_t a_id, const B& b, size_t b_id) const;
+  double GetValue(const BranchChannel& object) const {
+    assert(branch_ids_.size() == 1);
+    vars_.clear();
+    for (const auto& field : fields_) {
+      vars_.emplace_back(object[field]);
+    }
+    return lambda_(vars_);
+  }
 
   void SetName(std::string name) { name_ = std::move(name); }
   void SetSize(short size) { size_ = size; }
@@ -101,31 +107,6 @@ class Variable {
   ClassDef(Variable, 1);
 };
 
-template<class T>
-double Variable::GetValue(const T& object) const {
-  assert(branch_ids_.size() == 1);
-  vars_.clear();
-  for (const auto& field : fields_) {
-    vars_.emplace_back(field.GetValue(object));
-  }
-  return lambda_(vars_);
-}
-
-template<class A, class B>
-double Variable::GetValue(const A& a, size_t a_id, const B& b, size_t b_id) const {
-  //    assert(branch_ids_.size() == 2);
-  vars_.clear();
-  for (const auto& field : fields_) {
-    if (field.GetBranchId() == a_id)
-      vars_.emplace_back(field.GetValue(a));
-    else if (field.GetBranchId() == b_id)
-      vars_.emplace_back(field.GetValue(b));
-    else {
-      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
-    }
-  }
-  return lambda_(vars_);
-}
 
 }// namespace AnalysisTree
 

@@ -25,14 +25,14 @@ class BranchChannel {
 /* Getting value */
   [[nodiscard]] double Value(const Field& v) const;
   [[nodiscard]] double operator[](const Field& v) const;
-  [[nodiscard]] inline std::size_t GetChannelNumber() const { return i_channel; }
+  [[nodiscard]] inline std::size_t GetChannelNumber() const { return i_channel_; }
 
   void SetValue(const Field& v, double value);
 
   template<typename T>
-  T* Data() { return ANALYSISTREE_UTILS_GET<T*>(data_ptr); }
+  T* Data() { return ANALYSISTREE_UTILS_GET<T*>(data_ptr_); }
   template<typename T>
-  const T* Data() const { return ANALYSISTREE_UTILS_GET<T*>(data_ptr); }
+  const T* Data() const { return ANALYSISTREE_UTILS_GET<T*>(data_ptr_); }
 
   /**
    * @brief Copy contents of other branch channel
@@ -47,13 +47,13 @@ class BranchChannel {
  private:
   friend Branch;
 
-  BranchChannel(Branch* branch, std::size_t i_channel);
+  BranchChannel(const Branch* branch, std::size_t i_channel);
   void UpdatePointer();
   void UpdateChannel(std::size_t new_channel);
 
-  ChannelPointer data_ptr;
-  Branch* branch;
-  std::size_t i_channel;
+  ChannelPointer data_ptr_;
+  const Branch* branch_;
+  std::size_t i_channel_;
 };
 
 }// namespace AnalysisTree
