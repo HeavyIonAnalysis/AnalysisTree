@@ -43,14 +43,33 @@ class SimpleCut {
     FillBranchNames();
   }
 
-  /**
-   * @brief Evaluates cut
-   * @tparam T type of data-object associated with TTree
-   * @param object
-   * @return result of cut
-   */
-  template<class T>
-  bool Apply(const T& object) const {
+//  /**
+//   * @brief Evaluates cut
+//   * @tparam T type of data-object associated with TTree
+//   * @param object
+//   * @return result of cut
+//   */
+//  template<class T>
+//  bool Apply(const T& object) const {
+//    std::vector<double> variables;
+//    variables.reserve(vars_.size());
+//    for (const auto& var : vars_) {
+//      variables.emplace_back(var.GetValue(object));
+//    }
+//    return lambda_(variables);
+//  }
+//
+//  template<class A, class B>
+//  bool Apply(const A& a, size_t a_id, const B& b, size_t b_id) const {
+//    std::vector<double> variables;
+//    variables.reserve(vars_.size());
+//    for (const auto& var : vars_) {
+//      variables.emplace_back(var.GetValue(a, a_id, b, b_id));
+//    }
+//    return lambda_(variables);
+//  }
+
+  bool Apply(const BranchChannel& object) const {
     std::vector<double> variables;
     variables.reserve(vars_.size());
     for (const auto& var : vars_) {
@@ -59,8 +78,7 @@ class SimpleCut {
     return lambda_(variables);
   }
 
-  template<class A, class B>
-  bool Apply(const A& a, size_t a_id, const B& b, size_t b_id) const {
+  bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
     std::vector<double> variables;
     variables.reserve(vars_.size());
     for (const auto& var : vars_) {
@@ -68,6 +86,7 @@ class SimpleCut {
     }
     return lambda_(variables);
   }
+
 
   void Print() const;
 

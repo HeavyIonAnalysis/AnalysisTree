@@ -7,24 +7,24 @@
 using namespace AnalysisTree;
 
 void BranchChannel::UpdateChannel(size_t new_channel) {
-  i_channel = new_channel;
+  i_channel_ = new_channel;
   UpdatePointer();
 }
 
 void BranchChannel::UpdatePointer() {
-  if (i_channel < branch->size()) {
-    data_ptr = std::visit([this](auto&& v){ return ChannelPointer( &(v->Channel(i_channel)) ); }, branch->GetData());
+  if (i_channel_ < branch_->size()) {
+    data_ptr_ = std::visit([this](auto&& v){ return ChannelPointer( &(v->Channel(i_channel_)) ); }, branch_->GetData());
   } else {
     throw std::out_of_range("");
   }
 }
 void BranchChannel::CopyContents(const BranchChannel& other) {
-  branch->CheckMutable();
+  branch_->CheckMutable();
 
-  auto mapping_it = branch->copy_fields_mapping.find(other.branch);
-  if (mapping_it == branch->copy_fields_mapping.end()) {
-    branch->CreateMapping(other.branch);
-    mapping_it = branch->copy_fields_mapping.find(other.branch);
+  auto mapping_it = branch_->copy_fields_mapping.find(other.branch_);
+  if (mapping_it == branch_->copy_fields_mapping.end()) {
+    branch_->CreateMapping(other.branch_);
+    mapping_it = branch_->copy_fields_mapping.find(other.branch_);
   }
 
   /* Eval mapping */
@@ -35,7 +35,7 @@ void BranchChannel::CopyContents(const BranchChannel& other) {
   }
 }
 
-BranchChannel::BranchChannel(Branch* branch, std::size_t i_channel) : branch(branch), i_channel(i_channel) {
+BranchChannel::BranchChannel(const Branch* branch, std::size_t i_channel) : branch_(branch), i_channel_(i_channel) {
   UpdatePointer();
 }
 
@@ -54,18 +54,18 @@ BranchChannel Branch::NewChannel() {
 }
 
 void BranchChannel::Print(std::ostream& os) const {
-  os << "Branch " << branch->GetBranchName() << " channel #" << i_channel << std::endl;
+  os << "Branch " << branch_->GetBranchName() << " channel #" << i_channel_ << std::endl;
 }
 
 double BranchChannel::Value(const Field& v) const {
-  assert(v.GetBranchId() == branch->GetId());
+  assert(v.GetBranchId() == branch_->GetId());
   assert(v.IsInitialized());
 
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
-    case Types::kFloat :   return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<float>(v.GetFieldId()); }, data_ptr);
-    case Types::kInteger : return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<int>(v.GetFieldId()); }, data_ptr);
-    case Types::kBool :    return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<bool>(v.GetFieldId()); }, data_ptr);
+    case Types::kFloat :   return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<float>(v.GetFieldId()); }, data_ptr_);
+    case Types::kInteger : return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<int>(v.GetFieldId()); }, data_ptr_);
+    case Types::kBool :    return ANALYSISTREE_UTILS_VISIT([v](auto&& ch){ return ch->template GetField<bool>(v.GetFieldId()); }, data_ptr_);
     default: throw std::runtime_error("Field type is not correct!");
   }
 }
@@ -73,9 +73,9 @@ double BranchChannel::Value(const Field& v) const {
 void BranchChannel::SetValue(const Field& v, double value) {
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
-    case Types::kFloat :   ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<float>(v.GetFieldId(), value); }, data_ptr);
-    case Types::kInteger : ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<int>(v.GetFieldId(), value); }, data_ptr);
-    case Types::kBool :    ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<bool>(v.GetFieldId(), value); }, data_ptr);
+    case Types::kFloat :   ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<float>(v.GetFieldId(), value); }, data_ptr_);
+    case Types::kInteger : ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<int>(v.GetFieldId(), value); }, data_ptr_);
+    case Types::kBool :    ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<bool>(v.GetFieldId(), value); }, data_ptr_);
     default: throw std::runtime_error("Field type is not correct!");
   }
 }

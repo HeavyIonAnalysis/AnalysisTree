@@ -75,14 +75,14 @@ class Field {
 
   void Print() const;
 
-  ANALYSISTREE_ATTR_NODISCARD Branch* GetParentBranch() const { return parent_branch; }
+  ANALYSISTREE_ATTR_NODISCARD Branch* GetParentBranch() const { return parent_branch_; }
   ANALYSISTREE_ATTR_NODISCARD bool IsInitialized() const { return is_init_; }
   explicit operator bool() const { return IsInitialized(); }
 
  private:
   friend Branch;
 
-  Branch* parent_branch{nullptr};///!
+  Branch* parent_branch_{nullptr};///!
 
   std::string branch_;
   std::string field_;

@@ -7,7 +7,6 @@
 #include "vector"
 
 #include "AnalysisEntry.hpp"
-#include "BranchReader.hpp"
 #include "Matching.hpp"
 #include "Task.hpp"
 #include "Variable.hpp"
@@ -33,11 +32,6 @@ class AnalysisTask : public Task {
   void Finish() override{};
 
   ANALYSISTREE_ATTR_NODISCARD const array2D& GetValues(int i_var) const { return entries_.at(i_var).GetValues(); }
-  ANALYSISTREE_ATTR_NODISCARD const std::vector<BranchReader>& GetBranches() const { return branches_; }
-
-  std::vector<BranchReader>& Branches() { return branches_; }
-  BranchReader GetBranch(const std::string& name);
-
   ANALYSISTREE_ATTR_NODISCARD const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
   ANALYSISTREE_ATTR_NODISCARD std::vector<AnalysisEntry>& VarEntries() { return entries_; }
 
@@ -54,7 +48,6 @@ class AnalysisTask : public Task {
 
  protected:
   std::vector<AnalysisEntry> entries_{};
-  std::vector<BranchReader> branches_{};
   std::map<std::string, Cuts*> cuts_map_{};
 
   ClassDefOverride(AnalysisTask, 1);

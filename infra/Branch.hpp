@@ -20,8 +20,13 @@ namespace AnalysisTree {
 
 class Branch {
  public:
-
   /* c-tors */
+  Branch() = default;
+  Branch(const Branch&) = default;
+  Branch(Branch&&) = default;
+  Branch& operator=(Branch&&) = default;
+  Branch& operator=(const Branch&) = default;
+
   explicit Branch(BranchConfig config) : config_(std::move(config)) {
     InitDataPtr();
     UpdateConfigHash();
@@ -59,7 +64,7 @@ class Branch {
   //  /* iterating */
   [[nodiscard]] size_t size() const;
 
-  BranchChannel operator[](size_t i_channel) {
+  BranchChannel operator[](size_t i_channel) const {
     return BranchChannel(this, i_channel);
   }
 
@@ -89,7 +94,7 @@ class Branch {
   bool is_connected_to_input{false};
   bool is_connected_to_output{false};
 
-  std::map<const Branch* /* other branch */, FieldsMapping> copy_fields_mapping;
+  mutable std::map<const Branch* /* other branch */, FieldsMapping> copy_fields_mapping;
 
   /* Modification */
   void Freeze(bool freeze = true) { is_frozen_ = freeze; };
@@ -123,7 +128,6 @@ class Branch {
    * @param vars - vector of pairs with name and reference to the ATI2::Field object
    */
   void UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars, bool ignore_missing = false);
-  [[nodiscard]] bool HasField(const std::string& field_name) const;
 //  [[nodiscard]] std::vector<std::string> GetFieldNames() const;
 
   /**
@@ -132,7 +136,7 @@ class Branch {
    */
   void CopyContentsRaw(Branch* other);
 
-  void CreateMapping(Branch* other);
+  void CreateMapping(const Branch* other) const ;
 
   void UpdateConfigHash();
 
@@ -145,7 +149,7 @@ class Branch {
   template<typename Functor>
   auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
 
-  AnalysisTree::ShortInt_t Hash() const {
+  [[nodiscard]] AnalysisTree::ShortInt_t Hash() const {
     const auto hasher = std::hash<std::string>();
     return AnalysisTree::ShortInt_t(hasher(config_.GetName()));
   }

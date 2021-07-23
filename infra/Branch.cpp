@@ -30,8 +30,8 @@ void Branch::InitDataPtr() {
 
 Field Branch::GetFieldVar(const std::string& field_name) {
   AnalysisTree::Field v;
-  v.parent_branch = this;
-  v.field_id_ = v.parent_branch->config_.GetFieldId(field_name);
+  v.parent_branch_ = this;
+  v.field_id_ = v.parent_branch_->config_.GetFieldId(field_name);
   //  v.name_ = this->config.GetName() + "/" + field_name; //NOTE is it needed?
   v.field_ = field_name;
   v.field_type_ = config_.GetFieldType(field_name);
@@ -77,7 +77,7 @@ Field Branch::NewVariable(const std::string& field_name, AnalysisTree::Types typ
 
   AnalysisTree::Field v;
   v.field_ = field_name;
-  v.parent_branch = this;
+  v.parent_branch_ = this;
   v.field_id_ = config_.GetFieldId(field_name);
   v.field_type_ = config_.GetFieldType(field_name);
   v.is_init_ = true;
@@ -175,7 +175,7 @@ void Branch::CopyContentsRaw(Branch* other) {
   }
 }
 
-void Branch::CreateMapping(Branch* other) {
+void Branch::CreateMapping(const Branch* other) const {
   if (copy_fields_mapping.find(other) != copy_fields_mapping.end()) {
     // TODO Warning
     return;
@@ -218,7 +218,7 @@ void Branch::UpdateConfigHash() {
 }
 
 Branch::~Branch() {
-  ApplyT([this](auto entry_ptr) {
-    delete entry_ptr;
-  });
+//  ApplyT([this](auto entry_ptr) {
+//    delete entry_ptr;
+//  });
 }
