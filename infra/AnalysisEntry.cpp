@@ -8,25 +8,19 @@
 
 namespace AnalysisTree {
 
-bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, int i_channel) const {
-//  if (!br.ApplyCut(i_channel)) return false;
-//  if (!cuts_) return true;
-//  return ANALYSISTREE_UTILS_VISIT(apply_cut(i_channel, cuts_), br.GetData());
-return true;
+bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel) const {
+  if (cuts && !cuts->Apply(br[i_channel])) { return false; }
+  return !cuts_ || cuts_->Apply(br[i_channel]);
 }
 
-bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, int ch1, const Branch& br2, int ch2) const {
-//  if (!br1.ApplyCut(ch1)) return false;
-//  if (!br2.ApplyCut(ch2)) return false;
-//
-//  if (!cuts_) return true;
-//  return ANALYSISTREE_UTILS_VISIT(apply_cut_2_branches(ch1, ch2, cuts_), br1.GetData(), br2.GetData());
-return true;
+bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const {
+  if (cuts1 && !cuts1->Apply(br1[ch1])) { return false; }
+  if (cuts2 && !cuts2->Apply(br2[ch2])) { return false; }
+  return !cuts_ || cuts_->Apply(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
   return var.GetValue(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
-//  return ANALYSISTREE_UTILS_VISIT(fill_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
 }
 
 /**
@@ -35,12 +29,13 @@ double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int c
  * If channel or track fails to pass cuts it won't be written
  */
 void AnalysisEntry::FillFromOneBranch() {
-  const Branch& br = branches_.at(0);
+  const auto& br = branches_.at(0).first;
+
   const auto n_channels = br.size();
   values_.reserve(n_channels);
 
   for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
-    if (!ApplyCutOnBranch(br, i_channel)) continue;
+    if (!ApplyCutOnBranch(br, branches_.at(0).second, i_channel)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
@@ -63,24 +58,24 @@ void AnalysisEntry::FillMatchingForEventHeader(const Branch& br1, const Branch& 
  * It iterates over registered matches and fills variables
  */
 void AnalysisEntry::FillFromTwoBranches() {
-  Branch& br1 = branches_.at(0);
-  Branch& br2 = branches_.at(1);
-  if (br1.GetBranchType() == DetType::kEventHeader) {//put EventHeader to second place, to be able to fill matching
+  auto& br1 = branches_.at(0);
+  auto& br2 = branches_.at(1);
+  if (br1.first.GetBranchType() == DetType::kEventHeader) {//put EventHeader to second place, to be able to fill matching
     std::swap(br1, br2);
   }
-  if (br2.GetBranchType() == DetType::kEventHeader) {
-    FillMatchingForEventHeader(br1, br2);
+  if (br2.first.GetBranchType() == DetType::kEventHeader) {
+    FillMatchingForEventHeader(br1.first, br2.first);
   }
   values_.reserve(matching_->GetMatches().size());
 
   for (auto match : matching_->GetMatches(is_inverted_matching_)) {
     const int ch1 = match.first;
     const int ch2 = match.second;
-    if (!ApplyCutOnBranches(br1, ch1, br2, ch2)) continue;
+    if (!ApplyCutOnBranches(br1.first, br1.second, ch1, br2.first, br2.second, ch2)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{};
     for (const auto& var : vars_) {
-      temp_vars[i_var] = FillVariable(var, br1, ch1, br2, ch2);
+      temp_vars[i_var] = FillVariable(var, br1.first, ch1, br2.first, ch2);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
@@ -109,7 +104,7 @@ void AnalysisEntry::FillBranchNames() {
   }
 }
 
-void AnalysisEntry::Init(const AnalysisTree::Configuration& conf, const std::map<std::string, Matching*>& matches) {
+void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, Matching*>& matches) {
   if (cuts_) {
     cuts_->Init(conf);
   }
