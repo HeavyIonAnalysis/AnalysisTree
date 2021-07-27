@@ -63,6 +63,28 @@ TEST(Branch, ReadValue) {
   EXPECT_FLOAT_EQ(channel[pz], 0.5);
 }
 
+TEST(Branch, WriteValue) {
+  BranchConfig config("test", DetType::kParticle);
+  auto* particles = new Particles(1);
+
+  Branch branch(config, particles);
+  branch.SetMutable();
+  Field pT = branch.GetField("pT");
+  Field px = branch.GetField("px");
+  Field py = branch.GetField("py");
+  Field pz = branch.GetField("pz");
+
+  auto ch = branch.NewChannel();
+  ch.SetValue(px, 0.1);
+  ch.SetValue(py, 0.3);
+  ch.SetValue(pz, 0.5);
+
+  auto particle = ch.Data<Particle>();
+  EXPECT_FLOAT_EQ(particle->GetPx(), 0.1);
+  EXPECT_FLOAT_EQ(particle->GetPy(), 0.3);
+  EXPECT_FLOAT_EQ(particle->GetPz(), 0.5);
+}
+
 
 
 }
