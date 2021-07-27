@@ -16,7 +16,7 @@ void BranchChannel::UpdateChannel(size_t new_channel) {
 
 void BranchChannel::UpdatePointer() {
   if (i_channel_ < branch_->size()) {
-    data_ptr_ = std::visit([this](auto&& v){ return ChannelPointer( &(v->Channel(i_channel_)) ); }, branch_->GetData());
+    data_ptr_ = ANALYSISTREE_UTILS_VISIT([this](auto&& v){ return ChannelPointer( &(v->Channel(i_channel_)) ); }, branch_->GetData());
   } else {
     throw std::out_of_range("");
   }
@@ -76,9 +76,9 @@ double BranchChannel::Value(const Field& v) const {
 void BranchChannel::SetValue(const Field& v, double value) {
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
-    case Types::kFloat :   ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<float>(v.GetFieldId(), value); }, data_ptr_);
-    case Types::kInteger : ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<int>(v.GetFieldId(), value); }, data_ptr_);
-    case Types::kBool :    ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<bool>(v.GetFieldId(), value); }, data_ptr_);
+    case Types::kFloat :   ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<float>(value, v.GetFieldId()); }, data_ptr_); break;
+    case Types::kInteger : ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<int>(value, v.GetFieldId()); }, data_ptr_);  break;
+    case Types::kBool :    ANALYSISTREE_UTILS_VISIT([v, value](auto&& ch){ ch->template SetField<bool>(value, v.GetFieldId()); }, data_ptr_);  break;
     default: throw std::runtime_error("Field type is not correct!");
   }
 }

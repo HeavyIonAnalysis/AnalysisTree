@@ -87,8 +87,8 @@ class Field {
   std::string branch_;
   std::string field_;
 
-  short field_id_{};
-  Types field_type_{};
+  short field_id_{0};
+  Types field_type_{Types::kNumberOfTypes};
 
   size_t branch_id_{0};
   DetType branch_type_{DetType(UndefValueShort)};
