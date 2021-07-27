@@ -43,9 +43,9 @@ TEST(Cuts, RangeCut) {
   AnalysisTree::Cuts cut_false2("cut1", {AnalysisTree::RangeCut("VtxTracks.chi2", 2.4001, 3.)});
   cut_false2.Init(conf);
 
-//  ASSERT_TRUE(cut_true.Apply(*track));
-//  ASSERT_FALSE(cut_false1.Apply(*track));
-//  ASSERT_FALSE(cut_false2.Apply(*track));
+  ASSERT_TRUE(cut_true.Apply({track}));
+  ASSERT_FALSE(cut_false1.Apply({track}));
+  ASSERT_FALSE(cut_false2.Apply({track}));
 }
 
 TEST(Cuts, EqualCut) {
@@ -77,12 +77,12 @@ TEST(Cuts, EqualCut) {
   Cuts cut_false3("cut5", {EqualsCut("VtxTracks.is_good", false)});
   cut_false3.Init(conf);
 
-//  ASSERT_TRUE(cut_true1.Apply(*track));
-//  ASSERT_TRUE(cut_true2.Apply(*track));
-//
-//  ASSERT_FALSE(cut_false1.Apply(*track));
-//  ASSERT_FALSE(cut_false2.Apply(*track));
-//  ASSERT_FALSE(cut_false3.Apply(*track));
+  ASSERT_TRUE(cut_true1.Apply({track}));
+  ASSERT_TRUE(cut_true2.Apply({track}));
+
+  ASSERT_FALSE(cut_false1.Apply({track}));
+  ASSERT_FALSE(cut_false2.Apply({track}));
+  ASSERT_FALSE(cut_false3.Apply({track}));
 }
 
 TEST(Cuts, FunctionalCut) {
@@ -120,9 +120,9 @@ TEST(Cuts, FunctionalCut) {
   Cuts Nhits_true("Nhits_true", {testCutNhits_true});
   Nhits_true.Init(conf);
 
-//  ASSERT_TRUE(dca_true.Apply(*track));
-//  ASSERT_FALSE(dca_false.Apply(*track));
-//  ASSERT_TRUE(Nhits_true.Apply(*track));
+  ASSERT_TRUE(dca_true.Apply({track}));
+  ASSERT_FALSE(dca_false.Apply({track}));
+  ASSERT_TRUE(Nhits_true.Apply({track}));
 }
 
 }// namespace
