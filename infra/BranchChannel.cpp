@@ -2,7 +2,10 @@
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Eugeny Kashirin, Ilya Selyuzhenkov */
 #include "BranchChannel.hpp"
+
 #include "Branch.hpp"
+#include "Field.hpp"
+#include "EventHeader.hpp"
 
 using namespace AnalysisTree;
 
@@ -58,7 +61,7 @@ void BranchChannel::Print(std::ostream& os) const {
 }
 
 double BranchChannel::Value(const Field& v) const {
-  assert(v.GetBranchId() == branch_->GetId());
+//  assert(v.GetBranchId() == branch_->GetId());
   assert(v.IsInitialized());
 
   using AnalysisTree::Types;

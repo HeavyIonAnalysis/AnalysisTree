@@ -4,23 +4,23 @@
 #ifndef ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 #define ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 
-#include "Field.hpp"
-
-#include <Track.hpp>
-#include <Particle.hpp>
-#include <Module.hpp>
-#include <Hit.hpp>
-#include <EventHeader.hpp>
-
 #include <cassert>
 #include <iostream>
+
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
 class Branch;
+class Field;
 
 class BranchChannel {
  public:
+  BranchChannel() = default;
+  BranchChannel(const ChannelPointer& data_ptr, const Branch* branch= nullptr, size_t i_channel=0)
+  : data_ptr_(data_ptr),
+    branch_(branch),
+    i_channel_(i_channel) {}
 
 /* Getting value */
   [[nodiscard]] double Value(const Field& v) const;
@@ -40,7 +40,6 @@ class BranchChannel {
    * @return
    */
   void CopyContents(const BranchChannel& other);
-//  void CopyContents(Branch& other);
 
   void Print(std::ostream& os = std::cout) const;
 
@@ -52,8 +51,8 @@ class BranchChannel {
   void UpdateChannel(std::size_t new_channel);
 
   ChannelPointer data_ptr_;
-  const Branch* branch_;
-  std::size_t i_channel_;
+  const Branch* branch_{nullptr};
+  std::size_t i_channel_{0};
 };
 
 }// namespace AnalysisTree

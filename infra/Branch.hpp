@@ -13,6 +13,8 @@
 #include <vector>
 
 #include "BranchChannel.hpp"
+#include "Field.hpp"
+#include "EventHeader.hpp"
 
 class TTree;
 
