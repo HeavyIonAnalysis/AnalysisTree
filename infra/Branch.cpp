@@ -43,7 +43,7 @@ Field Branch::GetFieldVar(const std::string& field_name) {
 }
 
 size_t AnalysisTree::Branch::size() const {
-  return ANALYSISTREE_UTILS_VISIT([](auto&& arg) { return arg->GetNumberOfChannels(); }, data_);
+  return ANALYSISTREE_UTILS_VISIT(get_n_channels_struct(), data_);
 }
 
 Field Branch::NewVariable(const std::string& field_name, AnalysisTree::Types type) {
@@ -86,23 +86,17 @@ Field Branch::NewVariable(const std::string& field_name, AnalysisTree::Types typ
 
 void Branch::ClearChannels() {
   CheckMutable();
-  ApplyT([](auto entity_ptr) -> void {
-    if constexpr (is_event_header_v<decltype(entity_ptr)>) {
-      throw std::runtime_error("Not applicable for EventHeader");
-    } else {
-      entity_ptr->ClearChannels();
-    }
-  });
+  ANALYSISTREE_UTILS_VISIT(clear_channels_struct(), data_);
 }
 
 void Branch::ConnectOutputTree(TTree* tree) {
-  is_connected_to_output = ApplyT([this, tree](auto entity) -> bool {
-    if (!tree)
-      return false;
-    auto new_tree_branch_ptr = tree->Branch(config_.GetName().c_str(),
-                                            std::add_pointer_t<decltype(entity)>(&this->data_));
-    return bool(new_tree_branch_ptr);
-  });
+//  is_connected_to_output = ApplyT([this, tree](auto entity) -> bool {
+//    if (!tree)
+//      return false;
+//    auto new_tree_branch_ptr = tree->Branch(config_.GetName().c_str(),
+//                                            std::add_pointer_t<decltype(entity)>(&this->data_));
+//    return bool(new_tree_branch_ptr);
+//  });
 }
 
 
@@ -201,17 +195,17 @@ void Branch::CreateMapping(const Branch* other) const {
 //  copy_fields_mapping.emplace(other, std::move(fields_mapping));
 }
 
-void Branch::UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars,
-                       bool ignore_missing) {
-  for (auto& element : vars) {
-    auto& field_name = element.first;
-    if (!config_.HasField(field_name) && ignore_missing) {
-      element.second.get() = Field();
-      continue;
-    }
-    element.second.get() = GetFieldVar(field_name);
-  }
-}
+//void Branch::UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars,
+//                       bool ignore_missing) {
+//  for (auto& element : vars) {
+//    auto& field_name = element.first;
+//    if (!config_.HasField(field_name) && ignore_missing) {
+//      element.second.get() = Field();
+//      continue;
+//    }
+//    element.second.get() = GetFieldVar(field_name);
+//  }
+//}
 
 void Branch::UpdateConfigHash() {
   config_hash_ = Impl::BranchConfigHasher(config_);

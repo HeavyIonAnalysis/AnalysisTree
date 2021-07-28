@@ -15,6 +15,7 @@
 #include "BranchChannel.hpp"
 #include "Field.hpp"
 #include "EventHeader.hpp"
+#include "VariantMagic.hpp"
 
 class TTree;
 
@@ -39,7 +40,7 @@ class Branch {
     UpdateConfigHash();
   }
 
-  Branch(BranchConfig config, BranchPointer ptr) : config_(std::move(config)), data_(ptr) {
+  Branch(BranchConfig config, BranchPointer ptr) : config_(std::move(config)), data_(std::move(ptr)) {
     UpdateConfigHash();
   }
 
@@ -50,8 +51,8 @@ class Branch {
   };
 
   /* Accessors to branch' main parameters, used very often */
-  [[nodiscard]] auto GetBranchName() const { return config_.GetName(); }
-  [[nodiscard]] auto GetBranchType() const { return config_.GetType(); }
+  [[nodiscard]] std::string GetBranchName() const { return config_.GetName(); }
+  [[nodiscard]] DetType GetBranchType() const { return config_.GetType(); }
   [[nodiscard]] const BranchConfig& GetConfig() const { return config_; }
 
   void InitDataPtr();
@@ -71,7 +72,7 @@ class Branch {
   }
 
   [[nodiscard]] size_t GetId() const {
-    return std::visit([](auto&& b) { return b->GetId(); }, data_);
+    return ANALYSISTREE_UTILS_VISIT(get_id_struct(), data_);
   }
 
   [[nodiscard]] BranchPointer GetData() const { return data_; }
@@ -120,6 +121,7 @@ class Branch {
    * @param field_name variable names convertible to std::string
    * @return tuple of variables
    */
+#ifdef cpp17
   template<typename... Args>
   auto GetVars(Args... field_name) {
     return GetVarsImpl(std::array<std::string, sizeof...(Args)>{{std::string(field_name)...}},
@@ -136,20 +138,22 @@ class Branch {
    * @brief Copies contents from other branch 'as-is'. Faster than CopyContents() since it creates no mapping
    * @param other
    */
+  template<typename EntityPtr>
+  constexpr static const bool is_event_header_v =
+      std::is_same_v<AnalysisTree::EventHeader, std::remove_const_t<std::remove_pointer_t<EntityPtr>>>;
+#endif
+
   void CopyContentsRaw(Branch* other);
 
   void CreateMapping(const Branch* other) const ;
 
   void UpdateConfigHash();
 
-  template<typename EntityPtr>
-  constexpr static const bool is_event_header_v =
-      std::is_same_v<AnalysisTree::EventHeader, std::remove_const_t<std::remove_pointer_t<EntityPtr>>>;
 
-  template<typename Functor>
-  auto ApplyT(Functor&& f) { return ANALYSISTREE_UTILS_VISIT(f, data_); }
-  template<typename Functor>
-  auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
+//  template<typename Functor>
+//  auto ApplyT(Functor&& f) { return ANALYSISTREE_UTILS_VISIT(f, data_); }
+//  template<typename Functor>
+//  auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
 
   [[nodiscard]] AnalysisTree::ShortInt_t Hash() const {
     const auto hasher = std::hash<std::string>();
@@ -157,10 +161,10 @@ class Branch {
   }
 
  private:
-  template<size_t... Idx>
-  auto GetVarsImpl(std::array<std::string, sizeof...(Idx)>&& field_names, std::index_sequence<Idx...>) {
-    return std::make_tuple(GetFieldVar(field_names[Idx])...);
-  }
+//  template<size_t... Idx>
+//  auto GetVarsImpl(std::array<std::string, sizeof...(Idx)>&& field_names, std::index_sequence<Idx...>) {
+//    return std::make_tuple(GetFieldVar(field_names[Idx])...);
+//  }
 };
 
 }// namespace AnalysisTree

@@ -74,6 +74,8 @@ class EventHeader : public Container {
 
   ANALYSISTREE_ATTR_NODISCARD const EventHeader& GetChannel(size_t i) const;// needed in order to have EventHeader similar to Detector
   ANALYSISTREE_ATTR_NODISCARD EventHeader& Channel(size_t i);// needed in order to have EventHeader similar to Detector
+  static void ClearChannels() { throw std::runtime_error("Not available for EventHeader"); }
+  static EventHeader* AddChannel() { throw std::runtime_error("Not available for EventHeader"); }
 
   void Print() const noexcept override;
  protected:

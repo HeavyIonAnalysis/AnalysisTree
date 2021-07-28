@@ -28,7 +28,7 @@ class Field {
   Field& operator=(const Field&) = default;
   virtual ~Field() = default;
 
-  Field(std::string name) : field_(std::move(name)){};
+  explicit Field(std::string name) : field_(std::move(name)){};
 
   Field(std::string branch, std::string field) : branch_(std::move(branch)),
                                                  field_(std::move(field)){};
@@ -64,13 +64,12 @@ class Field {
     if (!is_init_) {
       throw std::runtime_error("Field::Fill - Field " + field_ + " is not initialized");
     }
-    if (field_type_ == Types::kFloat)
-      return object.template GetField<float>(field_id_);
-    else if (field_type_ == Types::kInteger)
-      return object.template GetField<int>(field_id_);
-    else if (field_type_ == Types::kBool)
-      return object.template GetField<bool>(field_id_);
-    return UndefValueFloat;
+    switch (field_type_) {
+      case Types::kFloat    : return object.template GetField<float>(field_id_);
+      case(Types::kInteger) : return object.template GetField<int>(field_id_);
+      case Types::kBool     : return object.template GetField<bool>(field_id_);
+      default: throw std::runtime_error("Unknown field type");
+    }
   }
 
   void Print() const;
