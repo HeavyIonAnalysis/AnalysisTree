@@ -4,8 +4,8 @@
 #include "BranchChannel.hpp"
 
 #include "Branch.hpp"
-#include "Field.hpp"
 #include "EventHeader.hpp"
+#include "Field.hpp"
 
 using namespace AnalysisTree;
 
@@ -44,7 +44,7 @@ BranchChannel::BranchChannel(const Branch* branch, std::size_t i_channel) : bran
 
 BranchChannel Branch::NewChannel() {
   CheckMutable(true);
-  ANALYSISTREE_UTILS_VISIT(new_channel_struct( &(this->config_) ), data_);
+  ANALYSISTREE_UTILS_VISIT(new_channel_struct(&(this->config_)), data_);
   Freeze();
   return BranchChannel(this, size() - 1);
 }
@@ -54,14 +54,14 @@ void BranchChannel::Print(std::ostream& os) const {
 }
 
 double BranchChannel::Value(const Field& v) const {
-//  assert(v.GetBranchId() == branch_->GetId()); // TODO
+  //  assert(v.GetBranchId() == branch_->GetId()); // TODO
   assert(v.IsInitialized());
 
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
-    case Types::kFloat :   return ANALYSISTREE_UTILS_VISIT(get_field_struct<float>(v.GetFieldId()), data_ptr_);
-    case Types::kInteger : return ANALYSISTREE_UTILS_VISIT(get_field_struct<int>(v.GetFieldId()), data_ptr_);
-    case Types::kBool :    return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
+    case Types::kFloat: return ANALYSISTREE_UTILS_VISIT(get_field_struct<float>(v.GetFieldId()), data_ptr_);
+    case Types::kInteger: return ANALYSISTREE_UTILS_VISIT(get_field_struct<int>(v.GetFieldId()), data_ptr_);
+    case Types::kBool: return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
     default: throw std::runtime_error("Field type is not correct!");
   }
 }
@@ -69,9 +69,9 @@ double BranchChannel::Value(const Field& v) const {
 void BranchChannel::SetValue(const Field& v, double value) {
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
-    case Types::kFloat :   ANALYSISTREE_UTILS_VISIT(set_field_struct<float>(value, v.GetFieldId()), data_ptr_); break;
-    case Types::kInteger : ANALYSISTREE_UTILS_VISIT(set_field_struct<int>(value, v.GetFieldId()), data_ptr_);  break;
-    case Types::kBool :    ANALYSISTREE_UTILS_VISIT(set_field_struct<bool>(value, v.GetFieldId()), data_ptr_);  break;
+    case Types::kFloat: ANALYSISTREE_UTILS_VISIT(set_field_struct<float>(value, v.GetFieldId()), data_ptr_); break;
+    case Types::kInteger: ANALYSISTREE_UTILS_VISIT(set_field_struct<int>(value, v.GetFieldId()), data_ptr_); break;
+    case Types::kBool: ANALYSISTREE_UTILS_VISIT(set_field_struct<bool>(value, v.GetFieldId()), data_ptr_); break;
     default: throw std::runtime_error("Field type is not correct!");
   }
 }

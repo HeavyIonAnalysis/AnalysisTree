@@ -32,5 +32,4 @@ inline std::size_t BranchConfigHasher(const AnalysisTree::BranchConfig& config) 
 
 }// namespace Impl
 
-
 #endif//ANALYSISTREE_INFRA_BRANCHHASHHELPER_HPP_

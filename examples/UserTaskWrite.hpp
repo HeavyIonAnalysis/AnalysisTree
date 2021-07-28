@@ -2,8 +2,8 @@
 #define ANALYSISTREE_EXAMPLES_USERTASKWRITE_HPP_
 
 #include <AnalysisTree/Branch.hpp>
-#include <AnalysisTree/Task.hpp>
 #include <AnalysisTree/Detector.hpp>
+#include <AnalysisTree/Task.hpp>
 
 class UserTaskWrite : public AnalysisTree::Task {
 

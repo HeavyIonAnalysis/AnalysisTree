@@ -35,7 +35,7 @@ struct get_id_struct : public Utils::Visitor<size_t> {
 struct get_channel_struct : public Utils::Visitor<ChannelPointer> {
   explicit get_channel_struct(size_t i) : i_channel_(i) {}
   template<typename Entity>
-  ChannelPointer get_channel(Entity* d) const { return ChannelPointer( &(d->Channel(i_channel_)) ); }
+  ChannelPointer get_channel(Entity* d) const { return ChannelPointer(&(d->Channel(i_channel_))); }
   template<typename Entity>
   ChannelPointer operator()(Entity* d) const { return get_channel<Entity>(d); }
   size_t i_channel_;
@@ -76,7 +76,7 @@ struct set_field_struct : public Utils::Visitor<void> {
   template<typename Entity>
   void set_field(Entity* d) const { d->template SetField<T>(value_, id_); }
   template<typename Entity>
-  void   operator()(Entity* d) const { set_field<Entity>(d); }
+  void operator()(Entity* d) const { set_field<Entity>(d); }
   double value_{0.};
   int id_{-999};
 };

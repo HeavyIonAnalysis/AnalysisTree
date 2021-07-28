@@ -84,5 +84,4 @@ double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChann
   return lambda_(vars_);
 }
 
-
 }// namespace AnalysisTree

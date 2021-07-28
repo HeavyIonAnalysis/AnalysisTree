@@ -12,13 +12,11 @@ class UserTaskRead : public AnalysisTree::Task {
   void Init() override;
   void Exec() override;
 
-  void Finish() override { }
+  void Finish() override {}
 
  private:
-
   AnalysisTree::Branch particles_;
   AnalysisTree::Branch tracks_;
-
 };
 
 #endif//ANALYSISTREE_EXAMPLES_USERTASKREAD_HPP_

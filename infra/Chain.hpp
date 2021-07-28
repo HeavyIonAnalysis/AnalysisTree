@@ -14,10 +14,10 @@
 #include <TChain.h>
 #include <TFile.h>
 
+#include "Branch.hpp"
 #include "Configuration.hpp"
 #include "DataHeader.hpp"
 #include "Utils.hpp"
-#include "Branch.hpp"
 
 namespace AnalysisTree {
 

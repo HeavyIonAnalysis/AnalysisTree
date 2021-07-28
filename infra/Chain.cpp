@@ -3,8 +3,8 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "Chain.hpp"
 #include "ChainDrawHelper.hpp"
-#include "VariantMagic.hpp"
 #include "Matching.hpp"
+#include "VariantMagic.hpp"
 
 #include <TChain.h>
 #include <TFileCollection.h>
@@ -150,7 +150,7 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
 
 class Branch Chain::GetBranch(const std::string& name) const {
   auto it = branches_.find(name);
-  if(it == branches_.end()){
+  if (it == branches_.end()) {
     throw std::runtime_error("Branch " + name + " is not found!");
   }
   auto ptr = branches_.find(name)->second;

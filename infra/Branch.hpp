@@ -13,8 +13,8 @@
 #include <vector>
 
 #include "BranchChannel.hpp"
-#include "Field.hpp"
 #include "EventHeader.hpp"
+#include "Field.hpp"
 #include "VariantMagic.hpp"
 
 class TTree;
@@ -132,7 +132,7 @@ class Branch {
    * @param vars - vector of pairs with name and reference to the ATI2::Field object
    */
   void UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars, bool ignore_missing = false);
-//  [[nodiscard]] std::vector<std::string> GetFieldNames() const;
+  //  [[nodiscard]] std::vector<std::string> GetFieldNames() const;
 
   /**
    * @brief Copies contents from other branch 'as-is'. Faster than CopyContents() since it creates no mapping
@@ -145,15 +145,14 @@ class Branch {
 
   void CopyContentsRaw(Branch* other);
 
-  void CreateMapping(const Branch* other) const ;
+  void CreateMapping(const Branch* other) const;
 
   void UpdateConfigHash();
 
-
-//  template<typename Functor>
-//  auto ApplyT(Functor&& f) { return ANALYSISTREE_UTILS_VISIT(f, data_); }
-//  template<typename Functor>
-//  auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
+  //  template<typename Functor>
+  //  auto ApplyT(Functor&& f) { return ANALYSISTREE_UTILS_VISIT(f, data_); }
+  //  template<typename Functor>
+  //  auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
 
   [[nodiscard]] AnalysisTree::ShortInt_t Hash() const {
     const auto hasher = std::hash<std::string>();
@@ -161,10 +160,10 @@ class Branch {
   }
 
  private:
-//  template<size_t... Idx>
-//  auto GetVarsImpl(std::array<std::string, sizeof...(Idx)>&& field_names, std::index_sequence<Idx...>) {
-//    return std::make_tuple(GetFieldVar(field_names[Idx])...);
-//  }
+  //  template<size_t... Idx>
+  //  auto GetVarsImpl(std::array<std::string, sizeof...(Idx)>&& field_names, std::index_sequence<Idx...>) {
+  //    return std::make_tuple(GetFieldVar(field_names[Idx])...);
+  //  }
 };
 
 }// namespace AnalysisTree
