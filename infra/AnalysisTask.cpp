@@ -15,7 +15,7 @@ void AnalysisTask::Init() {
   for (auto& var : entries_) {
     var.Init(*config_, chain->GetMatchPointers());
     for (const auto& br : var.GetBranchNames()) {
-      Cuts* branch_cut = cuts_map_.find(br) != cuts_map_.end() ?  cuts_map_.find(br)->second : nullptr;
+      Cuts* branch_cut = cuts_map_.find(br) != cuts_map_.end() ? cuts_map_.find(br)->second : nullptr;
       var.AddBranch(chain->GetBranch(br), branch_cut);
     }
   }// vars

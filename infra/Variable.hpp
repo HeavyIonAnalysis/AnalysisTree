@@ -107,7 +107,6 @@ class Variable {
   ClassDef(Variable, 1);
 };
 
-
 }// namespace AnalysisTree
 
 #endif

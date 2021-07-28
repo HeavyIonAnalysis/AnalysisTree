@@ -25,7 +25,6 @@ class Configuration;
 class TaskManager {
 
  public:
-
   static TaskManager* GetInstance();
 
   TaskManager(TaskManager& other) = delete;
@@ -62,10 +61,9 @@ class TaskManager {
   template<class BranchPtr>
   void AddBranch(BranchPtr*& ptr, const BranchConfig& config) {
 
-    if(!ptr){
+    if (!ptr) {
       ptr = new BranchPtr(config.GetId());
-    }
-    else if (ptr->GetId() != config.GetId()) {
+    } else if (ptr->GetId() != config.GetId()) {
       std::cout << "WARNING! ptr->GetId() != config.GetId()!" << std::endl;
       ptr = new BranchPtr(config.GetId());
     }
@@ -73,7 +71,7 @@ class TaskManager {
       InitOutChain();
     }
     configuration_->AddBranchConfig(config);
-    if(write_mode_ == eBranchWriteMode::kCreateNewTree){
+    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddBranchConfig(config);
     }
 
@@ -82,11 +80,26 @@ class TaskManager {
 
   void AddBranch(Branch* branch) {
     switch (branch->GetBranchType()) {
-      case DetType::kParticle : { AddBranch(branch->GetDataRaw<Particles*>(), branch->GetConfig()); break; }
-      case DetType::kTrack : { AddBranch(branch->GetDataRaw<TrackDetector*>(), branch->GetConfig()); break; }
-      case DetType::kHit : { AddBranch(branch->GetDataRaw<HitDetector*>(), branch->GetConfig()); break; }
-      case DetType::kModule : { AddBranch(branch->GetDataRaw<ModuleDetector*>(), branch->GetConfig()); break; }
-      case DetType::kEventHeader : { AddBranch(branch->GetDataRaw<EventHeader*>(), branch->GetConfig()); break; }
+      case DetType::kParticle: {
+        AddBranch(branch->GetDataRaw<Particles*>(), branch->GetConfig());
+        break;
+      }
+      case DetType::kTrack: {
+        AddBranch(branch->GetDataRaw<TrackDetector*>(), branch->GetConfig());
+        break;
+      }
+      case DetType::kHit: {
+        AddBranch(branch->GetDataRaw<HitDetector*>(), branch->GetConfig());
+        break;
+      }
+      case DetType::kModule: {
+        AddBranch(branch->GetDataRaw<ModuleDetector*>(), branch->GetConfig());
+        break;
+      }
+      case DetType::kEventHeader: {
+        AddBranch(branch->GetDataRaw<EventHeader*>(), branch->GetConfig());
+        break;
+      }
     }
   }
 
@@ -104,7 +117,7 @@ class TaskManager {
                          chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
-    if(write_mode_ == eBranchWriteMode::kCreateNewTree){
+    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddMatch(match);
     }
     out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
@@ -140,7 +153,7 @@ class TaskManager {
     out_tree_name_ = std::move(tree);
   }
 
-  void SetOutputMode(eBranchWriteMode mode){ write_mode_ = mode; }
+  void SetOutputMode(eBranchWriteMode mode) { write_mode_ = mode; }
 
   void ClearTasks() { tasks_.clear(); }
 

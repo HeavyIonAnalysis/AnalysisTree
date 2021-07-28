@@ -8,8 +8,8 @@
 #include <gtest/gtest.h>
 
 #include "PlainTreeFiller.hpp"
-#include "ToyMC.hpp"
 #include "TaskManager.hpp"
+#include "ToyMC.hpp"
 
 namespace {
 

@@ -138,7 +138,7 @@ class ToyMC : public Task {
   }
 };
 
-void inline RunToyMC(int n_events = 1000, const std::string& filelist = ""){
+void inline RunToyMC(int n_events = 1000, const std::string& filelist = "") {
   std::string filename = "toymc_analysis_task.root";
   std::string treename = "tTree";
 
@@ -153,15 +153,14 @@ void inline RunToyMC(int n_events = 1000, const std::string& filelist = ""){
   man->Finish();
   man->ClearTasks();
 
-//  delete man;
+  //  delete man;
 
-  if(!filelist.empty()){
+  if (!filelist.empty()) {
     std::ofstream fl(filelist);
     fl << filename << "\n";
     fl.close();
   }
 }
-
 
 }// namespace AnalysisTree
 

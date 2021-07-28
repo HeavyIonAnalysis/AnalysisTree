@@ -20,11 +20,10 @@ void UserTaskRead::Exec() {
   std::cout << tracks_.size() << std::endl;
 
   auto pT = particles_.GetField("pT");
-  for(size_t i=0; i<particles_.size(); ++i){
+  for (size_t i = 0; i < particles_.size(); ++i) {
     auto particle = particles_[i];
     std::cout << particle[pT] << std::endl;
   }
-
 }
 
 UserTaskRead::~UserTaskRead() = default;

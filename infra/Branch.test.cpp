@@ -57,7 +57,7 @@ TEST(Branch, ReadValue) {
   Field pz = branch.GetField("pz");
 
   auto channel = branch[0];
-  EXPECT_FLOAT_EQ(channel[pT], sqrt(0.1*0.1+0.3*0.3));
+  EXPECT_FLOAT_EQ(channel[pT], sqrt(0.1 * 0.1 + 0.3 * 0.3));
   EXPECT_FLOAT_EQ(channel[px], 0.1);
   EXPECT_FLOAT_EQ(channel[py], 0.3);
   EXPECT_FLOAT_EQ(channel[pz], 0.5);
@@ -85,8 +85,5 @@ TEST(Branch, WriteValue) {
   EXPECT_FLOAT_EQ(particle->GetPz(), 0.5);
 }
 
-
-
-}
+}// namespace
 #endif//ANALYSISTREE_INFRA_BRANCH_TEST_CPP_
-

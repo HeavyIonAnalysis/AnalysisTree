@@ -37,7 +37,7 @@ class AnalysisEntry {
 
   ANALYSISTREE_ATTR_NODISCARD const array2D& GetValues() const { return values_; }
   ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranchNames() const { return branch_names_; }
-//  ANALYSISTREE_ATTR_NODISCARD const std::vector<Branch>& GetBranches() const { return branches_; }
+  //  ANALYSISTREE_ATTR_NODISCARD const std::vector<Branch>& GetBranches() const { return branches_; }
   ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfBranches() const { return branch_names_.size(); }
   ANALYSISTREE_ATTR_NODISCARD const Cuts* GetCuts() const { return cuts_; }
   ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
@@ -49,7 +49,6 @@ class AnalysisEntry {
   void FillBranchNames();
 
  private:
-
   void FillFromOneBranch();
   void FillFromTwoBranches();
   void FillMatchingForEventHeader(const Branch& br1, const Branch& br2);

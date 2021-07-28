@@ -3,8 +3,8 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include <iostream>
 
-#include <AnalysisTree/ToyMC.hpp>
 #include <AnalysisTree/Branch.hpp>
+#include <AnalysisTree/ToyMC.hpp>
 
 #include "UserTaskRead.hpp"
 #include "UserTaskWrite.hpp"
@@ -13,21 +13,18 @@ using namespace AnalysisTree;
 
 int main(int argc, char* argv[]) {
 
-  const int n_events = 10;
-  const std::string filelist = "fl_toy_mc.txt";
+  BranchConfig config("test", DetType::kParticle);
+  auto* particles = new Particles(1);
 
-  RunToyMC(n_events, filelist);
+  Branch branch(config, particles);
+  branch.SetMutable();
+  Field pT = branch.GetField("pT");
+  Field px = branch.GetField("px");
+  Field py = branch.GetField("py");
+  Field pz = branch.GetField("pz");
 
-  auto* man = TaskManager::GetInstance();
-  man->SetOutputMode(eBranchWriteMode::kCopyTree);
-
-  auto* task_read = new UserTaskRead();
-  auto* task_write = new UserTaskWrite();
-
-  man->AddTask(task_read);
-  man->AddTask(task_write);
-
-  man->Init({filelist}, {"tTree"});
-  man->Run(-1);
-  man->Finish();
+  auto ch = branch.NewChannel();
+  ch.SetValue(px, 0.1);
+  ch.SetValue(py, 0.3);
+  ch.SetValue(pz, 0.5);
 }

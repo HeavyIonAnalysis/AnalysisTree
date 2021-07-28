@@ -6,12 +6,12 @@
 
 #include "Configuration.hpp"
 
-#include <vector>
 #include <string>
+#include <vector>
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
-class ChainDrawHelper{
+class ChainDrawHelper {
 
  public:
   explicit ChainDrawHelper(Configuration* configuration) : configuration_(configuration) {}
@@ -24,6 +24,6 @@ class ChainDrawHelper{
   void DrawFieldTransform(std::string& expr);
 };
 
-}
+}// namespace AnalysisTree
 
 #endif//ANALYSISTREE_INFRA_CHAINDRAWHELPER_HPP_

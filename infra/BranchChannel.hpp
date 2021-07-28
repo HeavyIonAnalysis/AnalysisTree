@@ -17,12 +17,12 @@ class Field;
 class BranchChannel {
  public:
   BranchChannel() = default;
-  BranchChannel(const ChannelPointer& data_ptr, const Branch* branch= nullptr, size_t i_channel=0)
-  : data_ptr_(data_ptr),
-    branch_(branch),
-    i_channel_(i_channel) {}
+  BranchChannel(const ChannelPointer& data_ptr, const Branch* branch = nullptr, size_t i_channel = 0)
+      : data_ptr_(data_ptr),
+        branch_(branch),
+        i_channel_(i_channel) {}
 
-/* Getting value */
+  /* Getting value */
   [[nodiscard]] double Value(const Field& v) const;
   [[nodiscard]] double operator[](const Field& v) const;
   [[nodiscard]] inline std::size_t GetChannelNumber() const { return i_channel_; }

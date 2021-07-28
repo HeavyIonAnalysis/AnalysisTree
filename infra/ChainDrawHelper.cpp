@@ -4,7 +4,7 @@
 #include "ChainDrawHelper.hpp"
 #include <TString.h>
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 
 void ChainDrawHelper::DrawFieldTransform(std::string& expr) {
   auto dot = expr.find('.');
@@ -76,4 +76,4 @@ void ChainDrawHelper::DrawTransform(std::string& expr) {
   }
 }
 
-}
+}// namespace AnalysisTree
