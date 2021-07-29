@@ -136,10 +136,8 @@ class Track : public Container {
         case TrackFields::kPhi: throw std::runtime_error("Cannot set transient fields");
         default: throw std::runtime_error("Unknown field");
       }
-
     }
   }
-
 
   /**
   * Prints the track content

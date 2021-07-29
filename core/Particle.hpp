@@ -54,7 +54,6 @@ class Particle : public Track {
     }
   }
 
-
   template<typename T>
   void SetField(T value, Int_t field_id) {
     if (field_id >= 0) {
@@ -73,7 +72,6 @@ class Particle : public Track {
         default: throw std::runtime_error("Unknown field");
       }
     }
-
   }
 
  protected:
