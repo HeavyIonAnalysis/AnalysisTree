@@ -1,11 +1,12 @@
-/* Copyright (C) 2019-2021 GSI, MEPhI
+/* Copyright (C) 2019-2021 GSI, MEPhI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
-   Authors: Eugeny Kashirin, Ilya Selyuzhenkov */
+   Authors: Eugeny Kashirin, Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 #define ANALYSISTREE_INFRA_BRANCHCHANNEL_HPP_
 
 #include <cassert>
 #include <iostream>
+#include <utility>
 
 #include "Utils.hpp"
 
@@ -17,8 +18,8 @@ class Field;
 class BranchChannel {
  public:
   BranchChannel() = default;
-  BranchChannel(const ChannelPointer& data_ptr, const Branch* branch = nullptr, size_t i_channel = 0)
-      : data_ptr_(data_ptr),
+  BranchChannel(ChannelPointer data_ptr, const Branch* branch = nullptr, size_t i_channel = 0)
+      : data_ptr_(std::move(data_ptr)),
         branch_(branch),
         i_channel_(i_channel) {}
 
