@@ -45,7 +45,7 @@ class Module : public Container {
   template<typename T>
   void SetField(T value, Int_t field_id) {
     if (field_id >= 0) {
-       Container::SetField(value, field_id);
+      Container::SetField(value, field_id);
     } else {
       switch (field_id) {
         case ModuleFields::kSignal: signal_ = value; break;
