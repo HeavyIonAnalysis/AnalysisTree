@@ -1,6 +1,6 @@
-/* Copyright (C) 2019-2021 GSI, MEPhI
+/* Copyright (C) 2019-2021 GSI, MEPhI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
-   Authors: Eugeny Kashirin, Ilya Selyuzhenkov */
+   Authors: Eugeny Kashirin, Viktor Klochkov, Ilya Selyuzhenkov */
 #include "BranchChannel.hpp"
 
 #include "Branch.hpp"

@@ -43,33 +43,29 @@ class SimpleCut {
     FillBranchNames();
   }
 
-  //  /**
-  //   * @brief Evaluates cut
-  //   * @tparam T type of data-object associated with TTree
-  //   * @param object
-  //   * @return result of cut
-  //   */
-  //  template<class T>
-  //  bool Apply(const T& object) const {
-  //    std::vector<double> variables;
-  //    variables.reserve(vars_.size());
-  //    for (const auto& var : vars_) {
-  //      variables.emplace_back(var.GetValue(object));
-  //    }
-  //    return lambda_(variables);
-  //  }
-  //
-  //  template<class A, class B>
-  //  bool Apply(const A& a, size_t a_id, const B& b, size_t b_id) const {
-  //    std::vector<double> variables;
-  //    variables.reserve(vars_.size());
-  //    for (const auto& var : vars_) {
-  //      variables.emplace_back(var.GetValue(a, a_id, b, b_id));
-  //    }
-  //    return lambda_(variables);
-  //  }
+  /**
+  * Constructor for range cut: min <= field <= max
+  * @param variable_name name of the variable in format "branch.field"
+  * @param min minimal accepted value
+  * @param max maximal accepted value
+  */
+  friend SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title);
 
-  bool Apply(const BranchChannel& object) const {
+  /**
+  * Constructor for integers and bool fields for cut: field == value
+  * @param variable_name name of the variable in format "branch.field"
+  * @param value only objects with field == value will be accepted
+  */
+  friend SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title);
+
+  /**
+   * @brief Evaluates cut
+   * @tparam T type of data-object associated with TTree
+   * @param object
+   * @return result of cut
+   */
+  template<class T>
+  bool Apply(const T& object) const {
     std::vector<double> variables;
     variables.reserve(vars_.size());
     for (const auto& var : vars_) {
@@ -77,15 +73,8 @@ class SimpleCut {
     }
     return lambda_(variables);
   }
-
-  bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
-    std::vector<double> variables;
-    variables.reserve(vars_.size());
-    for (const auto& var : vars_) {
-      variables.emplace_back(var.GetValue(a, a_id, b, b_id));
-    }
-    return lambda_(variables);
-  }
+  bool Apply(const BranchChannel& object) const;
+  bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
 
   void Print() const;
 
@@ -95,33 +84,9 @@ class SimpleCut {
 
   friend bool operator==(const SimpleCut& that, const SimpleCut& other);
 
-  friend SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title);
-  friend SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title);
-
  protected:
-  /**
-* Constructor for range cut: min <= field <= max
-* @param field name of the field
-* @param min minimal accepted value
-* @param max maximal accepted value
-*/
-  //  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::RangeCut instead")
-  SimpleCut(const Variable& var, float min, float max, std::string title = "") : title_(std::move(title)) {
-    vars_.emplace_back(var);
-    lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
-    FillBranchNames();
-  }
-  /**
-  * Constructor for integers and bool fields for cut: field == value
-  * @param field name of the field
-  * @param value only objects with field == value will be accepted
-  */
-  //  ANALYSISTREE_ATTR_DEPRECATED("Use AnalysisTree::EqualsCut")
-  SimpleCut(const Variable& var, int value, std::string title = "") : title_(std::move(title)) {
-    vars_.emplace_back(var);
-    lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
-    FillBranchNames();
-  }
+  SimpleCut(const Variable& var, float min, float max, std::string title = "");
+  SimpleCut(const Variable& var, int value, std::string title = "");
 
   void FillBranchNames();
 
@@ -132,7 +97,6 @@ class SimpleCut {
 
   ClassDef(SimpleCut, 1);
 };
-
 SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title = "");
 SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title = "");
 

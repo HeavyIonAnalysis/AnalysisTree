@@ -12,24 +12,19 @@
 
 namespace AnalysisTree {
 
-Variable::Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda) : name_(std::move(name)),
-                                                                                                                      fields_(std::move(fields)),
-                                                                                                                      lambda_(std::move(lambda)) {
-  for (const auto& f : fields_) {
-    branch_names_.insert(f.GetBranchName());
-  }
+Variable::Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda)
+    : name_(std::move(name)),
+      fields_(std::move(fields)),
+      lambda_(std::move(lambda)),
+      n_branches_(GetBranches().size())
+{
 }
 
 void Variable::Init(const Configuration& conf) {
   for (auto& field : fields_) {
     field.Init(conf);
   }
-  for (const auto& branch : branch_names_) {
-    branch_ids_.insert(conf.GetBranchConfig(branch).GetId());
-  }
-
   vars_.reserve(fields_.size());
-
   is_init_ = true;
 }
 
@@ -39,8 +34,6 @@ void Variable::Print() const {
   for (const auto& field : fields_) {
     field.Print();
   }
-  std::cout << "  id: " << id_ << std::endl;
-  std::cout << "  size: " << size_ << std::endl;
 }
 
 bool operator==(const AnalysisTree::Variable& that, const AnalysisTree::Variable& other) {
@@ -70,7 +63,17 @@ Variable Variable::FromString(const std::string& full_name) {
   throw std::runtime_error("Field name must be in the format <branch>.<name>");
 }
 
+double Variable::GetValue(const BranchChannel& object) const {
+  assert(is_init_ && n_branches_ == 1);
+  vars_.clear();
+  for (const auto& field : fields_) {
+    vars_.emplace_back(object[field]);
+  }
+  return lambda_(vars_);
+}
+
 double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+  assert(is_init_);
   vars_.clear();
   for (const auto& field : fields_) {
     if (field.GetBranchId() == a_id)
@@ -82,6 +85,20 @@ double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChann
     }
   }
   return lambda_(vars_);
+}
+std::string Variable::GetBranchName() const {
+  if(n_branches_ != 1){
+    throw std::runtime_error("Number of branches is not 1!");
+  }
+  return fields_.at(0).GetBranchName();
+}
+
+std::set<std::string> Variable::GetBranches() const {
+  std::set<std::string> branches{};
+  for(const auto& field : fields_){
+    branches.emplace(field.GetBranchName());
+  }
+  return branches;
 }
 
 }// namespace AnalysisTree

@@ -1,6 +1,6 @@
-/* Copyright (C) 2019-2021 GSI, MEPhI
+/* Copyright (C) 2019-2021 GSI, MEPhI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
-   Authors: Eugeny Kashirin, Ilya Selyuzhenkov */
+   Authors: Eugeny Kashirin, Viktor Klochkov, Ilya Selyuzhenkov */
 #include <TTree.h>
 
 #include "Branch.hpp"
@@ -113,7 +113,7 @@ void Branch::ClearChannels() {
   ANALYSISTREE_UTILS_VISIT(clear_channels_struct(), data_);
 }
 
-void Branch::ConnectOutputTree(TTree* tree) {
+void Branch::ConnectOutputTree(TTree* /*tree*/) {
   //  is_connected_to_output = ApplyT([this, tree](auto entity) -> bool {
   //    if (!tree)
   //      return false;
@@ -250,7 +250,7 @@ void Branch::UpdateConfigHash() {
 }
 
 Branch::~Branch() {
-  //  ApplyT([this](auto entry_ptr) {
+  //  ApplyT([this](auto entry_ptr) {  // TODO
   //    delete entry_ptr;
   //  });
 }
