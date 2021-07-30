@@ -19,13 +19,13 @@ class PlainTreeFiller : public AnalysisTask {
   void Exec() override;
   void Finish() override;
 
-  void SetOutputName(std::string file, std::string tree){
+  void SetOutputName(std::string file, std::string tree) {
     file_name_ = std::move(file);
     tree_name_ = std::move(tree);
   }
 
  protected:
-  TFile *file_{nullptr};
+  TFile* file_{nullptr};
   TTree* plain_tree_{nullptr};
 
   std::string file_name_{"PlainTree.root"};

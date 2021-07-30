@@ -18,11 +18,10 @@ class Matching {
  public:
   Matching() = default;
   Matching(size_t id1, size_t id2) : branch1_id_(id1), branch2_id_(id2){};
-  Matching(size_t id1, size_t id2, MapType match, MapType match_inverted) :
-      branch1_id_(id1),
-      branch2_id_(id2),
-      match_(std::move(match)),
-      match_inverted_(std::move(match_inverted)){};
+  Matching(size_t id1, size_t id2, MapType match, MapType match_inverted) : branch1_id_(id1),
+                                                                            branch2_id_(id2),
+                                                                            match_(std::move(match)),
+                                                                            match_inverted_(std::move(match_inverted)){};
 
   virtual ~Matching() = default;
 
@@ -49,7 +48,7 @@ class Matching {
   ANALYSISTREE_ATTR_NODISCARD size_t GetBranch1Id() const { return branch1_id_; }
   ANALYSISTREE_ATTR_NODISCARD size_t GetBranch2Id() const { return branch2_id_; }
 
-  void SetMatches(MapType match, MapType match_inv){
+  void SetMatches(MapType match, MapType match_inv) {
     match_ = std::move(match);
     match_inverted_ = std::move(match_inv);
   }

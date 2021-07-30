@@ -81,7 +81,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
     }
   }
 
-  for (const auto& branch : names) { // Init all pointers to branches
+  for (const auto& branch : names) {// Init all pointers to branches
     BranchPointer branch_ptr;
     const auto& branch_config = configuration_->GetBranchConfig(branch);
     std::cout << "Adding branch pointer: " << branch << std::endl;
@@ -110,7 +110,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
     branches_.emplace(branch, branch_ptr);
   }
 
-  for (const auto& match : configuration_->GetMatches()) { // Init all pointers to matching //TODO exclude unused
+  for (const auto& match : configuration_->GetMatches()) {// Init all pointers to matching //TODO exclude unused
     std::cout << "Adding branch pointer: " << match.second << std::endl;
     matches_.emplace(match.second, new Matching);
   }

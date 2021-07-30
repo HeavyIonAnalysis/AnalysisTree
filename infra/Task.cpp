@@ -4,7 +4,7 @@
 namespace AnalysisTree {
 
 ANALYSISTREE_ATTR_NODISCARD bool Task::IsGoodEvent(const Chain& t) const {
-  if(!event_cuts_) return true;
+  if (!event_cuts_) return true;
   auto br_name = event_cuts_->GetBranches().begin();
   // Here EventHeader expected
   //TODO throw exeption otherwise
@@ -18,7 +18,7 @@ void Task::PreInit() {
   config_ = man->GetConfig();
   data_header_ = man->GetDataHeader();
 
-  if(event_cuts_){
+  if (event_cuts_) {
     event_cuts_->Init(*config_);
   }
 }

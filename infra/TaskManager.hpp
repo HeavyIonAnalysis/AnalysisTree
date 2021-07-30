@@ -63,15 +63,15 @@ class TaskManager {
 */
   template<class Branch>
   void AddBranch(const std::string& name, Branch*& ptr, const BranchConfig& config, eBranchWriteMode mode = eBranchWriteMode::kCreateNewTree) {
-    if(name.empty()){
+    if (name.empty()) {
       throw std::runtime_error("name is empty");
     }
-    if(ptr){
+    if (ptr) {
       throw std::runtime_error("ptr is not nullptr! The memory should be allocated inside this function with proper id!");
     }
 
     if (mode == eBranchWriteMode::kCreateNewTree) {
-      if(!out_tree_){
+      if (!out_tree_) {
         InitOutChain();
         fill_out_tree_ = true;
       }
@@ -122,7 +122,7 @@ class TaskManager {
 
   void Exec() {
     for (auto* task : tasks_) {
-      if(!task->IsGoodEvent(*chain_)) continue;
+      if (!task->IsGoodEvent(*chain_)) continue;
       task->Exec();
     }
     if (fill_out_tree_) {
