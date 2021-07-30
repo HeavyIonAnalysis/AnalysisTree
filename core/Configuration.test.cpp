@@ -26,10 +26,10 @@ TEST(Configuration, Basics) {
   config.AddBranchConfig(branch_config);
 
   EXPECT_EQ(config.GetNumberOfBranches(), 1);
-//  EXPECT_EQ(config.GetLastId(), 0);
+  //  EXPECT_EQ(config.GetLastId(), 0);
 
   const auto& br1 = config.GetBranchConfig("RecTrack");
-//  EXPECT_EQ(br1.GetId(), 0);
+  //  EXPECT_EQ(br1.GetId(), 0);
 }
 
 TEST(Configuration, Match) {
@@ -70,12 +70,11 @@ TEST(Configuration, ReadWrite) {
       config.GetBranchConfig("test2").GetId());
   auto matching_swapped_branches = new Matching(
       config.GetBranchConfig("test2").GetId(),
-      config.GetBranchConfig("test1").GetId()
-      );
+      config.GetBranchConfig("test1").GetId());
   EXPECT_NO_THROW(config.AddMatch(matching_to_add));
-//  Not yet implemented?
-//  EXPECT_THROW(config.AddMatch(matching_to_add), std::runtime_error); // Attempt to add existing branch
-//  EXPECT_THROW(config.AddMatch(matching_swapped_branches), std::runtime_error); // Attempt to add existing branch
+  //  Not yet implemented?
+  //  EXPECT_THROW(config.AddMatch(matching_to_add), std::runtime_error); // Attempt to add existing branch
+  //  EXPECT_THROW(config.AddMatch(matching_swapped_branches), std::runtime_error); // Attempt to add existing branch
 
   {
     TFile f("configuration_io.root", "recreate");
@@ -92,7 +91,6 @@ TEST(Configuration, ReadWrite) {
   delete matching_to_add;
   delete matching_swapped_branches;
 }
-
 
 }// namespace
 

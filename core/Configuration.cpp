@@ -1,19 +1,19 @@
 #include <cassert>
 #include <iostream>
-#include <string>
 #include <map>
+#include <string>
 
 #include "Configuration.hpp"
 #include "Matching.hpp"
 
-#include <TROOT.h>
-#include <TClass.h>
 #include <TBuffer.h>
+#include <TClass.h>
+#include <TROOT.h>
 #include <TVirtualStreamerInfo.h>
 
 namespace AnalysisTree {
 
-void Configuration::Streamer(TBuffer & rb) {
+void Configuration::Streamer(TBuffer& rb) {
   if (rb.IsReading()) {
     bool read_ok = false;
     UInt_t rs = 0, rc = 0;
@@ -37,8 +37,7 @@ void Configuration::Streamer(TBuffer & rb) {
       // populate the transient field
       this->matches_index_ = conf_v3.matches_;
       read_ok = true;
-    }
-    else {
+    } else {
       Warning(__func__, "Current version of AnalysisTree::Configuration (%d) "
                         "is different from the version from file (%d) and no rule to read this version was implemented. "
                         "Contact developers if dedicated Streamer implementation is needed for this version.",
@@ -114,10 +113,10 @@ void Configuration::AddMatch(Matching* match) {
   const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
   const std::string data_branch = br1 + "2" + br2;
   /* looking up for match with same branches */
-  auto is_matching_exists = std::find_if(begin(matches_), end(matches_), [&br1, &br2] (const MatchingConfig& config) -> bool {
-    return (br1 == config.GetFirstBranchName() && br2 == config.GetSecondBranchName()) ||
-        (br2 == config.GetFirstBranchName() && br1 == config.GetSecondBranchName());
-  }) != end(matches_);
+  auto is_matching_exists = std::find_if(begin(matches_), end(matches_), [&br1, &br2](const MatchingConfig& config) -> bool {
+                              return (br1 == config.GetFirstBranchName() && br2 == config.GetSecondBranchName()) || (br2 == config.GetFirstBranchName() && br1 == config.GetSecondBranchName());
+                            })
+      != end(matches_);
 
   if (is_matching_exists) {
     Warning(__func__, "Matching between branches %s and %s already exists", br1.c_str(), br2.c_str());

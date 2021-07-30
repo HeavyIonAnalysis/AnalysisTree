@@ -19,9 +19,9 @@ class Matching;
 class MatchingConfig {
  public:
   MatchingConfig() = default;
-  MatchingConfig(std::string  Branch1,
-                 std::string  Branch2,
-                 std::string  DataBranch) : branch1_(std::move(Branch1)), branch2_(std::move(Branch2)), data_branch_(std::move(DataBranch)) {}
+  MatchingConfig(std::string Branch1,
+                 std::string Branch2,
+                 std::string DataBranch) : branch1_(std::move(Branch1)), branch2_(std::move(Branch2)), data_branch_(std::move(DataBranch)) {}
 
   std::string GetFirstBranchName() const { return branch1_; }
   std::string GetSecondBranchName() const { return branch2_; }
@@ -34,7 +34,6 @@ class MatchingConfig {
 
   ClassDefNV(MatchingConfig, 2);
 };
-
 
 class Configuration_v3 : public TObject {
  public:
@@ -67,7 +66,7 @@ class Configuration : public TObject {
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
     auto it = branches_.find(i);
-    if(it == branches_.end()){
+    if (it == branches_.end()) {
       throw std::runtime_error("Branch with id = " + std::to_string(i) + " not found");
     }
     return it->second;
@@ -81,9 +80,9 @@ class Configuration : public TObject {
 
   void Print(Option_t* = "") const;
 
-  static std::map<std::array<std::string, 2>, std::string> MakeMatchingIndex(const std::vector<MatchingConfig> &matches) {
+  static std::map<std::array<std::string, 2>, std::string> MakeMatchingIndex(const std::vector<MatchingConfig>& matches) {
     std::map<std::array<std::string, 2>, std::string> result;
-    for (auto &match: matches) {
+    for (auto& match : matches) {
       std::array<std::string, 2> map_key{match.GetFirstBranchName(), match.GetSecondBranchName()};
       auto emplace_result = result.emplace(map_key, match.GetDataBranchName());
       if (!emplace_result.second) {
@@ -95,7 +94,7 @@ class Configuration : public TObject {
 
   static std::vector<MatchingConfig> MakeMatchConfigsFromIndex(const MatchingIndex& matching_index) {
     std::vector<MatchingConfig> result;
-    for (auto &matching_index_element : matching_index) {
+    for (auto& matching_index_element : matching_index) {
       result.emplace_back(matching_index_element.first[0],
                           matching_index_element.first[1],
                           matching_index_element.second);
@@ -103,13 +102,12 @@ class Configuration : public TObject {
     return result;
   }
 
-
  protected:
   std::string name_;
   std::map<size_t, BranchConfig> branches_{};
   std::vector<MatchingConfig> matches_{};
 
-  MatchingIndex matches_index_{}; //! transient field in this version
+  MatchingIndex matches_index_{};//! transient field in this version
 
   ClassDef(Configuration, 4)
 };

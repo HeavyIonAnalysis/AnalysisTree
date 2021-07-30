@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
   const std::string filelist_ana = argv[2];
 
   auto* chain = new Chain(std::vector<std::string>{filelist_reco, filelist_ana}, {"aTree", "cTree"});
-  
+
   auto* config = chain->GetConfiguration();
   auto* data_header = chain->GetDataHeader();
 
