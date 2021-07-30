@@ -4,8 +4,6 @@
 #ifndef ANALYSISTREE_INFRA_BRANCH_HPP_
 #define ANALYSISTREE_INFRA_BRANCH_HPP_
 
-#include <BranchConfig.hpp>
-#include <Configuration.hpp>
 
 #include <cassert>
 #include <map>
@@ -13,6 +11,8 @@
 #include <vector>
 
 #include "BranchChannel.hpp"
+#include "BranchConfig.hpp"
+#include "Configuration.hpp"
 #include "EventHeader.hpp"
 #include "Field.hpp"
 #include "VariantMagic.hpp"
