@@ -11,20 +11,6 @@
 
 using namespace AnalysisTree;
 
-int main(int argc, char* argv[]) {
+int main() {
 
-  BranchConfig config("test", DetType::kParticle);
-  auto* particles = new Particles(1);
-
-  Branch branch(config, particles);
-  branch.SetMutable();
-  Field pT = branch.GetField("pT");
-  Field px = branch.GetField("px");
-  Field py = branch.GetField("py");
-  Field pz = branch.GetField("pz");
-
-  auto ch = branch.NewChannel();
-  ch.SetValue(px, 0.1);
-  ch.SetValue(py, 0.3);
-  ch.SetValue(pz, 0.5);
 }

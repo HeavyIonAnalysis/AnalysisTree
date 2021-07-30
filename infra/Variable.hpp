@@ -30,7 +30,7 @@ class Variable {
   virtual ~Variable() = default;
 
   explicit Variable(const Field& field)
-  : name_(field.GetBranchName() + "." + field.GetName()),
+  : name_(field.GetBranchName() + "_" + field.GetName()),
     fields_({field}),
     n_branches_(1) {};
 
