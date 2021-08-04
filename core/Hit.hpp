@@ -17,6 +17,7 @@ class Hit : public Container {
 
  public:
   Hit() = default;
+  explicit Hit(const Container& cont) : Container(cont) {}
   Hit(const Hit& otherHit) = default;
   Hit(Hit&& otherHit) = default;
   Hit& operator=(Hit&&) = default;

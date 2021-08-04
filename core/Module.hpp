@@ -16,6 +16,7 @@ class Module : public Container {
 
  public:
   Module() = default;
+  explicit Module(const Container& cont) : Container(cont) {}
   Module(const Module& otherModule) = default;
   Module(Module&& otherModule) = default;
   Module& operator=(Module&&) = default;

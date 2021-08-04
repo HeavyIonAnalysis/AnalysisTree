@@ -15,6 +15,7 @@ class Particle : public Track {
   explicit Particle(size_t id) : Track(id) {}
   Particle(size_t id, const BranchConfig& branch) noexcept : Track(id, branch) {}
 
+  explicit Particle(const Container& cont) : Track(cont) {}
   explicit Particle(const Track& track) : Track(track) {}
 
   Particle(const Particle& particle) = default;

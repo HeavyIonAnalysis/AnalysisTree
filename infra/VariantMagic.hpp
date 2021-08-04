@@ -53,7 +53,11 @@ struct new_channel_struct : public Utils::Visitor<void> {
 struct copy_content_struct : public Utils::Visitor<void> {
   template<typename T1, typename T2>
   void copy_content(T1* ch1, T2* ch2) const {
-    *ch1 = T1(*ch2);
+    *ch1 = T1(Container(*ch2));
+  }
+  template<typename T1, typename T2>
+  void copy_content(Particle* ch1, Track* ch2) const {
+    *ch1 = Particle(*ch2);
   }
   template<typename T1, typename T2>
   void operator()(T1* ch1, T2* ch2) const { copy_content<T1, T2>(ch1, ch2); }
