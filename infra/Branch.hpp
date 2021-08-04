@@ -56,13 +56,11 @@ class Branch {
   [[nodiscard]] const BranchConfig& GetConfig() const { return config_; }
 
   void InitDataPtr();
-  void ConnectOutputTree(TTree* tree);
 
   BranchChannel NewChannel();
   void ClearChannels();
   Field NewVariable(const std::string& field_name, const std::string& title, AnalysisTree::Types type);
   void CloneVariables(const AnalysisTree::BranchConfig& other);
-  void CopyContents(Branch* br);
 
   //  /* iterating */
   [[nodiscard]] size_t size() const;
@@ -70,6 +68,8 @@ class Branch {
   BranchChannel operator[](size_t i_channel) const {
     return BranchChannel(this, i_channel);
   }
+
+  std::vector<std::string> GetFieldNames() const;
 
   [[nodiscard]] size_t GetId() const {
     return ANALYSISTREE_UTILS_VISIT(get_id_struct(), data_);
@@ -94,9 +94,6 @@ class Branch {
 
  public:
   AnalysisTree::Configuration* parent_config{nullptr};
-  bool is_connected_to_input{false};
-  bool is_connected_to_output{false};
-
   mutable std::map<const Branch* /* other branch */, FieldsMapping> copy_fields_mapping;
 
   /* Modification */
@@ -112,8 +109,6 @@ class Branch {
     if (is_mutable_ != expected)
       throw std::runtime_error("Branch is not mutable");
   }
-
-  Field GetFieldVar(const std::string& field_name);
   /**
    * @brief Gets variables according to variable names specified in the arguments.
    * Returns tuple of variables which is suitable for unpacking with std::tie()

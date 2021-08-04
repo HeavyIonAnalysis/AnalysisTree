@@ -40,7 +40,7 @@ class BranchChannel {
    * @param other
    * @return
    */
-  void CopyContents(const BranchChannel& other);
+  void CopyContent(const BranchChannel& other);
 
   void CopyContentRaw(const BranchChannel& other);
 
