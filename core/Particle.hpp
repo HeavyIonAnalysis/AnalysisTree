@@ -68,11 +68,11 @@ class Particle : public Track {
         case ParticleFields::kPy: py_ = value; break;
         case ParticleFields::kPz: pz_ = value; break;
         case ParticleFields::kPid: pid_ = value; break;
-        case ParticleFields::kP: /*throw std::runtime_error("Cannot set transient fields")*/;
-        case ParticleFields::kPt: /*throw std::runtime_error("Cannot set transient fields")*/;
-        case ParticleFields::kEta: /*throw std::runtime_error("Cannot set transient fields")*/;
-        case ParticleFields::kPhi: /*throw std::runtime_error("Cannot set transient fields")*/;
-        case ParticleFields::kRapidity: /*throw std::runtime_error("Cannot set transient fields")*/;
+        case ParticleFields::kP: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
+        case ParticleFields::kPt: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
+        case ParticleFields::kEta: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
+        case ParticleFields::kPhi: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
+        case ParticleFields::kRapidity: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
         default: throw std::runtime_error("Unknown field");
       }
     }
