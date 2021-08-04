@@ -95,6 +95,10 @@ BranchConfig BranchConfig::Clone(const std::string& name, DetType type) const {
       result.AddField<bool>(field.first, field.second.id_, field.second.title_);
     }
   }
+  result.AnalysisTree::VectorConfig<bool>::size_ = AnalysisTree::VectorConfig<bool>::size_;
+  result.AnalysisTree::VectorConfig<int>::size_ = AnalysisTree::VectorConfig<int>::size_;
+  result.AnalysisTree::VectorConfig<float>::size_ = AnalysisTree::VectorConfig<float>::size_;
+
   return result;
 }
 
