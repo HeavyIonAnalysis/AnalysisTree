@@ -21,9 +21,9 @@ void BranchChannel::UpdatePointer() {
     throw std::out_of_range("");
   }
 }
+
 void BranchChannel::CopyContents(const BranchChannel& other) {
   branch_->CheckMutable();
-
   auto mapping_it = branch_->copy_fields_mapping.find(other.branch_);
   if (mapping_it == branch_->copy_fields_mapping.end()) {
     branch_->CreateMapping(other.branch_);

@@ -24,7 +24,7 @@ using namespace AnalysisTree;
 TEST(Cuts, RangeCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
-  VtxTracksBranch.AddField<float>("chi2");
+  VtxTracksBranch.AddField<float>("chi2", "");
 
   auto* track = new Track();
   track->Init(VtxTracksBranch);
@@ -51,8 +51,8 @@ TEST(Cuts, RangeCut) {
 TEST(Cuts, EqualCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
-  VtxTracksBranch.AddField<int>("nhits");
-  VtxTracksBranch.AddField<bool>("is_good");
+  VtxTracksBranch.AddField<int>("nhits", "");
+  VtxTracksBranch.AddField<bool>("is_good", "");
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
@@ -88,8 +88,8 @@ TEST(Cuts, EqualCut) {
 TEST(Cuts, FunctionalCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
-  VtxTracksBranch.AddFields<float>({"dcax", "dcay", "dcaz"});
-  VtxTracksBranch.AddFields<int>({"Nhits_vtpc1", "Nhits_vtpc2", "Nhits_mtpc"});
+  VtxTracksBranch.AddFields<float>({"dcax", "dcay", "dcaz"}, "");
+  VtxTracksBranch.AddFields<int>({"Nhits_vtpc1", "Nhits_vtpc2", "Nhits_mtpc"}, "");
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 

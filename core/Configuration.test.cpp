@@ -22,9 +22,9 @@ TEST(Configuration, Basics) {
   EXPECT_EQ(config.GetMatches().size(), 0);
 
   BranchConfig branch_config("RecTrack", DetType::kTrack);
-  branch_config.AddField<float>("test_f");
-  branch_config.AddField<int>("test_i");
-  branch_config.AddField<bool>("test_b");
+  branch_config.AddField<float>("test_f", "just a test field");
+  branch_config.AddField<int>("test_i", "just a test field");
+  branch_config.AddField<bool>("test_b", "just a test field");
 
   config.AddBranchConfig(branch_config);
 

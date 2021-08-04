@@ -17,9 +17,9 @@ TEST(BranchConfig, Basics) {
   auto det_types = {DetType::kTrack, DetType::kModule, DetType::kParticle, DetType::kHit, DetType::kEventHeader};
   for (auto det_type : det_types) {
     BranchConfig branch_config("RecTrack", det_type);
-    branch_config.AddField<float>("test_f");
-    branch_config.AddField<int>("test_i");
-    branch_config.AddField<bool>("test_b");
+    branch_config.AddField<float>("test_f", "just a test field");
+    branch_config.AddField<int>("test_i", "just a test field");
+    branch_config.AddField<bool>("test_b", "just a test field");
 
     EXPECT_EQ(branch_config.GetFieldId("test_i"), 0);
     EXPECT_EQ(branch_config.GetFieldId("test_b"), 0);
