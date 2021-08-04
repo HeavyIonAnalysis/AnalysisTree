@@ -77,3 +77,7 @@ void BranchChannel::SetValue(const Field& v, double value) {
 }
 
 double BranchChannel::operator[](const Field& v) const { return Value(v); }
+
+void BranchChannel::CopyContentRaw(const BranchChannel& other) {
+  ANALYSISTREE_UTILS_VISIT(copy_content_struct(), data_ptr_, other.data_ptr_);
+}
