@@ -22,7 +22,7 @@ void BranchChannel::UpdatePointer() {
   }
 }
 
-void BranchChannel::CopyContents(const BranchChannel& other) {
+void BranchChannel::CopyContent(const BranchChannel& other) {
   branch_->CheckMutable();
   auto mapping_it = branch_->copy_fields_mapping.find(other.branch_);
   if (mapping_it == branch_->copy_fields_mapping.end()) {

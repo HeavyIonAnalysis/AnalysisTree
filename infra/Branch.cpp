@@ -43,20 +43,6 @@ void Branch::InitDataPtr() {
   }
 }
 
-Field Branch::GetFieldVar(const std::string& field_name) {
-  AnalysisTree::Field v;
-  v.parent_branch_ = this;
-  v.field_id_ = v.parent_branch_->config_.GetFieldId(field_name);
-  //  v.name_ = this->config.GetName() + "/" + field_name; //NOTE is it needed?
-  v.field_ = field_name;
-  v.field_type_ = config_.GetFieldType(field_name);
-  v.is_init_ = true;
-
-  if (v.field_id_ == AnalysisTree::UndefValueShort)
-    throw std::runtime_error("Field of name '" + v.field_ + "' not found");
-  return v;
-}
-
 size_t AnalysisTree::Branch::size() const {
   return ANALYSISTREE_UTILS_VISIT(get_n_channels_struct(), data_);
 }
@@ -111,16 +97,6 @@ Field Branch::NewVariable(const std::string& field_name, const std::string& titl
 void Branch::ClearChannels() {
   CheckMutable();
   ANALYSISTREE_UTILS_VISIT(clear_channels_struct(), data_);
-}
-
-void Branch::ConnectOutputTree(TTree* /*tree*/) {
-  //  is_connected_to_output = ApplyT([this, tree](auto entity) -> bool {
-  //    if (!tree)
-  //      return false;
-  //    auto new_tree_branch_ptr = tree->Branch(config_.GetName().c_str(),
-  //                                            std::add_pointer_t<decltype(entity)>(&this->data_));
-  //    return bool(new_tree_branch_ptr);
-  //  });
 }
 
 void Branch::CloneVariables(const AnalysisTree::BranchConfig& other) {
@@ -195,14 +171,14 @@ void Branch::CreateMapping(const Branch* other) const {
 
     std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
     FieldsMapping fields_mapping;
-//    for (auto& field_name : other->GetFieldNames()) {
-//      if (!config_.HasField(field_name)) { continue; }
-//      fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetFieldVar(field_name), GetFieldVar(field_name)));
-//      std::cout << "\t" << field_name
-//                << "\t(" << types_map.at(other->GetFieldVar(field_name).GetFieldType()) << " ---> "
-//                << types_map.at(GetFieldVar(field_name).GetFieldType()) << ")" << std::endl;
-//    }
-//    copy_fields_mapping.emplace(other, std::move(fields_mapping));
+    for (auto& field_name : other->GetFieldNames()) {
+      if (!config_.HasField(field_name)) { continue; }
+      fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetField(field_name), GetField(field_name)));
+      std::cout << "\t" << field_name
+                << "\t(" << types_map.at(other->GetField(field_name).GetFieldType()) << " ---> "
+                << types_map.at(GetField(field_name).GetFieldType()) << ")" << std::endl;
+    }
+    copy_fields_mapping.emplace(other, std::move(fields_mapping));
 }
 
 //void Branch::UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars,
@@ -213,7 +189,7 @@ void Branch::CreateMapping(const Branch* other) const {
 //      element.second.get() = Field();
 //      continue;
 //    }
-//    element.second.get() = GetFieldVar(field_name);
+//    element.second.get() = GetField(field_name);
 //  }
 //}
 
@@ -221,8 +197,17 @@ void Branch::UpdateConfigHash() {
   config_hash_ = Impl::BranchConfigHasher(config_);
 }
 
-Branch::~Branch() {
-  //  ApplyT([this](auto entry_ptr) {  // TODO
-  //    delete entry_ptr;
-  //  });
+std::vector<std::string> Branch::GetFieldNames() const {
+  std::vector<std::string> result;
+  auto fill_vector_from_map = [&result](const std::map<std::string, ConfigElement>& fields_map) -> void {
+    for (auto& element : fields_map) {
+      result.push_back(element.first);
+    }
+  };
+  fill_vector_from_map(config_.GetMap<float>());
+  fill_vector_from_map(config_.GetMap<int>());
+  fill_vector_from_map(config_.GetMap<bool>());
+  return result;
 }
+
+Branch::~Branch() = default;
