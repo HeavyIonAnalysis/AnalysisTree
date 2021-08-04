@@ -19,6 +19,7 @@ class EventHeader : public Container {
  public:
   EventHeader() = default;
   explicit EventHeader(size_t id) : Container(id){};
+  explicit EventHeader(const Container& cont) : Container(cont) {}
   EventHeader(size_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
 
   EventHeader(const EventHeader& eh) = default;

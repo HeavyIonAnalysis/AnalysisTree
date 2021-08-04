@@ -24,6 +24,7 @@ class Track : public Container {
   Track() = default;
 
   explicit Track(size_t id) noexcept : Container(id) {}
+  explicit Track(const Container& cont) : Container(cont) {}
   Track(size_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
   Track(const Track& track) = default;
   Track(Track&& track) = default;
