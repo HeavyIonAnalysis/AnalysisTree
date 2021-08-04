@@ -42,6 +42,8 @@ class BranchChannel {
    */
   void CopyContents(const BranchChannel& other);
 
+  void CopyContentRaw(const BranchChannel& other);
+
   void Print(std::ostream& os = std::cout) const;
 
  private:
