@@ -30,10 +30,11 @@ struct ConfigElement {
   ClassDef(ConfigElement, 1)
 };
 
+typedef std::map<std::string, ConfigElement> MapType;
+
 template<typename T>
 class VectorConfig {
  public:
-  typedef std::map<std::string, ConfigElement> MapType;
 
   VectorConfig() = default;
   VectorConfig(const VectorConfig&) = default;
@@ -44,15 +45,17 @@ class VectorConfig {
   virtual ~VectorConfig() = default;
 
   virtual void AddField(const std::string& name, const std::string& title) {
-    map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++, title)));
+    map_.insert(std::make_pair(name, ConfigElement(size_++, title)));
   }
-  void AddField(const std::string& name, ShortInt_t id, const std::string& title = "") {
-    map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(id, title)));
+  virtual void AddField(const std::string& name, ShortInt_t id, const std::string& title) {
+    map_.insert(std::make_pair(name, ConfigElement(id, title)));
   }
-
+  void AddField(const std::string& name, const ConfigElement& field) {
+    map_.insert(std::make_pair(name, field));
+  }
   virtual void AddFields(const std::vector<std::string>& names, const std::string& title) {
     for (const auto& name : names) {
-      map_.insert(std::pair<std::string, ConfigElement>(name, ConfigElement(size_++, title)));
+      map_.insert(std::make_pair(name, ConfigElement(size_++, title)));
     }
   }
 
@@ -100,15 +103,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   BranchConfig& operator=(const BranchConfig&) = default;
   ~BranchConfig() override = default;
 
-  explicit BranchConfig(std::string name, DetType type);
-
-  BranchConfig(std::string name, DetType type, const VectorConfig<int>::MapType& ints, const VectorConfig<float>::MapType& floats, const VectorConfig<bool>::MapType& bools) : VectorConfig<int>::VectorConfig<int>(ints),
-                                                                                                                                                                               VectorConfig<float>::VectorConfig<float>(floats),
-                                                                                                                                                                               VectorConfig<bool>::VectorConfig<bool>(bools),
-                                                                                                                                                                               name_(std::move(name)),
-                                                                                                                                                                               type_(type) {
-    GenerateId();
-  }
+  BranchConfig(std::string name, DetType type);
 
   void GenerateId();
 
@@ -119,26 +114,29 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   // Setters
   template<typename T>
-  void AddField(const std::string& name, const std::string& title = "") {
+  void AddField(const std::string& name, const std::string& title) {
     VectorConfig<T>::AddField(name, title);
   }
   template<typename T>
-  void AddFields(const std::vector<std::string>& names, const std::string& title = "") {
+  void AddFields(const std::vector<std::string>& names, const std::string& title) {
     VectorConfig<T>::AddFields(names, title);
   }
+  template<typename T>
+  void AddField(const std::string& name, ShortInt_t id, const std::string& title) {
+    VectorConfig<T>::AddField(name, id, title);
+  }
+
 
   // Getters
   template<typename T>
-  ANALYSISTREE_ATTR_NODISCARD const VectorConfig<int>::MapType& GetMap() const { return VectorConfig<T>::GetMap(); }
+  ANALYSISTREE_ATTR_NODISCARD const MapType& GetMap() const { return VectorConfig<T>::GetMap(); }
   template<typename T>
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 
   ANALYSISTREE_ATTR_NODISCARD std::string GetName() const { return name_; }
   ANALYSISTREE_ATTR_NODISCARD size_t GetId() const { return id_; }
   ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
-  ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const {
-    return BranchConfig(name, type, VectorConfig<int>::map_, VectorConfig<float>::map_, VectorConfig<bool>::map_);
-  }
+  ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const;
 
   bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
 
