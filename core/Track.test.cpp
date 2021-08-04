@@ -54,10 +54,10 @@ TEST(Track, Write) {
   Configuration config;
 
   BranchConfig RecTracksBranch("RecTrack", DetType::kTrack);
-  RecTracksBranch.AddField<float>("dcax");
-  RecTracksBranch.AddField<float>("dcay");
-  RecTracksBranch.AddField<float>("dcaz");
-  RecTracksBranch.AddField<int>("nhits");
+  RecTracksBranch.AddField<float>("dcax", "cm");
+  RecTracksBranch.AddField<float>("dcay", "cm");
+  RecTracksBranch.AddField<float>("dcaz", "cm");
+  RecTracksBranch.AddField<int>("nhits", "Number of hits");
 
   config.AddBranchConfig(RecTracksBranch);
   auto* RecTracks = new TrackDetector(0);

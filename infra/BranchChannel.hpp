@@ -31,7 +31,7 @@ class BranchChannel {
   void SetValue(const Field& v, double value);
 
   template<typename T>
-  T* Data() { return ANALYSISTREE_UTILS_GET<T*>(data_ptr_); }
+  T*& Data() { return ANALYSISTREE_UTILS_GET<T*>(data_ptr_); }
   template<typename T>
   const T* Data() const { return ANALYSISTREE_UTILS_GET<T*>(data_ptr_); }
 

@@ -32,9 +32,9 @@ TEST(Variable, FromString) {
 TEST(Variable, Basics) {
 
   BranchConfig branch_config("RecTrack", DetType::kTrack);
-  branch_config.AddField<float>("test_f");
-  branch_config.AddField<int>("test_i");
-  branch_config.AddField<bool>("test_b");
+  branch_config.AddField<float>("test_f", "test field");
+  branch_config.AddField<int>("test_i", "test field");
+  branch_config.AddField<bool>("test_b", "test field");
 
   Configuration configuration;
   configuration.AddBranchConfig(branch_config);

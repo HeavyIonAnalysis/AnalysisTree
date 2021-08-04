@@ -60,7 +60,7 @@ class Branch {
 
   BranchChannel NewChannel();
   void ClearChannels();
-  Field NewVariable(const std::string& field_name, AnalysisTree::Types type);
+  Field NewVariable(const std::string& field_name, const std::string& title, AnalysisTree::Types type);
   void CloneVariables(const AnalysisTree::BranchConfig& other);
   void CopyContents(Branch* br);
 
@@ -148,11 +148,6 @@ class Branch {
   void CreateMapping(const Branch* other) const;
 
   void UpdateConfigHash();
-
-  //  template<typename Functor>
-  //  auto ApplyT(Functor&& f) { return ANALYSISTREE_UTILS_VISIT(f, data_); }
-  //  template<typename Functor>
-  //  auto ApplyT(Functor&& f) const { return ANALYSISTREE_UTILS_VISIT(f, data_); }
 
   [[nodiscard]] AnalysisTree::ShortInt_t Hash() const {
     const auto hasher = std::hash<std::string>();

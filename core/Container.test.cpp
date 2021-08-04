@@ -22,9 +22,9 @@ TEST(Container, Basics) {
   EXPECT_EQ(container.GetSize<bool>(), 0);
 
   BranchConfig config("RecTrack", DetType::kTrack);
-  config.AddField<float>("test_f");
-  config.AddField<int>("test_i");
-  config.AddField<bool>("test_b");
+  config.AddField<float>("test_f", "just a test field");
+  config.AddField<int>("test_i", "just a test field");
+  config.AddField<bool>("test_b", "just a test field");
 
   container.Init(config);
 

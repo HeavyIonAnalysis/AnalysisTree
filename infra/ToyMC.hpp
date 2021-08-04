@@ -33,12 +33,12 @@ class ToyMC : public Task {
     auto* man = TaskManager::GetInstance();
 
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
-    sim_eh.AddField<float>("psi_RP");
+    sim_eh.AddField<float>("psi_RP", "Reaction Plane angle");
 
     BranchConfig sim_part("SimParticles", DetType::kParticle);
-    sim_part.AddField<float>("float");
-    sim_part.AddField<bool>("bool");
-    sim_part.AddField<int>("int");
+    sim_part.AddField<float>("float", "test field");
+    sim_part.AddField<bool>("bool", "test field");
+    sim_part.AddField<int>("int", "test field");
 
     man->AddBranch(sim_event_header_, sim_eh);
     man->AddBranch(particles_, sim_part);

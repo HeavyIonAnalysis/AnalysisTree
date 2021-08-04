@@ -61,7 +61,7 @@ size_t AnalysisTree::Branch::size() const {
   return ANALYSISTREE_UTILS_VISIT(get_n_channels_struct(), data_);
 }
 
-Field Branch::NewVariable(const std::string& field_name, AnalysisTree::Types type) {
+Field Branch::NewVariable(const std::string& field_name, const std::string& title, AnalysisTree::Types type) {
   if (field_name.empty()) {
     throw std::runtime_error("Field name cannot be empty");
   }
@@ -78,15 +78,15 @@ Field Branch::NewVariable(const std::string& field_name, AnalysisTree::Types typ
 
   switch (type) {
     case Types::kFloat: {
-      config_.template AddField<float>(field_name);
+      config_.template AddField<float>(field_name, title);
       break;
     }
     case Types::kInteger: {
-      config_.template AddField<int>(field_name);
+      config_.template AddField<int>(field_name, title);
       break;
     }
     case Types::kBool: {
-      config_.template AddField<bool>(field_name);
+      config_.template AddField<bool>(field_name, title);
       break;
     }
     default: assert(false);
@@ -131,41 +131,13 @@ void Branch::CloneVariables(const AnalysisTree::BranchConfig& other) {
         std::cout << "Field '" << field_name << "' already exists" << std::endl;
         continue;
       }
-      this->NewVariable(field_name, type);
+      this->NewVariable(field_name, element.second.title_, type);
     }// map elements
   };
 
   import_fields_from_map(other.GetMap<float>(), AnalysisTree::Types::kFloat);
   import_fields_from_map(other.GetMap<int>(), AnalysisTree::Types::kInteger);
   import_fields_from_map(other.GetMap<bool>(), AnalysisTree::Types::kBool);
-}
-
-void Branch::CopyContents(Branch* other) {
-  if (this == other) {
-    throw std::runtime_error("Copying contents from the same branch makes no sense");
-  }
-  CheckMutable();
-
-  if (other->config_.GetType() != config_.GetType()) {
-    throw std::runtime_error("Branch types must be the same");
-  }
-  if (config_.GetType() != AnalysisTree::DetType::kEventHeader) {
-    throw std::runtime_error("Only EventHeader is available for Branch::CopyContents");
-  }
-
-  auto mapping_it = copy_fields_mapping.find(other);
-  if (mapping_it == copy_fields_mapping.end()) {
-    CreateMapping(other);
-    mapping_it = copy_fields_mapping.find(other);
-  }
-
-  /* evaluate mapping */
-  auto src_branch = mapping_it->first;
-  const auto& mapping = mapping_it->second;
-
-  //  for (auto& field_pair /* src : dst */ : mapping.field_pairs) {
-  //    this->SetValue(field_pair.second, src_branch->Value(field_pair.first));
-  //  }
 }
 
 void Branch::CopyContentsRaw(Branch* other) {
@@ -221,16 +193,16 @@ void Branch::CreateMapping(const Branch* other) const {
       {AnalysisTree::Types::kInteger, "integer"},
       {AnalysisTree::Types::kBool, "bool"}};
 
-  //  std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
-  //  FieldsMapping fields_mapping;
-  //  for (auto& field_name : other->GetFieldNames()) {
-  //    if (!config_.HasField(field_name)) { continue; }
-  //    fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetFieldVar(field_name), GetFieldVar(field_name)));
-  //    std::cout << "\t" << field_name
-  //              << "\t(" << types_map.at(other->GetFieldVar(field_name).GetFieldType()) << " ---> "
-  //              << types_map.at(GetFieldVar(field_name).GetFieldType()) << ")" << std::endl;
-  //  }
-  //  copy_fields_mapping.emplace(other, std::move(fields_mapping));
+    std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
+    FieldsMapping fields_mapping;
+//    for (auto& field_name : other->GetFieldNames()) {
+//      if (!config_.HasField(field_name)) { continue; }
+//      fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetFieldVar(field_name), GetFieldVar(field_name)));
+//      std::cout << "\t" << field_name
+//                << "\t(" << types_map.at(other->GetFieldVar(field_name).GetFieldType()) << " ---> "
+//                << types_map.at(GetFieldVar(field_name).GetFieldType()) << ")" << std::endl;
+//    }
+//    copy_fields_mapping.emplace(other, std::move(fields_mapping));
 }
 
 //void Branch::UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars,
