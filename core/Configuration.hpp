@@ -105,6 +105,11 @@ class Configuration : public TObject {
     return result;
   }
 
+  std::vector<std::string> GetListOfBranches() const;
+
+  std::vector<std::string> GetListOfBranchesExcluding(const std::vector<std::string>& exclude) const;
+
+
  protected:
   std::string name_;
   std::map<size_t, BranchConfig> branches_{};

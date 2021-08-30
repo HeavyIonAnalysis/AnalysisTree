@@ -5,12 +5,12 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <algorithm>
 
 #include "Configuration.hpp"
 #include "Matching.hpp"
 
 #include <TBuffer.h>
-#include <TClass.h>
 #include <TROOT.h>
 #include <TVirtualStreamerInfo.h>
 
@@ -129,6 +129,33 @@ void Configuration::AddMatch(Matching* match) {
   matches_.emplace_back(br1, br2, data_branch);
   /* refresh index */
   matches_index_ = MakeMatchingIndex(matches_);
+}
+
+std::vector<std::string> Configuration::GetListOfBranches() const {
+  std::vector<std::string> branches{};
+  for(const auto& br : branches_){
+    branches.emplace_back(br.second.GetName());
+  }
+  for(const auto& match : matches_index_) {
+    branches.emplace_back(match.second);
+  }
+  return branches;
+}
+
+std::vector<std::string> Configuration::GetListOfBranchesExcluding(const std::vector<std::string>& exclude) const {
+  std::vector<std::string> branches{};
+  for(const auto& br : branches_){
+    if(std::find(exclude.begin(), exclude.end(), br.second.GetName()) == exclude.end()){
+      branches.emplace_back(br.second.GetName());
+    }
+  }
+  for(const auto& match : matches_index_) {
+    if(std::find(exclude.begin(), exclude.end(), match.first[0]) == exclude.end() &&
+    std::find(exclude.begin(), exclude.end(), match.first[1]) == exclude.end() ){
+      branches.emplace_back(match.second);
+    }
+  }
+  return branches;
 }
 
 }// namespace AnalysisTree
