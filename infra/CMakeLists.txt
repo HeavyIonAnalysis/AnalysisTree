@@ -57,6 +57,10 @@ target_include_directories(AnalysisTreeInfra
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
             $<INSTALL_INTERFACE:include>
+            # ${BOOST_LIBRARIES} apparently keeps only paths to *.so files, thus
+            # to have Boost_INCLUDE_DIRS propagated to dependent projects,
+            # they must be specified here
+            $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>
         INTERFACE
             $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         )
