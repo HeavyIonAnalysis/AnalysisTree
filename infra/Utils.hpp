@@ -36,12 +36,6 @@ class EventHeader;
 using BranchPointer = ANALYSISTREE_UTILS_VARIANT<HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*>;
 using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Hit*, Module*, Track*, EventHeader*, Particle*>;
 
-enum class eBranchWriteMode {
-  kCreateNewTree,
-  kCopyTree,
-  kNone
-};
-
 namespace Utils {
 
 template<typename RetType>
