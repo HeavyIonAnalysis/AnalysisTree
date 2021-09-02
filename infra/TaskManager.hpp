@@ -22,6 +22,41 @@ namespace AnalysisTree {
 
 class Configuration;
 
+enum class eBranchWriteMode {
+  kCreateNewTree,
+  kCopyTree,
+  kCopySelectedBranches,
+  kNone
+};
+
+struct OutputTreeConfig{
+  OutputTreeConfig() = default;
+  explicit OutputTreeConfig(eBranchWriteMode mode, std::vector<std::string> ex = {}, std::vector<std::string> br = {})
+  :  write_mode_(mode), branches_exclude_(std::move(ex)), branches_(std::move(br)) {}
+
+  void Init(const Configuration& config){
+    if(write_mode_ == eBranchWriteMode::kCreateNewTree || write_mode_ == eBranchWriteMode::kCopyTree){
+      assert(branches_exclude_.empty() && branches_.empty());
+      is_init_ = true;
+      return;
+    }
+    if(write_mode_ == eBranchWriteMode::kCopySelectedBranches){
+      if(!branches_exclude_.empty()){
+        assert(branches_.empty());
+        branches_ = config.GetListOfBranchesExcluding(branches_exclude_);
+      }
+      assert(!branches_.empty());
+    }
+  }
+
+  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
+  std::vector<std::string> branches_exclude_{};
+  std::vector<std::string> branches_{};
+
+  bool is_init_{false};
+};
+
+
 class TaskManager {
 
  public:
@@ -71,7 +106,7 @@ class TaskManager {
       InitOutChain();
     }
     configuration_->AddBranchConfig(config);
-    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
+    if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddBranchConfig(config);
     }
 
@@ -117,7 +152,7 @@ class TaskManager {
                          chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
-    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
+    if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddMatch(match);
     }
     out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
@@ -153,7 +188,7 @@ class TaskManager {
     out_tree_name_ = std::move(tree);
   }
 
-  void SetOutputMode(eBranchWriteMode mode) { write_mode_ = mode; }
+  void SetOutputTreeConfig(OutputTreeConfig mode) { out_tree_conf_ = std::move(mode); }
 
   void ClearTasks() { tasks_.clear(); }
 
@@ -176,7 +211,8 @@ class TaskManager {
   std::string out_file_name_{"analysis_tree.root"};
 
   // configuration parameters
-  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
+  OutputTreeConfig out_tree_conf_;
+//  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
   bool is_init_{false};
   bool fill_out_tree_{false};
   bool read_in_tree_{false};
