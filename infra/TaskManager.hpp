@@ -25,7 +25,7 @@ class Configuration;
 enum class eBranchWriteMode {
   kCreateNewTree,
   kCopyTree,
-  kCopySelectedBranches,
+//  kCopySelectedBranches,
   kNone
 };
 
@@ -40,13 +40,13 @@ struct OutputTreeConfig{
       is_init_ = true;
       return;
     }
-    if(write_mode_ == eBranchWriteMode::kCopySelectedBranches){
-      if(!branches_exclude_.empty()){
-        assert(branches_.empty());
-        branches_ = config.GetListOfBranchesExcluding(branches_exclude_);
-      }
-      assert(!branches_.empty());
-    }
+//    if(write_mode_ == eBranchWriteMode::kCopySelectedBranches){
+//      if(!branches_exclude_.empty()){
+//        assert(branches_.empty());
+//        branches_ = config.GetListOfBranchesExcluding(branches_exclude_);
+//      }
+//      assert(!branches_.empty());
+//    }
   }
 
   eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
