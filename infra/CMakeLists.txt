@@ -28,7 +28,11 @@ list(APPEND HEADERS
         Utils.hpp
         )
 
-include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(
+        ${CMAKE_SOURCE_DIR}/core
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>
+        )
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
 target_compile_definitions(AnalysisTreeInfra PUBLIC
         $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
