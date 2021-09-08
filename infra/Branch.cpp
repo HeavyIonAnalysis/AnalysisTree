@@ -36,7 +36,9 @@ void Branch::InitDataPtr() {
       break;
     }
     case DetType::kEventHeader: {
-      data_ = new EventHeader(config_.GetId());
+      auto temp = new EventHeader(config_.GetId());
+      temp->Init(config_);
+      data_ = temp;
       break;
     }
     default: throw std::runtime_error("Branch type is not known!");
