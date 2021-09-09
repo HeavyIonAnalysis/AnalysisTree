@@ -23,8 +23,16 @@ void UserTaskWrite::Init() {
 }
 
 void UserTaskWrite::Exec() {
-  *new_particles_ptr_ = *(particles_.GetDataRaw<Particles*>());
-  new_particles_.CopyContentsRaw(&particles_);
+
+//  new_particles_.CopyContentsRaw(&particles_);
+
+  for(int i=0; i<particles_.size(); ++i){
+    auto particle = particles_[i];
+    auto new_part = new_particles_.NewChannel();
+    new_part.CopyContent(particle);
+//    new_part.CopyContentRaw(particle);
+  }
+
 }
 
 UserTaskWrite::~UserTaskWrite() {
