@@ -80,6 +80,14 @@ class Chain : public TChain {
 
   class Branch GetBranch(const std::string& name) const;
 
+  Matching* GetMatching(const std::string& br1, const std::string& br2) const {
+    auto match = matches_.find(configuration_->GetMatchName(br1, br2));
+    if(match == matches_.end()){
+      throw std::runtime_error("No matching found");
+    }
+    return match->second;
+  }
+
  protected:
   void InitChain();
   void InitConfiguration();
