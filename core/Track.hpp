@@ -7,7 +7,8 @@
 #include <cmath>
 #include <stdexcept>
 
-#include <TLorentzVector.h>
+#include <Math/Vector4D.h>
+#include <TVector3.h>
 #include <TVector3.h>
 
 #include "Container.hpp"
@@ -37,8 +38,8 @@ class Track : public Container {
   * @param mass - track mass hypotesis in GeV/c^2
   * @return 4d-momentum of track
   */
-  ANALYSISTREE_ATTR_NODISCARD inline TLorentzVector Get4MomentumByMass(Floating_t mass) const noexcept {
-    return TLorentzVector({px_, py_, pz_}, sqrt(px_ * px_ + py_ * py_ + pz_ * pz_ + mass * mass));
+  ANALYSISTREE_ATTR_NODISCARD inline ROOT::Math::PxPyPzMVector Get4MomentumByMass(Floating_t mass) const noexcept {
+    return {px_, py_, pz_, mass};
   }
 
   /**
@@ -46,7 +47,7 @@ class Track : public Container {
   * @param pdg - pdg code hypotesis
   * @return 4d-momentum of track. If pdg is not found - exeption should be thrown.
   */
-  ANALYSISTREE_ATTR_NODISCARD inline TLorentzVector Get4Momentum(PdgCode_t pdg) const {
+  ANALYSISTREE_ATTR_NODISCARD inline ROOT::Math::PxPyPzMVector Get4Momentum(PdgCode_t pdg) const {
     const float mass = GetMassByPdgId(pdg);
     return Get4MomentumByMass(mass);
   }
@@ -68,13 +69,13 @@ class Track : public Container {
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPz() const noexcept { return pz_; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPt() const noexcept { return sqrt(px_ * px_ + py_ * py_); }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPhi() const noexcept { return atan2(py_, px_); }
-  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetEta() const noexcept { return 0.5 * log((GetP() + pz_) / (GetP() - pz_)); }
+  ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetEta() const noexcept { return 0.5f * log((GetP() + pz_) / (GetP() - pz_)); }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetP() const noexcept { return sqrt(px_ * px_ + py_ * py_ + pz_ * pz_); }
 
   /**
   * @return 3d-momentum of a track
   */
-  ANALYSISTREE_ATTR_NODISCARD inline TVector3 GetMomentum3() const noexcept { return TVector3(px_, py_, pz_); }
+  ANALYSISTREE_ATTR_NODISCARD inline TVector3 GetMomentum3() const noexcept { return {px_, py_, pz_}; }
 
   /**
   * Compares 2 tracks
@@ -99,7 +100,7 @@ class Track : public Container {
   */
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetRapidityByMass(float mass) const noexcept {
     const float e = sqrt(mass * mass + GetP() * GetP());
-    return 0.5 * log((e + GetPz()) / (e - GetPz()));
+    return 0.5f * log((e + GetPz()) / (e - GetPz()));
   }
 
   /**
