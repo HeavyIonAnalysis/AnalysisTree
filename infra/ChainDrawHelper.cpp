@@ -34,7 +34,12 @@ void ChainDrawHelper::DrawFieldTransform(std::string& expr) {
     }
   }
 
-  expr = Form("%s.channels_.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
+  if(br.GetType() != DetType::kEventHeader){
+    expr = Form("%s.channels_.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
+  }
+  else{
+    expr = Form("%s.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
+  }
 }
 
 std::vector<std::pair<std::string, int>> ChainDrawHelper::FindAndRemoveFields(std::string& expr) {
