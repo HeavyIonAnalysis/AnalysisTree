@@ -22,7 +22,8 @@ TEST(Test_AnalysisTreeInfra, Test_Chain) {
   chain->InitPointersToBranches({});
   auto branches_map = chain->GetBranchPointers();
 
-  chain->Draw("SimParticles.px", "");
+  auto n_px = chain->Draw("SimParticles.px", "");
+  EXPECT_GT(n_px, 0);
 
   auto* particles = std::get<Particles*>(chain->GetPointerToBranch("SimParticles"));
   auto* tracks = std::get<TrackDetector*>(chain->GetPointerToBranch("RecTracks"));

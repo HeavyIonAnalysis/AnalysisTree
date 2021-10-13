@@ -15,8 +15,6 @@ set(SOURCES
 
   Branch.cpp
   BranchChannel.cpp
-#  ValueHolder.cpp
-#   ../examples/UserTaskWrite.cpp
         )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
@@ -82,6 +80,7 @@ if(AnalysisTree_BUILD_TESTS)
             PlainTreeFiller.test.cpp
             AnalysisTask.test.cpp
             Branch.test.cpp
+            Chain.test.hpp
             )
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)
