@@ -72,6 +72,7 @@ class Chain : public TChain {
   void InitPointersToBranches(std::set<std::string> names);
 
   Long64_t Draw(const char* varexp, const char* selection = nullptr, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
+  Long64_t Scan(const char* varexp, const char* selection = nullptr, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
 
   void Print(Option_t*) const override {
     this->data_header_->Print();
