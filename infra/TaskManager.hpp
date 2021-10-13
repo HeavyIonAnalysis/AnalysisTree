@@ -34,19 +34,12 @@ struct OutputTreeConfig{
   explicit OutputTreeConfig(eBranchWriteMode mode, std::vector<std::string> ex = {}, std::vector<std::string> br = {})
   :  write_mode_(mode), branches_exclude_(std::move(ex)), branches_(std::move(br)) {}
 
-  void Init(const Configuration& config){
+  void Init(){
     if(write_mode_ == eBranchWriteMode::kCreateNewTree || write_mode_ == eBranchWriteMode::kCopyTree){
       assert(branches_exclude_.empty() && branches_.empty());
       is_init_ = true;
       return;
     }
-//    if(write_mode_ == eBranchWriteMode::kCopySelectedBranches){
-//      if(!branches_exclude_.empty()){
-//        assert(branches_.empty());
-//        branches_ = config.GetListOfBranchesExcluding(branches_exclude_);
-//      }
-//      assert(!branches_.empty());
-//    }
   }
 
   eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};

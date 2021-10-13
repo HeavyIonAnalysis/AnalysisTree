@@ -60,7 +60,7 @@ void TaskManager::Init() {
 
 void TaskManager::InitOutChain() {
   fill_out_tree_ = true;
-  out_tree_conf_.Init(*chain_->GetConfiguration());
+  out_tree_conf_.Init();
   out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
   if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
     out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
