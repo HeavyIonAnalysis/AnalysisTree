@@ -169,4 +169,17 @@ Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option
   return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
 
+Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry){
+  std::string exp{varexp};
+  std::string sel{selection ? selection : ""};
+
+  auto helper = ChainDrawHelper(configuration_);
+  helper.DrawTransform(exp);
+  if (!sel.empty()) {
+    helper.DrawTransform(sel);
+  }
+  return TChain::Scan(exp.c_str(), sel.c_str(), option, nentries, firstentry);
+}
+
+
 }// namespace AnalysisTree
