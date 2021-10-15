@@ -81,3 +81,5 @@ double BranchChannel::operator[](const Field& v) const { return Value(v); }
 void BranchChannel::CopyContentRaw(const BranchChannel& other) {
   ANALYSISTREE_UTILS_VISIT(copy_content_struct(), data_ptr_, other.data_ptr_);
 }
+
+std::size_t BranchChannel::GetId() const { return ANALYSISTREE_UTILS_VISIT(get_id_struct(), data_ptr_); }

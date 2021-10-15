@@ -17,6 +17,7 @@ class UserTaskRead : public AnalysisTree::Task {
  private:
   AnalysisTree::Branch particles_;
   AnalysisTree::Branch tracks_;
+  AnalysisTree::Matching* match_{nullptr};
 };
 
 #endif//ANALYSISTREE_EXAMPLES_USERTASKREAD_HPP_

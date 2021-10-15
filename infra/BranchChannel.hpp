@@ -27,6 +27,7 @@ class BranchChannel {
   [[nodiscard]] double Value(const Field& v) const;
   [[nodiscard]] double operator[](const Field& v) const;
   [[nodiscard]] inline std::size_t GetChannelNumber() const { return i_channel_; }
+  [[nodiscard]] std::size_t GetId() const;
 
   void SetValue(const Field& v, double value);
 
