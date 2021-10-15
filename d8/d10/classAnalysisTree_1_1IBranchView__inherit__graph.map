@@ -1,0 +1,4 @@
+<map id="AnalysisTree::IBranchView" name="AnalysisTree::IBranchView">
+<area shape="rect" id="node1" title="Interface class representing two&#45;dimensional object with index [channel_id, field_name + (type)]." alt="" coords="6,5,183,229"/>
+<area shape="rect" id="node2" href="$dd/d75/classAnalysisTree_1_1AnalysisTreeBranch.html" title="Binding of AnalysisTree branch to BranchView." alt="" coords="5,277,184,472"/>
+</map>
