@@ -54,6 +54,8 @@ class Task {
     event_cuts_ = cuts;
   }
 
+  void AddInputBranch(const std::string& name) { in_branches_.emplace(name); }
+
  protected:
   const Configuration* config_{nullptr};
   const DataHeader* data_header_{nullptr};
