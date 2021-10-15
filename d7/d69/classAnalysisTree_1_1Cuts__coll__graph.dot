@@ -1,6 +1,0 @@
-digraph "AnalysisTree::Cuts"
-{
-  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
-  node [fontname="Helvetica",fontsize="10",shape=record];
-  Node1 [label="{AnalysisTree::Cuts\n|# name_\l# branch_names_\l# branch_ids_\l# cuts_\l# is_init_\l|+ Cuts()\l+ Cuts()\l+ Cuts()\l+ operator=()\l+ operator=()\l+ ~Cuts()\l+ Cuts()\l+ Cuts()\l+ Apply()\l+ Apply()\land 7 more...\l+ Equal()\l# ClassDef()\l}",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
-}
