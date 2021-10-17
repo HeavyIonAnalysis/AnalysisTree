@@ -7,6 +7,7 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
+#include <Configuration.hpp>
 #include <ROOT/RDataFrame.hxx>
 
 using namespace AnalysisTree;
@@ -45,6 +46,8 @@ TEST(AnalysisTreeRDF, Display) {
       );
 
   ROOT::RDataFrame rdf(std::move(ds));
-  rdf.Display({"vtx_x", "vtx_y", "vtx_z"}).GetValue().Print();
+  rdf
+      .Define("vtx_r", "TMath::Sqrt(vtx_x*vtx_x + vtx_y*vtx_y)")
+      .Display({"vtx_x", "vtx_y", "vtx_z", "vtx_r"}).GetValue().Print();
 
 }

@@ -80,7 +80,12 @@ if(AnalysisTree_BUILD_TESTS)
     endif()
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
-    target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
+    target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE
+            ROOTNTuple
+            ROOTVecOps
+            vdt
+            AnalysisTreeInfra
+            gtest_main)
     gtest_discover_tests(AnalysisTreeInfra_UnitTests TEST_PREFIX AnalysisTreeInfra_)
 endif()
 
