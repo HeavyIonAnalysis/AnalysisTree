@@ -4,10 +4,16 @@
 #include "Container.hpp"
 #include <array>
 #include <stdexcept>
+#include <cassert>
 
 class TVector3;
 
 namespace AnalysisTree {
+
+namespace Impl {
+  struct EventHeaderAccessor;
+}
+
 
 /**
  * A class for an event header
@@ -55,8 +61,31 @@ class EventHeader : public Container {
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};
 
+  friend struct Impl::EventHeaderAccessor;
+
   ClassDefOverride(EventHeader, 2)
 };
+
+namespace Impl {
+
+struct EventHeaderAccessor {
+  explicit EventHeaderAccessor(EventHeader* EventHeaderPtr) : event_header_ptr(EventHeaderPtr) {}
+
+  EventHeader *event_header_ptr;
+
+  void *getFieldData(Integer_t i_field) {
+    switch (i_field) {
+      case EventHeaderFields::kVertexX: return &(event_header_ptr->vtx_pos_[Exyz::kX]);
+      case EventHeaderFields::kVertexY: return &(event_header_ptr->vtx_pos_[Exyz::kY]);
+      case EventHeaderFields::kVertexZ: return &(event_header_ptr->vtx_pos_[Exyz::kZ]);
+      default: assert(false);
+    }
+  }
+
+};
+
+
+}
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_BASEEVENTHEADER_H

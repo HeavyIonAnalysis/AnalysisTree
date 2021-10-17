@@ -73,7 +73,7 @@ if(AnalysisTree_BUILD_TESTS)
             SimpleCut.test.cpp
             PlainTreeFiller.test.cpp
             AnalysisTask.test.cpp
-            )
+            AnalysisTreeRDF.test.cpp)
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)
         list(APPEND TEST_SOURCES BranchView.test.cpp)
