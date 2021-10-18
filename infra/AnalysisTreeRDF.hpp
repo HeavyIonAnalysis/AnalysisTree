@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include <TTree.h>
-#include <TFile.h>
 #include <ROOT/RDataSource.hxx>
-#include <utility>
+#include <TFile.h>
+#include <TTree.h>
 #include <map>
+#include <utility>
 
 #include <AnalysisTree/BranchReader.hpp>
 #include <AnalysisTree/Configuration.hpp>
@@ -20,28 +20,31 @@ namespace AnalysisTree {
 namespace Impl {
 
 template<typename T>
-struct ColumnReader;
-
-template <>
-struct ColumnReader<EventHeader> {
-  std::map<std::string, void *> data_ptr_to_ptr;
-
-  void *readData(const BranchConfig& config, const std::string &field_name, EventHeader *ptr) {
-    if (data_ptr_to_ptr.find(field_name) != end(data_ptr_to_ptr)) {
-      return &(data_ptr_to_ptr[field_name]);
-    }
-    auto field_id = config.GetFieldId(field_name);
-    EventHeaderAccessor event_header_accessor(ptr);
-    data_ptr_to_ptr.emplace(field_name, event_header_accessor.getFieldData(field_id));
-    return &(data_ptr_to_ptr[field_name]);
+struct ColumnReader {
+  ColumnReader(BranchConfig& config, std::string_view field_name) {
+    field_id = config.GetFieldId(std::string(field_name));
+    field_type = config.GetFieldType(std::string(field_name));
   }
+
+  void update(T *ptr) {
+    data = Data(ptr, field_id, field_type);
+  }
+
+  void* dataPtr() {
+    return std::addressof(data);
+  }
+
+  Integer_t field_id{};
+  Types field_type{};
+
+  void* data{nullptr};
 };
 
 template<typename T>
 class AnalysisTreeRDFImplT : public ROOT::RDF::RDataSource {
 
  public:
-  AnalysisTreeRDFImplT(std::string  Filename, std::string  TreeName, std::string  BranchName) : filename_(std::move(Filename)), tree_name_(std::move(TreeName)), branch_name_(std::move(BranchName)) {
+  AnalysisTreeRDFImplT(std::string Filename, std::string TreeName, std::string BranchName) : filename_(std::move(Filename)), tree_name_(std::move(TreeName)), branch_name_(std::move(BranchName)) {
     column_names_ = getColumnNames();
   }
 
@@ -63,11 +66,11 @@ class AnalysisTreeRDFImplT : public ROOT::RDF::RDataSource {
     auto branch_config = configuration->GetBranchConfig(branch_name_);
     auto column_type = branch_config.GetFieldType(std::string(View));
     switch (column_type) {
-      case Types::kBool :
+      case Types::kBool:
         return "bool";
-      case Types::kInteger :
+      case Types::kInteger:
         return "int";
-      case Types::kFloat :
+      case Types::kFloat:
         return "float";
       default:;
     }
@@ -76,7 +79,7 @@ class AnalysisTreeRDFImplT : public ROOT::RDF::RDataSource {
   std::vector<std::pair<ULong64_t, ULong64_t>> GetEntryRanges() override {
     auto last_entry = slots_.back()->ientry;
     auto total_entries = slots_.back()->tree->GetEntries();
-    if (last_entry == total_entries-1) {
+    if (last_entry == total_entries - 1) {
       return {};
     }
     std::vector<std::pair<ULong64_t, ULong64_t>> result(slots_.size());
@@ -87,17 +90,21 @@ class AnalysisTreeRDFImplT : public ROOT::RDF::RDataSource {
   bool SetEntry(unsigned int i_slot, ULong64_t entry) override {
     slots_[i_slot]->tree->GetEntry(entry);
     slots_[i_slot]->ientry = entry;
+    for (auto& reader : slots_[i_slot]->column_readers) {
+      reader.second->update(slots_[i_slot]->entry_ptr);
+    }
+    return true;
   }
 
  protected:
   Record_t GetColumnReadersImpl(std::string_view name, const std::type_info& Info) override {
     /* type-erased vector of pointers to pointers to column values - one per slot  */
     Record_t result;
-    result.resize(slots_.size());
-    for (int i_slot = 0; i_slot < slots_.size(); ++i_slot) {
-      result[i_slot] = slots_[i_slot]->column_reader.readData(slots_[i_slot]->branch_config,
-                                                              std::string(name),
-                                                              slots_[i_slot]->entry_ptr);
+    result.reserve(slots_.size());
+    for (auto & slot : slots_) {
+      auto new_column_reader = std::make_shared<ColumnReader<T>>(slot->branch_config, name);
+      auto emplace_result = slot->column_readers.emplace(name, new_column_reader);
+      result.template emplace_back(emplace_result.first->second->dataPtr());
     }
     return result;
   }
@@ -105,19 +112,18 @@ class AnalysisTreeRDFImplT : public ROOT::RDF::RDataSource {
  private:
   struct Slot {
     BranchConfig branch_config;
-    TFile *file{nullptr};
-    TTree *tree{nullptr};
-    T *entry_ptr{nullptr};
-    ColumnReader<T> column_reader;
+    std::unique_ptr<TFile> file{nullptr};
+    TTree* tree{nullptr};
+    T* entry_ptr{nullptr};
+    std::map<std::string,std::shared_ptr<ColumnReader<T>>> column_readers;
     ULong64_t ientry{0ul};
   };
 
   std::shared_ptr<Slot> makeSlot() const {
     auto new_slot = std::make_shared<Slot>();
-    new_slot->file = TFile::Open(filename_.c_str(), "READ");
+    new_slot->file.reset(TFile::Open(filename_.c_str(), "READ"));
     new_slot->tree = new_slot->file->template Get<TTree>(tree_name_.c_str());
-    new_slot->entry_ptr = new T;
-    new_slot->tree->template SetBranchAddress(branch_name_.c_str(), &new_slot->entry_ptr);
+    new_slot->tree->template SetBranchAddress(branch_name_.c_str(), std::addressof(new_slot->entry_ptr));
 
     auto configuration = new_slot->file->template Get<Configuration>("Configuration");
     new_slot->branch_config = configuration->GetBranchConfig(branch_name_);
@@ -142,14 +148,12 @@ class AnalysisTreeRDFImplT : public ROOT::RDF::RDataSource {
     return result;
   }
 
-
   std::string filename_;
   std::string tree_name_;
   std::string branch_name_;
 
   std::vector<std::shared_ptr<Slot>> slots_;
   std::vector<std::string> column_names_;
-
 };
 
 }// namespace Impl

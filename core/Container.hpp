@@ -6,6 +6,12 @@
 
 namespace AnalysisTree {
 
+class Container;
+
+namespace Impl {
+void* Data(Container* container_ptr, Integer_t field_id, Types field_type);
+}
+
 /*! \brief A class to store any number of integers, floats and bools
  *
  *  Consists of IndexedObject and separate std::vector<T>, for T={float, int, bool}.
@@ -52,12 +58,30 @@ class Container : public IndexedObject {
   void Init(const BranchConfig& branch);
 
  protected:
+  friend void* Impl::Data(Container* container_ptr, Integer_t field_id, Types field_type);
+
   std::vector<float> floats_{};
   std::vector<int> ints_{};
   std::vector<bool> bools_{};
 
   ClassDefOverride(Container, 2);
 };
+
+namespace Impl {
+
+inline void* Data(Container* container_ptr, Integer_t field_id, Types field_type) {
+  switch (field_type) {
+    case Types::kInteger:
+      return &(container_ptr->ints_[field_id]);
+    case Types::kFloat:
+      return &(container_ptr->floats_[field_id]);
+    case Types::kBool:
+      /* not working due to specific implementation of std::vector for boolean type */
+      //      return &(container_ptr->bools_[field_id]);
+    default: return nullptr;
+  }
+}
+}// namespace Impl
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_BASECONTAINER_H

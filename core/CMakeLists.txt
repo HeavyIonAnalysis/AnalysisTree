@@ -3,14 +3,15 @@ set(SOURCES
   IndexedObject.cpp
   Track.cpp
   Hit.cpp
-  EventHeader.cpp
   Module.cpp
-  Configuration.cpp
-  BranchConfig.cpp
-  Container.cpp
-  DataHeader.cpp
+        Configuration.cpp
+        BranchConfig.cpp
+        Container.cpp
+        EventHeader.cpp
+        DataHeader.cpp
   Matching.cpp
-  Particle.cpp)
+  Particle.cpp
+        )
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
 list(APPEND HEADERS "Constants.hpp" "Detector.hpp")

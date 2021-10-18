@@ -3,17 +3,18 @@
 
 #include "Container.hpp"
 #include <array>
-#include <stdexcept>
 #include <cassert>
+#include <stdexcept>
 
 class TVector3;
 
 namespace AnalysisTree {
 
-namespace Impl {
-  struct EventHeaderAccessor;
-}
+class EventHeader;
 
+namespace Impl {
+void* Data(EventHeader*, Integer_t, Types field_type);
+}
 
 /**
  * A class for an event header
@@ -61,31 +62,24 @@ class EventHeader : public Container {
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};
 
-  friend struct Impl::EventHeaderAccessor;
+  friend void* Impl::Data(EventHeader*, Integer_t, Types field_type);
 
   ClassDefOverride(EventHeader, 2)
 };
 
 namespace Impl {
 
-struct EventHeaderAccessor {
-  explicit EventHeaderAccessor(EventHeader* EventHeaderPtr) : event_header_ptr(EventHeaderPtr) {}
-
-  EventHeader *event_header_ptr;
-
-  void *getFieldData(Integer_t i_field) {
-    switch (i_field) {
-      case EventHeaderFields::kVertexX: return &(event_header_ptr->vtx_pos_[Exyz::kX]);
-      case EventHeaderFields::kVertexY: return &(event_header_ptr->vtx_pos_[Exyz::kY]);
-      case EventHeaderFields::kVertexZ: return &(event_header_ptr->vtx_pos_[Exyz::kZ]);
-      default: assert(false);
-    }
+inline void* Data(EventHeader* header_ptr, Integer_t i_field, Types field_type) {
+  switch (i_field) {
+    case EventHeaderFields::kVertexX: return &(header_ptr->vtx_pos_[Exyz::kX]);
+    case EventHeaderFields::kVertexY: return  &(header_ptr->vtx_pos_[Exyz::kY]);
+    case EventHeaderFields::kVertexZ: return &(header_ptr->vtx_pos_[Exyz::kZ]);
+    default: return ::AnalysisTree::Impl::Data(dynamic_cast<Container*>(header_ptr), i_field, field_type);
   }
-
-};
-
-
+  return nullptr;
 }
+
+}// namespace Impl
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_BASEEVENTHEADER_H
