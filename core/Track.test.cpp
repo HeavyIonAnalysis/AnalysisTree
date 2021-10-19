@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_TEST_CORE_TRACK_TEST_HPP_
 #define ANALYSISTREE_TEST_CORE_TRACK_TEST_HPP_
 
@@ -5,6 +8,8 @@
 
 #include <TFile.h>
 #include <TTree.h>
+#include <Math/Vector4D.h>
+
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -24,8 +29,7 @@ TEST(Track, Basics) {
   const float py = std::rand() * (1. / RAND_MAX * 1.5);
   const float pz = 2. + std::rand() * (1. / RAND_MAX);
 
-  TLorentzVector vec;
-  vec.SetVectM({px, py, pz}, 0.13957);
+  ROOT::Math::PxPyPzMVector vec(px, py, pz, 0.13957);
 
   track.SetMomentum(px, py, pz);
 
@@ -37,7 +41,7 @@ TEST(Track, Basics) {
   ASSERT_FLOAT_EQ(track.GetP(), sqrt(px * px + py * py + pz * pz));
   ASSERT_NEAR(track.GetRapidity(211), vec.Rapidity(), 1e-5);
 
-  TLorentzVector vec1 = track.Get4Momentum(211);
+  auto vec1 = track.Get4Momentum(211);
 
   ASSERT_NEAR(vec1.Rapidity(), vec.Rapidity(), 1e-5);
   ASSERT_NEAR(vec1.M(), vec.M(), 1e-5);
@@ -51,10 +55,10 @@ TEST(Track, Write) {
   Configuration config;
 
   BranchConfig RecTracksBranch("RecTrack", DetType::kTrack);
-  RecTracksBranch.AddField<float>("dcax");
-  RecTracksBranch.AddField<float>("dcay");
-  RecTracksBranch.AddField<float>("dcaz");
-  RecTracksBranch.AddField<int>("nhits");
+  RecTracksBranch.AddField<float>("dcax", "cm");
+  RecTracksBranch.AddField<float>("dcay", "cm");
+  RecTracksBranch.AddField<float>("dcaz", "cm");
+  RecTracksBranch.AddField<int>("nhits", "Number of hits");
 
   config.AddBranchConfig(RecTracksBranch);
   auto* RecTracks = new TrackDetector(0);

@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_CHAIN_HPP_
 #define ANALYSISTREE_INFRA_CHAIN_HPP_
 
@@ -11,9 +14,10 @@
 #include <TChain.h>
 #include <TFile.h>
 
-#include "BranchReader.hpp"
+#include "Branch.hpp"
 #include "Configuration.hpp"
 #include "DataHeader.hpp"
+#include "Utils.hpp"
 
 namespace AnalysisTree {
 
@@ -68,20 +72,27 @@ class Chain : public TChain {
   void InitPointersToBranches(std::set<std::string> names);
 
   Long64_t Draw(const char* varexp, const char* selection = nullptr, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
+  Long64_t Scan(const char* varexp, const char* selection = nullptr, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) override;
 
   void Print(Option_t*) const override {
     this->data_header_->Print();
     this->configuration_->Print();
   }
 
+  class Branch GetBranch(const std::string& name) const;
+
+  Matching* GetMatching(const std::string& br1, const std::string& br2) const {
+    auto match = matches_.find(configuration_->GetMatchName(br1, br2));
+    if(match == matches_.end()){
+      throw std::runtime_error("No matching found");
+    }
+    return match->second;
+  }
+
  protected:
   void InitChain();
   void InitConfiguration();
   void InitDataHeader();
-
-  void DrawTransform(std::string& expr) const;
-  static std::vector<std::pair<std::string, int>> FindAndRemoveFields(std::string& expr);
-  void DrawFieldTransform(std::string& expr) const;
 
   static TChain* MakeChain(const std::string& filelist, const std::string& treename);
 

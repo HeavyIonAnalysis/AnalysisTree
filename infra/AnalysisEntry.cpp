@@ -1,25 +1,26 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "AnalysisEntry.hpp"
 
 #include "Configuration.hpp"
+#include "VariantMagic.hpp"
 
 namespace AnalysisTree {
 
-bool AnalysisEntry::ApplyCutOnBranch(const BranchReader& br, int i_channel) const {
-  if (!br.ApplyCut(i_channel)) return false;
-  if (!cuts_) return true;
-  return ANALYSISTREE_UTILS_VISIT(apply_cut(i_channel, cuts_), br.GetData());
+bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel) const {
+  if (cuts && !cuts->Apply(br[i_channel])) { return false; }
+  return !cuts_ || cuts_->Apply(br[i_channel]);
 }
 
-bool AnalysisEntry::ApplyCutOnBranches(const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) const {
-  if (!br1.ApplyCut(ch1)) return false;
-  if (!br2.ApplyCut(ch2)) return false;
-
-  if (!cuts_) return true;
-  return ANALYSISTREE_UTILS_VISIT(apply_cut_2_branches(ch1, ch2, cuts_), br1.GetData(), br2.GetData());
+bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const {
+  if (cuts1 && !cuts1->Apply(br1[ch1])) { return false; }
+  if (cuts2 && !cuts2->Apply(br2[ch2])) { return false; }
+  return !cuts_ || cuts_->Apply(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
 }
 
-double AnalysisEntry::FillVariable(const Variable& var, const BranchReader& br1, int ch1, const BranchReader& br2, int ch2) {
-  return ANALYSISTREE_UTILS_VISIT(fill_2_branches(var, ch1, ch2), br1.GetData(), br2.GetData());
+double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
+  return var.GetValue(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
 }
 
 /**
@@ -28,25 +29,26 @@ double AnalysisEntry::FillVariable(const Variable& var, const BranchReader& br1,
  * If channel or track fails to pass cuts it won't be written
  */
 void AnalysisEntry::FillFromOneBranch() {
-  const BranchReader& br = branches_.at(0);
-  const auto n_channels = br.GetNumberOfChannels();
+  const auto& br = branches_.at(0).first;
+
+  const auto n_channels = br.size();
   values_.reserve(n_channels);
 
   for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
-    if (!ApplyCutOnBranch(br, i_channel)) continue;
+    if (!ApplyCutOnBranch(br, branches_.at(0).second, i_channel)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
-      temp_vars[i_var] = br.GetValue(var, i_channel);
+      temp_vars[i_var] = var.GetValue(br[i_channel]);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
   }//channels
 }
 
-void AnalysisEntry::FillMatchingForEventHeader(const BranchReader& br1, const BranchReader& br2) {
+void AnalysisEntry::FillMatchingForEventHeader(const Branch& br1, const Branch& br2) {
   matching_ = new Matching(br1.GetId(), br2.GetId());
-  for (size_t i = 0; i < br1.GetNumberOfChannels(); ++i) {
+  for (size_t i = 0; i < br1.size(); ++i) {
     matching_->AddMatch(i, 0);
   }
 }
@@ -56,24 +58,24 @@ void AnalysisEntry::FillMatchingForEventHeader(const BranchReader& br1, const Br
  * It iterates over registered matches and fills variables
  */
 void AnalysisEntry::FillFromTwoBranches() {
-  BranchReader& br1 = branches_.at(0);
-  BranchReader& br2 = branches_.at(1);
-  if (br1.GetType() == DetType::kEventHeader) {//put EventHeader to second place, to be able to fill matching
+  auto& br1 = branches_.at(0);
+  auto& br2 = branches_.at(1);
+  if (br1.first.GetBranchType() == DetType::kEventHeader) {//put EventHeader to second place, to be able to fill matching
     std::swap(br1, br2);
   }
-  if (br2.GetType() == DetType::kEventHeader) {
-    FillMatchingForEventHeader(br1, br2);
+  if (br2.first.GetBranchType() == DetType::kEventHeader) {
+    FillMatchingForEventHeader(br1.first, br2.first);
   }
   values_.reserve(matching_->GetMatches().size());
 
   for (auto match : matching_->GetMatches(is_inverted_matching_)) {
     const int ch1 = match.first;
     const int ch2 = match.second;
-    if (!ApplyCutOnBranches(br1, ch1, br2, ch2)) continue;
+    if (!ApplyCutOnBranches(br1.first, br1.second, ch1, br2.first, br2.second, ch2)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{};
     for (const auto& var : vars_) {
-      temp_vars[i_var] = FillVariable(var, br1, ch1, br2, ch2);
+      temp_vars[i_var] = FillVariable(var, br1.first, ch1, br2.first, ch2);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
@@ -102,7 +104,7 @@ void AnalysisEntry::FillBranchNames() {
   }
 }
 
-void AnalysisEntry::Init(const AnalysisTree::Configuration& conf, const std::map<std::string, Matching*>& matches) {
+void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, Matching*>& matches) {
   if (cuts_) {
     cuts_->Init(conf);
   }
@@ -110,13 +112,12 @@ void AnalysisEntry::Init(const AnalysisTree::Configuration& conf, const std::map
     var.Init(conf);
   }
 
-  auto branches = GetBranchNames();
-  if (branches.size() > 1) {
-    auto det1_type = conf.GetBranchConfig(*branches.begin()).GetType();
-    auto det2_type = conf.GetBranchConfig(*std::next(branches.begin(), 1)).GetType();
+  if (branch_names_.size() > 1) {
+    auto det1_type = conf.GetBranchConfig(*branch_names_.begin()).GetType();
+    auto det2_type = conf.GetBranchConfig(*std::next(branch_names_.begin(), 1)).GetType();
 
     if (det1_type != DetType::kEventHeader && det2_type != DetType::kEventHeader) {
-      auto match_info = conf.GetMatchInfo(*branches.begin(), *std::next(branches.begin(), 1));
+      auto match_info = conf.GetMatchInfo(*branch_names_.begin(), *std::next(branch_names_.begin(), 1));
       SetIsInvertedMatching(match_info.second);
       SetMatching((Matching*) matches.find(match_info.first)->second);
     }

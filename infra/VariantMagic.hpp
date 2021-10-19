@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_VARIANTMAGIC_HPP_
 #define ANALYSISTREE_INFRA_VARIANTMAGIC_HPP_
 
@@ -12,53 +15,73 @@
 
 namespace AnalysisTree {
 
-struct get_value : public Utils::Visitor<double> {
-  get_value(Variable var, int i_channel) : var_(std::move(var)), i_channel_(i_channel) {}
-  template<class Det>
-  double apply(Det* d) const { return var_.GetValue(d->GetChannel(i_channel_)); }
+struct get_id_struct : public Utils::Visitor<size_t> {
   template<typename Entity>
-  double operator()(Entity* d) const { return apply<Entity>(d); }
-  Variable var_;
-  int i_channel_;
+  size_t get_id(Entity* d) const { return d->GetId(); }
+  template<typename Entity>
+  size_t operator()(Entity* d) const { return get_id<Entity>(d); }
 };
 
-struct get_id_struct : public Utils::Visitor<int> {
+struct get_channel_struct : public Utils::Visitor<ChannelPointer> {
+  explicit get_channel_struct(size_t i) : i_channel_(i) {}
   template<typename Entity>
-  int get_id(Entity* d) const { return d->GetId(); }
+  ChannelPointer get_channel(Entity* d) const { return ChannelPointer( &(d->Channel(i_channel_)) ); }
   template<typename Entity>
-  int operator()(Entity* d) const { return get_id<Entity>(d); }
+  ChannelPointer operator()(Entity* d) const { return get_channel<Entity>(d); }
+  size_t i_channel_;
 };
 
-struct apply_cut : public Utils::Visitor<bool> {
-  apply_cut(int i_channel, const Cuts* cut) : i_channel_(i_channel), cut_(cut) {}
-  template<class Entity>
-  bool apply(Entity* d) const { return cut_->Apply(d->GetChannel(i_channel_)); }
+struct clear_channels_struct : public Utils::Visitor<void> {
   template<typename Entity>
-  bool operator()(Entity* d) const { return apply<Entity>(d); }
-  int i_channel_;
-  const Cuts* cut_;
+  void clear_channels(Entity* d) const { d->ClearChannels(); }
+  template<typename Entity>
+  void operator()(Entity* d) const { clear_channels<Entity>(d); }
 };
 
-struct apply_cut_2_branches : public Utils::Visitor<bool> {
-  apply_cut_2_branches(int ch1, int ch2, const Cuts* cut) : ch1_(ch1), ch2_(ch2), cut_(cut) {}
-  template<class Det1, class Det2>
-  bool apply(Det1* d1, Det2* d2) const { return cut_->Apply(d1->GetChannel(ch1_), d1->GetId(), d2->GetChannel(ch2_), d2->GetId()); }
-  template<typename Entity1, typename Entity2>
-  bool operator()(Entity1* d1, Entity2* d2) const { return apply<Entity1, Entity2>(d1, d2); }
-  int ch1_;
-  int ch2_;
-  const Cuts* cut_;
+struct new_channel_struct : public Utils::Visitor<void> {
+  explicit new_channel_struct(BranchConfig* config) : config_(config) {}
+  template<typename Entity>
+  void new_channel(Entity* d) const {
+    auto channel = d->AddChannel();
+    channel->Init(*config_);
+  }
+  template<typename Entity>
+  void operator()(Entity* d) const { new_channel<Entity>(d); }
+  BranchConfig* config_;
 };
 
-struct fill_2_branches : public Utils::Visitor<double> {
-  fill_2_branches(const Variable& var, int ch1, int ch2) : var_(var), ch1_(ch1), ch2_(ch2) {}
-  template<class Det1, class Det2>
-  double apply(Det1* d1, Det2* d2) const { return var_.GetValue(d1->GetChannel(ch1_), d1->GetId(), d2->GetChannel(ch2_), d2->GetId()); }
-  template<typename Entity1, typename Entity2>
-  double operator()(Entity1* d1, Entity2* d2) const { return apply<Entity1, Entity2>(d1, d2); }
-  const Variable& var_;
-  int ch1_;
-  int ch2_;
+struct copy_content_struct : public Utils::Visitor<void> {
+  template<typename T1, typename T2>
+  void copy_content(T1* ch1, T2* ch2) const {
+    *ch1 = T1(Container(*ch2));
+  }
+  template<typename T1, typename T2>
+  void copy_content(Particle* ch1, Track* ch2) const {
+    *ch1 = Particle(*ch2);
+  }
+  template<typename T1, typename T2>
+  void operator()(T1* ch1, T2* ch2) const { copy_content<T1, T2>(ch1, ch2); }
+};
+
+template<typename T>
+struct get_field_struct : public Utils::Visitor<double> {
+  explicit get_field_struct(int id) : id_(id) {}
+  template<typename Entity>
+  double get_field(Entity* d) const { return d->template GetField<T>(id_); }
+  template<typename Entity>
+  double operator()(Entity* d) const { return get_field<Entity>(d); }
+  int id_{-999};
+};
+
+template<typename T>
+struct set_field_struct : public Utils::Visitor<void> {
+  set_field_struct(double value, int id) : value_(value), id_(id) {}
+  template<typename Entity>
+  void set_field(Entity* d) const { d->template SetField<T>(value_, id_); }
+  template<typename Entity>
+  void operator()(Entity* d) const { set_field<Entity>(d); }
+  double value_{0.};
+  int id_{-999};
 };
 
 struct get_n_channels_struct : public Utils::Visitor<size_t> {

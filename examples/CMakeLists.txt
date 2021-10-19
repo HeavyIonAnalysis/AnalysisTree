@@ -32,9 +32,35 @@ find_package(AnalysisTree REQUIRED)
 message(STATUS "${ROOT_INCLUDE_DIRS} ${AnalysisTree_INCLUDE_DIR}")
 message(STATUS "${ROOT_LIBRARIES} ${AnalysisTree_INCLUDE_DIR}")
 
+set(SOURCES
+        UserTaskWrite.cpp
+        UserTaskRead.cpp
+        )
+
+message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
+
+string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
+
+include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
+add_library(AnalysisTreeUser SHARED ${SOURCES} G__AnalysisTreeUser.cxx)
+target_compile_definitions(AnalysisTreeUser PUBLIC
+        $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
+
+ROOT_GENERATE_DICTIONARY(G__AnalysisTreeUser ${HEADERS}
+        LINKDEF AnalysisTreeUserLinkDef.h
+        OPTIONS
+        -I${CMAKE_BINARY_DIR}/include
+        $<$<BOOL:${Boost_FOUND}>:-DANALYSISTREE_BOOST_FOUND>
+        )
+target_link_libraries(AnalysisTreeUser
+        PUBLIC
+        ${ROOT_LIBRARIES}
+        AnalysisTreeBase AnalysisTreeInfra
+        $<$<BOOL:${Boost_FOUND}>:${Boost_LIBRARIES}>
+        )
+
 include(${ROOT_USE_FILE})
 include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${AnalysisTree_INCLUDE_DIR})
 
-add_executable(example example.cpp)
-target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra ${ROOT_LIBRARIES} EG)
-
+add_executable(example test.cpp)
+target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra AnalysisTreeUser ${ROOT_LIBRARIES} EG)

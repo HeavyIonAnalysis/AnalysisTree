@@ -10,10 +10,16 @@ set(SOURCES
   AnalysisTask.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-  Chain.cpp)
+  Chain.cpp
+  ChainDrawHelper.cpp
+
+  Branch.cpp
+  BranchChannel.cpp
+        )
 
 if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
-    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
+#    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
+    list(APPEND SOURCES "AnalysisTask.cpp" "AnalysisEntry.cpp")
 endif()
 
 if (AnalysisTree_BUILD_EXPERIMENTAL)
@@ -23,7 +29,7 @@ endif ()
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
-list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp")
+list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp" "BranchHashHelper.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
@@ -73,6 +79,8 @@ if(AnalysisTree_BUILD_TESTS)
             SimpleCut.test.cpp
             PlainTreeFiller.test.cpp
             AnalysisTask.test.cpp
+            Branch.test.cpp
+            Chain.test.hpp
             )
 
     if (AnalysisTree_BUILD_EXPERIMENTAL)

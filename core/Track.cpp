@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #include "Track.hpp"
 
 #include <TDatabasePDG.h>
@@ -9,6 +12,7 @@ namespace AnalysisTree {
 void Track::Print() const noexcept {
   std::cout << " Px = " << px_ << "  Py = " << py_ << "  Pz = " << pz_
             << "  phi = " << GetPhi() << "  pT = " << GetPt() << "  eta = " << GetEta() << std::endl;
+  Container::Print();
 }
 
 bool operator==(const Track& that, const Track& other) noexcept {

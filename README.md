@@ -5,6 +5,12 @@
 
 ## Important note on AnalysisTree versions
 
+**Current version is development version!**
+
+Last tested version: v2.1.3
+
+Last release version: v.1.0.9
+
 Different MAJOR version means incompatible API changes. 
 Neither API nor data compatibility is preserved between MAJOR versions.
 
@@ -53,7 +59,7 @@ To apply the flag use -D{Name}={value}, for example, if you want to compile usin
 
 ## Reading AnalysisTree 
 
-### Load AnalysisTree libraries
+### Loading AnalysisTree libraries
 
 First of all you need to load AnalysisTree libraries into your system. Usually, the path to libraries is added to LD_LIBRARY_PATH:
 
@@ -64,7 +70,7 @@ After that one can open ROOT session and load libraries:
     root -l
     gSystem->Load("libAnalysisTreeBase.so")
 
-### Read file
+### Reading files from ROOT session
 
 Open a ROOT-file and check its content:
     
@@ -93,14 +99,28 @@ For a QA of the file(s) please use the dedicated package AnalysisTreeQA:
 
 https://github.com/HeavyIonAnalysis/AnalysisTreeQA
 
-## Cuts
+## Reading file with ROOT macro/executable
 
-Coming soon =)
+Follow the instructions in class examples/UserTaskRead.{hpp,cpp}
+
+Simple example of macro to read file:
+
+    auto* chain = new Chain("filename.root", "tree_name");
+    auto rec_particles = chain->GetBranch("RecParticles");
+    auto rec2sim_particles = chain->GetMatching("RecParticles", "SimParticles");
+    auto rec_pT = rec_particles.GetField("pT");
+    
+    for (long i_event = 0; i_event < 10; ++i_event) {
+        chain->GetEntry(i_event);
+        for(int i=0; i<rec_particles.size(); ++i){
+            auto pT = rec_particles[i][rec_pT];
+            std::cout << pT << std::endl;
+        }
+    }
 
 ## Creating your own AnalysisTree 
 
-Coming soon =)
+Follow the instructions in class examples/UserTaskWrite.{hpp,cpp}
 
 ## Known problems (features)
  - BranchConfig::GetFieldId() is slow -> should not be used for every event/track/hit/module
- - Branch name and title of the corresponding object should be the same

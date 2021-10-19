@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #include "Module.hpp"
 #include <iostream>
 
@@ -13,8 +16,9 @@ bool operator==(const AnalysisTree::Module& that, const AnalysisTree::Module& ot
   return that.number_ == other.number_ && that.signal_ == other.signal_;
 }
 
-void Module::Print() const {
+void Module::Print() const noexcept {
   std::cout << "  number = " << number_ << "  signal = " << signal_ << std::endl;
+  Container::Print();
 }
 
 void ModulePosition::Print() const {

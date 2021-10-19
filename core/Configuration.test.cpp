@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 #define ANALYSISTREE_CORE_CONFIGURATION_TEST_HPP_
 
@@ -19,9 +22,9 @@ TEST(Configuration, Basics) {
   EXPECT_EQ(config.GetMatches().size(), 0);
 
   BranchConfig branch_config("RecTrack", DetType::kTrack);
-  branch_config.AddField<float>("test_f");
-  branch_config.AddField<int>("test_i");
-  branch_config.AddField<bool>("test_b");
+  branch_config.AddField<float>("test_f", "just a test field");
+  branch_config.AddField<int>("test_i", "just a test field");
+  branch_config.AddField<bool>("test_b", "just a test field");
 
   config.AddBranchConfig(branch_config);
 

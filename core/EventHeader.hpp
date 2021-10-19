@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_BASEEVENTHEADER_H
 #define ANALYSISTREE_BASEEVENTHEADER_H
 
@@ -16,6 +19,7 @@ class EventHeader : public Container {
  public:
   EventHeader() = default;
   explicit EventHeader(size_t id) : Container(id){};
+  explicit EventHeader(const Container& cont) : Container(cont) {}
   EventHeader(size_t id, const BranchConfig& branch) noexcept : Container(id, branch) {}
 
   EventHeader(const EventHeader& eh) = default;
@@ -44,13 +48,37 @@ class EventHeader : public Container {
     }
   }
 
+  template<typename T>
+  void SetField(T value, Integer_t field_id) {
+    using AnalysisTree::EventHeaderFields::EventHeaderFields;
+    if (field_id >= 0) {
+      Container::SetField(value, field_id);
+    } else {
+      switch (field_id) {
+        case EventHeaderFields::kVertexX: vtx_pos_[Exyz::kX] = value; break;
+        case EventHeaderFields::kVertexY: vtx_pos_[Exyz::kY] = value; break;
+        case EventHeaderFields::kVertexZ: vtx_pos_[Exyz::kZ] = value; break;
+        default: throw std::runtime_error("Invalid field id");
+      }
+    }
+  }
+
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexX() const { return vtx_pos_[Exyz::kX]; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexY() const { return vtx_pos_[Exyz::kY]; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetVertexZ() const { return vtx_pos_[Exyz::kZ]; }
 
   static constexpr size_t GetNumberOfChannels() { return 1; }// needed in order to have EventHeader similar to Detector
+  EventHeader* begin() { return this; }
+  EventHeader* end() { return this; }
+  const EventHeader* cbegin() const { return this; }
+  const EventHeader* cend() const { return this; }
 
   ANALYSISTREE_ATTR_NODISCARD const EventHeader& GetChannel(size_t i) const;// needed in order to have EventHeader similar to Detector
+  ANALYSISTREE_ATTR_NODISCARD EventHeader& Channel(size_t i);               // needed in order to have EventHeader similar to Detector
+  static void ClearChannels() { throw std::runtime_error("Not available for EventHeader"); }
+  static EventHeader* AddChannel() { throw std::runtime_error("Not available for EventHeader"); }
+
+  void Print() const noexcept override;
 
  protected:
   std::array<Floating_t, 3> vtx_pos_{{UndefValueFloat, UndefValueFloat, UndefValueFloat}};

@@ -32,7 +32,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # CMake options
 set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
-set(AnalysisTree_BUILD_EXAMPLES ON CACHE BOOL "Build examples for the AnalysisTree")
+set(AnalysisTree_BUILD_EXAMPLES OFF CACHE BOOL "Build examples for the AnalysisTree")
 set(AnalysisTree_BUILD_EXPERIMENTAL OFF CACHE BOOL "Build experimental features for the AnalysisTree")
 
 # Tests
@@ -55,11 +55,9 @@ include(${ROOT_USE_FILE})
 add_subdirectory(core)
 add_subdirectory(infra)
 
-#if(AnalysisTree_BUILD_EXAMPLES)
-    #    add_subdirectory(examples)
-#    add_executable(example examples/test.cpp)
-#    target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra ${ROOT_LIBRARIES} EG)
-#endif()
+if(AnalysisTree_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 #if(AnalysisTree_BUILD_TESTS)
 #    include(GoogleTest)

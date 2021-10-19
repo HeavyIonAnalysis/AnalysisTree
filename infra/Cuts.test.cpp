@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_CUT_TEST_HPP_
 #define ANALYSISTREE_INFRA_CUT_TEST_HPP_
 
@@ -21,7 +24,7 @@ using namespace AnalysisTree;
 TEST(Cuts, RangeCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
-  VtxTracksBranch.AddField<float>("chi2");
+  VtxTracksBranch.AddField<float>("chi2", "");
 
   auto* track = new Track();
   track->Init(VtxTracksBranch);
@@ -40,16 +43,16 @@ TEST(Cuts, RangeCut) {
   AnalysisTree::Cuts cut_false2("cut1", {AnalysisTree::RangeCut("VtxTracks.chi2", 2.4001, 3.)});
   cut_false2.Init(conf);
 
-  ASSERT_TRUE(cut_true.Apply(*track));
-  ASSERT_FALSE(cut_false1.Apply(*track));
-  ASSERT_FALSE(cut_false2.Apply(*track));
+  ASSERT_TRUE(cut_true.Apply({track}));
+  ASSERT_FALSE(cut_false1.Apply({track}));
+  ASSERT_FALSE(cut_false2.Apply({track}));
 }
 
 TEST(Cuts, EqualCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
-  VtxTracksBranch.AddField<int>("nhits");
-  VtxTracksBranch.AddField<bool>("is_good");
+  VtxTracksBranch.AddField<int>("nhits", "");
+  VtxTracksBranch.AddField<bool>("is_good", "");
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
@@ -74,19 +77,19 @@ TEST(Cuts, EqualCut) {
   Cuts cut_false3("cut5", {EqualsCut("VtxTracks.is_good", false)});
   cut_false3.Init(conf);
 
-  ASSERT_TRUE(cut_true1.Apply(*track));
-  ASSERT_TRUE(cut_true2.Apply(*track));
+  ASSERT_TRUE(cut_true1.Apply({track}));
+  ASSERT_TRUE(cut_true2.Apply({track}));
 
-  ASSERT_FALSE(cut_false1.Apply(*track));
-  ASSERT_FALSE(cut_false2.Apply(*track));
-  ASSERT_FALSE(cut_false3.Apply(*track));
+  ASSERT_FALSE(cut_false1.Apply({track}));
+  ASSERT_FALSE(cut_false2.Apply({track}));
+  ASSERT_FALSE(cut_false3.Apply({track}));
 }
 
 TEST(Cuts, FunctionalCut) {
 
   BranchConfig VtxTracksBranch("VtxTracks", DetType::kTrack);
-  VtxTracksBranch.AddFields<float>({"dcax", "dcay", "dcaz"});
-  VtxTracksBranch.AddFields<int>({"Nhits_vtpc1", "Nhits_vtpc2", "Nhits_mtpc"});
+  VtxTracksBranch.AddFields<float>({"dcax", "dcay", "dcaz"}, "");
+  VtxTracksBranch.AddFields<int>({"Nhits_vtpc1", "Nhits_vtpc2", "Nhits_mtpc"}, "");
   Configuration conf;
   conf.AddBranchConfig(VtxTracksBranch);
 
@@ -117,9 +120,9 @@ TEST(Cuts, FunctionalCut) {
   Cuts Nhits_true("Nhits_true", {testCutNhits_true});
   Nhits_true.Init(conf);
 
-  ASSERT_TRUE(dca_true.Apply(*track));
-  ASSERT_FALSE(dca_false.Apply(*track));
-  ASSERT_TRUE(Nhits_true.Apply(*track));
+  ASSERT_TRUE(dca_true.Apply({track}));
+  ASSERT_FALSE(dca_false.Apply({track}));
+  ASSERT_TRUE(Nhits_true.Apply({track}));
 }
 
 }// namespace

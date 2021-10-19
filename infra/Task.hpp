@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_TASK_HPP_
 #define ANALYSISTREE_INFRA_TASK_HPP_
 
@@ -39,7 +42,7 @@ class Task {
   ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetInputBranchNames() const { return in_branches_; }
 
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const EventHeader& event_header) const {
-    return event_cuts_ ? event_cuts_->Apply(event_header) : true;
+    return event_cuts_ == nullptr || event_cuts_->Apply(event_header);
   }
 
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const Chain& t) const;
@@ -50,6 +53,8 @@ class Task {
     }
     event_cuts_ = cuts;
   }
+
+  void AddInputBranch(const std::string& name) { in_branches_.emplace(name); }
 
  protected:
   const Configuration* config_{nullptr};

@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_TOYMC_HPP_
 #define ANALYSISTREE_INFRA_TOYMC_HPP_
 
@@ -30,16 +33,16 @@ class ToyMC : public Task {
     auto* man = TaskManager::GetInstance();
 
     BranchConfig sim_eh("SimEventHeader", DetType::kEventHeader);
-    sim_eh.AddField<float>("psi_RP");
+    sim_eh.AddField<float>("psi_RP", "Reaction Plane angle");
 
     BranchConfig sim_part("SimParticles", DetType::kParticle);
-    //    sim_part.AddField<float>("float");
-    //    sim_part.AddField<bool>("bool");
-    //    sim_part.AddField<int>("int");
+    sim_part.AddField<float>("float", "test field");
+    sim_part.AddField<bool>("bool", "test field");
+    sim_part.AddField<int>("int", "test field");
 
-    man->AddBranch("SimEventHeader", sim_event_header_, sim_eh);
-    man->AddBranch("SimParticles", particles_, sim_part);
-    man->AddBranch("RecTracks", track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
+    man->AddBranch(sim_event_header_, sim_eh);
+    man->AddBranch(particles_, sim_part);
+    man->AddBranch(track_detector_, BranchConfig{"RecTracks", DetType::kTrack});
     man->AddMatching("RecTracks", "SimParticles", rec_tracks_to_sim_);
 
     sim_event_header_->Init(sim_eh);
@@ -134,6 +137,30 @@ class ToyMC : public Task {
     return phi_distr_(engine) + psi;
   }
 };
+
+void inline RunToyMC(int n_events = 1000, const std::string& filelist = "") {
+  std::string filename = "toymc_analysis_task.root";
+  std::string treename = "tTree";
+
+  auto* man = TaskManager::GetInstance();
+
+  auto* toy_mc = new ToyMC<std::default_random_engine>;
+  man->AddTask(toy_mc);
+  man->SetOutputName(filename, treename);
+
+  man->Init();
+  man->Run(n_events);
+  man->Finish();
+  man->ClearTasks();
+
+  //  delete man;
+
+  if (!filelist.empty()) {
+    std::ofstream fl(filelist);
+    fl << filename << "\n";
+    fl.close();
+  }
+}
 
 }// namespace AnalysisTree
 

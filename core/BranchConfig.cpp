@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "BranchConfig.hpp"
 
 #include <functional>//for std::hash
@@ -38,10 +41,10 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("y", HitFields::kY, "cm");
     VectorConfig<float>::AddField("z", HitFields::kZ, "cm");
     VectorConfig<float>::AddField("phi", HitFields::kPhi, "azimuthal angle");
-    VectorConfig<float>::AddField("signal", HitFields::kSignal);
+    VectorConfig<float>::AddField("signal", HitFields::kSignal, "");
   } else if (type_ == DetType::kModule) {
-    VectorConfig<int>::AddField("number", ModuleFields::kNumber);
-    VectorConfig<float>::AddField("signal", ModuleFields::kSignal);
+    VectorConfig<int>::AddField("number", ModuleFields::kNumber, "module number");
+    VectorConfig<float>::AddField("signal", ModuleFields::kSignal, "");
   } else if (type_ == DetType::kEventHeader) {
     VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX, "cm");
     VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY, "cm");
@@ -74,6 +77,31 @@ ShortInt_t BranchConfig::GetFieldId(const std::string& sField) const {
 
   return UndefValueShort;
 }
+
+BranchConfig BranchConfig::Clone(const std::string& name, DetType type) const {
+  BranchConfig result(name, type);
+  for(const auto& field : AnalysisTree::VectorConfig<float>::map_) {
+    if (field.second.id_ >= 0) {
+      result.AddField<float>(field.first, field.second.id_, field.second.title_);
+    }
+  }
+  for(const auto& field : AnalysisTree::VectorConfig<int>::map_){
+    if(field.second.id_ >= 0){
+      result.AddField<int>(field.first, field.second.id_, field.second.title_);
+    }
+  }
+  for(const auto& field : AnalysisTree::VectorConfig<bool>::map_){
+    if(field.second.id_ >= 0){
+      result.AddField<bool>(field.first, field.second.id_, field.second.title_);
+    }
+  }
+  result.AnalysisTree::VectorConfig<bool>::size_ = AnalysisTree::VectorConfig<bool>::size_;
+  result.AnalysisTree::VectorConfig<int>::size_ = AnalysisTree::VectorConfig<int>::size_;
+  result.AnalysisTree::VectorConfig<float>::size_ = AnalysisTree::VectorConfig<float>::size_;
+
+  return result;
+}
+
 
 void BranchConfig::Print() const {
   std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;

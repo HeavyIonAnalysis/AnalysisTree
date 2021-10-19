@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #include "EventHeader.hpp"
 
 #include <TVector3.h>
@@ -19,6 +22,18 @@ const EventHeader& EventHeader::GetChannel(size_t i) const {
     return *this;
   }
   throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
+}
+
+EventHeader& EventHeader::Channel(size_t i) {
+  if (i == 0) {
+    return *this;
+  }
+  throw std::out_of_range("EventHeader::GetChannel - Input " + std::to_string(i) + " !=0");
+}
+
+void EventHeader::Print() const noexcept {
+  std::cout << vtx_pos_[Exyz::kX] << " " << vtx_pos_[Exyz::kX] << " " << vtx_pos_[Exyz::kX] << std::endl;
+  Container::Print();
 }
 
 }// namespace AnalysisTree

@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_SRC_VARIABLE_H_
 #define ANALYSISTREE_SRC_VARIABLE_H_
 
@@ -8,6 +11,7 @@
 #include <string>
 #include <utility>
 
+#include "BranchChannel.hpp"
 #include "Field.hpp"
 
 namespace AnalysisTree {
@@ -25,21 +29,10 @@ class Variable {
   Variable& operator=(const Variable&) = default;
   virtual ~Variable() = default;
 
-  /**
-   * @brief
-   * @param name
-   */
-  ANALYSISTREE_ATTR_DEPRECATED("Use Variable::fromString() instead")
-  Variable(std::string name) : name_(std::move(name)) {
-    fields_.emplace_back(Field(name_));
-  };
-
-  explicit Variable(const Field& field, short size = 1) : name_(field.GetBranchName() + "_" + field.GetName()),
-                                                          fields_({field}),
-                                                          branch_names_({field.GetBranchName()}),
-                                                          size_(size){};
-
-  Variable(const std::string& branch, const std::string& field, short size = 1) : Variable({branch, field}, size) {}
+  explicit Variable(const Field& field)
+  : name_(field.GetBranchName() + "_" + field.GetName()),
+    fields_({field}),
+    n_branches_(1) {};
 
   /**
    * Generic constructor for complicated variables
@@ -48,6 +41,8 @@ class Variable {
    * TODO maybe move to Variable::FromFunction()
    */
   Variable(std::string name, std::vector<Field> fields, std::function<double(std::vector<double>&)> lambda);
+
+  Variable(const std::string& branch, const std::string& field) : Variable(Field(branch, field)) {}
 
   /**
    * @brief
@@ -64,65 +59,37 @@ class Variable {
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
   ANALYSISTREE_ATTR_NODISCARD const std::vector<Field>& GetFields() const { return fields_; }
-  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfBranches() const { return branch_names_.size(); }
-  ANALYSISTREE_ATTR_NODISCARD std::set<std::string> GetBranches() const { return branch_names_; }
-  ANALYSISTREE_ATTR_NODISCARD short GetSize() const { return size_; }
-  ANALYSISTREE_ATTR_NODISCARD short GetId() const { return id_; }
+  ANALYSISTREE_ATTR_NODISCARD short GetNumberOfBranches() const { return n_branches_; }
+  ANALYSISTREE_ATTR_NODISCARD std::set<std::string> GetBranches() const;
+  ANALYSISTREE_ATTR_NODISCARD std::string GetBranchName() const;
 
-  ANALYSISTREE_ATTR_NODISCARD std::string GetBranchName() const { return *branch_names_.begin(); }
+  double GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
 
-  template<class T>
-  double GetValue(const T& object) const;
+  template <class T>
+  double GetValue(const T& object) const {
+    assert(is_init_ && n_branches_ == 1);
+    vars_.clear();
+    for (const auto& field : fields_) {
+      vars_.emplace_back(field.template GetValue(object) );
+    }
+    return lambda_(vars_);
+  }
 
-  template<class A, class B>
-  double GetValue(const A& a, size_t a_id, const B& b, size_t b_id) const;
+  double GetValue(const BranchChannel& object) const;
 
   void SetName(std::string name) { name_ = std::move(name); }
-  void SetSize(short size) { size_ = size; }
-  void SetId(short id) { id_ = id; }
 
   void Print() const;
 
  private:
   std::string name_;
   std::vector<Field> fields_{};
-  std::set<std::string> branch_names_{};
-  std::set<size_t> branch_ids_{};
-  mutable std::vector<double> vars_{};                                                                    //!
+  mutable std::vector<double> vars_{};//!
   std::function<double(std::vector<double>&)> lambda_{[](std::vector<double>& var) { return var.at(0); }};//!
-
-  short size_{1};
-  short id_{-999};
-
+  short n_branches_{0};
   bool is_init_{false};
   ClassDef(Variable, 1);
 };
-
-template<class T>
-double Variable::GetValue(const T& object) const {
-  assert(branch_ids_.size() == 1);
-  vars_.clear();
-  for (const auto& field : fields_) {
-    vars_.emplace_back(field.GetValue(object));
-  }
-  return lambda_(vars_);
-}
-
-template<class A, class B>
-double Variable::GetValue(const A& a, size_t a_id, const B& b, size_t b_id) const {
-  //    assert(branch_ids_.size() == 2);
-  vars_.clear();
-  for (const auto& field : fields_) {
-    if (field.GetBranchId() == a_id)
-      vars_.emplace_back(field.GetValue(a));
-    else if (field.GetBranchId() == b_id)
-      vars_.emplace_back(field.GetValue(b));
-    else {
-      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
-    }
-  }
-  return lambda_(vars_);
-}
 
 }// namespace AnalysisTree
 

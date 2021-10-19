@@ -1,11 +1,15 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #include "Hit.hpp"
 
 #include <iostream>
 
 namespace AnalysisTree {
 
-void Hit::Print() const {
+void Hit::Print() const noexcept {
   std::cout << "  x = " << x_ << "  y = " << y_ << "  z = " << z_ << "  phi = " << GetPhi() << "  signal = " << signal_ << std::endl;
+  Container::Print();
 }
 
 bool operator==(const Hit& that, const Hit& other) {

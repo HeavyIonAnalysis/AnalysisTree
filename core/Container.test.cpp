@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_CORE_CONTAINER_TEST_HPP_
 #define ANALYSISTREE_CORE_CONTAINER_TEST_HPP_
 
@@ -19,9 +22,9 @@ TEST(Container, Basics) {
   EXPECT_EQ(container.GetSize<bool>(), 0);
 
   BranchConfig config("RecTrack", DetType::kTrack);
-  config.AddField<float>("test_f");
-  config.AddField<int>("test_i");
-  config.AddField<bool>("test_b");
+  config.AddField<float>("test_f", "just a test field");
+  config.AddField<int>("test_i", "just a test field");
+  config.AddField<bool>("test_b", "just a test field");
 
   container.Init(config);
 

@@ -1,7 +1,6 @@
-//
-// Created by eugene on 17/11/2020.
-//
-
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen, MEPhI
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Eugeny Kashirin, Ilya Selyuzhenkov */
 #ifndef ANALYSISTREE_INFRA_UTILS_HPP
 #define ANALYSISTREE_INFRA_UTILS_HPP
 
@@ -24,7 +23,18 @@
 #define ANALYSISTREE_UTILS_GET boost::get
 #endif
 
+#include "Detector.hpp"
+
 namespace AnalysisTree {
+
+class Track;
+class Particle;
+class Module;
+class Hit;
+class EventHeader;
+
+using BranchPointer = ANALYSISTREE_UTILS_VARIANT<HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*>;
+using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Hit*, Module*, Track*, EventHeader*, Particle*>;
 
 namespace Utils {
 

@@ -1,49 +1,56 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include <iostream>
-#include <random>
 
-#include <AnalysisTree/AnalysisTask.hpp>
+#include <AnalysisTree/Branch.hpp>
 #include <AnalysisTree/ToyMC.hpp>
+
+#include "UserTaskRead.hpp"
+
+#include "TLeaf.h"
 
 using namespace AnalysisTree;
 
-int main(int argc, char* argv[]) {
+void remove_branches(TTree* tree, AnalysisTree::Configuration* conf){
+//    tree->SetBranchStatus("*", false);
+//    for(const auto& br : conf->GetBranchConfigs()){
+//      auto name = br.second.GetName();
+//      std::cout << br.second.GetName() << "  " << (name.find("VtxTracks") == std::string::npos) << std::endl;
+//      if(name.find("VtxTracks") == std::string::npos){
+//        tree->SetBranchStatus(name.c_str(), true);
+//      }
+//    }
 
-  AnalysisTree::Chain t("/home/vklochkov/Data/cbm/test_prod_all/1.analysistree.root", "rTree");
-  t.Draw("TrdTracks.energy_loss_total");
+  auto branch = tree->GetBranch("VtxTracks");
+  tree->GetListOfBranches()->Remove(branch);
 
-  //  const int n_events = 1000;  // TODO propagate somehow
-  //  std::string filename = "toymc_analysis_task.root";
-  //  std::string treename = "tTree";
-  //  std::string filelist = "fl_toy_mc.txt";
-  //
-  //  auto* man = TaskManager::GetInstance();
-  //
-  //  auto* toy_mc = new ToyMC<std::default_random_engine>;
-  //  man->AddTask(toy_mc);
-  //  man->SetOutputName(filename, treename);
-  //
-  //  man->Init();
-  //  man->Run(n_events);
-  //  man->Finish();
+  TObject* l= tree->GetLeaf("VtxTracks");
+  tree->GetListOfLeaves()->Remove(l);
 
-  //  std::ofstream fl(filelist);
-  //  fl << filename << "\n";
-  //  fl.close();
-  //
-  //  man = TaskManager::GetInstance();
-  //
-  //  auto* var_manager = new AnalysisTask;
-  //  Variable px_sim("SimParticles", "px");
-  //  Variable px_rec("RecTracks", "px");
-  //  Cuts eta_cut("eta_cut", {RangeCut({"SimParticles.eta"}, -1, 1)});
-  //  var_manager->AddEntry(AnalysisEntry({px_sim}));
-  //  var_manager->AddEntry(AnalysisEntry({px_rec}));
-  //  var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}));
-  //  var_manager->AddEntry(AnalysisEntry({px_sim, px_rec}, &eta_cut));
-  //
-  //  man->AddTask(var_manager);
-  //
-  //  man->Init({filelist}, {treename});
-  //  man->Run(-1);
-  //  man->Finish();
+//  for(auto leaf : *branch->GetListOfLeaves()){
+//    std::cout << leaf->GetName() << std::endl;
+//    tree->GetListOfLeaves()->Remove(leaf);
+//  }
+}
+
+int main() {
+
+  auto f = TFile::Open("1.analysistree.root", "read");
+  auto tree = f->Get<TTree>("rTree");
+  auto conf = f->Get<AnalysisTree::Configuration>("Configuration");
+
+  TFile newfile("pid.analysistree.root", "recreate");
+  auto new_tree = tree->CloneTree();
+  remove_branches(new_tree, conf);
+  new_tree->SetName("rrrr");
+  new_tree->Write();
+  newfile.Close();
+
+  AnalysisTree::TrackDetector* vtx_tracks{nullptr};
+  tree->SetBranchAddress("VtxTracks", &vtx_tracks);
+  tree->GetEntry(1);
+  std::cout << vtx_tracks->GetNumberOfChannels() << std::endl;
+
+  f->Close();
 }

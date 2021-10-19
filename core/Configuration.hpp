@@ -1,3 +1,6 @@
+/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+   SPDX-License-Identifier: GPL-3.0-only
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 
 #ifndef ANALYSISTREE_CONFIGURATION_H
 #define ANALYSISTREE_CONFIGURATION_H
@@ -101,6 +104,11 @@ class Configuration : public TObject {
     }
     return result;
   }
+
+  std::vector<std::string> GetListOfBranches() const;
+
+  std::vector<std::string> GetListOfBranchesExcluding(const std::vector<std::string>& exclude) const;
+
 
  protected:
   std::string name_;
