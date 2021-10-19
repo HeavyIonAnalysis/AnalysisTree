@@ -19,11 +19,12 @@ list(APPEND HEADERS "Constants.hpp" "ToyMC.hpp")
 add_library(AnalysisTreeBase SHARED ${SOURCES} G__AnalysisTreeBase.cxx)
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeBase ${HEADERS} LINKDEF AnalysisTreeCoreLinkDef.h)
 target_link_libraries(AnalysisTreeBase
-        Core
-        RIO
-        Tree
-        Physics
-        ROOT::EG)
+        PUBLIC
+            ROOT::Core
+            ROOT::RIO
+            ROOT::Tree
+            ROOT::Physics
+            ROOT::EG)
 add_custom_command(TARGET AnalysisTreeBase PRE_BUILD
         COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/include/AnalysisTree
         COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_BINARY_DIR}/include/AnalysisTree
