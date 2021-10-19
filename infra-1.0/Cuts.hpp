@@ -6,7 +6,9 @@
 #include <utility>
 #include <vector>
 
+// core
 #include <AnalysisTree/Constants.hpp>
+// infra
 #include "SimpleCut.hpp"
 
 // Logical AND is applied for all Cuts in the vector

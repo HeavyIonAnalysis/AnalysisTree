@@ -1,7 +1,9 @@
 #ifndef ANALYSISTREE_FILLTASK_H_
 #define ANALYSISTREE_FILLTASK_H_
 
-#include "Configuration.hpp"
+// core
+#include <AnalysisTree/Configuration.hpp>
+// infra
 #include "Utils.hpp"
 
 class TChain;

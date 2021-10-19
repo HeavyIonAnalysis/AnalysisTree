@@ -9,10 +9,11 @@
 #include "TFile.h"
 #include "TTree.h"
 
-#include "Configuration.hpp"
-#include "Detector.hpp"
-#include "EventHeader.hpp"
-#include "Matching.hpp"
+// core
+#include <AnalysisTree/Configuration.hpp>
+#include <AnalysisTree/Detector.hpp>
+#include <AnalysisTree/EventHeader.hpp>
+#include <AnalysisTree/Matching.hpp>
 
 namespace AnalysisTree::Version1 {
 

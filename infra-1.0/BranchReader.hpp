@@ -5,9 +5,11 @@
 #include <utility>
 #include <vector>
 
+// core
 #include <AnalysisTree/Constants.hpp>
-#include "Detector.hpp"
-#include "EventHeader.hpp"
+#include <AnalysisTree/Detector.hpp>
+#include <AnalysisTree/EventHeader.hpp>
+// infra
 #include "Variable.hpp"
 #include "VariantMagic.hpp"
 
