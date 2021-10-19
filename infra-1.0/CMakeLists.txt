@@ -10,11 +10,10 @@ set(SOURCES
   TreeReader.cpp
   TaskManager.cpp
   PlainTreeFiller.cpp
-        )
-
-if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
-    list(APPEND SOURCES "VarManager.cpp" "BranchReader.cpp" "VarManagerEntry.cpp")
-endif()
+  VarManager.cpp
+  BranchReader.cpp
+  VarManagerEntry.cpp
+  )
 
 if (AnalysisTree_BUILD_EXPERIMENTAL)
     list(APPEND SOURCES BranchView.cpp)
