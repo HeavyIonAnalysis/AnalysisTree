@@ -5,6 +5,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include <TObject.h>
 
@@ -83,6 +84,14 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   [[nodiscard]] std::string GetName() const { return name_; }
   [[nodiscard]] ShortInt_t GetId() const { return id_; }
   [[nodiscard]] DetType GetType() const { return type_; }
+  template<typename T>
+  [[nodiscard]] std::vector<std::string> GetFieldsNamesT() const {
+    std::vector<std::string> result;
+    std::transform(begin(GetMap<T>()), end(GetMap<T>()), back_inserter(result),
+                   [] (const typename VectorConfig<T>::MapType::value_type &elem) { return elem.first; });
+    return result;
+  }
+
 
  protected:
   std::string name_;
