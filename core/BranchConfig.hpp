@@ -8,6 +8,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <algorithm>
 
 #include <TObject.h>
 
@@ -132,6 +133,13 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 
   ANALYSISTREE_ATTR_NODISCARD std::string GetName() const { return name_; }
+  template<typename T>
+  ANALYSISTREE_ATTR_NODISCARD std::vector<std::string> GetFieldsNamesT() const {
+    std::vector<std::string> result;
+    std::transform(begin(GetMap<T>()), end(GetMap<T>()), back_inserter(result),
+                   [] (const typename VectorConfig<T>::MapType::value_type &elem) { return elem.first; });
+    return result;
+  }
   ANALYSISTREE_ATTR_NODISCARD size_t GetId() const { return id_; }
   ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
   ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const {
