@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 
-#include "Constants.hpp"
+#include <AnalysisTree/Constants.hpp>
 #include "Detector.hpp"
 #include "EventHeader.hpp"
 #include "Variable.hpp"

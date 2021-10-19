@@ -5,7 +5,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "Constants.hpp"
+#include <AnalysisTree/Constants.hpp>
 #include "Utils.hpp"
 
 namespace AnalysisTree{
