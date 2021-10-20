@@ -38,7 +38,7 @@ void makeTestTree(int ne = 5) {
     vtx_tracks->ClearChannels();
     for (int j = 0; j < 10; ++j) {
       vtx_tracks->AddChannel(vtx_tracks_branch);
-      vtx_tracks->GetChannel(j);
+      vtx_tracks->Channel(j).SetMomentum(1.0*j, 10.*j, 100.*j);
     }
 
     tree->Fill();

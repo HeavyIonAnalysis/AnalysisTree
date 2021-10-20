@@ -20,6 +20,17 @@ namespace AnalysisTree {
 
 namespace Impl {
 
+template <typename T>
+std::vector<std::string> getTransitiveFields() { return {}; }
+
+template <>
+std::vector<std::string> getTransitiveFields<::AnalysisTree::Track>() {
+  return {"eta", "phi", "pT", "p"};
+}
+
+
+
+
 template<typename T>
 struct ColumnReader {
   ColumnReader(BranchConfig& config, std::string_view field_name) {
@@ -204,7 +215,14 @@ class AnalysisTreeRDFImplT<AnalysisTree::Detector<T>> :
   typedef std::shared_ptr<Slot> SlotPtr;
 
 
-  AnalysisTreeRDFImplT(const std::string& Filename, const std::string& TreeName, const std::string& BranchName) : AnalysisTreeRDFBase(Filename, TreeName, BranchName) {}
+  AnalysisTreeRDFImplT(const std::string& Filename, const std::string& TreeName, const std::string& BranchName) : AnalysisTreeRDFBase(Filename, TreeName, BranchName) {
+    for (auto &transitive_field: getTransitiveFields<channel_type>()) {
+      auto field_pos = std::find(begin(column_names_), end(column_names_), transitive_field);
+      if (field_pos != end(column_names_)) {
+        column_names_.erase(field_pos);
+      }
+    }
+  }
 
   void SetNSlots(unsigned int nSlots) override {
     for (int i = 0; i < nSlots; ++i) {

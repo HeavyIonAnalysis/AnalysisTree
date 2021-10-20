@@ -11,6 +11,12 @@
 
 namespace AnalysisTree {
 
+class Track;
+
+namespace Impl {
+  void *Data(Track *track_ptr, Integer_t i_field, Types field_type);
+}
+
 /*! \brief A class for a generic track with determined momentum
  *
  *  Detailed description starts here...
@@ -78,6 +84,9 @@ class Track : public Container {
   */
   friend bool operator==(const Track& that, const Track& other) noexcept;
 
+  friend void *Impl::Data(Track *track_ptr, Integer_t i_field, Types field_type);
+
+
   /**
   * Calculates rapidity
   * @param pdg - pdg code hypotesis
@@ -135,6 +144,25 @@ class Track : public Container {
 
   ClassDefOverride(Track, 2);
 };
+
+namespace Impl {
+
+inline
+void *Data(Track *track_ptr, Integer_t i_field, Types field_type) {
+  switch (i_field) {
+//    case TrackFields::kPhi: return GetPhi();
+//    case TrackFields::kPt: return GetPt();
+//    case TrackFields::kEta: return GetEta();
+//    case TrackFields::kP: return GetP();
+    case TrackFields::kPx: return &(track_ptr->px_);
+    case TrackFields::kPy: return &(track_ptr->py_);
+    case TrackFields::kPz: return &(track_ptr->pz_);
+    default: ::AnalysisTree::Impl::Data(static_cast<Container*>(track_ptr), i_field, field_type);
+  }
+  return nullptr;
+}
+
+}
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_GENERICTRACK_H
