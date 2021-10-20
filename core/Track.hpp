@@ -150,14 +150,14 @@ namespace Impl {
 inline
 void *Data(Track *track_ptr, Integer_t i_field, Types field_type) {
   switch (i_field) {
-//    case TrackFields::kPhi: return GetPhi();
-//    case TrackFields::kPt: return GetPt();
-//    case TrackFields::kEta: return GetEta();
-//    case TrackFields::kP: return GetP();
+    case TrackFields::kPhi:
+    case TrackFields::kPt:
+    case TrackFields::kEta:
+    case TrackFields::kP: throw std::runtime_error("Transient field is referenced");
     case TrackFields::kPx: return &(track_ptr->px_);
     case TrackFields::kPy: return &(track_ptr->py_);
     case TrackFields::kPz: return &(track_ptr->pz_);
-    default: ::AnalysisTree::Impl::Data(static_cast<Container*>(track_ptr), i_field, field_type);
+    default: return ::AnalysisTree::Impl::Data(static_cast<Container*>(track_ptr), i_field, field_type);
   }
   return nullptr;
 }

@@ -10,11 +10,12 @@
 #include <map>
 #include <utility>
 #include <memory>
+#include <cassert>
 
-#include <AnalysisTree/BranchReader.hpp>
-#include <AnalysisTree/Configuration.hpp>
-#include <AnalysisTree/EventHeader.hpp>
-#include <EventHeader.hpp>
+#include "BranchReader.hpp"
+#include "Configuration.hpp"
+#include "EventHeader.hpp"
+#include "Detector.hpp"
 
 namespace AnalysisTree {
 
@@ -23,10 +24,12 @@ namespace Impl {
 template <typename T>
 std::vector<std::string> getTransitiveFields() { return {}; }
 
+
 template <>
 std::vector<std::string> getTransitiveFields<::AnalysisTree::Track>() {
   return {"eta", "phi", "pT", "p"};
 }
+
 
 
 
@@ -40,6 +43,7 @@ struct ColumnReader {
 
   void update(T* ptr) {
     data = Data(ptr, field_id, field_type);
+    assert(data);
   }
 
   void* dataPtr() {
@@ -250,6 +254,7 @@ class AnalysisTreeRDFImplT<AnalysisTree::Detector<T>> :
 
     for (SlotPtr &slot_ptr: slots_) {
       Slot &slot = *slot_ptr;
+      assert(event_no < slot.tree->GetEntries());
       slot.tree->GetEntry(event_no);
 
       slot.event_no = event_no;

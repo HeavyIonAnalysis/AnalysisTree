@@ -7,7 +7,6 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
-#include <Configuration.hpp>
 #include <ROOT/RDataFrame.hxx>
 
 using namespace AnalysisTree;
@@ -83,5 +82,18 @@ TEST(AnalysisTreeRDF, DisplayVtxTracks) {
   ROOT::RDataFrame rdf(std::move(ds));
   rdf
   .Display("", 5)->Print();
+}
 
+TEST(AnalysisTreeRDF, RealDataExample) {
+  makeTestTree(25);
+
+  auto ds = std::make_unique<Impl::AnalysisTreeRDFImplT<TrackDetector>>(
+      "test_resources/991.analysistree.root",
+      "rTree",
+      "VtxTracks"
+      );
+
+  ROOT::RDataFrame rdf(std::move(ds));
+  rdf
+  .Display("", 5)->Print();
 }

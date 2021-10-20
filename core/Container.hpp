@@ -78,6 +78,7 @@ inline void* Data(Container* container_ptr, Integer_t field_id, Types field_type
     case Types::kBool:
       /* not working due to specific implementation of std::vector for boolean type */
       //      return &(container_ptr->bools_[field_id]);
+      throw std::runtime_error("Cannot handle bool fields");
     default: return nullptr;
   }
 }
