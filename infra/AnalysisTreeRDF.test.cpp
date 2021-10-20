@@ -95,5 +95,6 @@ TEST(AnalysisTreeRDF, RealDataExample) {
 
   ROOT::RDataFrame rdf(std::move(ds));
   rdf
-  .Display("", 5)->Print();
+      .Range(0, 10)
+      .Display("")->Print();
 }

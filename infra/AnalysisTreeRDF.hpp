@@ -39,10 +39,23 @@ struct ColumnReader {
   ColumnReader(BranchConfig& config, std::string_view field_name) {
     field_id = config.GetFieldId(std::string(field_name));
     field_type = config.GetFieldType(std::string(field_name));
+    if (field_type == Types::kBool) {
+      cached = new bool;
+    }
+  }
+  ~ColumnReader() {
+    if (cached) {
+      delete cached;
+    }
   }
 
   void update(T* ptr) {
-    data = Data(ptr, field_id, field_type);
+    if (field_type == Types::kBool) {
+      *((bool*)cached) = ptr->template GetField<bool>(field_id);
+      data = cached;
+    } else {
+      data = Data(ptr, field_id, field_type);
+    }
     assert(data);
   }
 
@@ -53,6 +66,7 @@ struct ColumnReader {
   Integer_t field_id{};
   Types field_type{};
 
+  void* cached{nullptr};
   void* data{nullptr};
 };
 
