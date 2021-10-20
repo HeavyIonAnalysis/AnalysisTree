@@ -20,6 +20,7 @@ ROOT_GENERATE_DICTIONARY(G__AnalysisTreeBase ${HEADERS} LINKDEF AnalysisTreeCore
 target_link_libraries(AnalysisTreeBase PUBLIC
         ROOT::Core
         ROOT::Tree
+        ROOT::Physics
         ROOT::EG)
 
 add_custom_command(TARGET AnalysisTreeBase PRE_BUILD
