@@ -9,6 +9,7 @@
 #include <TTree.h>
 #include <map>
 #include <utility>
+#include <memory>
 
 #include <AnalysisTree/BranchReader.hpp>
 #include <AnalysisTree/Configuration.hpp>
@@ -184,9 +185,31 @@ class AnalysisTreeRDFImplT<AnalysisTree::Detector<T>> :
     public AnalysisTreeRDFBase,
     public ROOT::RDF::RDataSource {
  public:
+
+  typedef Detector<T> detector_type;
+  typedef T channel_type;
+
+  struct Slot {
+    BranchConfig config;
+    std::unique_ptr<TFile> file;
+    TTree *tree{nullptr};
+    detector_type *detector_ptr{nullptr};
+    std::map<std::string, std::shared_ptr<ColumnReader<channel_type>>> column_readers;
+
+    bool is_initialized{false};
+    ULong64_t event_no{0ul};
+    ULong64_t entry_offset{0ul};
+    size_t n_channels{0ul};
+  };
+  typedef std::shared_ptr<Slot> SlotPtr;
+
+
   AnalysisTreeRDFImplT(const std::string& Filename, const std::string& TreeName, const std::string& BranchName) : AnalysisTreeRDFBase(Filename, TreeName, BranchName) {}
 
   void SetNSlots(unsigned int nSlots) override {
+    for (int i = 0; i < nSlots; ++i) {
+      slots_.emplace_back(makeSlot());
+    }
   }
   const std::vector<std::string>& GetColumnNames() const override {
     return column_names_;
@@ -198,16 +221,70 @@ class AnalysisTreeRDFImplT<AnalysisTree::Detector<T>> :
     return GetTypeNameImpl(View);
   }
   std::vector<std::pair<ULong64_t, ULong64_t>> GetEntryRanges() override {
-    return std::vector<std::pair<ULong64_t, ULong64_t>>();
+    std::vector<std::pair<ULong64_t, ULong64_t>> result;
+
+    auto event_no = slots_.back()->is_initialized? slots_.back()->event_no + 1 : 0ul;
+    auto entry_offset = slots_.back()->is_initialized?
+                                                      slots_.back()->entry_offset +
+                                                      slots_.back()->n_channels: 0ul;
+    if (event_no >= slots_.front()->tree->GetEntries())
+      return {};
+
+    for (SlotPtr &slot_ptr: slots_) {
+      Slot &slot = *slot_ptr;
+      slot.tree->GetEntry(event_no);
+
+      slot.event_no = event_no;
+      slot.n_channels = slot.detector_ptr->GetNumberOfChannels();
+      slot.entry_offset = entry_offset;
+      slot.is_initialized = true;
+
+      result.emplace_back(entry_offset, slot.entry_offset + slot.n_channels - 1);
+
+      event_no+=1;
+      entry_offset += slot.n_channels;
+    }
+    return result;
   }
-  bool SetEntry(unsigned int slot, ULong64_t entry) override {
+  bool SetEntry(unsigned int islot, ULong64_t entry) override {
+    Slot& slot = *(slots_[islot]);
+    auto i_channel = entry - slot.entry_offset;
+    if (i_channel < slot.n_channels) {
+      for (auto &reader : slot.column_readers) {
+        reader.second->update(std::addressof(slot.detector_ptr->Channel(i_channel)));
+      }
+      return true;
+    }
     return false;
   }
 
  protected:
   Record_t GetColumnReadersImpl(std::string_view name, const std::type_info& Info) override {
-    return ROOT::RDF::RDataSource::Record_t();
+    Record_t result;
+    result.reserve(slots_.size());
+    for (auto& slot_ptr : slots_) {
+      Slot& slot = *slot_ptr;
+      auto new_column_reader = std::make_shared<ColumnReader<channel_type>>(slot.config, name);
+      auto emplace_result = slot.column_readers.emplace(name, new_column_reader);
+      result.template emplace_back(emplace_result.first->second->dataPtr());
+    }
+    return result;
   }
+
+
+
+  std::shared_ptr<Slot> makeSlot() {
+    auto slot = std::make_shared<Slot>();
+    slot->file.reset(TFile::Open(filename_.c_str(), "read"));
+    slot->tree = slot->file->template Get<TTree>(tree_name_.c_str());
+    slot->tree->SetBranchAddress(branch_name_.c_str(), std::addressof(slot->detector_ptr));
+
+    auto configuration = slot->file->template Get<Configuration>("Configuration");
+    slot->config = configuration->GetBranchConfig(branch_name_);
+    return slot;
+  }
+
+  std::vector<std::shared_ptr<Slot>> slots_;
 };
 
 }// namespace Impl

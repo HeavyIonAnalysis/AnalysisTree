@@ -76,7 +76,6 @@ TEST(AnalysisTreeRDF, DisplayVtxTracks) {
 
   auto ds = std::make_unique<Impl::AnalysisTreeRDFImplT<TrackDetector>>(
       "test.root",
-
       "aTree",
       "VtxTracks"
       );
