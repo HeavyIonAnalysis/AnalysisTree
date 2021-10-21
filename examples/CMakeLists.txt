@@ -31,6 +31,8 @@ include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${AnalysisTree_INCL
 add_executable(example example.cpp)
 target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra AnalysisTreeUser ${ROOT_LIBRARIES} EG)
 
+add_executable(run_read_task run_read_task.cpp)
+target_link_libraries(run_read_task AnalysisTreeBase AnalysisTreeInfra AnalysisTreeUser ${ROOT_LIBRARIES} EG)
 
 
 

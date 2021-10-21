@@ -2,7 +2,7 @@
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include <iostream>
-#include <AnalysisTree/Chain.hpp>
+#include <Chain.hpp>
 
 using namespace AnalysisTree;
 

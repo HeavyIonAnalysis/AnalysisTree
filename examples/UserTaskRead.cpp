@@ -9,11 +9,11 @@ void UserTaskRead::Init() {
   auto chain = TaskManager::GetInstance()->GetChain();
 
   AddInputBranch("SimParticles");
-  AddInputBranch("RecTracks");
+  AddInputBranch("VtxTracks");
 
   particles_ = chain->GetBranch("SimParticles");
-  tracks_ = chain->GetBranch("RecTracks");
-  match_ = chain->GetMatching("RecTracks", "SimParticles");
+  tracks_ = chain->GetBranch("VtxTracks");
+  match_ = chain->GetMatching("VtxTracks", "SimParticles");
 }
 
 void UserTaskRead::Exec() {
