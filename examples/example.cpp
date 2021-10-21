@@ -2,42 +2,47 @@
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include <iostream>
-
-#include <AnalysisTree/DataHeader.hpp>
-#include <AnalysisTree/EventHeader.hpp>
-#include <AnalysisTree/Matching.hpp>
-
 #include <AnalysisTree/Chain.hpp>
 
 using namespace AnalysisTree;
 
+void example(const std::string& filename, const std::string& treename);
+
 int main(int argc, char* argv[]) {
 
-  if (argc < 2) {
+  if (argc < 3) {
     std::cout << "Error! Please use " << std::endl;
-    std::cout << " ./example filelist_ana" << std::endl;
+    std::cout << " ./example file_name tree_name" << std::endl;
     exit(EXIT_FAILURE);
   }
 
-  const std::string filelist_ana = argv[1];
+  const std::string filename = argv[1];
+  const std::string treename = argv[2];
+  example(filename, treename);
 
-  auto* chain = new Chain({filelist_ana}, {"aTree"});
-  
+  return 0;
+}
+
+void example(const std::string& filename, const std::string& treename){
+  auto* chain = new Chain(filename, treename);
+  chain->InitPointersToBranches({"VtxTracks", "SimParticles"});
+
   auto* config = chain->GetConfiguration();
   auto* data_header = chain->GetDataHeader();
 
   data_header->Print();
   config->Print();
 
-  auto rec_particles = chain->GetBranch("RecParticles");
-  auto rec2sim_particles = chain->GetMatching("RecParticles", "SimParticles");
+  auto rec_particles = chain->GetBranch("VtxTracks");
+  auto rec2sim_particles = chain->GetMatching("VtxTracks", "SimParticles");
 
   auto rec_pT = rec_particles.GetField("pT");
 
   for (long i_event = 0; i_event < 10; ++i_event) {
     chain->GetEntry(i_event);
-    for(int i=0; i<rec_particles.size(); ++i){
+    for(size_t i=0; i<rec_particles.size(); ++i){
       auto pT = rec_particles[i][rec_pT];
+      std::cout << " track #" << i << " pT = " << pT << std::endl;
     }
   }
 }

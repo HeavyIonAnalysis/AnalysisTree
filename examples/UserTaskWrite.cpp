@@ -1,6 +1,6 @@
 #include "UserTaskWrite.hpp"
 
-#include "AnalysisTree/TaskManager.hpp"
+#include "TaskManager.hpp"
 
 using namespace AnalysisTree;
 
