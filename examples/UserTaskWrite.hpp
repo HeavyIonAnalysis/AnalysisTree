@@ -1,9 +1,9 @@
 #ifndef ANALYSISTREE_EXAMPLES_USERTASKWRITE_HPP_
 #define ANALYSISTREE_EXAMPLES_USERTASKWRITE_HPP_
 
-#include <AnalysisTree/Branch.hpp>
-#include <AnalysisTree/Detector.hpp>
-#include <AnalysisTree/Task.hpp>
+#include <Branch.hpp>
+#include <Detector.hpp>
+#include <Task.hpp>
 
 class UserTaskWrite : public AnalysisTree::Task {
 
