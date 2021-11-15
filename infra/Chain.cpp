@@ -111,8 +111,9 @@ void Chain::InitConfiguration() {
 
   for (size_t i = 1; i < filelists_.size(); ++i) {
     auto* config_i = GetObjectFromFileList<Configuration>(filelists_.at(i), name);
-    for (size_t j = 0; j < config_i->GetNumberOfBranches(); ++j) {
-      configuration_->AddBranchConfig(config_i->GetBranchConfig(j));
+
+    for(const auto& c : config_i->GetBranchConfigs()){
+      configuration_->AddBranchConfig(c.second);
     }
   }
 }
