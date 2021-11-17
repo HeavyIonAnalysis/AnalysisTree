@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_3d_3d_0',['operator==',['../d9/d26/namespaceAnalysisTree.html#ad37e555282c07a52e104028079294030',1,'AnalysisTree']]]
+  ['merge_0',['Merge',['../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89',1,'AnalysisTree::Configuration']]]
 ];

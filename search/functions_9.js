@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['plainmerge_0',['PlainMerge',['../d4/d84/classAnalysisTree_1_1IBranchView.html#afdfafd6be51162ebd326f0d57b08b71c',1,'AnalysisTree::IBranchView']]],
-  ['print_1',['Print',['../da/d0a/classAnalysisTree_1_1Track.html#a600377f1f436a20052e9f8f4886018ea',1,'AnalysisTree::Track']]]
+  ['operator_3d_3d_0',['operator==',['../d9/d26/namespaceAnalysisTree.html#ad37e555282c07a52e104028079294030',1,'AnalysisTree']]]
 ];
