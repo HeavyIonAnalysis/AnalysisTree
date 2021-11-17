@@ -47,6 +47,7 @@ class Task {
 
   ANALYSISTREE_ATTR_NODISCARD bool IsGoodEvent(const Chain& t) const;
 
+
   void SetEventCuts(Cuts* cuts) {
     if (cuts->GetBranches().size() != 1) {
       throw std::runtime_error("Event cuts on only 1 branch are allowed at the moment!");

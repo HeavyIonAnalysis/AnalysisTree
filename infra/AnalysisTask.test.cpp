@@ -84,6 +84,7 @@ TEST(AnalysisTask, Basics) {
   RunToyMC(n_events, filelist);
 
   auto* man = TaskManager::GetInstance();
+
   auto* var_manager = new AnalysisTaskTest;
   Variable px_sim("SimParticles", "px");
   Variable px_rec("RecTracks", "px");

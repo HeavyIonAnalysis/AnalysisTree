@@ -17,7 +17,11 @@ list(APPEND HEADERS "Constants.hpp" "Detector.hpp")
 
 add_library(AnalysisTreeBase SHARED ${SOURCES} G__AnalysisTreeBase.cxx)
 ROOT_GENERATE_DICTIONARY(G__AnalysisTreeBase ${HEADERS} LINKDEF AnalysisTreeCoreLinkDef.h)
-target_link_libraries(AnalysisTreeBase ${ROOT_LIBRARIES} EG)
+target_link_libraries(AnalysisTreeBase PUBLIC
+        ROOT::Core
+        ROOT::Tree
+        ROOT::Physics
+        ROOT::EG)
 
 add_custom_command(TARGET AnalysisTreeBase PRE_BUILD
         COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/include/AnalysisTree
@@ -28,6 +32,7 @@ target_include_directories(AnalysisTreeBase
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include/AnalysisTree>
             $<INSTALL_INTERFACE:include>
         )
 

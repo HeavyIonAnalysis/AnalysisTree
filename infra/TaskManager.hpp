@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include <chrono>
 #include <vector>
 
 #include "Chain.hpp"
@@ -182,6 +183,7 @@ class TaskManager {
   }
 
   void SetOutputTreeConfig(OutputTreeConfig mode) { out_tree_conf_ = std::move(mode); }
+
 
   void ClearTasks() { tasks_.clear(); }
 

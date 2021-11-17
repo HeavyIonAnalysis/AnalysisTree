@@ -109,6 +109,28 @@ class Configuration : public TObject {
 
   std::vector<std::string> GetListOfBranchesExcluding(const std::vector<std::string>& exclude) const;
 
+  /**
+    * @brief Merge two configurations without reindexing of the branches
+    * THIS FUNCITON IS USED IN THE Infra v1
+    * @param other
+    */
+  void Merge(const Configuration& other) {
+    for (auto& other_branch : other.branches_) {
+      const auto other_id = other_branch.second.GetId();
+      const auto other_name = other_branch.second.GetName();
+      for (auto& local_branch : branches_) {
+        if (other_id == local_branch.second.GetId()) {
+          throw std::runtime_error("Configurations contain branches with the same id-s");
+        }
+        if (other_name == local_branch.second.GetName()) {
+          throw std::runtime_error("Configurations contain branches with the same names");
+        }
+      }
+      /// DO NOT REINDEX
+      branches_.emplace(other_branch);
+    }
+  }
+
 
  protected:
   std::string name_;

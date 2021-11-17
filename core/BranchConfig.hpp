@@ -148,6 +148,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
 
+
+
  protected:
   std::string name_;
   size_t id_{0};

@@ -2,8 +2,18 @@
 # that was used to copy headers to the build directory:
 # multiple files are supported since cmake 3.5
 cmake_minimum_required(VERSION 3.5)
-project(AnalysisTree CXX)
-set(PROJECT_VERSION 1.1)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include( MunkeiVersionFromGit )
+version_from_git(
+        LOG       ON
+        TIMESTAMP "%Y%m%d%H%M%S"
+)
+
+project(AnalysisTree
+        VERSION ${VERSION}
+        LANGUAGES CXX)
+
 
 # by default build optimized code
 if(NOT DEFINED CMAKE_BUILD_TYPE)
@@ -28,7 +38,7 @@ if(Boost_FOUND)
     message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
 endif()
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
 
 # CMake options
 set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
@@ -52,8 +62,11 @@ message(STATUS "Using ROOT: ${ROOT_VERSION} <${ROOT_CONFIG}>")
 include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR} core)
 include(${ROOT_USE_FILE})
 
+# libraries
 add_subdirectory(core)
 add_subdirectory(infra)
+add_subdirectory(infra-1.0)
+
 
 if(AnalysisTree_BUILD_EXAMPLES)
     add_subdirectory(examples)
@@ -64,6 +77,10 @@ endif()
 #    enable_testing()
 #    add_subdirectory(test)
 #endif()
+
+# header with version
+configure_file(cmake/AnalysisTreeVersion.hpp.in ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp)
+
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
