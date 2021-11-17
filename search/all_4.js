@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['entitytraits_0',['EntityTraits',['../d7/ddf/structAnalysisTree_1_1Details_1_1EntityTraits.html',1,'AnalysisTree::Details']]],
-  ['entitytraits_3c_20detector_3c_20t_20_3e_20_3e_1',['EntityTraits&lt; Detector&lt; T &gt; &gt;',['../df/d23/structAnalysisTree_1_1Details_1_1EntityTraits_3_01Detector_3_01T_01_4_01_4.html',1,'AnalysisTree::Details']]],
-  ['equalscut_2',['EqualsCut',['../d4/dfc/classAnalysisTree_1_1SimpleCut.html#a3d162f208d821da8fce81cc80613dd22',1,'AnalysisTree::SimpleCut::EqualsCut()'],['../d9/d26/namespaceAnalysisTree.html#a9c0d6f85c4d4903cf28702b392518b18',1,'AnalysisTree::EqualsCut(const std::string &amp;variable_name, int value, const std::string &amp;title)']]],
-  ['eventheader_3',['EventHeader',['../d8/dd1/classAnalysisTree_1_1EventHeader.html',1,'AnalysisTree']]]
+  ['equalscut_0',['EqualsCut',['../d4/dfc/classAnalysisTree_1_1SimpleCut.html#a3d162f208d821da8fce81cc80613dd22',1,'AnalysisTree::SimpleCut::EqualsCut()'],['../d9/d26/namespaceAnalysisTree.html#a9c0d6f85c4d4903cf28702b392518b18',1,'AnalysisTree::EqualsCut(const std::string &amp;variable_name, int value, const std::string &amp;title)']]],
+  ['eventheader_1',['EventHeader',['../d8/dd1/classAnalysisTree_1_1EventHeader.html',1,'AnalysisTree']]]
 ];

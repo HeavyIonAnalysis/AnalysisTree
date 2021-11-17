@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['plainmerge_0',['PlainMerge',['../d4/d84/classAnalysisTree_1_1IBranchView.html#afdfafd6be51162ebd326f0d57b08b71c',1,'AnalysisTree::IBranchView']]],
-  ['print_1',['Print',['../da/d0a/classAnalysisTree_1_1Track.html#a600377f1f436a20052e9f8f4886018ea',1,'AnalysisTree::Track']]]
+  ['setownstasks_0',['SetOwnsTasks',['../d2/d83/classAnalysisTree_1_1TaskManager.html#a3884e7be7b33f2efe8403a55fd08e617',1,'AnalysisTree::TaskManager']]],
+  ['simplecut_1',['SimpleCut',['../d4/dfc/classAnalysisTree_1_1SimpleCut.html#a4cb6db5a75abee9f486f60714231a7e3',1,'AnalysisTree::SimpleCut']]]
 ];
