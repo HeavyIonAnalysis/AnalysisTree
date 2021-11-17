@@ -7,12 +7,14 @@
 
 **Current version is development version!**
 
-Last tested version: v2.1.3
+Last tested version: v2.1.4
 
 Last release version: v.1.0.9
 
 Different MAJOR version means incompatible API changes. 
 Neither API nor data compatibility is preserved between MAJOR versions.
+
+Since v2.1.4 old infra implementation is kept for the sake of code compatibility.
 
 ## Doxygen documentation:
 
