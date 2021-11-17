@@ -88,7 +88,7 @@ class Variable {
   std::function<double(std::vector<double>&)> lambda_{[](std::vector<double>& var) { return var.at(0); }};//!
   short n_branches_{0};
   bool is_init_{false};
-  ClassDef(Variable, 1);
+  ClassDef(Variable, 0);
 };
 
 }// namespace AnalysisTree

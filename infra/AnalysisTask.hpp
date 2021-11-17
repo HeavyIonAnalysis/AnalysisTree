@@ -50,7 +50,7 @@ class AnalysisTask : public Task {
   std::vector<AnalysisEntry> entries_{};
   std::map<std::string, Cuts*> cuts_map_{};
 
-  ClassDefOverride(AnalysisTask, 1);
+  ClassDefOverride(AnalysisTask, 0);
 };
 
 }// namespace AnalysisTree

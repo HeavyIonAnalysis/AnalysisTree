@@ -94,7 +94,7 @@ class Field {
 
   bool is_init_{false};
 
-  ClassDef(Field, 2);
+  ClassDef(Field, 0);
 };
 
 }// namespace AnalysisTree

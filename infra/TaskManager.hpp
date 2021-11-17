@@ -213,7 +213,7 @@ class TaskManager {
   bool read_in_tree_{false};
   bool is_owns_tasks_{true};
 
-  ClassDef(TaskManager, 1);
+  ClassDef(TaskManager, 0);
 };
 
 };// namespace AnalysisTree
