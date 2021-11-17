@@ -15,9 +15,6 @@ set(SOURCES
   VarManagerEntry.cpp
   )
 
-if (AnalysisTree_BUILD_EXPERIMENTAL)
-    list(APPEND SOURCES BranchView.cpp)
-endif ()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
@@ -71,10 +68,6 @@ if(AnalysisTree_BUILD_TESTS)
             SimpleCut.test.cpp
             VarManager.test.cpp
             )
-
-    if (AnalysisTree_BUILD_EXPERIMENTAL)
-        list(APPEND TEST_SOURCES BranchView.test.cpp)
-    endif()
 
     add_executable(AnalysisTreeInfraVersion1_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfraVersion1_UnitTests PRIVATE AnalysisTreeInfraVersion1 gtest_main)

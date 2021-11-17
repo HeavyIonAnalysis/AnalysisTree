@@ -22,9 +22,6 @@ if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
     list(APPEND SOURCES "AnalysisTask.cpp" "AnalysisEntry.cpp")
 endif()
 
-if (AnalysisTree_BUILD_EXPERIMENTAL)
-    list(APPEND SOURCES BranchView.cpp)
-endif ()
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
@@ -82,9 +79,6 @@ if(AnalysisTree_BUILD_TESTS)
             Chain.test.hpp
             )
 
-    if (AnalysisTree_BUILD_EXPERIMENTAL)
-        list(APPEND TEST_SOURCES BranchView.test.cpp)
-    endif()
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
     target_link_libraries(AnalysisTreeInfra_UnitTests PRIVATE AnalysisTreeInfra gtest_main)
