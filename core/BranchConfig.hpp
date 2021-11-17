@@ -115,15 +115,15 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   // Setters
   template<typename T>
-  void AddField(const std::string& name, const std::string& title) {
+  void AddField(const std::string& name, const std::string& title = "") {
     VectorConfig<T>::AddField(name, title);
   }
   template<typename T>
-  void AddFields(const std::vector<std::string>& names, const std::string& title) {
+  void AddFields(const std::vector<std::string>& names, const std::string& title = "") {
     VectorConfig<T>::AddFields(names, title);
   }
   template<typename T>
-  void AddField(const std::string& name, ShortInt_t id, const std::string& title) {
+  void AddField(const std::string& name, ShortInt_t id, const std::string& title = "") {
     VectorConfig<T>::AddField(name, id, title);
   }
 

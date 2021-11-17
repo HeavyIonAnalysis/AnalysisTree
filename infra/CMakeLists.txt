@@ -44,7 +44,6 @@ ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS}
         )
 target_link_libraries(AnalysisTreeInfra
         PUBLIC
-            ${ROOT_LIBRARIES}
             AnalysisTreeBase
             $<$<BOOL:${Boost_FOUND}>:${Boost_LIBRARIES}>
         )
