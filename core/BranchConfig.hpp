@@ -139,7 +139,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD std::vector<std::string> GetFieldsNamesT() const {
     std::vector<std::string> result;
     std::transform(begin(GetMap<T>()), end(GetMap<T>()), back_inserter(result),
-                   [] (const typename VectorConfig<T>::MapType::value_type &elem) { return elem.first; });
+                   [] (const typename MapType::value_type &elem) { return elem.first; });
     return result;
   }
   ANALYSISTREE_ATTR_NODISCARD size_t GetId() const { return id_; }
