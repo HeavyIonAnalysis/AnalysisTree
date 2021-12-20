@@ -24,8 +24,8 @@ class Detector : public IndexedObject, protected IndexAccessor {
   Detector() = default;
   explicit Detector(size_t id) : IndexedObject(id) {}
   Detector(const Detector& otherDetector) = default;
-  Detector(Detector&& otherDetector) noexcept = default;
-  Detector& operator=(Detector&&) noexcept = default;
+  Detector(Detector&& otherDetector) noexcept(std::is_nothrow_move_constructible<std::vector<T>>::value) = default;
+  Detector& operator=(Detector&&) noexcept(std::is_nothrow_move_assignable<std::vector<T>>::value) = default;
   Detector& operator=(const Detector& part) = default;
 
   ~Detector() override = default;
