@@ -21,8 +21,10 @@ template<class T>
 class Detector : public IndexedObject, protected IndexAccessor {
 
  public:
-  static_assert(std::is_nothrow_move_constructible<std::vector<T>>::value);
-  static_assert(std::is_nothrow_move_assignable<std::vector<T>>::value);
+  static_assert(std::is_nothrow_move_constructible<std::vector<T>>::value,
+                "std::vector<T> is expected to be copy-constructible");
+  static_assert(std::is_nothrow_move_assignable<std::vector<T>>::value,
+                "std::vector<T> is expected to be copy-assignable");
 
   Detector() = default;
   explicit Detector(size_t id) : IndexedObject(id) {}
