@@ -16,11 +16,11 @@ inline std::size_t BranchConfigHasher(const AnalysisTree::BranchConfig& config) 
   using Type = AnalysisTree::Types;
 
   std::size_t hash = 0;
-  hash_combine(hash, config.GetType());
+  hash_combine(hash, static_cast<AnalysisTree::ShortInt_t>(config.GetType()));
 
   auto hash_fields = [&hash](const std::map<std::string, AnalysisTree::ConfigElement>& fields_map, Type field_type) {
     for (auto& field : fields_map) {
-      hash_combine(hash, field.first, field.second.id_, field_type);
+      hash_combine(hash, field.first, field.second.id_, static_cast<AnalysisTree::ShortInt_t>(field_type));
     }
   };
 
