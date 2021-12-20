@@ -21,11 +21,14 @@ template<class T>
 class Detector : public IndexedObject, protected IndexAccessor {
 
  public:
+  static_assert(std::is_nothrow_move_constructible<std::vector<T>>::value);
+  static_assert(std::is_nothrow_move_assignable<std::vector<T>>::value);
+
   Detector() = default;
   explicit Detector(size_t id) : IndexedObject(id) {}
   Detector(const Detector& otherDetector) = default;
-  Detector(Detector&& otherDetector) noexcept(std::is_nothrow_move_constructible<std::vector<T>>::value) = default;
-  Detector& operator=(Detector&&) noexcept(std::is_nothrow_move_assignable<std::vector<T>>::value) = default;
+  Detector(Detector&& otherDetector) noexcept = default;
+  Detector& operator=(Detector&&) noexcept = default;
   Detector& operator=(const Detector& part) = default;
 
   ~Detector() override = default;
