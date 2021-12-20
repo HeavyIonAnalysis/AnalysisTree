@@ -13,6 +13,7 @@
 #include <TBuffer.h>
 #include <TROOT.h>
 #include <TVirtualStreamerInfo.h>
+#include <TClass.h>
 
 namespace AnalysisTree {
 
