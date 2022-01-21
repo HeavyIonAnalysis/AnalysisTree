@@ -25,6 +25,7 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("phi", TrackFields::kPhi, "azimuthal angle");
     VectorConfig<float>::AddField("eta", TrackFields::kEta, "pseudorapidity");
     VectorConfig<float>::AddField("p", TrackFields::kP, "GeV/c");
+    VectorConfig<int>::AddField("id", TrackFields::kId, "unique id");
   } else if (type_ == DetType::kParticle) {
     VectorConfig<float>::AddField("px", ParticleFields::kPx, "GeV/c");
     VectorConfig<float>::AddField("py", ParticleFields::kPy, "GeV/c");
@@ -36,19 +37,23 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("p", ParticleFields::kP, "GeV/c");
     VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity, "in Lab. frame");
     VectorConfig<int>::AddField("pid", ParticleFields::kPid, "PDG code");
+    VectorConfig<int>::AddField("id", ParticleFields::kId, "unique id");
   } else if (type_ == DetType::kHit) {
     VectorConfig<float>::AddField("x", HitFields::kX, "cm");
     VectorConfig<float>::AddField("y", HitFields::kY, "cm");
     VectorConfig<float>::AddField("z", HitFields::kZ, "cm");
     VectorConfig<float>::AddField("phi", HitFields::kPhi, "azimuthal angle");
     VectorConfig<float>::AddField("signal", HitFields::kSignal, "");
+    VectorConfig<int>::AddField("id", HitFields::kId, "unique id");
   } else if (type_ == DetType::kModule) {
     VectorConfig<int>::AddField("number", ModuleFields::kNumber, "module number");
     VectorConfig<float>::AddField("signal", ModuleFields::kSignal, "");
+    VectorConfig<int>::AddField("id", ModuleFields::kId, "unique id");
   } else if (type_ == DetType::kEventHeader) {
     VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX, "cm");
     VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY, "cm");
     VectorConfig<float>::AddField("vtx_z", EventHeaderFields::kVertexZ, "cm");
+    VectorConfig<int>::AddField("id", EventHeaderFields::kId, "unique id");
   }
 }
 
