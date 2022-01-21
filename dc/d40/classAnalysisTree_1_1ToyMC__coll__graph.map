@@ -1,7 +1,7 @@
 <map id="AnalysisTree::ToyMC&lt; RandomEngine &gt;" name="AnalysisTree::ToyMC&lt; RandomEngine &gt;">
 <area shape="rect" id="node1" title=" " alt="" coords="675,1013,819,1340"/>
 <area shape="rect" id="node2" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="314,653,489,951"/>
-<area shape="rect" id="node3" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title=" " alt="" coords="5,264,219,561"/>
+<area shape="rect" id="node3" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,264,219,561"/>
 <area shape="rect" id="node4" title=" " alt="" coords="187,57,255,134"/>
 <area shape="rect" id="node5" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="243,235,415,591"/>
 <area shape="rect" id="node6" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="440,257,571,569"/>

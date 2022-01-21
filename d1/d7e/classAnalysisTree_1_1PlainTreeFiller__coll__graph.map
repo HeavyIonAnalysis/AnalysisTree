@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title=" " alt="" coords="236,1185,423,1409"/>
 <area shape="rect" id="node2" href="$d0/d40/classAnalysisTree_1_1AnalysisTask.html" title="AnalysisTask is a Task which keeps list of AnalysisEntry&#45;s It evaluates Variables according to the ru..." alt="" coords="239,897,420,1136"/>
 <area shape="rect" id="node3" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="242,551,417,848"/>
-<area shape="rect" id="node4" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title=" " alt="" coords="5,161,219,459"/>
+<area shape="rect" id="node4" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,161,219,459"/>
 <area shape="rect" id="node5" title=" " alt="" coords="186,5,254,83"/>
 <area shape="rect" id="node6" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="243,132,415,488"/>
 <area shape="rect" id="node7" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="440,154,571,466"/>
