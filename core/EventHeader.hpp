@@ -43,6 +43,7 @@ class EventHeader : public Container {
         case EventHeaderFields::kVertexX: return GetVertexX();
         case EventHeaderFields::kVertexY: return GetVertexY();
         case EventHeaderFields::kVertexZ: return GetVertexZ();
+        case EventHeaderFields::kId: return GetId();
         default: throw std::out_of_range("EventHeader::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }

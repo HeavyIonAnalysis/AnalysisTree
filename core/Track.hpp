@@ -121,6 +121,7 @@ class Track : public Container {
         case TrackFields::kPx: return GetPx();
         case TrackFields::kPy: return GetPy();
         case TrackFields::kPz: return GetPz();
+        case TrackFields::kId: return GetId();
         default: throw std::out_of_range("Track::GetField - Index " + std::to_string(id) + " is not found");
       }
     }

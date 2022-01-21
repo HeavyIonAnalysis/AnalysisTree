@@ -53,6 +53,7 @@ class Particle : public Track {
         case ParticleFields::kPx: return GetPx();
         case ParticleFields::kPy: return GetPy();
         case ParticleFields::kPz: return GetPz();
+        case ParticleFields::kId: return GetId();
         default: throw std::out_of_range("Particle::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }

@@ -9,9 +9,10 @@
 
 namespace AnalysisTree {
 
-/*! \brief A class to store any number of integers, floats and bools
- *
- *  Consists of IndexedObject and separate std::vector<T>, for T={float, int, bool}.
+/// A class to store any number of integers, floats and bools.
+/**
+ * Consists of IndexedObject and separate std::vector<T>, for T={float, int, bool}.
+ * Intended to be used as a base class for all AnalysysTree objects.
  */
 
 class Container : public IndexedObject {

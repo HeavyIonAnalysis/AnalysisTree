@@ -62,6 +62,7 @@ class Hit : public Container {
         case HitFields::kZ: return GetZ();
         case HitFields::kPhi: return GetPhi();
         case HitFields::kSignal: return GetSignal();
+        case HitFields::kId: return GetId();
         default: throw std::out_of_range("Hit::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }

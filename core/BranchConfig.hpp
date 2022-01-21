@@ -19,6 +19,7 @@
 
 namespace AnalysisTree {
 
+/// Information to store about a data field in Configuration
 struct ConfigElement {
   ConfigElement() = default;
   virtual ~ConfigElement() = default;
@@ -33,6 +34,7 @@ struct ConfigElement {
 
 typedef std::map<std::string, ConfigElement> MapType;
 
+/// Template class to store configuration, e. g. name and description of the vector element
 template<typename T>
 class VectorConfig {
  public:
@@ -94,6 +96,10 @@ class VectorConfig {
   ClassDef(VectorConfig, 2)
 };
 
+/// A class to store configuration of the Container.
+/**
+ * Maybe better design choise would be use composition over inheritance (?)
+ */
 class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, public VectorConfig<bool> {
 
  public:
@@ -105,8 +111,6 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ~BranchConfig() override = default;
 
   BranchConfig(std::string name, DetType type);
-
-  void GenerateId();
 
   void Print() const override;
 
@@ -127,7 +131,6 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
     VectorConfig<T>::AddField(name, id, title);
   }
 
-
   // Getters
   template<typename T>
   ANALYSISTREE_ATTR_NODISCARD const MapType& GetMap() const { return VectorConfig<T>::GetMap(); }
@@ -144,6 +147,12 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   }
   ANALYSISTREE_ATTR_NODISCARD size_t GetId() const { return id_; }
   ANALYSISTREE_ATTR_NODISCARD DetType GetType() const { return type_; }
+
+  /**
+ * @brief Creates a copy with different name and/or detector type
+ * @param name new name
+ * @param type new type
+ */
   ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const;
 
   bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
@@ -151,6 +160,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
 
  protected:
+  void GenerateId();
+
   std::string name_;
   size_t id_{0};
   DetType type_{DetType(UndefValueShort)};

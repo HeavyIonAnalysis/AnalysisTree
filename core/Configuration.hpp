@@ -19,6 +19,7 @@ namespace AnalysisTree {
 
 class Matching;
 
+/// Information to store about Matching
 class MatchingConfig {
  public:
   MatchingConfig() = default;
@@ -38,6 +39,7 @@ class MatchingConfig {
   ClassDefNV(MatchingConfig, 2);
 };
 
+/// Some ROOT magic, ask Eugeny
 class Configuration_v3 : public TObject {
  public:
   std::string name_;
@@ -47,6 +49,12 @@ class Configuration_v3 : public TObject {
   ClassDef(Configuration_v3, 1);
 };
 
+/// A class to store configuration of the whole AnalysisTree object
+/**
+ * Consists of map with configs for all branches and Matching information.
+ * Should be written to ROOT file next to the TTree.
+ * Needed to read information correctly and decode meaning of the Container objects
+ */
 class Configuration : public TObject {
 
  public:

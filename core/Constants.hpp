@@ -66,7 +66,8 @@ enum TrackFields : ShortInt_t {
   kPx = -4,
   kPy = -5,
   kPz = -6,
-  kP = -7
+  kP = -7,
+  kId = -8
 };
 }
 
@@ -81,7 +82,8 @@ enum ParticleFields : ShortInt_t {
   kPx = -7,
   kPy = -8,
   kPz = -9,
-  kP = -10
+  kP = -10,
+  kId = -11
 };
 }
 
@@ -91,14 +93,16 @@ enum HitFields : ShortInt_t {
   kSignal = -2,
   kX = -3,
   kY = -4,
-  kZ = -5
+  kZ = -5,
+  kId = -6
 };
 }
 
 namespace ModuleFields {
 enum ModuleFields : ShortInt_t {
   kNumber = -1,
-  kSignal = -2
+  kSignal = -2,
+  kId = -3
 };
 }
 
@@ -106,7 +110,8 @@ namespace EventHeaderFields {
 enum EventHeaderFields : ShortInt_t {
   kVertexX = -1,
   kVertexY = -2,
-  kVertexZ = -3
+  kVertexZ = -3,
+  kId = -4
 };
 }
 

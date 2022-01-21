@@ -41,6 +41,7 @@ class Module : public Container {
       switch (iField) {
         case ModuleFields::kNumber: return GetNumber();
         case ModuleFields::kSignal: return GetSignal();
+        case ModuleFields::kId: return GetId();
         default: throw std::out_of_range("Module::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }
