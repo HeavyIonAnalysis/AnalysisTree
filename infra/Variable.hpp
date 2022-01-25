@@ -81,7 +81,7 @@ class Variable {
 
   void Print() const;
 
- private:
+ protected:
   std::string name_;
   std::vector<Field> fields_{};
   mutable std::vector<double> vars_{};//!
