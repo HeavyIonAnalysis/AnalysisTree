@@ -69,6 +69,8 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="../../d8/dae/classAnalysisTree_1_1Variable-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">AnalysisTree::Variable Class Reference</div></div>
@@ -84,7 +86,7 @@ Collaboration diagram for AnalysisTree::Variable:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../dd/d38/classAnalysisTree_1_1Variable__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1Variable_coll__map" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1Variable_coll__map" id="aAnalysisTree_1_1Variable_coll__map">
-<area shape="rect" title="Variable is a wrapper object for Field. In contrary to Field Variable is not bound to the data...." alt="" coords="5,5,156,244"/>
+<area shape="rect" title="Variable is a wrapper object for Field. In contrary to Field Variable is not bound to the data...." alt="" coords="5,5,156,332"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -149,6 +151,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Print</b> () const</t
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1be624c9d91f5d4535c6f12d22e98394"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="../../d9/dc1/classAnalysisTree_1_1Variable.html">Variable</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dc1/classAnalysisTree_1_1Variable.html#a1be624c9d91f5d4535c6f12d22e98394">FromString</a> (const std::string &amp;full_name)</td></tr>
 <tr class="separator:a1be624c9d91f5d4535c6f12d22e98394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ab3c39f828668b0bcc7c9824f9dd2e8c9"><td class="memItemLeft" align="right" valign="top"><a id="ab3c39f828668b0bcc7c9824f9dd2e8c9" name="ab3c39f828668b0bcc7c9824f9dd2e8c9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ClassDef</b> (<a class="el" href="../../d9/dc1/classAnalysisTree_1_1Variable.html">Variable</a>, 0)</td></tr>
+<tr class="separator:ab3c39f828668b0bcc7c9824f9dd2e8c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ae51af182ca02531dcdb9f828f4781494"><td class="memItemLeft" align="right" valign="top"><a id="ae51af182ca02531dcdb9f828f4781494" name="ae51af182ca02531dcdb9f828f4781494"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>name_</b></td></tr>
+<tr class="separator:ae51af182ca02531dcdb9f828f4781494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6098a064b16aea5e9a24279f5bd4caf"><td class="memItemLeft" align="right" valign="top"><a id="ab6098a064b16aea5e9a24279f5bd4caf" name="ab6098a064b16aea5e9a24279f5bd4caf"></a>
+std::vector&lt; <a class="el" href="../../db/dab/classAnalysisTree_1_1Field.html">Field</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fields_</b> {}</td></tr>
+<tr class="separator:ab6098a064b16aea5e9a24279f5bd4caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec93620043091c1dbe6dbfc648f84266"><td class="memItemLeft" align="right" valign="top"><a id="aec93620043091c1dbe6dbfc648f84266" name="aec93620043091c1dbe6dbfc648f84266"></a>
+std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vars_</b> {}</td></tr>
+<tr class="separator:aec93620043091c1dbe6dbfc648f84266"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cd757507e1d730e408f44277bc725b5"><td class="memItemLeft" align="right" valign="top"><a id="a4cd757507e1d730e408f44277bc725b5" name="a4cd757507e1d730e408f44277bc725b5"></a>
+std::function&lt; double(std::vector&lt; double &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><b>lambda_</b> {[](std::vector&lt;double&gt;&amp; var) { return var.at(0); }}</td></tr>
+<tr class="separator:a4cd757507e1d730e408f44277bc725b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd694c887322d17956da44a34ac35bac"><td class="memItemLeft" align="right" valign="top"><a id="afd694c887322d17956da44a34ac35bac" name="afd694c887322d17956da44a34ac35bac"></a>
+short&#160;</td><td class="memItemRight" valign="bottom"><b>n_branches_</b> {0}</td></tr>
+<tr class="separator:afd694c887322d17956da44a34ac35bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47b18a05c0641c0b0d8449b6e59601cb"><td class="memItemLeft" align="right" valign="top"><a id="a47b18a05c0641c0b0d8449b6e59601cb" name="a47b18a05c0641c0b0d8449b6e59601cb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_init_</b> {false}</td></tr>
+<tr class="separator:a47b18a05c0641c0b0d8449b6e59601cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
