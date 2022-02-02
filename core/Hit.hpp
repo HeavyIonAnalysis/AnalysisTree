@@ -78,6 +78,7 @@ class Hit : public Container {
         case HitFields::kY: y_ = value; break;
         case HitFields::kZ: z_ = value; break;
         case HitFields::kSignal: signal_ = value; break;
+        case HitFields::kId: break;
         case HitFields::kPhi: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         default: throw std::runtime_error("Unknown field");
       }

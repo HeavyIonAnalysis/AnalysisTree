@@ -55,6 +55,7 @@ class Module : public Container {
       switch (field_id) {
         case ModuleFields::kSignal: signal_ = value; break;
         case ModuleFields::kNumber: number_ = value; break;
+        case ModuleFields::kId: break;
         default: throw std::runtime_error("Unknown field");
       }
     }
