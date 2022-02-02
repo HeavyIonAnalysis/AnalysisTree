@@ -136,6 +136,7 @@ class Track : public Container {
         case TrackFields::kPx: px_ = value; break;
         case TrackFields::kPy: py_ = value; break;
         case TrackFields::kPz: pz_ = value; break;
+        case TrackFields::kId: break;
         case TrackFields::kP: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case TrackFields::kPt: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case TrackFields::kEta: /*throw std::runtime_error("Cannot set transient fields");*/ break;

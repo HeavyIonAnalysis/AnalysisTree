@@ -70,6 +70,7 @@ class Particle : public Track {
         case ParticleFields::kPz: pz_ = value; break;
         case ParticleFields::kMass: mass_ = value; break;
         case ParticleFields::kPid: SetPid(value); break;
+        case ParticleFields::kId: break;
         case ParticleFields::kP: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
         case ParticleFields::kPt: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
         case ParticleFields::kEta: /*throw std::runtime_error("Cannot set transient fields");*/ break;  
