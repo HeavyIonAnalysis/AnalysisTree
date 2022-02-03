@@ -14,7 +14,6 @@ project(AnalysisTree
         VERSION ${VERSION}
         LANGUAGES CXX)
 
-
 # by default build optimized code
 if(NOT DEFINED CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE RELEASE)
@@ -30,7 +29,7 @@ if (CMAKE_BUILD_TYPE MATCHES DEBUG)
 endif ()
 
 if(CMAKE_CXX_STANDARD LESS 17)
-    find_package(Boost)
+    find_package(Boost REQUIRED)
 endif()
 
 if(Boost_FOUND)
@@ -38,12 +37,11 @@ if(Boost_FOUND)
     message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
 endif()
 
-
-
 # CMake options
 set(AnalysisTree_BUILD_TESTS OFF CACHE BOOL "Build tests for the AnalysisTree")
 set(AnalysisTree_BUILD_EXAMPLES OFF CACHE BOOL "Build examples for the AnalysisTree")
 set(AnalysisTree_BUILD_EXPERIMENTAL OFF CACHE BOOL "Build experimental features for the AnalysisTree")
+set(AnalysisTree_BUILD_INFRA_1 OFF CACHE BOOL "Build AnalysisTree infra-1.0")
 
 # Tests
 include(TestsSetup)
@@ -65,18 +63,13 @@ include(${ROOT_USE_FILE})
 # libraries
 add_subdirectory(core)
 add_subdirectory(infra)
-add_subdirectory(infra-1.0)
-
+if(AnalysisTree_BUILD_INFRA_1)
+    add_subdirectory(infra-1.0)
+endif()
 
 if(AnalysisTree_BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
-
-#if(AnalysisTree_BUILD_TESTS)
-#    include(GoogleTest)
-#    enable_testing()
-#    add_subdirectory(test)
-#endif()
 
 # header with version
 configure_file(cmake/AnalysisTreeVersion.hpp.in ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp)
