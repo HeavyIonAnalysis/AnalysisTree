@@ -86,7 +86,7 @@ Inheritance diagram for AnalysisTree::Track:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d3/dee/classAnalysisTree_1_1Track__inherit__graph.png" border="0" usemap="#aAnalysisTree_1_1Track_inherit__map" alt="Inheritance graph"/></div>
 <map name="aAnalysisTree_1_1Track_inherit__map" id="aAnalysisTree_1_1Track_inherit__map">
-<area shape="rect" title="A class for a generic track with determined momentum." alt="" coords="8,549,189,832"/>
+<area shape="rect" title="A class for a generic track with determined momentum." alt="" coords="27,549,170,832"/>
 <area shape="rect" href="../../db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="25,880,172,1133"/>
 <area shape="rect" href="../../d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="19,233,178,501"/>
 <area shape="rect" href="../../df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,192,185"/>
@@ -97,7 +97,7 @@ Collaboration diagram for AnalysisTree::Track:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../df/d30/classAnalysisTree_1_1Track__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1Track_coll__map" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1Track_coll__map" id="aAnalysisTree_1_1Track_coll__map">
-<area shape="rect" title="A class for a generic track with determined momentum." alt="" coords="8,549,189,832"/>
+<area shape="rect" title="A class for a generic track with determined momentum." alt="" coords="27,549,170,832"/>
 <area shape="rect" href="../../d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="19,233,178,501"/>
 <area shape="rect" href="../../df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,192,185"/>
 </map>
@@ -126,12 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a93a04ac9bb367be851cc214fddf1296d"><td class="memItemLeft" align="right" valign="top"><a id="a93a04ac9bb367be851cc214fddf1296d" name="a93a04ac9bb367be851cc214fddf1296d"></a>
 <a class="el" href="../../da/d0a/classAnalysisTree_1_1Track.html">Track</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="../../da/d0a/classAnalysisTree_1_1Track.html">Track</a> &amp;track)=default</td></tr>
 <tr class="separator:a93a04ac9bb367be851cc214fddf1296d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb752c698425b254651f6aac916d14b7"><td class="memItemLeft" align="right" valign="top">ANALYSISTREE_ATTR_NODISCARD ROOT::Math::PxPyPzMVector&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d0a/classAnalysisTree_1_1Track.html#aeb752c698425b254651f6aac916d14b7">Get4MomentumByMass</a> (Floating_t mass) const noexcept</td></tr>
-<tr class="separator:aeb752c698425b254651f6aac916d14b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a561636adb51c26a23bc3ad7f91608c87"><td class="memItemLeft" align="right" valign="top">ANALYSISTREE_ATTR_NODISCARD ROOT::Math::PxPyPzMVector&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d0a/classAnalysisTree_1_1Track.html#a561636adb51c26a23bc3ad7f91608c87">Get4Momentum</a> (PdgCode_t pdg) const</td></tr>
-<tr class="separator:a561636adb51c26a23bc3ad7f91608c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f6d5cea92c36e72f254ebe86763a4b6"><td class="memItemLeft" align="right" valign="top"><a id="a7f6d5cea92c36e72f254ebe86763a4b6" name="a7f6d5cea92c36e72f254ebe86763a4b6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMomentum</b> (Floating_t px, Floating_t py, Floating_t pz) noexcept</td></tr>
+<tr class="memitem:a7f6d5cea92c36e72f254ebe86763a4b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/d0a/classAnalysisTree_1_1Track.html#a7f6d5cea92c36e72f254ebe86763a4b6">SetMomentum</a> (Floating_t px, Floating_t py, Floating_t pz) noexcept</td></tr>
 <tr class="separator:a7f6d5cea92c36e72f254ebe86763a4b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add24014db9b7ff19f8cc46fbac79f93f"><td class="memItemLeft" align="right" valign="top"><a id="add24014db9b7ff19f8cc46fbac79f93f" name="add24014db9b7ff19f8cc46fbac79f93f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetMomentum3</b> (const TVector3 &amp;momentum) noexcept</td></tr>
@@ -308,72 +303,6 @@ Friends</h2></td></tr>
 <div class="textblock"><p >A class for a generic track with determined momentum. </p>
 <p >Detailed description starts here... </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a561636adb51c26a23bc3ad7f91608c87" name="a561636adb51c26a23bc3ad7f91608c87"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a561636adb51c26a23bc3ad7f91608c87">&#9670;&nbsp;</a></span>Get4Momentum()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ANALYSISTREE_ATTR_NODISCARD ROOT::Math::PxPyPzMVector AnalysisTree::Track::Get4Momentum </td>
-          <td>(</td>
-          <td class="paramtype">PdgCode_t&#160;</td>
-          <td class="paramname"><em>pdg</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >Calculates 4-momentum </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pdg</td><td>- pdg code hypotesis </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>4d-momentum of track. If pdg is not found - exeption should be thrown. </dd></dl>
-
-</div>
-</div>
-<a id="aeb752c698425b254651f6aac916d14b7" name="aeb752c698425b254651f6aac916d14b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb752c698425b254651f6aac916d14b7">&#9670;&nbsp;</a></span>Get4MomentumByMass()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ANALYSISTREE_ATTR_NODISCARD ROOT::Math::PxPyPzMVector AnalysisTree::Track::Get4MomentumByMass </td>
-          <td>(</td>
-          <td class="paramtype">Floating_t&#160;</td>
-          <td class="paramname"><em>mass</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p >Calculates 4-momentum </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">mass</td><td>- track mass hypotesis in GeV/c^2 </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>4d-momentum of track </dd></dl>
-
-</div>
-</div>
 <a id="a127819ce995b6cc9fd2e2f180411653b" name="a127819ce995b6cc9fd2e2f180411653b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a127819ce995b6cc9fd2e2f180411653b">&#9670;&nbsp;</a></span>GetField()</h2>
 
@@ -526,6 +455,62 @@ template&lt;typename T &gt; </div>
 <p >Prints the track content </p>
 
 <p>Reimplemented from <a class="el" href="../../d2/d0f/classAnalysisTree_1_1Container.html">AnalysisTree::Container</a>.</p>
+
+</div>
+</div>
+<a id="a7f6d5cea92c36e72f254ebe86763a4b6" name="a7f6d5cea92c36e72f254ebe86763a4b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f6d5cea92c36e72f254ebe86763a4b6">&#9670;&nbsp;</a></span>SetMomentum()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AnalysisTree::Track::SetMomentum </td>
+          <td>(</td>
+          <td class="paramtype">Floating_t&#160;</td>
+          <td class="paramname"><em>px</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Floating_t&#160;</td>
+          <td class="paramname"><em>py</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Floating_t&#160;</td>
+          <td class="paramname"><em>pz</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p >Calculates 4-momentum </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mass</td><td>- track mass hypotesis in GeV/c^2 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>4d-momentum of track Calculates 4-momentum </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pdg</td><td>- pdg code hypotesis </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>4d-momentum of track. If pdg is not found - exeption should be thrown. </dd></dl>
 
 </div>
 </div>
