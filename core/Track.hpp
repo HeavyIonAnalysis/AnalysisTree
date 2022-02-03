@@ -7,8 +7,7 @@
 #include <cmath>
 #include <stdexcept>
 
-#include <Math/Vector4D.h>
-#include <TVector3.h>
+//#include <Math/Vector4D.h>
 #include <TVector3.h>
 
 #include "Container.hpp"
@@ -38,19 +37,19 @@ class Track : public Container {
   * @param mass - track mass hypotesis in GeV/c^2
   * @return 4d-momentum of track
   */
-  ANALYSISTREE_ATTR_NODISCARD inline ROOT::Math::PxPyPzMVector Get4MomentumByMass(Floating_t mass) const noexcept {
-    return {px_, py_, pz_, mass};
-  }
+//  ANALYSISTREE_ATTR_NODISCARD inline ROOT::Math::PxPyPzMVector Get4MomentumByMass(Floating_t mass) const noexcept {
+//    return {px_, py_, pz_, mass};
+//  }
 
   /**
   * Calculates 4-momentum
   * @param pdg - pdg code hypotesis
   * @return 4d-momentum of track. If pdg is not found - exeption should be thrown.
   */
-  ANALYSISTREE_ATTR_NODISCARD inline ROOT::Math::PxPyPzMVector Get4Momentum(PdgCode_t pdg) const {
-    const float mass = GetMassByPdgId(pdg);
-    return Get4MomentumByMass(mass);
-  }
+//  ANALYSISTREE_ATTR_NODISCARD inline ROOT::Math::PxPyPzMVector Get4Momentum(PdgCode_t pdg) const {
+//    const float mass = GetMassByPdgId(pdg);
+//    return Get4MomentumByMass(mass);
+//  }
 
   void SetMomentum(Floating_t px, Floating_t py, Floating_t pz) noexcept {
     px_ = px;
