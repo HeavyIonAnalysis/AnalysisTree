@@ -25,7 +25,7 @@ bool operator==(const SimpleCut& that, const SimpleCut& other) {
   return that.vars_ == other.vars_ && that.title_ == other.title_;
 }
 
-SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title) {
+SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const std::string& title) {
   return SimpleCut(Variable::FromString(variable_name), lo, hi, title);
 }
 
@@ -39,7 +39,7 @@ SimpleCut::SimpleCut(const Variable& var, int value, std::string title) : title_
   FillBranchNames();
 }
 
-SimpleCut::SimpleCut(const Variable& var, float min, float max, std::string title) : title_(std::move(title)) {
+SimpleCut::SimpleCut(const Variable& var, double min, double max, std::string title) : title_(std::move(title)) {
   vars_.emplace_back(var);
   lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
   FillBranchNames();
