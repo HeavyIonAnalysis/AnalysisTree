@@ -270,8 +270,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (con
 <tr class="memitem:a1c4076dfa5bc0baa975a9a7d1058489c"><td class="memItemLeft" align="right" valign="top"><a id="a1c4076dfa5bc0baa975a9a7d1058489c" name="a1c4076dfa5bc0baa975a9a7d1058489c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="../../d4/dfc/classAnalysisTree_1_1SimpleCut.html">SimpleCut</a> &amp;that, const <a class="el" href="../../d4/dfc/classAnalysisTree_1_1SimpleCut.html">SimpleCut</a> &amp;other)</td></tr>
 <tr class="separator:a1c4076dfa5bc0baa975a9a7d1058489c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57df134466a3739d4fa72be4696b71d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/dfc/classAnalysisTree_1_1SimpleCut.html">SimpleCut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d26/namespaceAnalysisTree.html#a57df134466a3739d4fa72be4696b71d8">RangeCut</a> (const std::string &amp;variable_name, float lo, float hi, const std::string &amp;title)</td></tr>
-<tr class="separator:a57df134466a3739d4fa72be4696b71d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a579faf03433ca10ed5a007d0908bf18a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/dfc/classAnalysisTree_1_1SimpleCut.html">SimpleCut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d26/namespaceAnalysisTree.html#a579faf03433ca10ed5a007d0908bf18a">RangeCut</a> (const std::string &amp;variable_name, double lo, double hi, const std::string &amp;title)</td></tr>
+<tr class="separator:a579faf03433ca10ed5a007d0908bf18a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c0d6f85c4d4903cf28702b392518b18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d4/dfc/classAnalysisTree_1_1SimpleCut.html">SimpleCut</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/d26/namespaceAnalysisTree.html#a9c0d6f85c4d4903cf28702b392518b18">EqualsCut</a> (const std::string &amp;variable_name, int value, const std::string &amp;title)</td></tr>
 <tr class="separator:a9c0d6f85c4d4903cf28702b392518b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9b9817d606a9299f3817209beb0488e"><td class="memItemLeft" align="right" valign="top"><a id="af9b9817d606a9299f3817209beb0488e" name="af9b9817d606a9299f3817209beb0488e"></a>
@@ -298,9 +298,9 @@ constexpr ShortInt_t&#160;</td><td class="memItemRight" valign="bottom"><b>Undef
 <tr class="memitem:afa8e8e723b3875dee72f7a4075b52f40"><td class="memItemLeft" align="right" valign="top"><a id="afa8e8e723b3875dee72f7a4075b52f40" name="afa8e8e723b3875dee72f7a4075b52f40"></a>
 constexpr Integer_t&#160;</td><td class="memItemRight" valign="bottom"><b>UndefValueInt</b> = -999</td></tr>
 <tr class="separator:afa8e8e723b3875dee72f7a4075b52f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03c8e2ed9fc156b3eda85c28b80918ac"><td class="memItemLeft" align="right" valign="top"><a id="a03c8e2ed9fc156b3eda85c28b80918ac" name="a03c8e2ed9fc156b3eda85c28b80918ac"></a>
-constexpr Floating_t&#160;</td><td class="memItemRight" valign="bottom"><b>SmallNumber</b> = 1e-6f</td></tr>
-<tr class="separator:a03c8e2ed9fc156b3eda85c28b80918ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96bead3a7aa88cdb740bf1fb0e08fdf4"><td class="memItemLeft" align="right" valign="top"><a id="a96bead3a7aa88cdb740bf1fb0e08fdf4" name="a96bead3a7aa88cdb740bf1fb0e08fdf4"></a>
+constexpr double&#160;</td><td class="memItemRight" valign="bottom"><b>SmallNumber</b> = 1e-6</td></tr>
+<tr class="separator:a96bead3a7aa88cdb740bf1fb0e08fdf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="../../d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts.">Cuts</a> keep list of SimpleCuts. Logical AND is applied for all <a class="el" href="../../d4/dfc/classAnalysisTree_1_1SimpleCut.html" title="SimpleCut keeps predicate (lambda function with vector of arguments) and list of Variables.">SimpleCut</a> in the <a class="el" href="../../d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts.">Cuts</a> object. </p>
@@ -388,8 +388,8 @@ constexpr Floating_t&#160;</td><td class="memItemRight" valign="bottom"><b>Small
 
 </div>
 </div>
-<a id="a57df134466a3739d4fa72be4696b71d8" name="a57df134466a3739d4fa72be4696b71d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57df134466a3739d4fa72be4696b71d8">&#9670;&nbsp;</a></span>RangeCut()</h2>
+<a id="a579faf03433ca10ed5a007d0908bf18a" name="a579faf03433ca10ed5a007d0908bf18a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a579faf03433ca10ed5a007d0908bf18a">&#9670;&nbsp;</a></span>RangeCut()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -403,13 +403,13 @@ constexpr Floating_t&#160;</td><td class="memItemRight" valign="bottom"><b>Small
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>lo</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>hi</em>, </td>
         </tr>
         <tr>
