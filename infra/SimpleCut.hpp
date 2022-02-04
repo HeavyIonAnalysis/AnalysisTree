@@ -49,7 +49,7 @@ class SimpleCut {
   * @param min minimal accepted value
   * @param max maximal accepted value
   */
-  friend SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title);
+  friend SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const std::string& title);
 
   /**
   * Constructor for integers and bool fields for cut: field == value
@@ -85,7 +85,7 @@ class SimpleCut {
   friend bool operator==(const SimpleCut& that, const SimpleCut& other);
 
  protected:
-  SimpleCut(const Variable& var, float min, float max, std::string title = "");
+  SimpleCut(const Variable& var, double min, double max, std::string title = "");
   SimpleCut(const Variable& var, int value, std::string title = "");
 
   void FillBranchNames();
@@ -97,7 +97,7 @@ class SimpleCut {
 
   ClassDef(SimpleCut, 1);
 };
-SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title = "");
+SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const std::string& title = "");
 SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title = "");
 
 }// namespace AnalysisTree

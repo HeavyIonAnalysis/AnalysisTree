@@ -33,7 +33,7 @@ typedef Long64_t PdgCode_t;
 constexpr Floating_t UndefValueFloat = -999.;
 constexpr ShortInt_t UndefValueShort = -999;
 constexpr Integer_t UndefValueInt = -999;
-constexpr Floating_t SmallNumber = 1e-6f;
+constexpr double SmallNumber = 1e-6;
 
 namespace Exyz {
 enum Exyz : ShortInt_t {
