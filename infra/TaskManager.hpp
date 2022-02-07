@@ -104,7 +104,7 @@ class TaskManager {
       chain_->GetConfiguration()->AddBranchConfig(config);
     }
 
-    out_tree_->Branch(config.GetName().c_str(), &ptr);
+    out_tree_->Branch((config.GetName() + ".").c_str(), &ptr);
   }
 
   void AddBranch(Branch* branch) {
@@ -149,7 +149,7 @@ class TaskManager {
     if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddMatch(match);
     }
-    out_tree_->Branch(configuration_->GetMatchName(br1, br2).c_str(), &match);
+    out_tree_->Branch((configuration_->GetMatchName(br1, br2) + ".").c_str(), &match);
   }
 
   ANALYSISTREE_ATTR_NODISCARD const Configuration* GetConfig() const { return chain_->GetConfiguration(); }
@@ -183,6 +183,8 @@ class TaskManager {
   }
 
   void SetOutputTreeConfig(OutputTreeConfig mode) { out_tree_conf_ = std::move(mode); }
+  
+  void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
 
 
   void ClearTasks() { tasks_.clear(); }
@@ -204,6 +206,7 @@ class TaskManager {
   DataHeader* data_header_{nullptr};
   std::string out_tree_name_{"aTree"};
   std::string out_file_name_{"analysis_tree.root"};
+  std::vector<std::string> branches_exclude_{};
 
   // configuration parameters
   OutputTreeConfig out_tree_conf_;

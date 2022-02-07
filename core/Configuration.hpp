@@ -70,9 +70,11 @@ class Configuration : public TObject {
   void AddBranchConfig(const BranchConfig& branch) {
     branches_.emplace(branch.GetId(), branch);
   }
+  
+  void RemoveBranchConfig(const std::string& branchname);
 
   void AddMatch(Matching* match);
-
+  
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
