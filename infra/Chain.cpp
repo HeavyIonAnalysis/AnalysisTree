@@ -97,7 +97,7 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
   }
 
   for (auto& match : matches_) {
-    this->SetBranchAddress(match.first.c_str(), &(match.second));
+    this->SetBranchAddress((match.first + ".").c_str(), &(match.second));
   }
   for (auto& branch : branches_) {
     ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);

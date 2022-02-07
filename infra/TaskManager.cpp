@@ -74,11 +74,17 @@ void TaskManager::InitOutChain() {
 //        chain_->SetBranchStatus((br+"*").c_str(), true);
 //      }
 //    }
+    for(auto& brex : branches_exclude_) {
+      chain_->SetBranchStatus((brex + "*").c_str(), 0);
+    }
     out_tree_ = chain_->CloneTree(0);
     out_tree_->SetName(out_tree_name_.c_str());
     configuration_ = chain_->GetConfiguration();
+    for(auto& brex : branches_exclude_) {
+      configuration_->RemoveBranchConfig(brex);
+    }
     data_header_ = chain_->GetDataHeader();
-    chain_->SetBranchStatus("*", true);
+    chain_->SetBranchStatus("*", true);               // Do we need this line or it is a remnant of debugging?
   }
 }
 
