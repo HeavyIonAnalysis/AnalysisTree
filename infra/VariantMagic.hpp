@@ -94,7 +94,7 @@ struct get_n_channels_struct : public Utils::Visitor<size_t> {
 struct set_branch_address_struct : public Utils::Visitor<int> {
   set_branch_address_struct(TTree* tree, std::string name) : tree_(tree), name_(std::move(name)) {}
   template<class Det>
-  int set_branch_address(Det*& d) const { return tree_->SetBranchAddress((name_ + ".").c_str(), &d); }
+  int set_branch_address(Det*& d) const { return tree_->SetBranchAddress(name_.c_str(), &d); }
   template<typename Entity>
   int operator()(Entity*& d) const { return set_branch_address<Entity>(d); }
   TTree* tree_{nullptr};

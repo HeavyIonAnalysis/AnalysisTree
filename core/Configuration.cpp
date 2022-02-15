@@ -184,16 +184,15 @@ void Configuration::RemoveBranchConfig(const std::string& branchname) {
     matches_.erase(matches_.begin() + tbe - i);
     i++;
   }
-  
-  // Remove matchings from MatchingIndex                                   // Why even without this block Configuration::GetMatches().size() == 1, not 2 ???
-  std::vector<std::array<std::string, 2>> to_be_erased_2;
-  for(auto& mi : matches_index_) {
-    if(mi.first.at(0) == branchname || mi.first.at(1) == branchname) {
-      to_be_erased_2.push_back(mi.first);
-    }
-  }
-  for(auto& tbe : to_be_erased_2)
-    matches_index_.erase(tbe);
 }
 
+const std::vector<std::string> Configuration::GetMatchesOfBranch(const std::string& branchname) const {
+  std::vector<std::string> matches{};
+  for(auto& ma : matches_) {
+    if(ma.GetFirstBranchName() == branchname || ma.GetSecondBranchName() == branchname)
+      matches.emplace_back(ma.GetDataBranchName());
+  }
+
+  return matches;
+}
 }// namespace AnalysisTree

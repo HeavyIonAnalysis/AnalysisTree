@@ -74,17 +74,20 @@ void TaskManager::InitOutChain() {
 //        chain_->SetBranchStatus((br+"*").c_str(), true);
 //      }
 //    }
+    configuration_ = chain_->GetConfiguration();
     for(auto& brex : branches_exclude_) {
-      chain_->SetBranchStatus((brex + "*").c_str(), 0);
+      if (chain_->CheckBranchExistence(brex) == 1) {
+        throw std::runtime_error("AnalysisTree::TaskManager::InitOutChain - Tree in the input file does not support selective cloning");
+      }
+      chain_->SetBranchStatus((brex + ".*").c_str(), 0);
+      for(auto& maex : configuration_->GetMatchesOfBranch(brex))
+        chain_->SetBranchStatus((maex + ".*").c_str(), 0);
+      configuration_->RemoveBranchConfig(brex);
     }
     out_tree_ = chain_->CloneTree(0);
     out_tree_->SetName(out_tree_name_.c_str());
-    configuration_ = chain_->GetConfiguration();
-    for(auto& brex : branches_exclude_) {
-      configuration_->RemoveBranchConfig(brex);
-    }
     data_header_ = chain_->GetDataHeader();
-    chain_->SetBranchStatus("*", true);               // Do we need this line or it is a remnant of debugging?
+    chain_->SetBranchStatus("*", true);
   }
 }
 
