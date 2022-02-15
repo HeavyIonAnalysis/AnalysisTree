@@ -26,7 +26,7 @@ class Configuration;
 enum class eBranchWriteMode {
   kCreateNewTree,
   kCopyTree,
-//  kCopySelectedBranches,
+//  kCopySelectedBranches,// Maybe remove? kCopyTree together with SetBranchesExclude() should enough
   kNone
 };
 
@@ -44,7 +44,7 @@ struct OutputTreeConfig{
   }
 
   eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
-  std::vector<std::string> branches_exclude_{};
+  std::vector<std::string> branches_exclude_{};   // Maybe remove these strings?
   std::vector<std::string> branches_{};
 
   bool is_init_{false};

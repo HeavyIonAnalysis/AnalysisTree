@@ -97,10 +97,20 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
   }
 
   for (auto& match : matches_) {
-    this->SetBranchAddress((match.first + ".").c_str(), &(match.second));
+    if( CheckBranchExistence(match.first) == 1 )
+      this->SetBranchAddress(match.first.c_str(), &(match.second));
+    else if ( CheckBranchExistence(match.first) == 2 )
+      this->SetBranchAddress((match.first + ".").c_str(), &(match.second));
+    else
+      throw std::runtime_error("AnalysisTree::InitPointersToBranches - Matching " + match.first + " does not exist");
   }
   for (auto& branch : branches_) {
-    ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
+    if( CheckBranchExistence(branch.first) == 1 )
+      ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
+    else if ( CheckBranchExistence(branch.first) == 2 )
+      ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, (branch.first + ".").c_str()), branch.second);
+    else
+      throw std::runtime_error("AnalysisTree::InitPointersToBranches - Branch " + branch.first + " does not exist");
   }
 }
 
@@ -180,6 +190,24 @@ Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option
     helper.DrawTransform(sel);
   }
   return TChain::Scan(exp.c_str(), sel.c_str(), option, nentries, firstentry);
+}
+
+int Chain::CheckBranchExistence(const std::string& branchname) {
+  auto* lob = this->GetListOfBranches();
+
+  const int Nbranches = lob->GetEntries();
+  for(int i=0; i<Nbranches; i++) {
+    const std::string& name_i = lob->At(i)->GetName();
+    if ( name_i == branchname) {
+      return 1;
+    }
+    else if ( name_i == (branchname + ".").c_str() ) {
+      return 2;
+    }
+  }
+
+  throw std::runtime_error("AnalysisTree::Chain - Branch " + branchname + " does not exist");
+  return 0;
 }
 
 

@@ -73,6 +73,8 @@ class Configuration : public TObject {
   
   void RemoveBranchConfig(const std::string& branchname);
 
+  const std::vector<std::string> GetMatchesOfBranch(const std::string& branchname) const;
+
   void AddMatch(Matching* match);
   
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
