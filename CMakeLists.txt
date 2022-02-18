@@ -4,12 +4,11 @@
 cmake_minimum_required(VERSION 3.5)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-#include( MunkeiVersionFromGit )
-#version_from_git(
-#        LOG       ON
-#        TIMESTAMP "%Y%m%d%H%M%S"
-#)
-set(VERSION "2.2.6")
+include( MunkeiVersionFromGit )
+version_from_git(
+        LOG       ON
+        TIMESTAMP "%Y%m%d%H%M%S"
+)
 
 project(AnalysisTree
         VERSION ${VERSION}
