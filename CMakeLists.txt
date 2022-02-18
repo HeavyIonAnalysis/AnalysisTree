@@ -9,6 +9,7 @@ version_from_git(
         LOG       ON
         TIMESTAMP "%Y%m%d%H%M%S"
 )
+#set(VERSION "2.2.6")
 
 project(AnalysisTree
         VERSION ${VERSION}
