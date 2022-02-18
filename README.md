@@ -1,5 +1,5 @@
 # AnalysisTree
-[![Build Status](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree.svg?branch=master)](https://travis-ci.com/HeavyIonAnalysis/AnalysisTree)
+![Workflow status](https://github.com/HeavyIonAnalysis/AnalysisTree/workflows/CMake/badge.svg)
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/HeavyIonAnalysis/AnalysisTree?sort=semver)
 ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/HeavyIonAnalysis/AnalysisTree)
 
