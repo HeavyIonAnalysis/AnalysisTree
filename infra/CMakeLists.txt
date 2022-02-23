@@ -1,26 +1,19 @@
 
-find_package(Boost QUIET)
-
 set(SOURCES
-  SimpleCut.cpp
-  Cuts.cpp
-  Field.cpp
-  Variable.cpp
-  Task.cpp
-  AnalysisTask.cpp
-  TaskManager.cpp
-  PlainTreeFiller.cpp
-  Chain.cpp
-  ChainDrawHelper.cpp
-
-  Branch.cpp
-  BranchChannel.cpp
-        )
-
-if(CMAKE_CXX_STANDARD GREATER_EQUAL 17 OR Boost_FOUND)
-#    list(APPEND SOURCES "AnalysisTask.cpp" "BranchReader.cpp" "AnalysisEntry.cpp")
-    list(APPEND SOURCES "AnalysisTask.cpp" "AnalysisEntry.cpp")
-endif()
+    SimpleCut.cpp
+    Cuts.cpp
+    Field.cpp
+    Variable.cpp
+    Task.cpp
+    AnalysisTask.cpp
+    TaskManager.cpp
+    PlainTreeFiller.cpp
+    Chain.cpp
+    ChainDrawHelper.cpp
+    Branch.cpp
+    BranchChannel.cpp
+    AnalysisEntry.cpp
+    )
 
 
 message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
@@ -45,16 +38,12 @@ target_link_libraries(AnalysisTreeInfra
             $<$<BOOL:${Boost_FOUND}>:${Boost_LIBRARIES}>
         )
 
-foreach(HEADER ${HEADERS})
-    set(HEADER_ABS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/${HEADER})
-    set(HEADERS_BINARY_DIR ${CMAKE_BINARY_DIR}/include/AnalysisTree)
-    set(HEADER_SYMLINK_PATH ${HEADERS_BINARY_DIR}/${HEADER})
-    add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${HEADERS_BINARY_DIR}
-        COMMAND ${CMAKE_COMMAND} ARGS -E create_symlink ${HEADER_ABS_PATH} ${HEADER_SYMLINK_PATH}
+add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
+        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
-endforeach()
+
 target_include_directories(AnalysisTreeInfra
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
