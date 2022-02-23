@@ -159,13 +159,17 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   return object;
 }
 
-class Branch Chain::GetBranch(const std::string& name) const {
+class Branch Chain::GetBranchObject(const std::string& name) const {
   auto it = branches_.find(name);
   if (it == branches_.end()) {
     throw std::runtime_error("Branch " + name + " is not found!");
   }
   auto ptr = branches_.find(name)->second;
   return {configuration_->GetBranchConfig(name), ptr};
+}
+
+class Branch Chain::GetBranch(const std::string& name) const {
+  return GetBranchObject(name);
 }
 
 Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
@@ -180,7 +184,7 @@ Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option
   return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
 
-Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
+Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry){
   std::string exp{varexp};
   std::string sel{selection ? selection : ""};
 

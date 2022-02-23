@@ -38,11 +38,13 @@ target_link_libraries(AnalysisTreeInfra
             $<$<BOOL:${Boost_FOUND}>:${Boost_LIBRARIES}>
         )
 
-add_custom_command(TARGET AnalysisTreeInfra PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
-        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
+add_custom_target(AnalysisTreeInfraCopyHeaders ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
+
+add_dependencies(AnalysisTreeInfra AnalysisTreeInfraCopyHeaders)
 
 target_include_directories(AnalysisTreeInfra
         PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}

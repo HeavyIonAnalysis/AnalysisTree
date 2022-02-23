@@ -81,7 +81,12 @@ class Chain : public TChain {
     this->configuration_->Print();
   }
 
-  class Branch GetBranch(const std::string& name) const;
+//  [[deprecated("Will be removed soon to avoid confusion with TChain::GetBranch. Use GetBranchObject")]]
+//  class Branch GetBranch(const std::string& name) const;
+
+  class Branch GetBranchObject(const std::string& name) const;
+
+
 
   Matching* GetMatching(const std::string& br1, const std::string& br2) const {
     auto match = matches_.find(configuration_->GetMatchName(br1, br2));
