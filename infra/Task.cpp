@@ -10,12 +10,11 @@ namespace AnalysisTree {
 ANALYSISTREE_ATTR_NODISCARD bool Task::IsGoodEvent(const Chain& t) const {
   if (!event_cuts_) return true;
   auto br_name = event_cuts_->GetBranches().begin();
-  // Here EventHeader expected
-  //TODO throw exeption otherwise
-  //  const auto cut = apply_cut(0, event_cuts_);
-  const auto data_ptr = t.GetBranch(*br_name);
-  return event_cuts_->Apply(data_ptr[0]);
-  //  return ANALYSISTREE_UTILS_VISIT(cut, data_ptr_);
+  const auto branch = t.GetBranchObject(*br_name);
+  if(branch.GetBranchType() != DetType::kEventHeader) {
+    throw std::runtime_error("EventHeader is expected");
+  }
+  return event_cuts_->Apply(branch[0]);
 }
 
 void Task::PreInit() {
