@@ -20,8 +20,8 @@ ROOT_GENERATE_DICTIONARY(G__AnalysisTreeBase ${HEADERS} LINKDEF AnalysisTreeCore
 target_link_libraries(AnalysisTreeBase ${ROOT_LIBRARIES} EG)
 
 add_custom_command(TARGET AnalysisTreeBase PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_BINARY_DIR}/include/AnalysisTree
-        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_BINARY_DIR}/include/AnalysisTree
+        COMMAND ${CMAKE_COMMAND} ARGS -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
+        COMMAND ${CMAKE_COMMAND} ARGS -E copy_if_different ${HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/../include/AnalysisTree
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 target_include_directories(AnalysisTreeBase
