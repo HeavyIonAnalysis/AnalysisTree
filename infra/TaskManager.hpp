@@ -26,30 +26,8 @@ class Configuration;
 enum class eBranchWriteMode {
   kCreateNewTree,
   kCopyTree,
-//  kCopySelectedBranches,// Maybe remove? kCopyTree together with SetBranchesExclude() should enough
   kNone
 };
-
-struct OutputTreeConfig{
-  OutputTreeConfig() = default;
-  explicit OutputTreeConfig(eBranchWriteMode mode, std::vector<std::string> ex = {}, std::vector<std::string> br = {})
-  :  write_mode_(mode), branches_exclude_(std::move(ex)), branches_(std::move(br)) {}
-
-  void Init(){
-    if(write_mode_ == eBranchWriteMode::kCreateNewTree || write_mode_ == eBranchWriteMode::kCopyTree){
-      assert(branches_exclude_.empty() && branches_.empty());
-      is_init_ = true;
-      return;
-    }
-  }
-
-  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
-  std::vector<std::string> branches_exclude_{};   // Maybe remove these strings?
-  std::vector<std::string> branches_{};
-
-  bool is_init_{false};
-};
-
 
 class TaskManager {
 
@@ -100,7 +78,7 @@ class TaskManager {
       InitOutChain();
     }
     configuration_->AddBranchConfig(config);
-    if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
+    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddBranchConfig(config);
     }
 
@@ -146,7 +124,7 @@ class TaskManager {
                          chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
-    if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
+    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
       chain_->GetConfiguration()->AddMatch(match);
     }
     out_tree_->Branch((configuration_->GetMatchName(br1, br2) + ".").c_str(), &match);
@@ -181,9 +159,8 @@ class TaskManager {
     out_file_name_ = std::move(file);
     out_tree_name_ = std::move(tree);
   }
-
-  void SetOutputTreeConfig(OutputTreeConfig mode) { out_tree_conf_ = std::move(mode); }
   
+  void SetWriteMode(eBranchWriteMode mode) { write_mode_ = mode; }
   void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
 
 
@@ -209,8 +186,7 @@ class TaskManager {
   std::vector<std::string> branches_exclude_{};
 
   // configuration parameters
-  OutputTreeConfig out_tree_conf_;
-//  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
+  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
   bool is_init_{false};
   bool fill_out_tree_{false};
   bool read_in_tree_{false};
