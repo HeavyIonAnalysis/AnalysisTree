@@ -119,8 +119,6 @@ class Configuration : public TObject {
 
   std::vector<std::string> GetListOfBranches() const;
 
-  std::vector<std::string> GetListOfBranchesExcluding(const std::vector<std::string>& exclude) const;
-
   /**
     * @brief Merge two configurations without reindexing of the branches
     * THIS FUNCITON IS USED IN THE Infra v1

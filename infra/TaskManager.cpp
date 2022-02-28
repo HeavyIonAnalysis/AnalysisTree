@@ -60,20 +60,12 @@ void TaskManager::Init() {
 
 void TaskManager::InitOutChain() {
   fill_out_tree_ = true;
-  out_tree_conf_.Init();
   out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
-  if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCreateNewTree) {
+  if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
     out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
     configuration_ = new Configuration("Configuration");
     data_header_ = new DataHeader;
-  } else if (out_tree_conf_.write_mode_ == eBranchWriteMode::kCopyTree) { // || out_tree_conf_.write_mode_ == eBranchWriteMode::kCopySelectedBranches) {
-//    if(out_tree_conf_.write_mode_ == eBranchWriteMode::kCopySelectedBranches){
-//      chain_->SetBranchStatus("*", false);
-//      for(const auto& br : out_tree_conf_.branches_){
-//        std::cout << "SDFGSDFGDF " << br << std::endl;
-//        chain_->SetBranchStatus((br+"*").c_str(), true);
-//      }
-//    }
+  } else if (write_mode_ == eBranchWriteMode::kCopyTree) {
     configuration_ = chain_->GetConfiguration();
     for(auto& brex : branches_exclude_) {
       if (chain_->CheckBranchExistence(brex) == 1) {

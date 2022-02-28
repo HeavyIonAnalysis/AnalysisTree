@@ -143,22 +143,6 @@ std::vector<std::string> Configuration::GetListOfBranches() const {
   return branches;
 }
 
-std::vector<std::string> Configuration::GetListOfBranchesExcluding(const std::vector<std::string>& exclude) const {
-  std::vector<std::string> branches{};
-  for(const auto& br : branches_){
-    if(std::find(exclude.begin(), exclude.end(), br.second.GetName()) == exclude.end()){
-      branches.emplace_back(br.second.GetName());
-    }
-  }
-  for(const auto& match : matches_index_) {
-    if(std::find(exclude.begin(), exclude.end(), match.first[0]) == exclude.end() &&
-    std::find(exclude.begin(), exclude.end(), match.first[1]) == exclude.end() ){
-      branches.emplace_back(match.second);
-    }
-  }
-  return branches;
-}
-
 void Configuration::RemoveBranchConfig(const std::string& branchname) {
   // Remove branch itself
   std::vector<size_t> to_be_erased{};
