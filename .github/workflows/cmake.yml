@@ -15,7 +15,7 @@ permissions:
   contents: read    # This is required for actions/checkout@v2
 
 jobs:
-  build_fedora35:
+  build_fedora35_root_6_24_cpp17:
     container: rootproject/root:6.24.06-fedora35
     runs-on: ubuntu-latest
     steps:
@@ -29,7 +29,7 @@ jobs:
     - name: Test
       run: cd ${{github.workspace}}/build && ctest -C ${{env.BUILD_TYPE}}
 
-  build_fedora34:
+  build_fedora34_root_6_22_cpp17:
     container: rootproject/root:6.22.08-fedora34
     runs-on: ubuntu-latest
     steps:
@@ -43,26 +43,39 @@ jobs:
       - name: Test
         run: cd ${{github.workspace}}/build && ctest -C ${{env.BUILD_TYPE}}
 
-#  build_arch:
-#    container: rootproject/root:6.20.06-arch
+  build_ubuntu20_root_6_20_cpp11:
+    container: rootproject/root:6.20.08-ubuntu20.04
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install git
+        run: apt-get update && apt-get install -y git
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Get boost
+        run: wget -O /opt/boost_1_75_0.tar.gz https://sourceforge.net/projects/boost/files/boost/1.75.0/boost_1_75_0.tar.gz/download && tar -xf /opt/boost_1_75_0.tar.gz -C /opt/
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DAnalysisTree_BUILD_TESTS=ON -DBOOSTROOT=/opt/boost_1_75_0 -DCMAKE_CXX_STANDARD=11
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      - name: Test
+        run: cd ${{github.workspace}}/build && ctest -C ${{env.BUILD_TYPE}}
+
+#  build_centos7_root_6_24_cpp11:
+#    container: rootproject/root:6.24.06-centos7
 #    runs-on: ubuntu-latest
 #    steps:
+#      - name: Install wget
+#        run: yum -y update && yum -y install wget cmake
 #      - uses: actions/checkout@v2
+#        with:
+#          fetch-depth: 0
+#      - name: Get boost
+#        run: wget -O /opt/boost_1_75_0.tar.gz https://sourceforge.net/projects/boost/files/boost/1.75.0/boost_1_75_0.tar.gz/download && tar -xf /opt/boost_1_75_0.tar.gz -C /opt/
 #      - name: Configure CMake
-#        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DAnalysisTree_BUILD_TESTS=ON
+#        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DAnalysisTree_BUILD_TESTS=ON -DBOOSTROOT=/opt/boost_1_75_0 -DCMAKE_CXX_STANDARD=11
 #      - name: Build
 #        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 #      - name: Test
 #        run: cd ${{github.workspace}}/build && ctest -C ${{env.BUILD_TYPE}}
-#
-#  build_conda:
-#    container: rootproject/root:6.22.08-conda
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Configure CMake
-#        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DAnalysisTree_BUILD_TESTS=ON
-#      - name: Build
-#        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-#      - name: Test
-#        run: cd ${{github.workspace}}/build && ctest -C ${{env.BUILD_TYPE}}
+
