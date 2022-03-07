@@ -81,13 +81,12 @@ Collaboration diagram for AnalysisTree::TaskManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/d18/classAnalysisTree_1_1TaskManager__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1TaskManager_coll__map" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1TaskManager_coll__map" id="aAnalysisTree_1_1TaskManager_coll__map">
-<area shape="rect" title=" " alt="" coords="301,969,483,1384"/>
-<area shape="rect" href="../../d7/d86/classAnalysisTree_1_1Chain.html" title=" " alt="" coords="207,551,379,907"/>
+<area shape="rect" title=" " alt="" coords="201,969,383,1413"/>
+<area shape="rect" href="../../d7/d86/classAnalysisTree_1_1Chain.html" title=" " alt="" coords="205,551,379,907"/>
 <area shape="rect" title=" " alt="" coords="243,271,306,349"/>
 <area shape="rect" href="../../d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,161,219,459"/>
 <area shape="rect" title=" " alt="" coords="229,5,297,83"/>
 <area shape="rect" href="../../d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="330,132,502,488"/>
-<area shape="rect" href="../../d7/d0f/structAnalysisTree_1_1OutputTreeConfig.html" title=" " alt="" coords="541,646,709,811"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -153,9 +152,12 @@ std::vector&lt; <a class="el" href="../../d8/dcf/classAnalysisTree_1_1Task.html"
 <tr class="memitem:a50fa6cbd76a877a8495e5906204217c2"><td class="memItemLeft" align="right" valign="top"><a id="a50fa6cbd76a877a8495e5906204217c2" name="a50fa6cbd76a877a8495e5906204217c2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetOutputName</b> (std::string file, std::string tree=&quot;aTree&quot;)</td></tr>
 <tr class="separator:a50fa6cbd76a877a8495e5906204217c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fe50bde8b29fda750bb289d7074fe32"><td class="memItemLeft" align="right" valign="top"><a id="a7fe50bde8b29fda750bb289d7074fe32" name="a7fe50bde8b29fda750bb289d7074fe32"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetOutputTreeConfig</b> (<a class="el" href="../../d7/d0f/structAnalysisTree_1_1OutputTreeConfig.html">OutputTreeConfig</a> mode)</td></tr>
-<tr class="separator:a7fe50bde8b29fda750bb289d7074fe32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeb117aa09c12258aa7377e151679eb0"><td class="memItemLeft" align="right" valign="top"><a id="adeb117aa09c12258aa7377e151679eb0" name="adeb117aa09c12258aa7377e151679eb0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetWriteMode</b> (eBranchWriteMode mode)</td></tr>
+<tr class="separator:adeb117aa09c12258aa7377e151679eb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb03e9a5a745df17d076a67a210e18ea"><td class="memItemLeft" align="right" valign="top"><a id="abb03e9a5a745df17d076a67a210e18ea" name="abb03e9a5a745df17d076a67a210e18ea"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetBranchesExclude</b> (std::vector&lt; std::string &gt; brex)</td></tr>
+<tr class="separator:abb03e9a5a745df17d076a67a210e18ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b845766f0dfa3d59de8dc99d8876f08"><td class="memItemLeft" align="right" valign="top"><a id="a3b845766f0dfa3d59de8dc99d8876f08" name="a3b845766f0dfa3d59de8dc99d8876f08"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ClearTasks</b> ()</td></tr>
 <tr class="separator:a3b845766f0dfa3d59de8dc99d8876f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,9 +205,12 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>out_tree_name_
 <tr class="memitem:ac0825bcea62f5c0a4aaa89d5ce5b61a7"><td class="memItemLeft" align="right" valign="top"><a id="ac0825bcea62f5c0a4aaa89d5ce5b61a7" name="ac0825bcea62f5c0a4aaa89d5ce5b61a7"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>out_file_name_</b> {&quot;analysis_tree.root&quot;}</td></tr>
 <tr class="separator:ac0825bcea62f5c0a4aaa89d5ce5b61a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99035f5f248dfc575145102b2b19e317"><td class="memItemLeft" align="right" valign="top"><a id="a99035f5f248dfc575145102b2b19e317" name="a99035f5f248dfc575145102b2b19e317"></a>
-<a class="el" href="../../d7/d0f/structAnalysisTree_1_1OutputTreeConfig.html">OutputTreeConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><b>out_tree_conf_</b></td></tr>
-<tr class="separator:a99035f5f248dfc575145102b2b19e317"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae125e649e1f3528cbd31157762ecf9d5"><td class="memItemLeft" align="right" valign="top"><a id="ae125e649e1f3528cbd31157762ecf9d5" name="ae125e649e1f3528cbd31157762ecf9d5"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>branches_exclude_</b> {}</td></tr>
+<tr class="separator:ae125e649e1f3528cbd31157762ecf9d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ba3077f13a55409bcd258f2bc71ce5"><td class="memItemLeft" align="right" valign="top"><a id="aa8ba3077f13a55409bcd258f2bc71ce5" name="aa8ba3077f13a55409bcd258f2bc71ce5"></a>
+eBranchWriteMode&#160;</td><td class="memItemRight" valign="bottom"><b>write_mode_</b> {eBranchWriteMode::kCreateNewTree}</td></tr>
+<tr class="separator:aa8ba3077f13a55409bcd258f2bc71ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8238c3a0a43bf524e743be4e59e4c7c0"><td class="memItemLeft" align="right" valign="top"><a id="a8238c3a0a43bf524e743be4e59e4c7c0" name="a8238c3a0a43bf524e743be4e59e4c7c0"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_init_</b> {false}</td></tr>
 <tr class="separator:a8238c3a0a43bf524e743be4e59e4c7c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
