@@ -33,6 +33,26 @@ TEST(TaskManager, RemoveBranch) {
 
   ASSERT_GT(t1.GetListOfBranches()->GetEntries(), t2.GetListOfBranches()->GetEntries());
   ASSERT_GT(t1.GetFile()->GetSize(), t2.GetFile()->GetSize());
+  ASSERT_EQ(t1.GetEntries(), t2.GetEntries());
+
+  t1.InitPointersToBranches({});
+  t2.InitPointersToBranches({});
+
+  auto br1 = t1.GetBranch("RecTracks");
+  auto br2 = t2.GetBranch("RecTracks");
+
+  t1.GetEntry(0);
+  t2.GetEntry(0);
+
+  ASSERT_EQ(br1.size(), br1.size());
+  for(int i = 0; i<br1.size(); ++i){
+    auto track1 = *(br1[i].Data<Track>());
+    auto track2 = *(br2[i].Data<Track>());
+    ASSERT_EQ(track1, track2);
+  }
+
+
+
 }
 
 

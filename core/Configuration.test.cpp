@@ -64,6 +64,23 @@ TEST(Configuration, Match) {
   EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
 }
 
+TEST(Configuration, RemoveBranch){
+  Configuration config("test");
+
+  auto rec = BranchConfig("RecTrack", DetType::kParticle);
+  auto sim = BranchConfig("SimTrack", DetType::kParticle);
+
+  config.AddBranchConfig(rec);
+  config.AddBranchConfig(sim);
+
+  Matching match(rec.GetId(), sim.GetId());
+  config.AddMatch(&match);
+
+  config.RemoveBranchConfig("SimTrack");
+  EXPECT_EQ(config.GetNumberOfBranches(), 1);
+  EXPECT_EQ(config.GetMatches().size(), 0);
+}
+
 TEST(Configuration, ReadWrite) {
   Configuration config("c");
   config.AddBranchConfig(BranchConfig("test1", AnalysisTree::DetType::kParticle));
