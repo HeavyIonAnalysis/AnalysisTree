@@ -77,7 +77,7 @@ if(AnalysisTree_BUILD_TESTS)
             AnalysisTask.test.cpp
             Branch.test.cpp
             Chain.test.hpp
-            )
+            TaskManager.test.cpp)
 
 
     add_executable(AnalysisTreeInfra_UnitTests ${TEST_SOURCES})
