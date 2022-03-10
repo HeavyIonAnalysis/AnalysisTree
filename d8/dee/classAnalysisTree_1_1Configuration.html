@@ -128,9 +128,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>AddBranchConfig</b> (
 <tr class="memitem:ad459192fc10bb3292cbcb73f086565e2"><td class="memItemLeft" align="right" valign="top"><a id="ad459192fc10bb3292cbcb73f086565e2" name="ad459192fc10bb3292cbcb73f086565e2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>RemoveBranchConfig</b> (const std::string &amp;branchname)</td></tr>
 <tr class="separator:ad459192fc10bb3292cbcb73f086565e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab04b8030d5eef8460032bc9720a911fa"><td class="memItemLeft" align="right" valign="top"><a id="ab04b8030d5eef8460032bc9720a911fa" name="ab04b8030d5eef8460032bc9720a911fa"></a>
-const std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetMatchesOfBranch</b> (const std::string &amp;branchname) const</td></tr>
-<tr class="separator:ab04b8030d5eef8460032bc9720a911fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8b7de162be22bc967a1368c49d83337"><td class="memItemLeft" align="right" valign="top"><a id="aa8b7de162be22bc967a1368c49d83337" name="aa8b7de162be22bc967a1368c49d83337"></a>
+std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetMatchesOfBranch</b> (const std::string &amp;branchname) const</td></tr>
+<tr class="separator:aa8b7de162be22bc967a1368c49d83337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bd630f293ca5222e3e777ed00448b29"><td class="memItemLeft" align="right" valign="top"><a id="a5bd630f293ca5222e3e777ed00448b29" name="a5bd630f293ca5222e3e777ed00448b29"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>AddMatch</b> (<a class="el" href="../../d8/d42/classAnalysisTree_1_1Matching.html">Matching</a> *match)</td></tr>
 <tr class="separator:a5bd630f293ca5222e3e777ed00448b29"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,9 +155,9 @@ ANALYSISTREE_ATTR_NODISCARD const std::string &amp;&#160;</td><td class="memItem
 <tr class="memitem:aac2a7ac13f13bf05786bf3c4c93e68f9"><td class="memItemLeft" align="right" valign="top"><a id="aac2a7ac13f13bf05786bf3c4c93e68f9" name="aac2a7ac13f13bf05786bf3c4c93e68f9"></a>
 ANALYSISTREE_ATTR_NODISCARD std::pair&lt; std::string, bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetMatchInfo</b> (const std::string &amp;br1, const std::string &amp;br2) const</td></tr>
 <tr class="separator:aac2a7ac13f13bf05786bf3c4c93e68f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87bfc59a2e7a0e39dce272cebba25314"><td class="memItemLeft" align="right" valign="top"><a id="a87bfc59a2e7a0e39dce272cebba25314" name="a87bfc59a2e7a0e39dce272cebba25314"></a>
-ANALYSISTREE_ATTR_NODISCARD const std::map&lt; std::array&lt; std::string, 2 &gt;, std::string &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>GetMatches</b> () const</td></tr>
-<tr class="separator:a87bfc59a2e7a0e39dce272cebba25314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a644858247ded2d83b1163cf069679108"><td class="memItemLeft" align="right" valign="top"><a id="a644858247ded2d83b1163cf069679108" name="a644858247ded2d83b1163cf069679108"></a>
+ANALYSISTREE_ATTR_NODISCARD const MatchingIndex &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>GetMatches</b> () const</td></tr>
+<tr class="separator:a644858247ded2d83b1163cf069679108"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a990c1f2bf0cf829ef1c53b963daadd67"><td class="memItemLeft" align="right" valign="top"><a id="a990c1f2bf0cf829ef1c53b963daadd67" name="a990c1f2bf0cf829ef1c53b963daadd67"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>Print</b> (Option_t *=&quot;&quot;) const</td></tr>
 <tr class="separator:a990c1f2bf0cf829ef1c53b963daadd67"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,14 +165,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>Print</b> (Option_t *
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>GetListOfBranches</b> () const</td></tr>
 <tr class="separator:a601d320bfa3c3cb110c47937fe8fb696"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69acc381a5218615a03e4c6a99136c89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89">Merge</a> (const <a class="el" href="../../d8/dee/classAnalysisTree_1_1Configuration.html">Configuration</a> &amp;other)</td></tr>
-<tr class="memdesc:a69acc381a5218615a03e4c6a99136c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge two configurations without reindexing of the branches THIS FUNCITON IS USED IN THE Infra v1.  <a href="../../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89">More...</a><br /></td></tr>
+<tr class="memdesc:a69acc381a5218615a03e4c6a99136c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge two configurations without reindexing of the branches THIS FUNCTION IS USED IN THE Infra v1.  <a href="../../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89">More...</a><br /></td></tr>
 <tr class="separator:a69acc381a5218615a03e4c6a99136c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad5045a955581d2ad48520d98ec66bb5f"><td class="memItemLeft" align="right" valign="top"><a id="ad5045a955581d2ad48520d98ec66bb5f" name="ad5045a955581d2ad48520d98ec66bb5f"></a>
-static std::map&lt; std::array&lt; std::string, 2 &gt;, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>MakeMatchingIndex</b> (const std::vector&lt; <a class="el" href="../../d0/d78/classAnalysisTree_1_1MatchingConfig.html">MatchingConfig</a> &gt; &amp;matches)</td></tr>
-<tr class="separator:ad5045a955581d2ad48520d98ec66bb5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a95015ea50a6e700f1051cf2f447b95"><td class="memItemLeft" align="right" valign="top"><a id="a7a95015ea50a6e700f1051cf2f447b95" name="a7a95015ea50a6e700f1051cf2f447b95"></a>
+static MatchingIndex&#160;</td><td class="memItemRight" valign="bottom"><b>MakeMatchingIndex</b> (const std::vector&lt; <a class="el" href="../../d0/d78/classAnalysisTree_1_1MatchingConfig.html">MatchingConfig</a> &gt; &amp;matches)</td></tr>
+<tr class="separator:a7a95015ea50a6e700f1051cf2f447b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d0974195622a50272e1ea74ab57ceb8"><td class="memItemLeft" align="right" valign="top"><a id="a4d0974195622a50272e1ea74ab57ceb8" name="a4d0974195622a50272e1ea74ab57ceb8"></a>
 static std::vector&lt; <a class="el" href="../../d0/d78/classAnalysisTree_1_1MatchingConfig.html">MatchingConfig</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>MakeMatchConfigsFromIndex</b> (const MatchingIndex &amp;matching_index)</td></tr>
 <tr class="separator:a4d0974195622a50272e1ea74ab57ceb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -220,7 +220,7 @@ MatchingIndex&#160;</td><td class="memItemRight" valign="bottom"><b>matches_inde
 </table>
 </div><div class="memdoc">
 
-<p>Merge two configurations without reindexing of the branches THIS FUNCITON IS USED IN THE Infra v1. </p>
+<p>Merge two configurations without reindexing of the branches THIS FUNCTION IS USED IN THE Infra v1. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">other</td><td></td></tr>
