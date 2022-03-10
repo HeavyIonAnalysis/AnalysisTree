@@ -27,9 +27,9 @@ class MatchingConfig {
                  std::string Branch2,
                  std::string DataBranch) : branch1_(std::move(Branch1)), branch2_(std::move(Branch2)), data_branch_(std::move(DataBranch)) {}
 
-  std::string GetFirstBranchName() const { return branch1_; }
-  std::string GetSecondBranchName() const { return branch2_; }
-  std::string GetDataBranchName() const { return data_branch_; }
+  [[nodiscard]] std::string GetFirstBranchName() const { return branch1_; }
+  [[nodiscard]] std::string GetSecondBranchName() const { return branch2_; }
+  [[nodiscard]] std::string GetDataBranchName() const { return data_branch_; }
 
  private:
   std::string branch1_;
@@ -73,7 +73,7 @@ class Configuration : public TObject {
   
   void RemoveBranchConfig(const std::string& branchname);
 
-  const std::vector<std::string> GetMatchesOfBranch(const std::string& branchname) const;
+  [[nodiscard]] std::vector<std::string> GetMatchesOfBranch(const std::string& branchname) const;
 
   void AddMatch(Matching* match);
   
@@ -91,12 +91,12 @@ class Configuration : public TObject {
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
   ANALYSISTREE_ATTR_NODISCARD std::pair<std::string, bool> GetMatchInfo(const std::string& br1, const std::string& br2) const;
-  ANALYSISTREE_ATTR_NODISCARD const std::map<std::array<std::string, 2>, std::string>& GetMatches() const { return matches_index_; }
+  ANALYSISTREE_ATTR_NODISCARD const MatchingIndex& GetMatches() const { return matches_index_; }
 
   void Print(Option_t* = "") const;
 
-  static std::map<std::array<std::string, 2>, std::string> MakeMatchingIndex(const std::vector<MatchingConfig>& matches) {
-    std::map<std::array<std::string, 2>, std::string> result;
+  static MatchingIndex MakeMatchingIndex(const std::vector<MatchingConfig>& matches) {
+    MatchingIndex result;
     for (auto& match : matches) {
       std::array<std::string, 2> map_key{match.GetFirstBranchName(), match.GetSecondBranchName()};
       auto emplace_result = result.emplace(map_key, match.GetDataBranchName());
@@ -117,11 +117,11 @@ class Configuration : public TObject {
     return result;
   }
 
-  std::vector<std::string> GetListOfBranches() const;
+  [[nodiscard]] std::vector<std::string> GetListOfBranches() const;
 
   /**
     * @brief Merge two configurations without reindexing of the branches
-    * THIS FUNCITON IS USED IN THE Infra v1
+    * THIS FUNCTION IS USED IN THE Infra v1
     * @param other
     */
   void Merge(const Configuration& other) {

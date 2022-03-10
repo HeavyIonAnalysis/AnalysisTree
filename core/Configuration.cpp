@@ -145,38 +145,34 @@ std::vector<std::string> Configuration::GetListOfBranches() const {
 
 void Configuration::RemoveBranchConfig(const std::string& branchname) {
   // Remove branch itself
-  std::vector<size_t> to_be_erased{};
-  for(auto& br : branches_) {
-    if(br.second.GetName() == branchname) {
-      to_be_erased.push_back(br.first);
+  for (auto br = branches_.begin(); br != branches_.end(); ) {
+    if (br->second.GetName() == branchname) {
+      std::cout << "Removing branch: " << branchname << std::endl;
+      br = branches_.erase(br);// reseat iterator to a valid value post-erase
+    }
+    else {
+      ++br;
     }
   }
-  for(auto& tbe : to_be_erased)
-    branches_.erase(tbe);
-  
   // Remove matchings with this branch
-  to_be_erased.clear();
-  int i{0};
-  for(auto& ma : matches_) {
-    if(ma.GetFirstBranchName() == branchname || ma.GetSecondBranchName() == branchname) {
-      to_be_erased.push_back(i);
+  for (auto ma = matches_index_.begin(); ma != matches_index_.end(); ) {
+    if (ma->first[0] == branchname || ma->first[1] == branchname) {
+      std::cout << "Removing branch: " << ma->second << std::endl;
+      ma = matches_index_.erase(ma);// reseat iterator to a valid value post-erase
     }
-    i++;
-  }
-  i=0;
-  for(auto& tbe : to_be_erased){
-    matches_.erase(matches_.begin() + tbe - i);
-    i++;
+    else {
+      ++ma;
+    }
   }
 }
 
-const std::vector<std::string> Configuration::GetMatchesOfBranch(const std::string& branchname) const {
+std::vector<std::string> Configuration::GetMatchesOfBranch(const std::string& branchname) const {
   std::vector<std::string> matches{};
   for(auto& ma : matches_) {
     if(ma.GetFirstBranchName() == branchname || ma.GetSecondBranchName() == branchname)
       matches.emplace_back(ma.GetDataBranchName());
   }
-
   return matches;
 }
+
 }// namespace AnalysisTree

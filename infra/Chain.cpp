@@ -165,7 +165,7 @@ class Branch Chain::GetBranch(const std::string& name) const {
     throw std::runtime_error("Branch " + name + " is not found!");
   }
   auto ptr = branches_.find(name)->second;
-  return AnalysisTree::Branch(configuration_->GetBranchConfig(name), ptr);
+  return {configuration_->GetBranchConfig(name), ptr};
 }
 
 Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
