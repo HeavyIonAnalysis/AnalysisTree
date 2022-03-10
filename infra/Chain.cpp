@@ -201,7 +201,7 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
     if ( name_i == branchname) {
       return 1;
     }
-    else if ( name_i == (branchname + ".").c_str() ) {
+    else if ( name_i == branchname + "." ) {
       return 2;
     }
   }

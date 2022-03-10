@@ -5,7 +5,7 @@
 #define ANALYSISTREE_INFRA_SIMPLECUT_TEST_HPP_
 
 #include <gtest/gtest.h>
-#include <infra/SimpleCut.hpp>
+#include "SimpleCut.hpp"
 
 namespace {
 
