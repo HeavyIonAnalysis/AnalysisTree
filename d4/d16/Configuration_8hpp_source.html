@@ -134,13 +134,13 @@ $(function() {
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keywordtype">void</span> AddBranchConfig(<span class="keyword">const</span> <a class="code hl_class" href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">BranchConfig</a>&amp; branch) {</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    branches_.emplace(branch.GetId(), branch);</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  }</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keywordtype">void</span> RemoveBranchConfig(<span class="keyword">const</span> std::string&amp; branchname);</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  [[nodiscard]] std::vector&lt;std::string&gt; GetMatchesOfBranch(<span class="keyword">const</span> std::string&amp; branchname) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keywordtype">void</span> AddMatch(<a class="code hl_class" href="../../d8/d42/classAnalysisTree_1_1Matching.html">Matching</a>* match);</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  ANALYSISTREE_ATTR_NODISCARD <a class="code hl_class" href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">BranchConfig</a>&amp; GetBranchConfig(<span class="keyword">const</span> std::string&amp; name);</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  ANALYSISTREE_ATTR_NODISCARD <span class="keyword">const</span> <a class="code hl_class" href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">BranchConfig</a>&amp; GetBranchConfig(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  ANALYSISTREE_ATTR_NODISCARD <span class="keyword">const</span> <a class="code hl_class" href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">BranchConfig</a>&amp; GetBranchConfig(<span class="keywordtype">size_t</span> i)<span class="keyword"> const </span>{</div>
@@ -199,20 +199,19 @@ $(function() {
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    }</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  }</div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> <span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::string name_;</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  std::map&lt;size_t, BranchConfig&gt; branches_{};</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  std::vector&lt;MatchingConfig&gt; matches_{};</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  MatchingIndex matches_index_{};</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  ClassDef(Configuration, 4)</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>};</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>}<span class="comment">// namespace AnalysisTree</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">#endif</span><span class="comment">//ANALYSISTREE_CONFIGURATION_H</span></div>
-<div class="ttc" id="aclassAnalysisTree_1_1BranchConfig_html"><div class="ttname"><a href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">AnalysisTree::BranchConfig</a></div><div class="ttdoc">A class to store configuration of the Container.</div><div class="ttdef"><b>Definition:</b> BranchConfig.hpp:103</div></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  std::string name_;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::map&lt;size_t, BranchConfig&gt; branches_{};</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  std::vector&lt;MatchingConfig&gt; matches_{};</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  MatchingIndex matches_index_{};</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  ClassDef(Configuration, 4)</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>};</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>}<span class="comment">// namespace AnalysisTree</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="preprocessor">#endif</span><span class="comment">//ANALYSISTREE_CONFIGURATION_H</span></div>
+<div class="ttc" id="aclassAnalysisTree_1_1BranchConfig_html"><div class="ttname"><a href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">AnalysisTree::BranchConfig</a></div><div class="ttdoc">A class to store configuration of the Container.</div><div class="ttdef"><b>Definition:</b> BranchConfig.hpp:102</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Configuration__v3_html"><div class="ttname"><a href="../../d8/d5e/classAnalysisTree_1_1Configuration__v3.html">AnalysisTree::Configuration_v3</a></div><div class="ttdoc">Some ROOT magic, ask Eugeny.</div><div class="ttdef"><b>Definition:</b> Configuration.hpp:43</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Configuration_html"><div class="ttname"><a href="../../d8/dee/classAnalysisTree_1_1Configuration.html">AnalysisTree::Configuration</a></div><div class="ttdoc">A class to store configuration of the whole AnalysisTree object.</div><div class="ttdef"><b>Definition:</b> Configuration.hpp:58</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Configuration_html_a69acc381a5218615a03e4c6a99136c89"><div class="ttname"><a href="../../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89">AnalysisTree::Configuration::Merge</a></div><div class="ttdeci">void Merge(const Configuration &amp;other)</div><div class="ttdoc">Merge two configurations without reindexing of the branches THIS FUNCTION IS USED IN THE Infra v1.</div><div class="ttdef"><b>Definition:</b> Configuration.hpp:127</div></div>
