@@ -171,16 +171,16 @@ void Branch::CreateMapping(const Branch* other) const {
       {AnalysisTree::Types::kInteger, "integer"},
       {AnalysisTree::Types::kBool, "bool"}};
 
-    std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
-    FieldsMapping fields_mapping;
-    for (auto& field_name : other->GetFieldNames()) {
-      if (!config_.HasField(field_name)) { continue; }
-      fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetField(field_name), GetField(field_name)));
-      std::cout << "\t" << field_name
-                << "\t(" << types_map.at(other->GetField(field_name).GetFieldType()) << " ---> "
-                << types_map.at(GetField(field_name).GetFieldType()) << ")" << std::endl;
-    }
-    copy_fields_mapping.emplace(other, std::move(fields_mapping));
+  std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
+  FieldsMapping fields_mapping;
+  for (auto& field_name : other->GetFieldNames()) {
+    if (!config_.HasField(field_name)) { continue; }
+    fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetField(field_name), GetField(field_name)));
+    std::cout << "\t" << field_name
+              << "\t(" << types_map.at(other->GetField(field_name).GetFieldType()) << " ---> "
+              << types_map.at(GetField(field_name).GetFieldType()) << ")" << std::endl;
+  }
+  copy_fields_mapping.emplace(other, std::move(fields_mapping));
 }
 
 //void Branch::UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars,

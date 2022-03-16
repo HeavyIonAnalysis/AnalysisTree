@@ -12,10 +12,10 @@ class TTree;
 class TFile;
 class TChain;
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 class Configuration;
 class DataHeader;
-}
+}// namespace AnalysisTree
 
 namespace AnalysisTree::Version1 {
 
@@ -71,7 +71,7 @@ class TaskManager {
   Cuts* event_cuts_{nullptr};
 
   struct EventCuts;
-  EventCuts *event_cuts_new_{nullptr};
+  EventCuts* event_cuts_new_{nullptr};
 
   std::vector<FillTask*> tasks_{};
 

@@ -2,11 +2,11 @@
 #include <TFileCollection.h>
 #include <THashList.h>
 
-namespace AnalysisTree::Version1{
+namespace AnalysisTree::Version1 {
 
 TChain* MakeChain(const std::string& filelist, const std::string& treename) {
   auto chain = new TChain(treename.c_str());
-  TFileCollection fc("fc","",filelist.c_str());
+  TFileCollection fc("fc", "", filelist.c_str());
   chain->AddFileInfoList(fc.GetList());
   chain->ls();
   return chain;
@@ -63,7 +63,7 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
     if (!emplace_result.second) {
       throw std::runtime_error("Branch '" + branch_name + "' already has pointer");
     }
-    auto &new_element = *emplace_result.first;
+    auto& new_element = *emplace_result.first;
     switch (branch_config.GetType()) {
       case DetType::kTrack:
         new_element.second = new TrackDetector;
@@ -95,7 +95,7 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
     if (!emplace_result.second) {
       throw std::runtime_error("Branch '" + match.second + "' already has pointer");
     }
-    auto &new_element = *emplace_result.first;
+    auto& new_element = *emplace_result.first;
     new_element.second = new Matching;
     t->SetBranchAddress(match_name.c_str(), (Matching**) &new_element.second);
   }
@@ -104,4 +104,4 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
   return ret;
 }
 
-}
+}// namespace AnalysisTree::Version1

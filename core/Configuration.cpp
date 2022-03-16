@@ -1,19 +1,19 @@
 /* Copyright (C) 2019-2021 GSI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <map>
 #include <string>
-#include <algorithm>
 
 #include "Configuration.hpp"
 #include "Matching.hpp"
 
 #include <TBuffer.h>
+#include <TClass.h>
 #include <TROOT.h>
 #include <TVirtualStreamerInfo.h>
-#include <TClass.h>
 
 namespace AnalysisTree {
 
@@ -134,10 +134,10 @@ void Configuration::AddMatch(Matching* match) {
 
 std::vector<std::string> Configuration::GetListOfBranches() const {
   std::vector<std::string> branches{};
-  for(const auto& br : branches_){
+  for (const auto& br : branches_) {
     branches.emplace_back(br.second.GetName());
   }
-  for(const auto& match : matches_index_) {
+  for (const auto& match : matches_index_) {
     branches.emplace_back(match.second);
   }
   return branches;
@@ -145,22 +145,20 @@ std::vector<std::string> Configuration::GetListOfBranches() const {
 
 void Configuration::RemoveBranchConfig(const std::string& branchname) {
   // Remove branch itself
-  for (auto br = branches_.begin(); br != branches_.end(); ) {
+  for (auto br = branches_.begin(); br != branches_.end();) {
     if (br->second.GetName() == branchname) {
       std::cout << "Removing branch: " << branchname << std::endl;
       br = branches_.erase(br);// reseat iterator to a valid value post-erase
-    }
-    else {
+    } else {
       ++br;
     }
   }
   // Remove matchings with this branch
-  for (auto ma = matches_index_.begin(); ma != matches_index_.end(); ) {
+  for (auto ma = matches_index_.begin(); ma != matches_index_.end();) {
     if (ma->first[0] == branchname || ma->first[1] == branchname) {
       std::cout << "Removing branch: " << ma->second << std::endl;
       ma = matches_index_.erase(ma);// reseat iterator to a valid value post-erase
-    }
-    else {
+    } else {
       ++ma;
     }
   }
@@ -168,8 +166,8 @@ void Configuration::RemoveBranchConfig(const std::string& branchname) {
 
 std::vector<std::string> Configuration::GetMatchesOfBranch(const std::string& branchname) const {
   std::vector<std::string> matches{};
-  for(auto& ma : matches_) {
-    if(ma.GetFirstBranchName() == branchname || ma.GetSecondBranchName() == branchname)
+  for (auto& ma : matches_) {
+    if (ma.GetFirstBranchName() == branchname || ma.GetSecondBranchName() == branchname)
       matches.emplace_back(ma.GetDataBranchName());
   }
   return matches;

@@ -4,10 +4,10 @@
 #include <gtest/gtest.h>
 #include <infra-1.0/SimpleCut.hpp>
 
-namespace{
+namespace {
 
 using namespace AnalysisTree::Version1;
 
 }
 
-#endif //ANALYSISTREE_INFRA_SIMPLECUT_TEST_HPP_
+#endif//ANALYSISTREE_INFRA_SIMPLECUT_TEST_HPP_

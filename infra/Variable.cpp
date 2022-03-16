@@ -16,8 +16,7 @@ Variable::Variable(std::string name, std::vector<Field> fields, std::function<do
     : name_(std::move(name)),
       fields_(std::move(fields)),
       lambda_(std::move(lambda)),
-      n_branches_(GetBranches().size())
-{
+      n_branches_(GetBranches().size()) {
 }
 
 void Variable::Init(const Configuration& conf) {
@@ -87,7 +86,7 @@ double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChann
   return lambda_(vars_);
 }
 std::string Variable::GetBranchName() const {
-  if(n_branches_ != 1){
+  if (n_branches_ != 1) {
     throw std::runtime_error("Number of branches is not 1!");
   }
   return fields_.at(0).GetBranchName();
@@ -95,7 +94,7 @@ std::string Variable::GetBranchName() const {
 
 std::set<std::string> Variable::GetBranches() const {
   std::set<std::string> branches{};
-  for(const auto& field : fields_){
+  for (const auto& field : fields_) {
     branches.emplace(field.GetBranchName());
   }
   return branches;

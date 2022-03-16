@@ -64,7 +64,7 @@ TEST(Configuration, Match) {
   EXPECT_STREQ(match_info_inv.first.c_str(), "RecTrack2SimTrack");
 }
 
-TEST(Configuration, RemoveBranch){
+TEST(Configuration, RemoveBranch) {
   Configuration config("test");
 
   auto rec = BranchConfig("RecTrack", DetType::kParticle);

@@ -30,9 +30,9 @@ class Variable {
   virtual ~Variable() = default;
 
   explicit Variable(const Field& field)
-  : name_(field.GetBranchName() + "." + field.GetName()),
-    fields_({field}),
-    n_branches_(1) {};
+      : name_(field.GetBranchName() + "." + field.GetName()),
+        fields_({field}),
+        n_branches_(1){};
 
   /**
    * Generic constructor for complicated variables
@@ -65,12 +65,12 @@ class Variable {
 
   double GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
 
-  template <class T>
+  template<class T>
   double GetValue(const T& object) const {
     assert(is_init_ && n_branches_ == 1);
     vars_.clear();
     for (const auto& field : fields_) {
-      vars_.emplace_back(field.template GetValue(object) );
+      vars_.emplace_back(field.template GetValue(object));
     }
     return lambda_(vars_);
   }
@@ -84,7 +84,7 @@ class Variable {
  protected:
   std::string name_;
   std::vector<Field> fields_{};
-  mutable std::vector<double> vars_{};//!
+  mutable std::vector<double> vars_{};                                                                    //!
   std::function<double(std::vector<double>&)> lambda_{[](std::vector<double>& var) { return var.at(0); }};//!
   short n_branches_{0};
   bool is_init_{false};

@@ -11,7 +11,7 @@ struct TaskManager::EventCuts {
     if (factorized_cuts.empty()) {
       return true;
     }
-    for (auto &cuts_pair : factorized_cuts) {
+    for (auto& cuts_pair : factorized_cuts) {
       if (!cuts_pair.first.Apply(*cuts_pair.second)) {
         return false;
       }
@@ -30,7 +30,7 @@ void TaskManager::Init() {
   auto start = std::chrono::system_clock::now();
 
   std::set<std::string> branch_names{};
-  for (auto *task : tasks_) {
+  for (auto* task : tasks_) {
     auto br = task->GetInputBranchNames();
     branch_names.insert(br.begin(), br.end());
   }
@@ -55,25 +55,25 @@ void TaskManager::Init() {
   if (event_cuts_) {
     event_cuts_new_ = new EventCuts;
     std::map<std::string, Cuts> single_branch_cuts;
-    for (auto &simple_cut : event_cuts_->GetCuts()) {
+    for (auto& simple_cut : event_cuts_->GetCuts()) {
       assert(simple_cut.GetBranches().size() == 1);
       auto simple_cut_branch_name = *(simple_cut.GetBranches().begin());
       assert(in_config_->GetBranchConfig(simple_cut_branch_name).GetType() == DetType::kEventHeader);
       auto emplace_result = single_branch_cuts.emplace(simple_cut_branch_name, Cuts());
-      auto &cuts = emplace_result.first->second;
+      auto& cuts = emplace_result.first->second;
       cuts.GetCuts().emplace_back(simple_cut);
     }
-    for (auto &single_branch_cut_entry : single_branch_cuts) {
-      auto &branch_name = single_branch_cut_entry.first;
-      auto &cuts = single_branch_cut_entry.second;
+    for (auto& single_branch_cut_entry : single_branch_cuts) {
+      auto& branch_name = single_branch_cut_entry.first;
+      auto& cuts = single_branch_cut_entry.second;
       cuts.Init(*in_config_);
-      auto data_ptr = (EventHeader *) branches_map_.at(single_branch_cut_entry.first);
+      auto data_ptr = (EventHeader*) branches_map_.at(single_branch_cut_entry.first);
       event_cuts_new_->factorized_cuts.emplace_back(std::make_pair(cuts, data_ptr));
     }
-//    event_cuts_->Init(*in_config_);
+    //    event_cuts_->Init(*in_config_);
   }
 
-  for (auto *task : tasks_) {
+  for (auto* task : tasks_) {
     task->SetInChain(in_tree_);
     task->SetInConfiguration(in_config_);
     task->SetDataHeader(data_header_);
@@ -107,7 +107,7 @@ void TaskManager::Run(long long nEvents) {
         continue;
       }
     }
-    for (auto *task : tasks_) {
+    for (auto* task : tasks_) {
       task->Exec();
     }
     if (out_tree_) {
@@ -125,7 +125,7 @@ void TaskManager::Finish() {
   if (out_file_)
     out_file_->cd();
 
-  for (auto *task : tasks_) {
+  for (auto* task : tasks_) {
     task->Finish();
   }
 

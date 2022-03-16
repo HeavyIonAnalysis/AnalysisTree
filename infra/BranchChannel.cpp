@@ -61,8 +61,9 @@ double BranchChannel::Value(const Field& v) const {
   switch (v.GetFieldType()) {
     case Types::kFloat: return ANALYSISTREE_UTILS_VISIT(get_field_struct<float>(v.GetFieldId()), data_ptr_);
     case Types::kInteger: return ANALYSISTREE_UTILS_VISIT(get_field_struct<int>(v.GetFieldId()), data_ptr_);
-    case Types::kBool: return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
-//    default: throw std::runtime_error("Field type is not correct!"); //NOTE commented because of Ones field
+    case Types::kBool:
+      return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
+      //    default: throw std::runtime_error("Field type is not correct!"); //NOTE commented because of Ones field
   }
 }
 

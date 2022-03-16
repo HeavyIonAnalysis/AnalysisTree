@@ -6,9 +6,9 @@
 #include <string>
 #include <vector>
 
-#include <AnalysisTree/Constants.hpp>
-#include "Variable.hpp"
 #include "Utils.hpp"
+#include "Variable.hpp"
+#include <AnalysisTree/Constants.hpp>
 
 namespace AnalysisTree::Version1 {
 
@@ -54,10 +54,10 @@ class SimpleCut {
   * @param lambda function of fields, returns bool
   */
   SimpleCut(std::vector<std::string> vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
-                                                                                                                    lambda_(std::move(lambda)) {
+                                                                                                                       lambda_(std::move(lambda)) {
     std::transform(vars.begin(), vars.end(),
                    std::back_inserter(vars_),
-                   [] (const std::string& arg_name) { return Variable::FromString(arg_name); });
+                   [](const std::string& arg_name) { return Variable::FromString(arg_name); });
 
     FillBranchNames();
   }
@@ -107,9 +107,8 @@ class SimpleCut {
   ClassDef(AnalysisTree::Version1::SimpleCut, 1)
 };
 
-
-SimpleCut RangeCut(const std::string &variable_name, float lo, float hi, const std::string &title = "");
-SimpleCut EqualsCut(const std::string &variable_name, float value, const std::string &title = "");
+SimpleCut RangeCut(const std::string& variable_name, float lo, float hi, const std::string& title = "");
+SimpleCut EqualsCut(const std::string& variable_name, float value, const std::string& title = "");
 
 }// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_SIMPLECUT_H

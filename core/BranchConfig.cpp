@@ -85,18 +85,18 @@ ShortInt_t BranchConfig::GetFieldId(const std::string& sField) const {
 
 BranchConfig BranchConfig::Clone(const std::string& name, DetType type) const {
   BranchConfig result(name, type);
-  for(const auto& field : AnalysisTree::VectorConfig<float>::map_) {
+  for (const auto& field : AnalysisTree::VectorConfig<float>::map_) {
     if (field.second.id_ >= 0) {
       result.AddField<float>(field.first, field.second.id_, field.second.title_);
     }
   }
-  for(const auto& field : AnalysisTree::VectorConfig<int>::map_){
-    if(field.second.id_ >= 0){
+  for (const auto& field : AnalysisTree::VectorConfig<int>::map_) {
+    if (field.second.id_ >= 0) {
       result.AddField<int>(field.first, field.second.id_, field.second.title_);
     }
   }
-  for(const auto& field : AnalysisTree::VectorConfig<bool>::map_){
-    if(field.second.id_ >= 0){
+  for (const auto& field : AnalysisTree::VectorConfig<bool>::map_) {
+    if (field.second.id_ >= 0) {
       result.AddField<bool>(field.first, field.second.id_, field.second.title_);
     }
   }
@@ -106,7 +106,6 @@ BranchConfig BranchConfig::Clone(const std::string& name, DetType type) const {
 
   return result;
 }
-
 
 void BranchConfig::Print() const {
   std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;

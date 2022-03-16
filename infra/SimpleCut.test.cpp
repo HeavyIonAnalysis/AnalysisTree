@@ -4,8 +4,8 @@
 #ifndef ANALYSISTREE_INFRA_SIMPLECUT_TEST_HPP_
 #define ANALYSISTREE_INFRA_SIMPLECUT_TEST_HPP_
 
-#include <gtest/gtest.h>
 #include "SimpleCut.hpp"
+#include <gtest/gtest.h>
 
 namespace {
 

@@ -97,17 +97,17 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
   }
 
   for (auto& match : matches_) {
-    if( CheckBranchExistence(match.first) == 1 )
+    if (CheckBranchExistence(match.first) == 1)
       this->SetBranchAddress(match.first.c_str(), &(match.second));
-    else if ( CheckBranchExistence(match.first) == 2 )
+    else if (CheckBranchExistence(match.first) == 2)
       this->SetBranchAddress((match.first + ".").c_str(), &(match.second));
     else
       throw std::runtime_error("AnalysisTree::InitPointersToBranches - Matching " + match.first + " does not exist");
   }
   for (auto& branch : branches_) {
-    if( CheckBranchExistence(branch.first) == 1 )
+    if (CheckBranchExistence(branch.first) == 1)
       ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, branch.first), branch.second);
-    else if ( CheckBranchExistence(branch.first) == 2 )
+    else if (CheckBranchExistence(branch.first) == 2)
       ANALYSISTREE_UTILS_VISIT(set_branch_address_struct(this, (branch.first + ".").c_str()), branch.second);
     else
       throw std::runtime_error("AnalysisTree::InitPointersToBranches - Branch " + branch.first + " does not exist");
@@ -122,7 +122,7 @@ void Chain::InitConfiguration() {
   for (size_t i = 1; i < filelists_.size(); ++i) {
     auto* config_i = GetObjectFromFileList<Configuration>(filelists_.at(i), name);
 
-    for(const auto& c : config_i->GetBranchConfigs()){
+    for (const auto& c : config_i->GetBranchConfigs()) {
       configuration_->AddBranchConfig(c.second);
     }
   }
@@ -180,7 +180,7 @@ Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option
   return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
 
-Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry){
+Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
   std::string exp{varexp};
   std::string sel{selection ? selection : ""};
 
@@ -196,12 +196,11 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
   auto* lob = this->GetListOfBranches();
 
   const int Nbranches = lob->GetEntries();
-  for(int i=0; i<Nbranches; i++) {
+  for (int i = 0; i < Nbranches; i++) {
     const std::string& name_i = lob->At(i)->GetName();
-    if ( name_i == branchname) {
+    if (name_i == branchname) {
       return 1;
-    }
-    else if ( name_i == branchname + "." ) {
+    } else if (name_i == branchname + ".") {
       return 2;
     }
   }
@@ -209,6 +208,5 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
   throw std::runtime_error("AnalysisTree::Chain - Branch " + branchname + " does not exist");
   return 0;
 }
-
 
 }// namespace AnalysisTree

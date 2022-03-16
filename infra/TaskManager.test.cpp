@@ -4,9 +4,9 @@ Authors: Viktor Klochkov */
 #ifndef ANALYSISTREE_INFRA_TASKMANANGER_TEST_HPP_
 #define ANALYSISTREE_INFRA_TASKMANANGER_TEST_HPP_
 
-#include <gtest/gtest.h>
 #include "TaskManager.hpp"
 #include "ToyMC.hpp"
+#include <gtest/gtest.h>
 
 namespace {
 
@@ -45,17 +45,13 @@ TEST(TaskManager, RemoveBranch) {
   t2.GetEntry(0);
 
   ASSERT_EQ(br1.size(), br1.size());
-  for(int i = 0; i<br1.size(); ++i){
+  for (int i = 0; i < br1.size(); ++i) {
     auto track1 = *(br1[i].Data<Track>());
     auto track2 = *(br2[i].Data<Track>());
     ASSERT_EQ(track1, track2);
   }
-
-
-
 }
 
-
-}
+}// namespace
 
 #endif//ANALYSISTREE_INFRA_TASKMANANGER_TEST_HPP_

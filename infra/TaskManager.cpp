@@ -67,12 +67,12 @@ void TaskManager::InitOutChain() {
     data_header_ = new DataHeader;
   } else if (write_mode_ == eBranchWriteMode::kCopyTree) {
     configuration_ = chain_->GetConfiguration();
-    for(auto& brex : branches_exclude_) {
+    for (auto& brex : branches_exclude_) {
       if (chain_->CheckBranchExistence(brex) == 1) {
         throw std::runtime_error("AnalysisTree::TaskManager::InitOutChain - Tree in the input file does not support selective cloning");
       }
       chain_->SetBranchStatus((brex + ".*").c_str(), 0);
-      for(auto& maex : configuration_->GetMatchesOfBranch(brex))
+      for (auto& maex : configuration_->GetMatchesOfBranch(brex))
         chain_->SetBranchStatus((maex + ".*").c_str(), 0);
       configuration_->RemoveBranchConfig(brex);
     }

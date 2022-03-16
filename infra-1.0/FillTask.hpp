@@ -10,10 +10,10 @@ class TChain;
 class TTree;
 class TFile;
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 class Configuration;
 class DataHeader;
-}
+}// namespace AnalysisTree
 
 namespace AnalysisTree::Version1 {
 

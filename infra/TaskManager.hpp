@@ -4,10 +4,10 @@
 #ifndef ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
 #define ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_
 
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <utility>
-#include <chrono>
 #include <vector>
 
 #include "Chain.hpp"
@@ -160,7 +160,7 @@ class TaskManager {
     out_tree_name_ = std::move(tree);
     fill_out_tree_ = true;
   }
-  
+
   void SetWriteMode(eBranchWriteMode mode) { write_mode_ = mode; }
   void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
 

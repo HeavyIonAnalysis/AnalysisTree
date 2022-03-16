@@ -9,8 +9,7 @@
 #include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
 
-
-namespace{
+namespace {
 
 using namespace AnalysisTree::Version1;
 
@@ -25,8 +24,6 @@ TEST(Variable, FromString) {
   EXPECT_EQ(v1.GetFields()[0].GetName(), "field");
 
   EXPECT_THROW(Variable::FromString("field"), std::runtime_error);
-
-
 }
 
 TEST(Variable, Basics) {
@@ -40,7 +37,7 @@ TEST(Variable, Basics) {
   configuration.AddBranchConfig(branch_config);
 
   Variable var1("RecTrack", "test_f");
-  Variable var2("var2", {{"RecTrack", "test_f"}, {"RecTrack", "test_i"}}, [](std::vector<double> var) { return var[0]/var[1]; });
+  Variable var2("var2", {{"RecTrack", "test_f"}, {"RecTrack", "test_i"}}, [](std::vector<double> var) { return var[0] / var[1]; });
 
   var1.Init(configuration);
   var2.Init(configuration);
@@ -55,6 +52,6 @@ TEST(Variable, Basics) {
   EXPECT_FLOAT_EQ(var2.GetValue(track), 1.f);
 }
 
-}
+}// namespace
 
-#endif //ANALYSISTREE_INFRA_VARIABLE_TEST_HPP_
+#endif//ANALYSISTREE_INFRA_VARIABLE_TEST_HPP_

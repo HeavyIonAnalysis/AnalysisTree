@@ -31,7 +31,6 @@ BranchReader::BranchReader(std::string name, void* data, DetType type, Cuts* cut
     }
   }
   id_ = ANALYSISTREE_UTILS_VISIT(get_id_struct(), data_);
-
 }
 
 size_t BranchReader::GetNumberOfChannels() {

@@ -4,7 +4,6 @@
 #ifndef ANALYSISTREE_INFRA_BRANCH_HPP_
 #define ANALYSISTREE_INFRA_BRANCH_HPP_
 
-
 #include <cassert>
 #include <map>
 #include <utility>

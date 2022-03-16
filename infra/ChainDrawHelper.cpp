@@ -34,10 +34,9 @@ void ChainDrawHelper::DrawFieldTransform(std::string& expr) {
     }
   }
 
-  if(br.GetType() != DetType::kEventHeader){
+  if (br.GetType() != DetType::kEventHeader) {
     expr = Form("%s.channels_.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
-  }
-  else{
+  } else {
     expr = Form("%s.GetField<%s>(%i)", branch.c_str(), type_str.c_str(), id);
   }
 }

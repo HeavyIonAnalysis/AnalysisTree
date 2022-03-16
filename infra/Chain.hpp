@@ -85,7 +85,7 @@ class Chain : public TChain {
 
   Matching* GetMatching(const std::string& br1, const std::string& br2) const {
     auto match = matches_.find(configuration_->GetMatchName(br1, br2));
-    if(match == matches_.end()){
+    if (match == matches_.end()) {
       throw std::runtime_error("No matching found");
     }
     return match->second;

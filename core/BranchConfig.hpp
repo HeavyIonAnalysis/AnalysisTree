@@ -5,13 +5,13 @@
 #ifndef ANALYSISTREE_BRANCHCONFIG_H
 #define ANALYSISTREE_BRANCHCONFIG_H
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
-#include <algorithm>
 
 #include <TObject.h>
 
@@ -38,7 +38,6 @@ typedef std::map<std::string, ConfigElement> MapType;
 template<typename T>
 class VectorConfig {
  public:
-
   VectorConfig() = default;
   VectorConfig(const VectorConfig&) = default;
   explicit VectorConfig(const MapType& map) : map_(map), size_(map.size()) {}
@@ -142,7 +141,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD std::vector<std::string> GetFieldsNamesT() const {
     std::vector<std::string> result;
     std::transform(begin(GetMap<T>()), end(GetMap<T>()), back_inserter(result),
-                   [] (const typename MapType::value_type &elem) { return elem.first; });
+                   [](const typename MapType::value_type& elem) { return elem.first; });
     return result;
   }
   ANALYSISTREE_ATTR_NODISCARD size_t GetId() const { return id_; }
@@ -156,8 +155,6 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const;
 
   bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
-
-
 
  protected:
   void GenerateId();

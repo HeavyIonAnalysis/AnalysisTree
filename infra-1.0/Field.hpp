@@ -2,15 +2,15 @@
 #ifndef ANALYSISTREE_INFRA_FIELD_H_
 #define ANALYSISTREE_INFRA_FIELD_H_
 
-#include <string>
 #include <stdexcept>
+#include <string>
 
 // core
 #include <AnalysisTree/Constants.hpp>
 // infra
 #include "Utils.hpp"
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 class Configuration;
 }
 

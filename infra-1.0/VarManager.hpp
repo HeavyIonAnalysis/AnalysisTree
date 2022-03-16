@@ -3,11 +3,11 @@
 
 #include "vector"
 
-#include <AnalysisTree/Matching.hpp>
 #include "BranchReader.hpp"
 #include "FillTask.hpp"
 #include "VarManagerEntry.hpp"
 #include "Variable.hpp"
+#include <AnalysisTree/Matching.hpp>
 
 namespace AnalysisTree::Version1 {
 

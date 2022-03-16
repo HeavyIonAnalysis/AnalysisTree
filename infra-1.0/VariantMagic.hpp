@@ -4,8 +4,8 @@
 // I'm really sorry about this, blame Oleg
 // To be removed after c++17 will be available everywhere
 
-#include "Utils.hpp"
 #include "Cuts.hpp"
+#include "Utils.hpp"
 #include "Variable.hpp"
 
 namespace AnalysisTree::Version1 {
@@ -66,8 +66,6 @@ struct get_id_struct : public Utils::Visitor<int> {
   int operator()(Entity* d) const { return get_id<Entity>(d); }
 };
 
-
 }// namespace AnalysisTree::Version1
-
 
 #endif//ANALYSISTREE_INFRA_VARIANTMAGIC_HPP_

@@ -5,11 +5,11 @@
 
 #include <infra-1.0/Field.hpp>
 
-#include <core/Track.hpp>
 #include <core/BranchConfig.hpp>
 #include <core/Configuration.hpp>
+#include <core/Track.hpp>
 
-namespace{
+namespace {
 
 using namespace AnalysisTree::Version1;
 
@@ -35,7 +35,7 @@ TEST(Field, Basics) {
   field_b.Init(configuration);
 
   EXPECT_EQ(0, field_f.GetFieldId());
-//  EXPECT_EQ(0, field_f.GetBranchId());
+  //  EXPECT_EQ(0, field_f.GetBranchId());
   EXPECT_EQ(AnalysisTree::Types::kFloat, field_f.GetFieldType());
   EXPECT_EQ(AnalysisTree::Types::kInteger, field_i.GetFieldType());
   EXPECT_EQ(AnalysisTree::Types::kBool, field_b.GetFieldType());
@@ -49,11 +49,8 @@ TEST(Field, Basics) {
   EXPECT_FLOAT_EQ(99.f, field_f.GetValue(track));
   EXPECT_EQ(99, field_i.GetValue(track));
   EXPECT_EQ(true, field_b.GetValue(track));
-
 }
 
-}
+}// namespace
 
-
-
-#endif //ANALYSISTREE_INFRA_FIELD_TEST_HPP_
+#endif//ANALYSISTREE_INFRA_FIELD_TEST_HPP_

@@ -70,13 +70,13 @@ class Configuration : public TObject {
   void AddBranchConfig(const BranchConfig& branch) {
     branches_.emplace(branch.GetId(), branch);
   }
-  
+
   void RemoveBranchConfig(const std::string& branchname);
 
   [[nodiscard]] std::vector<std::string> GetMatchesOfBranch(const std::string& branchname) const;
 
   void AddMatch(Matching* match);
-  
+
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
@@ -140,7 +140,6 @@ class Configuration : public TObject {
       branches_.emplace(other_branch);
     }
   }
-
 
  protected:
   std::string name_;

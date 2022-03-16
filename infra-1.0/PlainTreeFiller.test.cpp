@@ -4,8 +4,8 @@
 
 #include <gtest/gtest.h>
 
-#include "TaskManager.hpp"
 #include "PlainTreeFiller.hpp"
+#include "TaskManager.hpp"
 
 namespace {
 
@@ -26,7 +26,6 @@ TEST(PlainTreeFiller, Basics) {
   man.Finish();
 }
 
-}
+}// namespace
 
-
-#endif //ANALYSISTREE_INFRA_PLAINTREEFILLER_TEST_HPP_
+#endif//ANALYSISTREE_INFRA_PLAINTREEFILLER_TEST_HPP_

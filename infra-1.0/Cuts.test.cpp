@@ -8,8 +8,8 @@
 #include <TFile.h>
 #include <TTree.h>
 
-#include <core/Track.hpp>
 #include <core/Configuration.hpp>
+#include <core/Track.hpp>
 
 #include <infra-1.0/Cuts.hpp>
 #include <infra-1.0/SimpleCut.hpp>

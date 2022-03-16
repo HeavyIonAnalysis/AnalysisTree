@@ -13,7 +13,7 @@
 
 // Logical AND is applied for all Cuts in the vector
 
-namespace AnalysisTree{
+namespace AnalysisTree {
 class Configuration;
 }
 

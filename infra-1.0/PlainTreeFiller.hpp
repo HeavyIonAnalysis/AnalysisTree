@@ -26,7 +26,6 @@ class PlainTreeFiller : public VarManager {
   std::string branch_name_;
 
   std::vector<float> vars_{};
-
 };
 
 }// namespace AnalysisTree::Version1

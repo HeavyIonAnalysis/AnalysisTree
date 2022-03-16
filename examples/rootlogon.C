@@ -1,6 +1,6 @@
 {
 
- const TString dir = "../install_11/lib/";
+ const TString dir = "../install_17/lib/";
  gSystem->Load(dir + "libAnalysisTreeBase");
  gSystem->Load(dir + "libAnalysisTreeInfra");
 
