@@ -59,6 +59,7 @@ class EventHeader : public Container {
         case EventHeaderFields::kVertexX: vtx_pos_[Exyz::kX] = value; break;
         case EventHeaderFields::kVertexY: vtx_pos_[Exyz::kY] = value; break;
         case EventHeaderFields::kVertexZ: vtx_pos_[Exyz::kZ] = value; break;
+        case EventHeaderFields::kId: break;
         default: throw std::runtime_error("Invalid field id");
       }
     }
