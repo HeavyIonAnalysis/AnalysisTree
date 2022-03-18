@@ -12,6 +12,32 @@ namespace {
 
 using namespace AnalysisTree;
 
+class TestTask : public Task {
+ public:
+  void Init() override {
+    auto man = TaskManager::GetInstance();
+    auto chain = man->GetChain();
+
+    rec_ = chain->GetBranch("RecTracks");
+    sim_ = chain->GetBranch("SimParticles");
+  }
+
+  void Exec() override {
+    // just do something to check data
+    auto r = rec_.size();
+    auto s = sim_.size();
+    if (r != s) {
+      std::cout << r << " " << s << std::endl;
+    }
+  }
+
+  void Finish() override {}
+
+ protected:
+  Branch rec_;
+  Branch sim_;
+};
+
 TEST(TaskManager, RemoveBranch) {
 
   const int n_events = 1000;
@@ -23,6 +49,7 @@ TEST(TaskManager, RemoveBranch) {
   man->SetWriteMode(eBranchWriteMode::kCopyTree);
   man->SetBranchesExclude({"SimParticles"});
   man->SetOutputName("test.root", "tTree");
+  man->AddTask(new TestTask);
 
   man->Init({filelist}, {"tTree"});
   man->Run(-1);
@@ -45,7 +72,7 @@ TEST(TaskManager, RemoveBranch) {
   t2.GetEntry(0);
 
   ASSERT_EQ(br1.size(), br1.size());
-  for (int i = 0; i < br1.size(); ++i) {
+  for (size_t i = 0; i < br1.size(); ++i) {
     auto track1 = *(br1[i].Data<Track>());
     auto track2 = *(br2[i].Data<Track>());
     ASSERT_EQ(track1, track2);
