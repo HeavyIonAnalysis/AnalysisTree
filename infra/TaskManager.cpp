@@ -71,10 +71,10 @@ void TaskManager::InitOutChain() {
       if (chain_->CheckBranchExistence(brex) == 1) {
         throw std::runtime_error("AnalysisTree::TaskManager::InitOutChain - Tree in the input file does not support selective cloning");
       }
-      chain_->SetBranchStatus((brex + ".*").c_str(), 0);
+      chain_->SetBranchStatus((brex + ".*").c_str(), false);
       for (auto& maex : configuration_->GetMatchesOfBranch(brex))
-        chain_->SetBranchStatus((maex + ".*").c_str(), 0);
-      configuration_->RemoveBranchConfig(brex);
+        chain_->SetBranchStatus((maex + ".*").c_str(), false);
+      //      configuration_->RemoveBranchConfig(brex);
     }
     out_tree_ = chain_->CloneTree(0);
     out_tree_->SetName(out_tree_name_.c_str());
@@ -111,6 +111,11 @@ void TaskManager::Finish() {
   }
 
   if (fill_out_tree_) {
+    if (write_mode_ == eBranchWriteMode::kCopyTree) {
+      for (auto& brex : branches_exclude_) {
+        configuration_->RemoveBranchConfig(brex);
+      }
+    }
     std::cout << "Output file is " << out_file_name_ << std::endl;
     std::cout << "Output tree is " << out_tree_name_ << std::endl;
     out_file_->cd();
