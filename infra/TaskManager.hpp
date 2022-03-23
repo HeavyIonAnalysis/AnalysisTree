@@ -45,14 +45,14 @@ class TaskManager {
   void SetOwnsTasks(bool owns_flag = true) { is_owns_tasks_ = owns_flag; }
 
   /**
- * Initialization in case of reading AnalysisTree
+ * Initialization in case of reading AnalysisTree (or reading + creating)
  * @param filelists vector of filelists -> text files with paths to all root files
  * @param in_trees vector ot TTree names
  */
   virtual void Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees);
 
   /**
-  * Initialization in case of writing AnalysisTree
+  * Initialization in case of only creating AnalysisTree
   */
   virtual void Init();
   virtual void Run(long long nEvents = -1);
@@ -67,15 +67,15 @@ class TaskManager {
 */
   template<class BranchPtr>
   void AddBranch(BranchPtr*& ptr, const BranchConfig& config) {
+    if(out_tree_ == nullptr){
+      throw std::runtime_error("No output tree. Probably, TaskManager::Init() was not called or output file/tree names are not set.");
+    }
 
     if (!ptr) {
       ptr = new BranchPtr(config.GetId());
     } else if (ptr->GetId() != config.GetId()) {
       std::cout << "WARNING! ptr->GetId() != config.GetId()!" << std::endl;
       ptr = new BranchPtr(config.GetId());
-    }
-    if (!out_tree_) {
-      InitOutChain();
     }
     configuration_->AddBranchConfig(config);
     if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
@@ -118,15 +118,17 @@ class TaskManager {
 */
   void AddMatching(const std::string& br1, const std::string& br2, Matching*& match) {
     assert(!br1.empty() && !br2.empty() && !match);
-    assert(out_tree_ && fill_out_tree_);
+    if(out_tree_ == nullptr){
+      throw std::runtime_error("No output tree. Probably, TaskManager::Init() was not called or output file/tree names are not set.");
+    }
 
     match = new Matching(chain_->GetConfiguration()->GetBranchConfig(br1).GetId(),
                          chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
-    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
-      chain_->GetConfiguration()->AddMatch(match);
-    }
+//    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
+//      chain_->GetConfiguration()->AddMatch(match);
+//    }
     out_tree_->Branch((configuration_->GetMatchName(br1, br2) + ".").c_str(), &match);
   }
 
@@ -139,7 +141,6 @@ class TaskManager {
 
   void SetOutputDataHeader(DataHeader* dh) {
     data_header_ = dh;
-    chain_->SetDataHeader(dh);// TODO
   }
   void FillOutput() { out_tree_->Fill(); }
 
@@ -173,14 +174,15 @@ class TaskManager {
   void InitOutChain();
   void InitTasks();
 
+  // input data members
   Chain* chain_{nullptr};
   std::vector<Task*> tasks_{};
 
   // output data members
   TFile* out_file_{nullptr};
   TTree* out_tree_{nullptr};
-  Configuration* configuration_{nullptr};
-  DataHeader* data_header_{nullptr};
+  Configuration* configuration_{nullptr}; ///< output
+  DataHeader* data_header_{nullptr}; ///< output
   std::string out_tree_name_{"aTree"};
   std::string out_file_name_{"analysis_tree.root"};
   std::vector<std::string> branches_exclude_{};

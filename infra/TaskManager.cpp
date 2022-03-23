@@ -12,7 +12,7 @@ TaskManager* TaskManager::manager_ = nullptr;
 TaskManager* TaskManager::GetInstance() {
   /**
    * This is a safer way to create an instance. instance = new Singleton is
-   * dangeruous in case two instance threads wants to access at the same time
+   * dangerous in case two instance threads wants to access at the same time
    */
   if (manager_ == nullptr) {
     manager_ = new TaskManager;
@@ -50,31 +50,35 @@ void TaskManager::InitTasks() {
 void TaskManager::Init() {
   assert(!is_init_);
   is_init_ = true;
+  fill_out_tree_ = true;
 
   InitOutChain();
   chain_ = new Chain(out_tree_, configuration_, data_header_);
-  fill_out_tree_ = true;
 
   InitTasks();
 }
 
 void TaskManager::InitOutChain() {
-  fill_out_tree_ = true;
+  assert(fill_out_tree_);
   out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
+  configuration_ = new Configuration("Configuration");
+  data_header_ = new DataHeader;
+
   if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
     out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
-    configuration_ = new Configuration("Configuration");
-    data_header_ = new DataHeader;
   } else if (write_mode_ == eBranchWriteMode::kCopyTree) {
-    configuration_ = chain_->GetConfiguration();
+    assert(configuration_ && data_header_ && chain_); // input should exist
+    *configuration_ = *(chain_->GetConfiguration());
+    *(data_header_) = *(chain_->GetDataHeader());
     for (auto& brex : branches_exclude_) {
       if (chain_->CheckBranchExistence(brex) == 1) {
         throw std::runtime_error("AnalysisTree::TaskManager::InitOutChain - Tree in the input file does not support selective cloning");
       }
       chain_->SetBranchStatus((brex + ".*").c_str(), false);
-      for (auto& maex : configuration_->GetMatchesOfBranch(brex))
+      for (auto& maex : configuration_->GetMatchesOfBranch(brex)) {
         chain_->SetBranchStatus((maex + ".*").c_str(), false);
-      //      configuration_->RemoveBranchConfig(brex);
+      }
+      configuration_->RemoveBranchConfig(brex);
     }
     out_tree_ = chain_->CloneTree(0);
     out_tree_->SetName(out_tree_name_.c_str());
@@ -111,11 +115,6 @@ void TaskManager::Finish() {
   }
 
   if (fill_out_tree_) {
-    if (write_mode_ == eBranchWriteMode::kCopyTree) {
-      for (auto& brex : branches_exclude_) {
-        configuration_->RemoveBranchConfig(brex);
-      }
-    }
     std::cout << "Output file is " << out_file_name_ << std::endl;
     std::cout << "Output tree is " << out_tree_name_ << std::endl;
     out_file_->cd();
