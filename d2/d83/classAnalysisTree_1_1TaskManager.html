@@ -195,9 +195,11 @@ TTree *&#160;</td><td class="memItemRight" valign="bottom"><b>out_tree_</b> {nul
 <tr class="separator:aa5b3a6b3c018f5e93ea367f916a6a4d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b1f2c56f901b28b1000ede1cd687cb6"><td class="memItemLeft" align="right" valign="top"><a id="a8b1f2c56f901b28b1000ede1cd687cb6" name="a8b1f2c56f901b28b1000ede1cd687cb6"></a>
 <a class="el" href="../../d8/dee/classAnalysisTree_1_1Configuration.html">Configuration</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>configuration_</b> {nullptr}</td></tr>
+<tr class="memdesc:a8b1f2c56f901b28b1000ede1cd687cb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">output <br /></td></tr>
 <tr class="separator:a8b1f2c56f901b28b1000ede1cd687cb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7540a6d2044b9ed1a58ddce8c5387d5"><td class="memItemLeft" align="right" valign="top"><a id="ab7540a6d2044b9ed1a58ddce8c5387d5" name="ab7540a6d2044b9ed1a58ddce8c5387d5"></a>
 <a class="el" href="../../d8/d77/classAnalysisTree_1_1DataHeader.html">DataHeader</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>data_header_</b> {nullptr}</td></tr>
+<tr class="memdesc:ab7540a6d2044b9ed1a58ddce8c5387d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">output <br /></td></tr>
 <tr class="separator:ab7540a6d2044b9ed1a58ddce8c5387d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae988e7ced7f9317ec569d61aefb2eea4"><td class="memItemLeft" align="right" valign="top"><a id="ae988e7ced7f9317ec569d61aefb2eea4" name="ae988e7ced7f9317ec569d61aefb2eea4"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>out_tree_name_</b> {&quot;aTree&quot;}</td></tr>
@@ -348,7 +350,7 @@ template&lt;class BranchPtr &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >This is a safer way to create an instance. instance = new Singleton is dangeruous in case two instance threads wants to access at the same time</p>
+<p >This is a safer way to create an instance. instance = new Singleton is dangerous in case two instance threads wants to access at the same time</p>
 
 </div>
 </div>
@@ -374,7 +376,7 @@ template&lt;class BranchPtr &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Initialization in case of writing <a class="el" href="../../d9/d26/namespaceAnalysisTree.html" title="Cuts keep list of SimpleCuts. Logical AND is applied for all SimpleCut in the Cuts object.">AnalysisTree</a> </p>
+<p >Initialization in case of only creating <a class="el" href="../../d9/d26/namespaceAnalysisTree.html" title="Cuts keep list of SimpleCuts. Logical AND is applied for all SimpleCut in the Cuts object.">AnalysisTree</a> </p>
 
 </div>
 </div>
@@ -411,7 +413,7 @@ template&lt;class BranchPtr &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p >Initialization in case of reading <a class="el" href="../../d9/d26/namespaceAnalysisTree.html" title="Cuts keep list of SimpleCuts. Logical AND is applied for all SimpleCut in the Cuts object.">AnalysisTree</a> </p><dl class="params"><dt>Parameters</dt><dd>
+<p >Initialization in case of reading <a class="el" href="../../d9/d26/namespaceAnalysisTree.html" title="Cuts keep list of SimpleCuts. Logical AND is applied for all SimpleCut in the Cuts object.">AnalysisTree</a> (or reading + creating) </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">filelists</td><td>vector of filelists -&gt; text files with paths to all root files </td></tr>
     <tr><td class="paramname">in_trees</td><td>vector ot TTree names </td></tr>
