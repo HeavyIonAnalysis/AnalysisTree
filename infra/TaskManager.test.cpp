@@ -18,8 +18,8 @@ class TestTask : public Task {
     auto man = TaskManager::GetInstance();
     auto chain = man->GetChain();
 
-    rec_ = chain->GetBranch("RecTracks");
-    sim_ = chain->GetBranch("SimParticles");
+    rec_ = chain->GetBranchObject("RecTracks");
+    sim_ = chain->GetBranchObject("SimParticles");
   }
 
   void Exec() override {
@@ -65,8 +65,8 @@ TEST(TaskManager, RemoveBranch) {
   t1.InitPointersToBranches({});
   t2.InitPointersToBranches({});
 
-  auto br1 = t1.GetBranch("RecTracks");
-  auto br2 = t2.GetBranch("RecTracks");
+  auto br1 = t1.GetBranchObject("RecTracks");
+  auto br2 = t2.GetBranchObject("RecTracks");
 
   t1.GetEntry(0);
   t2.GetEntry(0);

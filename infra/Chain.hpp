@@ -81,8 +81,8 @@ class Chain : public TChain {
     this->configuration_->Print();
   }
 
-//  [[deprecated("Will be removed soon to avoid confusion with TChain::GetBranch. Use GetBranchObject")]]
-//  class Branch GetBranch(const std::string& name) const;
+  [[deprecated("Will be removed soon to avoid confusion with TChain::GetBranch. Use GetBranchObject")]]
+  class Branch GetBranch(const std::string& name) const;
 
   class Branch GetBranchObject(const std::string& name) const;
 
