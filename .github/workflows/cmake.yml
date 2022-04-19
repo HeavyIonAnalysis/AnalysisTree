@@ -15,6 +15,7 @@ permissions:
   contents: read    # This is required for actions/checkout@v2
 
 jobs:
+
   build_fedora35_root_6_24_cpp17:
     container: rootproject/root:6.24.06-fedora35
     runs-on: ubuntu-latest
@@ -52,6 +53,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Trust My Directory
+        run: export GIT_CEILING_DIRECTORIES=/__w ; git config --global --add safe.directory /__w/AnalysisTree/AnalysisTree
       - name: Get boost
         run: wget -O /opt/boost_1_75_0.tar.gz https://sourceforge.net/projects/boost/files/boost/1.75.0/boost_1_75_0.tar.gz/download && tar -xf /opt/boost_1_75_0.tar.gz -C /opt/
       - name: Configure CMake
