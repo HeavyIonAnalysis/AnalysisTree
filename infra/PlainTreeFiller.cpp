@@ -1,6 +1,8 @@
 /* Copyright (C) 2019-2021 GSI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
+#include <algorithm>
+
 #include "TTree.h"
 
 #include "PlainTreeFiller.hpp"
@@ -39,7 +41,8 @@ void PlainTreeFiller::Init() {
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
   for (size_t i = 0; i < vars.size(); ++i) {
     std::string leaf_name = vars[i].GetName();
-    plain_tree_->Branch(vars[i].GetName().c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
+    std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
+    plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
   }
 }
 
