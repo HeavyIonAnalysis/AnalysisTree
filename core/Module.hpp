@@ -27,6 +27,13 @@ class Module : public Container {
 
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetSignal() const { return signal_; }
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetNumber() const { return number_; }
+  /* transient fields */
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetX() const;
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetY() const;
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetZ() const;
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetPhi() const;
+
+
 
   void SetSignal(Floating_t signal) { signal_ = signal; }
   void SetNumber(ShortInt_t number) { number_ = number; }
@@ -67,6 +74,7 @@ class Module : public Container {
   Floating_t signal_{0.f};
   ShortInt_t number_{UndefValueShort};
 
+ private:
   ClassDefOverride(Module, 2)
 };
 

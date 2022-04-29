@@ -13,6 +13,11 @@
 
 namespace AnalysisTree {
 
+class DataHeader;
+
+/* pointer to the last DataHeader that was read */
+extern const DataHeader *gCurrentDataHeader;
+
 /**
  * A class for a static info
  */
@@ -23,10 +28,14 @@ class DataHeader : public TObject {
   DataHeader(DataHeader&&) = default;
   DataHeader& operator=(DataHeader&&) = default;
   DataHeader& operator=(const DataHeader&) = default;
+  ~DataHeader() override {
+    if (gCurrentDataHeader == this)
+      gCurrentDataHeader = nullptr;
+  }
 
   ModulePositions& AddDetector();
 
-  void Print(Option_t* = "") const;
+  void Print(Option_t* = "") const override;
 
   void SetSystem(std::string sys) { system_ = std::move(sys); }
   void SetBeamMomentum(float mom, float m_target = 0.938, float m_beam = 0.938);
@@ -55,7 +64,7 @@ class DataHeader : public TObject {
   Floating_t beam_y_{UndefValueFloat};
   Floating_t sqrtsNN_{UndefValueFloat};
 
-  ClassDef(DataHeader, 1)
+  ClassDefOverride(DataHeader, 1)
 };
 
 }// namespace AnalysisTree

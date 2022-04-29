@@ -4,8 +4,20 @@
 #include "DataHeader.hpp"
 
 #include <iostream>
+#include <TBuffer.h>
 
 namespace AnalysisTree {
+
+const DataHeader *gCurrentDataHeader = nullptr;
+
+void DataHeader::Streamer(TBuffer& buf) {
+  if (buf.IsReading()) {
+    DataHeader::Class()->ReadBuffer(buf, this);
+    gCurrentDataHeader = this;
+  } else {
+    DataHeader::Class()->WriteBuffer(buf, this);
+  }
+}
 
 void DataHeader::Print(Option_t*) const {
   std::cout << "AnalysisTree::DataHeader::Print()" << std::endl;

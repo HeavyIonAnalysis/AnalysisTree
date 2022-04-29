@@ -102,7 +102,12 @@ namespace ModuleFields {
 enum ModuleFields : ShortInt_t {
   kNumber = -1,
   kSignal = -2,
-  kId = -3
+  kId = -3,
+  // transient fields enumeration
+  kX = -4,
+  kY = -5,
+  kZ = -6,
+  kPhi = -7
 };
 }
 
