@@ -33,8 +33,6 @@ class Module : public Container {
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetZ() const;
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetPhi() const;
 
-
-
   void SetSignal(Floating_t signal) { signal_ = signal; }
   void SetNumber(ShortInt_t number) { number_ = number; }
 
@@ -49,6 +47,10 @@ class Module : public Container {
         case ModuleFields::kNumber: return GetNumber();
         case ModuleFields::kSignal: return GetSignal();
         case ModuleFields::kId: return GetId();
+        case ModuleFields::kX: return GetX();
+        case ModuleFields::kY: return GetY();
+        case ModuleFields::kZ: return GetZ();
+        case ModuleFields::kPhi: return GetPhi();
         default: throw std::out_of_range("Module::GetField - Index " + std::to_string(iField) + " is not found");
       }
     }

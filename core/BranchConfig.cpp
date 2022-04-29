@@ -49,6 +49,10 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<int>::AddField("number", ModuleFields::kNumber, "module number");
     VectorConfig<float>::AddField("signal", ModuleFields::kSignal, "");
     VectorConfig<int>::AddField("id", ModuleFields::kId, "unique id");
+    VectorConfig<float>::AddField("x", ModuleFields::kX, "cm");
+    VectorConfig<float>::AddField("y", ModuleFields::kY, "cm");
+    VectorConfig<float>::AddField("z", ModuleFields::kZ, "cm");
+    VectorConfig<float>::AddField("phi", ModuleFields::kPhi, "rad");
   } else if (type_ == DetType::kEventHeader) {
     VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX, "cm");
     VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY, "cm");
