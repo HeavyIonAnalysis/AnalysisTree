@@ -230,7 +230,7 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
     }
   }
 
-  throw std::runtime_error("AnalysisTree::TreeReader - Branch " + branchname + " does not exist");
+  throw std::runtime_error("AnalysisTree::Chain - Branch " + branchname + " does not exist");
   return 0;
 }
 
