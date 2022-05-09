@@ -208,8 +208,29 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
       return 2;
     }
   }
+  
+  auto* lof = this->GetListOfFriends();
+  if(lof != nullptr) {
+    const int Nfriends = lof->GetSize();
+    for(int i = 0; i < Nfriends; i++) {
+      std::string friend_name = lof->At(i)->GetName();
+      auto* fr = this->GetFriend(friend_name.c_str());
+      
+      auto* lob2 = fr->GetListOfBranches();
 
-  throw std::runtime_error("AnalysisTree::Chain - Branch " + branchname + " does not exist");
+      const int Nbranches2 = lob2->GetEntries();
+      for (int j = 0; j < Nbranches2; j++) {
+        const std::string& name_j = lob2->At(j)->GetName();
+        if (name_j == branchname) {
+          return 1;
+        } else if (name_j == branchname + ".") {
+          return 2;
+        }
+      }      
+    }
+  }
+
+  throw std::runtime_error("AnalysisTree::TreeReader - Branch " + branchname + " does not exist");
   return 0;
 }
 

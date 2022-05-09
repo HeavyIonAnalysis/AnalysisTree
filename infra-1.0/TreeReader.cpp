@@ -146,6 +146,27 @@ int CheckBranchExistence(TChain* chain, const std::string& branchname) {
       return 2;
     }
   }
+  
+  auto* lof = chain->GetListOfFriends();
+  if(lof != nullptr) {
+    const int Nfriends = lof->GetSize();
+    for(int i = 0; i < Nfriends; i++) {
+      std::string friend_name = lof->At(i)->GetName();
+      auto* fr = chain->GetFriend(friend_name.c_str());
+      
+      auto* lob2 = fr->GetListOfBranches();
+
+      const int Nbranches2 = lob2->GetEntries();
+      for (int j = 0; j < Nbranches2; j++) {
+        const std::string& name_j = lob2->At(j)->GetName();
+        if (name_j == branchname) {
+          return 1;
+        } else if (name_j == branchname + ".") {
+          return 2;
+        }
+      }      
+    }
+  }
 
   throw std::runtime_error("AnalysisTree::TreeReader - Branch " + branchname + " does not exist");
   return 0;
