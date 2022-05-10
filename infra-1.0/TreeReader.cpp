@@ -67,23 +67,48 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
     switch (branch_config.GetType()) {
       case DetType::kTrack:
         new_element.second = new TrackDetector;
-        t->SetBranchAddress(branch_name.c_str(), (TrackDetector**) &new_element.second);
+        if (CheckBranchExistence(t, branch_name) == 1)
+          t->SetBranchAddress(branch_name.c_str(), (TrackDetector**) &new_element.second);
+        else if (CheckBranchExistence(t, branch_name) == 2)
+          t->SetBranchAddress((branch_name + ".").c_str(), (TrackDetector**) &new_element.second);
+        else
+          throw std::runtime_error("AnalysisTree::TreeReader::GetPointersToBranches - Branch " + branch_name + " does not exist");
         break;
       case DetType::kHit:
         new_element.second = new HitDetector;
-        t->SetBranchAddress(branch_name.c_str(), (HitDetector**) &new_element.second);
+        if (CheckBranchExistence(t, branch_name) == 1)
+          t->SetBranchAddress(branch_name.c_str(), (HitDetector**) &new_element.second);
+        else if (CheckBranchExistence(t, branch_name) == 2)
+          t->SetBranchAddress((branch_name + ".").c_str(), (HitDetector**) &new_element.second);
+        else
+          throw std::runtime_error("AnalysisTree::TreeReader::GetPointersToBranches - Branch " + branch_name + " does not exist");
         break;
       case DetType::kEventHeader:
         new_element.second = new EventHeader;
-        t->SetBranchAddress(branch_name.c_str(), (EventHeader**) &new_element.second);
+        if (CheckBranchExistence(t, branch_name) == 1)
+          t->SetBranchAddress(branch_name.c_str(), (EventHeader**) &new_element.second);
+        else if (CheckBranchExistence(t, branch_name) == 2)
+          t->SetBranchAddress((branch_name + ".").c_str(), (EventHeader**) &new_element.second);
+        else
+          throw std::runtime_error("AnalysisTree::TreeReader::GetPointersToBranches - Branch " + branch_name + " does not exist");
         break;
       case DetType::kParticle:
         new_element.second = new Particles;
-        t->SetBranchAddress(branch_name.c_str(), (Particles**) &new_element.second);
+        if (CheckBranchExistence(t, branch_name) == 1)
+          t->SetBranchAddress(branch_name.c_str(), (Particles**) &new_element.second);
+        else if (CheckBranchExistence(t, branch_name) == 2)
+          t->SetBranchAddress((branch_name + ".").c_str(), (Particles**) &new_element.second);
+        else
+          throw std::runtime_error("AnalysisTree::TreeReader::GetPointersToBranches - Branch " + branch_name + " does not exist");
         break;
       case DetType::kModule:
         new_element.second = new ModuleDetector;
-        t->SetBranchAddress(branch_name.c_str(), (ModuleDetector**) &new_element.second);
+        if (CheckBranchExistence(t, branch_name) == 1)
+          t->SetBranchAddress(branch_name.c_str(), (ModuleDetector**) &new_element.second);
+        else if (CheckBranchExistence(t, branch_name) == 2)
+          t->SetBranchAddress((branch_name + ".").c_str(), (ModuleDetector**) &new_element.second);
+        else
+          throw std::runtime_error("AnalysisTree::TreeReader::GetPointersToBranches - Branch " + branch_name + " does not exist");
         break;
     }
   }
@@ -97,11 +122,47 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
     }
     auto& new_element = *emplace_result.first;
     new_element.second = new Matching;
-    t->SetBranchAddress(match_name.c_str(), (Matching**) &new_element.second);
+    if (CheckBranchExistence(t, match_name) == 1)
+      t->SetBranchAddress(match_name.c_str(), (Matching**) &new_element.second);
+    else if (CheckBranchExistence(t, match_name) == 2)
+      t->SetBranchAddress((match_name + ".").c_str(), (Matching**) &new_element.second);
+    else
+      throw std::runtime_error("AnalysisTree::TreeReader::GetPointersToBranches - Matching " + match_name + " does not exist");
   }
 
   t->GetEntry(0);//init pointers
   return ret;
+}
+
+int CheckBranchExistence(TChain* chain, const std::string& branchname) {
+  std::vector<TChain*> v_chains;
+  v_chains.push_back(chain);
+
+  auto* lof = chain->GetListOfFriends();
+  if (lof != nullptr) {
+    const int Nfriends = lof->GetSize();
+    for (int i = 0; i < Nfriends; i++) {
+      std::string friend_name = lof->At(i)->GetName();
+      TTree* fr = chain->GetFriend(friend_name.c_str());
+      v_chains.emplace_back((TChain*) fr);
+    }
+  }
+
+  for (auto& ch : v_chains) {
+    auto* lob = ch->GetListOfBranches();
+    const int Nbranches = lob->GetEntries();
+    for (int i = 0; i < Nbranches; i++) {
+      const std::string& name_i = lob->At(i)->GetName();
+      if (name_i == branchname) {
+        return 1;
+      } else if (name_i == branchname + ".") {
+        return 2;
+      }
+    }
+  }
+
+  throw std::runtime_error("AnalysisTree::TreeReader - Branch " + branchname + " does not exist");
+  return 0;
 }
 
 }// namespace AnalysisTree::Version1

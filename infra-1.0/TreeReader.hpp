@@ -94,5 +94,7 @@ std::map<std::string, void*>
 GetPointersToBranches(TChain* t, const Configuration& config,
                       std::set<std::string> names = {});
 
+int CheckBranchExistence(TChain* chain, const std::string& branchname);
+
 }// namespace AnalysisTree::Version1
 #endif//ANALYSISTREE_TREEREADER_H
