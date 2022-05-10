@@ -135,36 +135,29 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
 }
 
 int CheckBranchExistence(TChain* chain, const std::string& branchname) {
-  auto* lob = chain->GetListOfBranches();
-
-  const int Nbranches = lob->GetEntries();
-  for (int i = 0; i < Nbranches; i++) {
-    const std::string& name_i = lob->At(i)->GetName();
-    if (name_i == branchname) {
-      return 1;
-    } else if (name_i == branchname + ".") {
-      return 2;
-    }
-  }
+  std::vector<TChain*> v_chains;
+  v_chains.push_back(chain);
   
   auto* lof = chain->GetListOfFriends();
   if(lof != nullptr) {
     const int Nfriends = lof->GetSize();
     for(int i = 0; i < Nfriends; i++) {
       std::string friend_name = lof->At(i)->GetName();
-      auto* fr = chain->GetFriend(friend_name.c_str());
-      
-      auto* lob2 = fr->GetListOfBranches();
-
-      const int Nbranches2 = lob2->GetEntries();
-      for (int j = 0; j < Nbranches2; j++) {
-        const std::string& name_j = lob2->At(j)->GetName();
-        if (name_j == branchname) {
-          return 1;
-        } else if (name_j == branchname + ".") {
-          return 2;
-        }
-      }      
+      TTree* fr = chain->GetFriend(friend_name.c_str());
+      v_chains.emplace_back((TChain*)fr);
+    }
+  }
+  
+  for(auto& ch : v_chains) {
+    auto* lob = ch->GetListOfBranches();
+    const int Nbranches = lob->GetEntries();
+    for (int i = 0; i < Nbranches; i++) {
+      const std::string& name_i = lob->At(i)->GetName();
+      if (name_i == branchname) {
+        return 1;
+      } else if (name_i == branchname + ".") {
+        return 2;
+      }
     }
   }
 
