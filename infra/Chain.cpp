@@ -184,7 +184,7 @@ Long64_t Chain::Draw(const char* varexp, const char* selection, Option_t* option
   return TChain::Draw(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
 
-Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry){
+Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option, Long64_t nentries, Long64_t firstentry) {
   std::string exp{varexp};
   std::string sel{selection ? selection : ""};
 
@@ -199,18 +199,18 @@ Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option
 int Chain::CheckBranchExistence(const std::string& branchname) {
   std::vector<TChain*> v_chains;
   v_chains.push_back(this);
-  
+
   auto* lof = this->GetListOfFriends();
-  if(lof != nullptr) {
+  if (lof != nullptr) {
     const int Nfriends = lof->GetSize();
-    for(int i = 0; i < Nfriends; i++) {
+    for (int i = 0; i < Nfriends; i++) {
       std::string friend_name = lof->At(i)->GetName();
       TTree* fr = this->GetFriend(friend_name.c_str());
-      v_chains.emplace_back((TChain*)fr);
+      v_chains.emplace_back((TChain*) fr);
     }
   }
-  
-  for(auto& ch : v_chains) {
+
+  for (auto& ch : v_chains) {
     auto* lob = ch->GetListOfBranches();
     const int Nbranches = lob->GetEntries();
     for (int i = 0; i < Nbranches; i++) {

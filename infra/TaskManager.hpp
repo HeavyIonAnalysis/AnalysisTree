@@ -67,7 +67,7 @@ class TaskManager {
 */
   template<class BranchPtr>
   void AddBranch(BranchPtr*& ptr, const BranchConfig& config) {
-    if(out_tree_ == nullptr){
+    if (out_tree_ == nullptr) {
       throw std::runtime_error("No output tree. Probably, TaskManager::Init() was not called or output file/tree names are not set.");
     }
 
@@ -118,7 +118,7 @@ class TaskManager {
 */
   void AddMatching(const std::string& br1, const std::string& br2, Matching*& match) {
     assert(!br1.empty() && !br2.empty() && !match);
-    if(out_tree_ == nullptr){
+    if (out_tree_ == nullptr) {
       throw std::runtime_error("No output tree. Probably, TaskManager::Init() was not called or output file/tree names are not set.");
     }
 
@@ -126,9 +126,9 @@ class TaskManager {
                          chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
-//    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
-//      chain_->GetConfiguration()->AddMatch(match);
-//    }
+    //    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
+    //      chain_->GetConfiguration()->AddMatch(match);
+    //    }
     out_tree_->Branch((configuration_->GetMatchName(br1, br2) + ".").c_str(), &match);
   }
 
@@ -181,8 +181,8 @@ class TaskManager {
   // output data members
   TFile* out_file_{nullptr};
   TTree* out_tree_{nullptr};
-  Configuration* configuration_{nullptr}; ///< output
-  DataHeader* data_header_{nullptr}; ///< output
+  Configuration* configuration_{nullptr};///< output
+  DataHeader* data_header_{nullptr};     ///< output
   std::string out_tree_name_{"aTree"};
   std::string out_file_name_{"analysis_tree.root"};
   std::vector<std::string> branches_exclude_{};

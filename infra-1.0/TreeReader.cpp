@@ -137,18 +137,18 @@ std::map<std::string, void*> GetPointersToBranches(TChain* t, const AnalysisTree
 int CheckBranchExistence(TChain* chain, const std::string& branchname) {
   std::vector<TChain*> v_chains;
   v_chains.push_back(chain);
-  
+
   auto* lof = chain->GetListOfFriends();
-  if(lof != nullptr) {
+  if (lof != nullptr) {
     const int Nfriends = lof->GetSize();
-    for(int i = 0; i < Nfriends; i++) {
+    for (int i = 0; i < Nfriends; i++) {
       std::string friend_name = lof->At(i)->GetName();
       TTree* fr = chain->GetFriend(friend_name.c_str());
-      v_chains.emplace_back((TChain*)fr);
+      v_chains.emplace_back((TChain*) fr);
     }
   }
-  
-  for(auto& ch : v_chains) {
+
+  for (auto& ch : v_chains) {
     auto* lob = ch->GetListOfBranches();
     const int Nbranches = lob->GetEntries();
     for (int i = 0; i < Nbranches; i++) {

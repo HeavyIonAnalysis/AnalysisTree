@@ -67,7 +67,7 @@ void TaskManager::InitOutChain() {
   if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
     out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
   } else if (write_mode_ == eBranchWriteMode::kCopyTree) {
-    assert(configuration_ && data_header_ && chain_); // input should exist
+    assert(configuration_ && data_header_ && chain_);// input should exist
     *configuration_ = *(chain_->GetConfiguration());
     *(data_header_) = *(chain_->GetDataHeader());
     for (auto& brex : branches_exclude_) {
