@@ -91,6 +91,7 @@ set(ConfigPackageLocation lib/cmake/${PROJECT_NAME})
 
 set(${PROJECT_NAME}_INCLUDE_DIR "include")
 set(${PROJECT_NAME}_LIBRARY_DIR "lib")
+set(${AnalysisTree_BINARY_DIR} "${CMAKE_CURRENT_BINARY_DIR}")
 
 configure_package_config_file(
         cmake/${PROJECT_NAME}Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake
