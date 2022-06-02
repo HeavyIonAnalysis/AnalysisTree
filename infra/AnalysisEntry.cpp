@@ -47,7 +47,7 @@ void AnalysisEntry::FillFromOneBranch() {
 }
 
 void AnalysisEntry::FillMatchingForEventHeader(const Branch& br1, const Branch& br2) {
-  matching_ = new Matching(br1.GetId(), br2.GetId());
+  matching_->Clear();
   for (size_t i = 0; i < br1.size(); ++i) {
     matching_->AddMatch(i, 0);
   }
@@ -120,6 +120,12 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
       auto match_info = conf.GetMatchInfo(*branch_names_.begin(), *std::next(branch_names_.begin(), 1));
       SetIsInvertedMatching(match_info.second);
       SetMatching((Matching*) matches.find(match_info.first)->second);
+    } else {
+      if (det1_type == DetType::kEventHeader) {
+        matching_ = new Matching(branches_.at(1).first.GetId(), branches_.at(0).first.GetId());
+      } else {
+        matching_ = new Matching(branches_.at(0).first.GetId(), branches_.at(1).first.GetId());
+      }
     }
   }
 }
