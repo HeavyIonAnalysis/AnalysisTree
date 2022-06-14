@@ -114,3 +114,11 @@ install(FILES
         COMPONENT
         Devel
         )
+        
+install(FILES
+        ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp
+        DESTINATION
+        include/AnalysisTree
+        COMPONENT
+        Devel
+        )
