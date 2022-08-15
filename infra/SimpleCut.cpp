@@ -33,6 +33,14 @@ SimpleCut EqualsCut(const std::string& variable_name, int value, const std::stri
   return SimpleCut(Variable::FromString(variable_name), value, title);
 }
 
+SimpleCut RangeCut(const Variable& var, double lo, double hi, const std::string& title) {
+  return SimpleCut(var, lo, hi, title);
+}
+
+SimpleCut EqualsCut(const Variable& var, int value, const std::string& title) {
+  return SimpleCut(var, value, title);
+}
+
 SimpleCut::SimpleCut(const Variable& var, int value, std::string title) : title_(std::move(title)) {
   vars_.emplace_back(var);
   lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };

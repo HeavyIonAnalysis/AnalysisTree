@@ -59,6 +59,21 @@ class SimpleCut {
   friend SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title);
 
   /**
+  * Constructor for range cut: min <= field <= max
+  * @param variable name of the pre-defined variable
+  * @param min minimal accepted value
+  * @param max maximal accepted value
+  */
+  friend SimpleCut RangeCut(const Variable& var, double lo, double hi, const std::string& title);
+
+  /**
+  * Constructor for integers and bool fields for cut: field == value
+  * @param variable name of the pre-defined variable
+  * @param value only objects with field == value will be accepted
+  */
+  friend SimpleCut EqualsCut(const Variable& var, int value, const std::string& title);
+
+  /**
    * @brief Evaluates cut
    * @tparam T type of data-object associated with TTree
    * @param object
@@ -99,6 +114,8 @@ class SimpleCut {
 };
 SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const std::string& title = "");
 SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title = "");
+SimpleCut RangeCut(const Variable& var, double lo, double hi, const std::string& title = "");
+SimpleCut EqualsCut(const Variable& var, int value, const std::string& title = "");
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_SIMPLECUT_H
