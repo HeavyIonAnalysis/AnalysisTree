@@ -74,6 +74,7 @@ endif()
 # header with version
 configure_file(cmake/AnalysisTreeVersion.hpp.in ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp)
 
+configure_file(cmake/AnalysisTreeConfig.sh.in ${CMAKE_BINARY_DIR}/AnalysisTreeConfig.sh)
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
@@ -119,6 +120,14 @@ install(FILES
         ${CMAKE_BINARY_DIR}/include/AnalysisTree/AnalysisTreeVersion.hpp
         DESTINATION
         include/AnalysisTree
+        COMPONENT
+        Devel
+        )
+
+install(FILES
+        ${CMAKE_BINARY_DIR}/AnalysisTreeConfig.sh
+        DESTINATION
+        bin
         COMPONENT
         Devel
         )
