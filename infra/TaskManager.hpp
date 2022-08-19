@@ -164,6 +164,7 @@ class TaskManager {
 
   void SetWriteMode(eBranchWriteMode mode) { write_mode_ = mode; }
   void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
+  void SetVerbosityPeriod(int value) { verbosity_period_ = value; }
 
   void ClearTasks() { tasks_.clear(); }
 
@@ -186,6 +187,8 @@ class TaskManager {
   std::string out_tree_name_{"aTree"};
   std::string out_file_name_{"analysis_tree.root"};
   std::vector<std::string> branches_exclude_{};
+
+  int verbosity_period_{-1};
 
   // configuration parameters
   eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
