@@ -77,6 +77,8 @@ class Configuration : public TObject {
 
   void AddMatch(Matching* match);
 
+  void AddMatch(const MatchingConfig& matching_config);
+
   ANALYSISTREE_ATTR_NODISCARD BranchConfig& GetBranchConfig(const std::string& name);
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(const std::string& name) const;
   ANALYSISTREE_ATTR_NODISCARD const BranchConfig& GetBranchConfig(size_t i) const {
@@ -87,6 +89,7 @@ class Configuration : public TObject {
     return it->second;
   }
   ANALYSISTREE_ATTR_NODISCARD const std::map<size_t, BranchConfig>& GetBranchConfigs() const { return branches_; }
+  ANALYSISTREE_ATTR_NODISCARD const std::vector<MatchingConfig>& GetMatchingConfigs() const { return matches_; }
   ANALYSISTREE_ATTR_NODISCARD unsigned int GetNumberOfBranches() const { return branches_.size(); }
 
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetMatchName(const std::string& br1, const std::string& br2) const;
@@ -147,6 +150,8 @@ class Configuration : public TObject {
   std::vector<MatchingConfig> matches_{};
 
   MatchingIndex matches_index_{};//! transient field in this version
+
+  void AddMatch(const std::string& br1, const std::string& br2, const std::string& data_branch);
 
   ClassDef(Configuration, 4)
 };

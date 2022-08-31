@@ -125,6 +125,10 @@ void Chain::InitConfiguration() {
     for (const auto& c : config_i->GetBranchConfigs()) {
       configuration_->AddBranchConfig(c.second);
     }
+
+    for (const auto& c : config_i->GetMatchingConfigs()) {
+      configuration_->AddMatch(c);
+    }
   }
 }
 
@@ -153,7 +157,7 @@ T* Chain::GetObjectFromFileList(const std::string& filelist, const std::string& 
   }
 
   if (object == nullptr) {
-    throw std::runtime_error("AnalysisTree::GetObjectFromFileList - object is nullprt");
+    throw std::runtime_error("AnalysisTree::GetObjectFromFileList - object is nullptr");
   }
 
   return object;
