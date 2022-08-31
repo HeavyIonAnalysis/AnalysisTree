@@ -111,11 +111,7 @@ std::pair<std::string, bool> Configuration::GetMatchInfo(const std::string& br1,
   }
 }
 
-void Configuration::AddMatch(Matching* match) {
-  assert(match);
-  const std::string br1 = GetBranchConfig(match->GetBranch1Id()).GetName();
-  const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
-  const std::string data_branch = br1 + "2" + br2;
+void Configuration::AddMatch(const std::string& br1, const std::string& br2, const std::string& data_branch) {
   /* looking up for match with same branches */
   auto is_matching_exists = std::find_if(begin(matches_), end(matches_), [&br1, &br2](const MatchingConfig& config) -> bool {
                               return (br1 == config.GetFirstBranchName() && br2 == config.GetSecondBranchName()) || (br2 == config.GetFirstBranchName() && br1 == config.GetSecondBranchName());
@@ -130,6 +126,23 @@ void Configuration::AddMatch(Matching* match) {
   matches_.emplace_back(br1, br2, data_branch);
   /* refresh index */
   matches_index_ = MakeMatchingIndex(matches_);
+}
+
+void Configuration::AddMatch(Matching* match) {
+  assert(match);
+  const std::string br1 = GetBranchConfig(match->GetBranch1Id()).GetName();
+  const std::string br2 = GetBranchConfig(match->GetBranch2Id()).GetName();
+  const std::string data_branch = br1 + "2" + br2;
+
+  AddMatch(br1, br2, data_branch);
+}
+
+void Configuration::AddMatch(const MatchingConfig& matching_config) {
+  const std::string br1 = matching_config.GetFirstBranchName();
+  const std::string br2 = matching_config.GetSecondBranchName();
+  const std::string data_branch = matching_config.GetDataBranchName();
+
+  AddMatch(br1, br2, data_branch);
 }
 
 std::vector<std::string> Configuration::GetListOfBranches() const {
