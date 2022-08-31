@@ -1,7 +1,7 @@
 <map id="AnalysisTree::Task" name="AnalysisTree::Task">
-<area shape="rect" id="node1" title=" " alt="" coords="242,551,417,848"/>
-<area shape="rect" id="node2" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,161,219,459"/>
-<area shape="rect" id="node3" title=" " alt="" coords="186,5,254,83"/>
-<area shape="rect" id="node4" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="243,132,415,488"/>
-<area shape="rect" id="node5" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="440,154,571,466"/>
+<area shape="rect" id="node1" title=" " alt="" coords="243,505,418,795"/>
+<area shape="rect" id="node2" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,117,219,421"/>
+<area shape="rect" id="node3" title=" " alt="" coords="184,5,256,45"/>
+<area shape="rect" id="node4" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="243,95,419,443"/>
+<area shape="rect" id="node5" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="443,117,578,421"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="AnalysisTree::Track" name="AnalysisTree::Track">
-<area shape="rect" id="node1" title="A class for a generic track with determined momentum." alt="" coords="27,549,170,832"/>
-<area shape="rect" id="node2" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="19,233,178,501"/>
-<area shape="rect" id="node3" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,192,185"/>
+<area shape="rect" id="node1" title="A class for a generic track with determined momentum." alt="" coords="29,519,172,793"/>
+<area shape="rect" id="node2" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="19,211,182,471"/>
+<area shape="rect" id="node3" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,196,163"/>
 </map>

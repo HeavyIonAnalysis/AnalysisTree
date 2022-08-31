@@ -1,7 +1,7 @@
 <map id="AnalysisTree::Chain" name="AnalysisTree::Chain">
-<area shape="rect" id="node1" title=" " alt="" coords="112,551,287,907"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,271,68,349"/>
-<area shape="rect" id="node3" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="93,161,306,459"/>
-<area shape="rect" id="node4" title=" " alt="" coords="273,5,341,83"/>
-<area shape="rect" id="node5" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="331,132,503,488"/>
+<area shape="rect" id="node1" title=" " alt="" coords="115,505,290,853"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,249,72,289"/>
+<area shape="rect" id="node3" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="96,117,309,421"/>
+<area shape="rect" id="node4" title=" " alt="" coords="276,5,348,45"/>
+<area shape="rect" id="node5" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="333,95,509,443"/>
 </map>

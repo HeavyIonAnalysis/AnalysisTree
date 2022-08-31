@@ -1,12 +1,12 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d4/da2/classAnalysisTree_1_1IndexAccessor.html" title=" " alt="" coords="5,31,195,57"/>
-<area shape="rect" id="node2" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="247,31,430,57"/>
-<area shape="rect" id="node3" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="7,81,193,108"/>
-<area shape="rect" id="node4" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="259,81,418,108"/>
-<area shape="rect" id="node10" href="$df/d4d/classAnalysisTree_1_1ModulePosition.html" title=" " alt="" coords="243,132,435,159"/>
-<area shape="rect" id="node5" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="483,5,661,32"/>
-<area shape="rect" id="node6" href="$de/dce/classAnalysisTree_1_1Hit.html" title=" " alt="" coords="512,56,632,83"/>
-<area shape="rect" id="node7" href="$de/dd8/classAnalysisTree_1_1Module.html" title=" " alt="" coords="499,107,645,133"/>
-<area shape="rect" id="node8" href="$da/d0a/classAnalysisTree_1_1Track.html" title="A class for a generic track with determined momentum." alt="" coords="504,157,640,184"/>
-<area shape="rect" id="node9" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="709,157,856,184"/>
+<area shape="rect" id="node1" href="$d4/da2/classAnalysisTree_1_1IndexAccessor.html" title=" " alt="" coords="5,31,195,56"/>
+<area shape="rect" id="node2" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="247,31,430,56"/>
+<area shape="rect" id="node3" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="7,80,193,105"/>
+<area shape="rect" id="node4" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="259,80,418,105"/>
+<area shape="rect" id="node10" href="$df/d4d/classAnalysisTree_1_1ModulePosition.html" title=" " alt="" coords="243,129,435,155"/>
+<area shape="rect" id="node5" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="483,5,661,31"/>
+<area shape="rect" id="node6" href="$de/dce/classAnalysisTree_1_1Hit.html" title=" " alt="" coords="512,55,632,80"/>
+<area shape="rect" id="node7" href="$de/dd8/classAnalysisTree_1_1Module.html" title=" " alt="" coords="499,104,645,129"/>
+<area shape="rect" id="node8" href="$da/d0a/classAnalysisTree_1_1Track.html" title="A class for a generic track with determined momentum." alt="" coords="504,153,640,179"/>
+<area shape="rect" id="node9" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="709,153,856,179"/>
 </map>

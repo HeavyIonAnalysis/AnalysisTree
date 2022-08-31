@@ -1,8 +1,8 @@
 <map id="AnalysisTree::new_channel_struct" name="AnalysisTree::new_channel_struct">
-<area shape="rect" id="node1" title=" " alt="" coords="47,712,226,833"/>
-<area shape="rect" id="node2" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="50,462,181,554"/>
-<area shape="rect" id="node3" href="$d8/d4c/classAnalysisTree_1_1BranchConfig.html" title="A class to store configuration of the Container." alt="" coords="205,367,385,649"/>
-<area shape="rect" id="node4" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,183,317"/>
-<area shape="rect" id="node5" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="207,5,384,317"/>
-<area shape="rect" id="node6" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="408,5,585,317"/>
+<area shape="rect" id="node1" title=" " alt="" coords="47,696,230,795"/>
+<area shape="rect" id="node2" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="50,461,185,531"/>
+<area shape="rect" id="node3" href="$d8/d4c/classAnalysisTree_1_1BranchConfig.html" title="A class to store configuration of the Container." alt="" coords="209,359,393,633"/>
+<area shape="rect" id="node4" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,187,309"/>
+<area shape="rect" id="node5" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="211,5,392,309"/>
+<area shape="rect" id="node6" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="416,5,597,309"/>
 </map>
