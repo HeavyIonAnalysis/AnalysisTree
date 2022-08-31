@@ -1,5 +1,5 @@
 <map id="AnalysisTree::PlainTreeFiller" name="AnalysisTree::PlainTreeFiller">
-<area shape="rect" id="node1" title=" " alt="" coords="235,1124,426,1340"/>
+<area shape="rect" id="node1" title=" " alt="" coords="235,1124,426,1369"/>
 <area shape="rect" id="node2" href="$d0/d40/classAnalysisTree_1_1AnalysisTask.html" title="AnalysisTask is a Task which keeps list of AnalysisEntry&#45;s It evaluates Variables according to the ru..." alt="" coords="238,844,423,1075"/>
 <area shape="rect" id="node3" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="243,505,418,795"/>
 <area shape="rect" id="node4" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,117,219,421"/>
