@@ -15,10 +15,10 @@ void PlainTreeFiller::AddBranch(const std::string& branch_name) {
 }
 
 void PlainTreeFiller::SetFieldsToIgnore(const std::vector<std::string>&& fields_to_ignore) {
-  if(branch_name_ == "") {
+  if (branch_name_ == "") {
     throw std::runtime_error("PlainTreeFiller::SetFieldsToIgnore() must be called after PlainTreeFiller::AddBranch()\n");
   }
-  for(auto& fti : fields_to_ignore) {
+  for (auto& fti : fields_to_ignore) {
     fields_to_ignore_.emplace_back((branch_name_ + "." + fti).c_str());
   }
 }
@@ -50,7 +50,7 @@ void PlainTreeFiller::Init() {
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
   for (size_t i = 0; i < vars.size(); ++i) {
     std::string leaf_name = vars[i].GetName();
-    if(std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), leaf_name)!=fields_to_ignore_.end()) continue;
+    if (std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), leaf_name) != fields_to_ignore_.end()) continue;
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
     plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
   }
