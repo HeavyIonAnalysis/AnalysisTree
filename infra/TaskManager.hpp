@@ -141,6 +141,7 @@ class TaskManager {
 
   void SetOutputDataHeader(DataHeader* dh) {
     data_header_ = dh;
+    chain_->SetDataHeader(dh);// TODO
   }
   void FillOutput() { out_tree_->Fill(); }
 
