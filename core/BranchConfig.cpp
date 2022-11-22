@@ -35,6 +35,8 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("eta", ParticleFields::kEta, "pseudorapidity");
     VectorConfig<float>::AddField("mass", ParticleFields::kMass, "GeV/c^2");
     VectorConfig<float>::AddField("p", ParticleFields::kP, "GeV/c");
+    VectorConfig<float>::AddField("E", ParticleFields::kEnergy, "full energy, GeV");
+    VectorConfig<float>::AddField("T", ParticleFields::kKineticEnergy, "kinetic energy, GeV");
     VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity, "in Lab. frame");
     VectorConfig<int>::AddField("pid", ParticleFields::kPid, "PDG code");
     VectorConfig<int>::AddField("id", ParticleFields::kId, "unique id");

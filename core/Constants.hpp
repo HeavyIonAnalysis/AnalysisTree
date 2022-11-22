@@ -83,7 +83,9 @@ enum ParticleFields : ShortInt_t {
   kPy = -8,
   kPz = -9,
   kP = -10,
-  kId = -11
+  kEnergy = -11,
+  kKineticEnergy = -12,
+  kId = -13
 };
 }
 

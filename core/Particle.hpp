@@ -50,6 +50,8 @@ class Particle : public Track {
         case ParticleFields::kMass: return GetMass();
         case ParticleFields::kEta: return GetEta();
         case ParticleFields::kP: return GetP();
+        case ParticleFields::kEnergy: return GetEnergy();
+        case ParticleFields::kKineticEnergy: return GetKineticEnergy();
         case ParticleFields::kPx: return GetPx();
         case ParticleFields::kPy: return GetPy();
         case ParticleFields::kPz: return GetPz();
@@ -72,11 +74,13 @@ class Particle : public Track {
         case ParticleFields::kPid: SetPid(value); break;
         case ParticleFields::kId: break;
         case ParticleFields::kP: /*throw std::runtime_error("Cannot set transient fields");*/ break;
+        case ParticleFields::kEnergy: /*throw std::runtime_error("Cannot set transient fields");*/ break;
+        case ParticleFields::kKineticEnergy: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case ParticleFields::kPt: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case ParticleFields::kEta: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case ParticleFields::kPhi: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case ParticleFields::kRapidity: /*throw std::runtime_error("Cannot set transient fields");*/ break;
-        default: throw std::runtime_error("Unknown field");
+        default: throw std::runtime_error("Particle::SetField - Index " + std::to_string(field_id) + " is not found");
       }
     }
   }
