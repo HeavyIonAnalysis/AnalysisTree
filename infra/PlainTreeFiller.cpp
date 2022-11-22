@@ -5,6 +5,7 @@
 
 #include "TTree.h"
 
+#include "TaskManager.hpp"
 #include "PlainTreeFiller.hpp"
 
 namespace AnalysisTree {
@@ -48,11 +49,18 @@ void PlainTreeFiller::Init() {
 
   file_ = TFile::Open(file_name_.c_str(), "recreate");
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
+  plain_tree_->SetAutoSave(0);
   for (size_t i = 0; i < vars.size(); ++i) {
     std::string leaf_name = vars[i].GetName();
     if (std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), leaf_name) != fields_to_ignore_.end()) continue;
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
     plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
+  }
+
+  for(auto& cm : cuts_map_) {
+    if(cm.second != nullptr) {
+      cm.second->Init(*(TaskManager::GetInstance()->GetChain()->GetConfiguration()));
+    }
   }
 }
 
