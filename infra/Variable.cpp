@@ -85,6 +85,24 @@ double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChann
   }
   return lambda_(vars_);
 }
+
+double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
+  assert(is_init_);
+  vars_.clear();
+  for (const auto& field : fields_) {
+    if (field.GetBranchId() == a_id)
+      vars_.emplace_back(a[field]);
+    else if (field.GetBranchId() == b_id)
+      vars_.emplace_back(b[field]);
+    else if (field.GetBranchId() == c_id)
+      vars_.emplace_back(c[field]);
+    else {
+      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
+    }
+  }
+  return lambda_(vars_);
+}
+
 std::string Variable::GetBranchName() const {
   if (n_branches_ != 1) {
     throw std::runtime_error("Number of branches is not 1!");

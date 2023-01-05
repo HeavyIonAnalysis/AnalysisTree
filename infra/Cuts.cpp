@@ -52,6 +52,17 @@ bool Cuts::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, si
   return true;
 }
 
+bool Cuts::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
+  if (!is_init_) {
+    throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
+  }
+  for (const auto& cut : cuts_) {
+    if (!cut.Apply(a, a_id, b, b_id, c, c_id))
+      return false;
+  }
+  return true;
+}
+
 bool Cuts::Apply(const BranchChannel& ob) const {
   if (!is_init_) {
     throw std::runtime_error("Cuts::Apply - cut is not initialized!!");

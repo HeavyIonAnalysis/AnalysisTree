@@ -19,8 +19,19 @@ bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, 
   return !cuts_ || cuts_->Apply(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
 }
 
+bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const {
+  if (cuts1 && !cuts1->Apply(br1[ch1])) { return false; }
+  if (cuts2 && !cuts2->Apply(br2[ch2])) { return false; }
+  if (cuts3 && !cuts3->Apply(br3[ch3])) { return false; }
+  return !cuts_ || cuts_->Apply(br1[ch1], br1.GetId(), br2[ch2], br2.GetId(), br3[ch3], br3.GetId());
+}
+
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
   return var.GetValue(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
+}
+
+double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3) {
+  return var.GetValue(br1[ch1], br1.GetId(), br2[ch2], br2.GetId(), br3[ch3], br3.GetId());
 }
 
 /**
@@ -82,14 +93,48 @@ void AnalysisEntry::FillFromTwoBranches() {
   }
 }
 
+void AnalysisEntry::FillFromThreeBranches() {
+  auto& br1 = branches_.at(0);
+  auto& br2 = branches_.at(1);
+  auto& br3 = branches_.at(2);
+  values_.reserve(matching_->GetMatches().size());
+  int event_header_n  = -1;
+  if(br1.first.GetBranchType() == DetType::kEventHeader) {
+    event_header_n = 0;
+  } else if(br2.first.GetBranchType() == DetType::kEventHeader) {
+    event_header_n = 1;
+  } else {
+    event_header_n = 2;
+  }
+  const int non_event_header_1 = (2-event_header_n)/2;
+  const int non_event_header_2 = (5-event_header_n)/2;
+
+  for (auto match : matching_->GetMatches(is_inverted_matching_)) {
+    std::array<int, 3> ch;
+    ch.at(non_event_header_1) = match.first;
+    ch.at(non_event_header_2) = match.second;
+    ch.at(event_header_n) = 0;
+    if (!ApplyCutOnBranches(br1.first, br1.second, ch.at(0), br2.first, br2.second, ch.at(1), br3.first, br3.second, ch.at(2))) continue;
+    std::vector<double> temp_vars(vars_.size());
+    short i_var{};
+    for (const auto& var : vars_) {
+      temp_vars[i_var] = FillVariable(var, br1.first, ch.at(0), br2.first, ch.at(1), br3.first, ch.at(2));
+      i_var++;
+    }//variables
+    values_.emplace_back(temp_vars);
+  }
+}
+
 void AnalysisEntry::FillValues() {
   values_.clear();
   if (branches_.size() == 1) {
     FillFromOneBranch();
   } else if (branches_.size() == 2) {
     FillFromTwoBranches();
+  } else if (branches_.size() == 3) {
+    FillFromThreeBranches();
   } else {
-    throw std::runtime_error("AnalysisEntry::FillValues - branches_.size() is more than 2 or 0");
+    throw std::runtime_error("AnalysisEntry::FillValues - branches_.size() is more than 3 or 0");
   }
 }
 
@@ -112,7 +157,7 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
     var.Init(conf);
   }
 
-  if (branch_names_.size() > 1) {
+  if (branch_names_.size() == 2) {
     auto det1_type = conf.GetBranchConfig(*branch_names_.begin()).GetType();
     auto det2_type = conf.GetBranchConfig(*std::next(branch_names_.begin(), 1)).GetType();
 
@@ -127,6 +172,28 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
         matching_ = new Matching(branches_.at(0).first.GetId(), branches_.at(1).first.GetId());
       }
     }
+  } else if (branch_names_.size() > 2) {
+    std::array<DetType, 3> det_type;
+    det_type.at(0) = conf.GetBranchConfig(*branch_names_.begin()).GetType();
+    det_type.at(1) = conf.GetBranchConfig(*std::next(branch_names_.begin(), 1)).GetType();
+    det_type.at(2) = conf.GetBranchConfig(*std::next(branch_names_.begin(), 2)).GetType();
+
+    int n_event_headers=0;
+    int event_header_n=-1;
+    for(int i=0; i<3; i++) {
+      if(det_type.at(i) == DetType::kEventHeader) {
+        n_event_headers++;
+        event_header_n = i;
+      }
+    }
+    if(n_event_headers != 1) {
+      throw std::runtime_error("AnalysisEntry::Init() - among 3 branches 1 and only 1 must be EventHeader");
+    }
+    const int non_event_header_1 = (2-event_header_n)/2;
+    const int non_event_header_2 = (5-event_header_n)/2;
+    auto match_info = conf.GetMatchInfo(*std::next(branch_names_.begin(), non_event_header_1), *std::next(branch_names_.begin(), non_event_header_2));
+    SetIsInvertedMatching(match_info.second);
+    SetMatching((Matching*) matches.find(match_info.first)->second);
   }
 }
 

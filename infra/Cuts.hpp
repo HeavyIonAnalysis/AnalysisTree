@@ -69,6 +69,7 @@ class Cuts {
   bool Apply(const BranchChannel& ob) const;
 
   bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
+  bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const;
 
   void Init(const Configuration& conf);
   void Print() const;
