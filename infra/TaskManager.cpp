@@ -66,7 +66,6 @@ void TaskManager::InitOutChain() {
 
   if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
     out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
-    out_tree_->SetAutoSave(0);
   } else if (write_mode_ == eBranchWriteMode::kCopyTree) {
     assert(configuration_ && data_header_ && chain_);// input should exist
     *configuration_ = *(chain_->GetConfiguration());
@@ -86,6 +85,7 @@ void TaskManager::InitOutChain() {
     data_header_ = chain_->GetDataHeader();
     chain_->SetBranchStatus("*", true);
   }
+  out_tree_->SetAutoSave(0);
 }
 
 void TaskManager::Run(long long nEvents) {

@@ -122,8 +122,8 @@ class TaskManager {
       throw std::runtime_error("No output tree. Probably, TaskManager::Init() was not called or output file/tree names are not set.");
     }
 
-    match = new Matching(chain_->GetConfiguration()->GetBranchConfig(br1).GetId(),
-                         chain_->GetConfiguration()->GetBranchConfig(br2).GetId());
+    match = new Matching(configuration_->GetBranchConfig(br1).GetId(),
+                         configuration_->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
     //    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
