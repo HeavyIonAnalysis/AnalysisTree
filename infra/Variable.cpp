@@ -71,36 +71,29 @@ double Variable::GetValue(const BranchChannel& object) const {
   return lambda_(vars_);
 }
 
-double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+double Variable::GetValue(std::vector<std::pair<const BranchChannel&, size_t>>& bch_id) const {
   assert(is_init_);
   vars_.clear();
   for (const auto& field : fields_) {
-    if (field.GetBranchId() == a_id)
-      vars_.emplace_back(a[field]);
-    else if (field.GetBranchId() == b_id)
-      vars_.emplace_back(b[field]);
-    else {
-      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
+    for(auto& bi : bch_id) {
+      if(field.GetBranchId() == bi.second) {
+        vars_.emplace_back(bi.first[field]);
+        break;
+      }
     }
+    throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
   }
   return lambda_(vars_);
 }
 
+double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+  std::vector<std::pair<const BranchChannel&, size_t>> vec = {{a, a_id}, {b, b_id}};
+  return GetValue(vec);
+}
+
 double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-  assert(is_init_);
-  vars_.clear();
-  for (const auto& field : fields_) {
-    if (field.GetBranchId() == a_id)
-      vars_.emplace_back(a[field]);
-    else if (field.GetBranchId() == b_id)
-      vars_.emplace_back(b[field]);
-    else if (field.GetBranchId() == c_id)
-      vars_.emplace_back(c[field]);
-    else {
-      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
-    }
-  }
-  return lambda_(vars_);
+  std::vector<std::pair<const BranchChannel&, size_t>> vec = {{a, a_id}, {b, b_id}, {c, c_id}};
+  return GetValue(vec);
 }
 
 std::string Variable::GetBranchName() const {

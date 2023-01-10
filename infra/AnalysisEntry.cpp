@@ -13,25 +13,41 @@ bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel
   return !cuts_ || cuts_->Apply(br[i_channel]);
 }
 
+bool AnalysisEntry::ApplyCutOnBranches(std::vector<std::tuple<const Branch&, Cuts*, int>>& input_vec) const {
+  std::vector<std::pair<const BranchChannel&, size_t>> cuts_vec;
+  for(auto& iv : input_vec) {
+    if (std::get<1>(iv) && !std::get<1>(iv)->Apply(std::get<0>(iv)[std::get<2>(iv)])) { return false; }
+    cuts_vec.emplace_back((std::pair<const BranchChannel&, size_t>){std::get<0>(iv)[std::get<2>(iv)], std::get<0>(iv).GetId()});
+  }
+  return !cuts_ || cuts_->Apply(cuts_vec);
+}
+
 bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const {
-  if (cuts1 && !cuts1->Apply(br1[ch1])) { return false; }
-  if (cuts2 && !cuts2->Apply(br2[ch2])) { return false; }
-  return !cuts_ || cuts_->Apply(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
+  std::vector<std::tuple<const Branch&, Cuts*, int>> vec = {{br1, cuts1, ch1}, {br2, cuts2, ch2}};
+  return ApplyCutOnBranches(vec);
 }
 
 bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const {
-  if (cuts1 && !cuts1->Apply(br1[ch1])) { return false; }
-  if (cuts2 && !cuts2->Apply(br2[ch2])) { return false; }
-  if (cuts3 && !cuts3->Apply(br3[ch3])) { return false; }
-  return !cuts_ || cuts_->Apply(br1[ch1], br1.GetId(), br2[ch2], br2.GetId(), br3[ch3], br3.GetId());
+  std::vector<std::tuple<const Branch&, Cuts*, int>> vec = {{br1, cuts1, ch1}, {br2, cuts2, ch2}, {br3, cuts3, ch3}};
+  return ApplyCutOnBranches(vec);
+}
+
+double AnalysisEntry::FillVariable(const Variable& var, std::vector<std::pair<const Branch&, int>>& b_id) {
+  std::vector<std::pair<const BranchChannel&, size_t>> vec;
+  for(auto& bi : b_id) {
+    vec.emplace_back((std::pair<const BranchChannel&, size_t>){bi.first[bi.second], bi.first.GetId()});
+  }
+  return var.GetValue(vec);
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
-  return var.GetValue(br1[ch1], br1.GetId(), br2[ch2], br2.GetId());
+  std::vector<std::pair<const Branch&, int>> vec = {{br1, ch1}, {br2, ch2}};
+  return FillVariable(var, vec);
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3) {
-  return var.GetValue(br1[ch1], br1.GetId(), br2[ch2], br2.GetId(), br3[ch3], br3.GetId());
+  std::vector<std::pair<const Branch&, int>> vec = {{br1, ch1}, {br2, ch2}, {br3, ch3}};
+  return FillVariable(var, vec);
 }
 
 /**
