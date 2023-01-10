@@ -160,7 +160,7 @@ void Configuration::RemoveBranchConfig(const std::string& branchname) {
   // Remove branch itself
   for (auto br = branches_.begin(); br != branches_.end();) {
     if (br->second.GetName() == branchname) {
-      std::cout << "Removing branch: " << branchname << std::endl;
+      std::cout << "AnalysisTree::Configuration Removing branch: " << branchname << std::endl;
       br = branches_.erase(br);// reseat iterator to a valid value post-erase
     } else {
       ++br;
@@ -169,12 +169,13 @@ void Configuration::RemoveBranchConfig(const std::string& branchname) {
   // Remove matchings with this branch
   for (auto ma = matches_index_.begin(); ma != matches_index_.end();) {
     if (ma->first[0] == branchname || ma->first[1] == branchname) {
-      std::cout << "Removing branch: " << ma->second << std::endl;
+      std::cout << "AnalysisTree::Configuration Removing matching branch: " << ma->second << std::endl;
       ma = matches_index_.erase(ma);// reseat iterator to a valid value post-erase
     } else {
       ++ma;
     }
   }
+  this->matches_ = MakeMatchConfigsFromIndex(matches_index_);
 }
 
 std::vector<std::string> Configuration::GetMatchesOfBranch(const std::string& branchname) const {
