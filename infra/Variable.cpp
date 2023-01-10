@@ -75,13 +75,17 @@ double Variable::GetValue(std::vector<std::pair<const BranchChannel&, size_t>>& 
   assert(is_init_);
   vars_.clear();
   for (const auto& field : fields_) {
+    bool success{false};
     for(auto& bi : bch_id) {
       if(field.GetBranchId() == bi.second) {
         vars_.emplace_back(bi.first[field]);
+        success = true;
         break;
       }
     }
-    throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
+    if(!success) {
+      throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
+    }
   }
   return lambda_(vars_);
 }
