@@ -49,10 +49,13 @@ class AnalysisEntry {
   void FillBranchNames();
 
  private:
-  void FillFromOneBranch();
-  void FillFromTwoBranches();
-  void FillFromThreeBranches();
-  void FillMatchingForEventHeader(const Branch& br1, const Branch& br2);
+//   void FillFromOneBranch();
+//   void FillFromTwoBranches();
+//   void FillFromThreeBranches();
+  void FillFromEveHeaders();
+  void FillFromOneChannalizedBranch();
+  void FillFromTwoChannalizedBranches();
+//   void FillMatchingForEventHeader(const Branch& br1, const Branch& br2);
   ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel) const;
   ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(std::vector<std::tuple<const Branch&, Cuts*, int>>& input_vec) const;
   [[deprecated]] ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const;
@@ -66,6 +69,9 @@ class AnalysisEntry {
 
   std::set<std::string> branch_names_{};
   std::vector<std::pair<Branch, Cuts*>> branches_{};///< non-owning pointers
+
+  std::vector<int> eve_header_indices_{};
+  std::vector<int> non_eve_header_indices_{};
 
   Matching* matching_{nullptr};///< non-owning
   bool is_inverted_matching_{false};
