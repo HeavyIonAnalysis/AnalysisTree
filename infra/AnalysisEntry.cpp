@@ -190,13 +190,14 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
     std::vector<std::pair<const Branch&, int>> vec_pairs;
     int i{0};
     for(const auto& br : branches_) {
+      int ch{-1};
       if(non_eve_header_indices_.at(0) == i) {
-        vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, i_channel});
-        vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, i_channel});
+        ch = i_channel;
       } else {
-        vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, 0});
-        vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, 0});
+        ch = 0;
       }
+      vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, ch});
+      vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, ch});
       i++;
     }
 
@@ -223,16 +224,16 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
     std::vector<std::pair<const Branch&, int>> vec_pairs;
     int i{0};
     for(const auto& br : branches_) {
+      int ch{-1};
       if (non_eve_header_indices_.at(0) == i) {
-        vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, match.first});
-        vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, match.first});
+        ch = match.first;
       } else if (non_eve_header_indices_.at(1) == i) {
-        vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, match.second});
-        vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, match.second});
+        ch = match.second;
       } else {
-        vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, 0});
-        vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, 0});
+        ch = 0;
       }
+      vec_tuples.emplace_back((std::tuple<const Branch&, Cuts*, int>){br.first, br.second, ch});
+      vec_pairs.emplace_back((std::pair<const Branch&, int>){br.first, ch});
       i++;
     }
 
