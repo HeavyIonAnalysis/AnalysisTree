@@ -71,14 +71,14 @@ double Variable::GetValue(const BranchChannel& object) const {
   return lambda_(vars_);
 }
 
-double Variable::GetValue(std::vector<std::pair<const BranchChannel&, size_t>>& bch_id) const {
+double Variable::GetValue(std::vector<std::pair<const BranchChannel*, size_t>>& bch_id) const {
   assert(is_init_);
   vars_.clear();
   for (const auto& field : fields_) {
     bool success{false};
     for(auto& bi : bch_id) {
       if(field.GetBranchId() == bi.second) {
-        vars_.emplace_back(bi.first[field]);
+        vars_.emplace_back(bi.first->Value(field));
         success = true;
         break;
       }
@@ -91,12 +91,12 @@ double Variable::GetValue(std::vector<std::pair<const BranchChannel&, size_t>>& 
 }
 
 double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
-  std::vector<std::pair<const BranchChannel&, size_t>> vec = {{a, a_id}, {b, b_id}};
+  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}};
   return GetValue(vec);
 }
 
 double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-  std::vector<std::pair<const BranchChannel&, size_t>> vec = {{a, a_id}, {b, b_id}, {c, c_id}};
+  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
   return GetValue(vec);
 }
 

@@ -57,10 +57,10 @@ class AnalysisEntry {
   void FillFromTwoChannalizedBranches();
 //   void FillMatchingForEventHeader(const Branch& br1, const Branch& br2);
   ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel) const;
-  ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(std::vector<std::tuple<const Branch&, Cuts*, int>>& input_vec) const;
+  ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(std::vector<std::tuple<const Branch*, Cuts*, int>>& input_vec) const;
   [[deprecated]] ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const;
   [[deprecated]] ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const;
-  static double FillVariable(const Variable& var, std::vector<std::pair<const Branch&, int>>& b_id);
+  static double FillVariable(const Variable& var, std::vector<std::pair<const Branch*, int>>& b_id);
   [[deprecated]] static double FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2);
   [[deprecated]] static double FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3);
 

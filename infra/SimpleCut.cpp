@@ -53,7 +53,7 @@ SimpleCut::SimpleCut(const Variable& var, double min, double max, std::string ti
   FillBranchNames();
 }
 
-bool SimpleCut::Apply(std::vector<std::pair<const BranchChannel&, size_t>>& bch_id) const {
+bool SimpleCut::Apply(std::vector<std::pair<const BranchChannel*, size_t>>& bch_id) const {
   std::vector<double> variables;
   variables.reserve(vars_.size());
   for (const auto& var : vars_) {
@@ -63,12 +63,12 @@ bool SimpleCut::Apply(std::vector<std::pair<const BranchChannel&, size_t>>& bch_
 }
 
 bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
-  std::vector<std::pair<const BranchChannel&, size_t>> vec = {{a, a_id}, {b, b_id}};
+  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}};
   return Apply(vec);
 }
 
 bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-  std::vector<std::pair<const BranchChannel&, size_t>> vec = {{a, a_id}, {b, b_id}, {c, c_id}};
+  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
   return Apply(vec);
 }
 
