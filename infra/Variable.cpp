@@ -87,6 +87,9 @@ double Variable::GetValue(std::vector<std::pair<const BranchChannel*, size_t>>& 
       throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
     }
   }
+  for(auto& bi : bch_id) {
+    delete bi.first;
+  }
   return lambda_(vars_);
 }
 

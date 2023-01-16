@@ -18,7 +18,8 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<std::tuple<const Branch*, Cut
   for(auto& iv : input_vec) {
     if (std::get<1>(iv) && !std::get<1>(iv)->Apply((*std::get<0>(iv))[std::get<2>(iv)])) { return false; }
     BranchChannel bch = (*std::get<0>(iv))[std::get<2>(iv)];
-    cuts_vec.emplace_back((std::pair<const BranchChannel*, size_t>){&bch, std::get<0>(iv)->GetId()});
+    BranchChannel* bchptr = new BranchChannel(std::move(bch));
+    cuts_vec.emplace_back((std::pair<const BranchChannel*, size_t>){bchptr, std::get<0>(iv)->GetId()});
   }
   return !cuts_ || cuts_->Apply(cuts_vec);
 }
@@ -37,7 +38,8 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<std::pair<co
   std::vector<std::pair<const BranchChannel*, size_t>> vec;
   for(auto& bi : b_id) {
     BranchChannel bch = (*bi.first)[bi.second];
-    vec.emplace_back((std::pair<const BranchChannel*, size_t>){&bch, bi.first->GetId()});
+    BranchChannel* bchptr = new BranchChannel(std::move(bch));
+    vec.emplace_back((std::pair<const BranchChannel*, size_t>){bchptr, bi.first->GetId()});
   }
   return var.GetValue(vec);
 }
