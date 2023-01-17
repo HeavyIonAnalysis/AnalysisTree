@@ -53,24 +53,30 @@ SimpleCut::SimpleCut(const Variable& var, double min, double max, std::string ti
   FillBranchNames();
 }
 
-bool SimpleCut::Apply(std::vector<std::pair<const BranchChannel*, size_t>>& bch_id) const {
+bool SimpleCut::Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
+  if(bch.size() != id.size()) {
+    throw std::runtime_error("AnalysisTree::SimpleCut::Apply() - BranchChannel and Id vectors must have the same size");
+  }
   std::vector<double> variables;
   variables.reserve(vars_.size());
   for (const auto& var : vars_) {
-    variables.emplace_back(var.GetValue(bch_id));
+    variables.emplace_back(var.GetValue(bch, id));
   }
   return lambda_(variables);
 }
 
 bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
-  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}};
-  return Apply(vec);
+  BranchChannel* a_ptr = new BranchChannel(std::move(a));
+  BranchChannel* b_ptr = new BranchChannel(std::move(b));
+  std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
+  std::vector<size_t> id_vec{a_id, b_id};
+  return Apply(brch_vec, id_vec);
 }
 
-bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
-  return Apply(vec);
-}
+// bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
+//   std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
+//   return Apply(vec);
+// }
 
 bool SimpleCut::Apply(const BranchChannel& object) const {
   std::vector<double> variables;

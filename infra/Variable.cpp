@@ -71,14 +71,17 @@ double Variable::GetValue(const BranchChannel& object) const {
   return lambda_(vars_);
 }
 
-double Variable::GetValue(std::vector<std::pair<const BranchChannel*, size_t>>& bch_id) const {
+double Variable::GetValue(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
   assert(is_init_);
+  if(bch.size() != id.size()) {
+    throw std::runtime_error("AnalysisTree::Variable::GetValue() - BranchChannel and Id vectors must have the same size");
+  }
   vars_.clear();
   for (const auto& field : fields_) {
     bool success{false};
-    for(auto& bi : bch_id) {
-      if(field.GetBranchId() == bi.second) {
-        vars_.emplace_back(bi.first->Value(field));
+    for(int i=0; i<bch.size(); i++) {
+      if(field.GetBranchId() == id.at(i)) {
+        vars_.emplace_back(bch.at(i)->Value(field));
         success = true;
         break;
       }
@@ -87,21 +90,24 @@ double Variable::GetValue(std::vector<std::pair<const BranchChannel*, size_t>>& 
       throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
     }
   }
-  for(auto& bi : bch_id) {
-    delete bi.first;
+  for(auto& b : bch) {
+    delete b;
   }
   return lambda_(vars_);
 }
 
 double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
-  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}};
-  return GetValue(vec);
+  BranchChannel* a_ptr = new BranchChannel(std::move(a));
+  BranchChannel* b_ptr = new BranchChannel(std::move(b));
+  std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
+  std::vector<size_t> id_vec{a_id, b_id};
+  return GetValue(brch_vec, id_vec);
 }
 
-double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-  std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
-  return GetValue(vec);
-}
+// double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
+//   std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
+//   return GetValue(vec);
+// }
 
 std::string Variable::GetBranchName() const {
   if (n_branches_ != 1) {

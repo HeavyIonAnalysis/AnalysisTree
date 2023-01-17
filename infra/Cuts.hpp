@@ -68,9 +68,9 @@ class Cuts {
 
   bool Apply(const BranchChannel& ob) const;
 
-  bool Apply(std::vector<std::pair<const BranchChannel*, size_t>>& bch_id) const;
+  bool Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const;
   [[deprecated]] bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
-  [[deprecated]] bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const;
+//   [[deprecated]] bool Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const;
 
   void Init(const Configuration& conf);
   void Print() const;

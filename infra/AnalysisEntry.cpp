@@ -13,46 +13,71 @@ bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel
   return !cuts_ || cuts_->Apply(br[i_channel]);
 }
 
-bool AnalysisEntry::ApplyCutOnBranches(std::vector<std::tuple<const Branch*, Cuts*, int>>& input_vec) const {
-  std::vector<std::pair<const BranchChannel*, size_t>> cuts_vec;
-  for(auto& iv : input_vec) {
-    if (std::get<1>(iv) && !std::get<1>(iv)->Apply((*std::get<0>(iv))[std::get<2>(iv)])) { return false; }
-    BranchChannel bch = (*std::get<0>(iv))[std::get<2>(iv)];
-    BranchChannel* bchptr = new BranchChannel(std::move(bch));
-    cuts_vec.emplace_back((std::pair<const BranchChannel*, size_t>){bchptr, std::get<0>(iv)->GetId()});
+bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vector<Cuts*>& cuts, std::vector<int>& ch) const {
+  if(br.size() != cuts.size() || cuts.size() != ch.size()) {
+    throw std::runtime_error("AnalysisTree::AnalysisEntry::ApplyCutOnBranches() - Branch, Cuts and Ch vectors must have the same size");
   }
-  return !cuts_ || cuts_->Apply(cuts_vec);
+  std::vector<const BranchChannel*> bch_vec;
+  std::vector<size_t> id_vec;
+  for(int i=0; i<br.size(); i++) {
+    BranchChannel bch = (*br.at(i))[ch.at(i)];
+    if(cuts.at(i) && !cuts.at(i)->Apply(bch)) { return false; }
+    BranchChannel* bchptr = new BranchChannel(std::move(bch));
+    bch_vec.emplace_back(bchptr);
+    id_vec.emplace_back(br.at(i)->GetId());
+  }
+
+  for(auto& b : br) {
+    delete b;
+  }
+  return !cuts_ || cuts_->Apply(bch_vec, id_vec);
 }
 
 bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const {
-  std::vector<std::tuple<const Branch*, Cuts*, int>> vec = {{&br1, cuts1, ch1}, {&br2, cuts2, ch2}};
-  return ApplyCutOnBranches(vec);
+  Branch* br1_ptr = new Branch(std::move(br1));
+  Branch* br2_ptr = new Branch(std::move(br2));
+  std::vector<const Branch*> br_vec{br1_ptr, br2_ptr};
+  std::vector<Cuts*> cuts_vec{cuts1, cuts2};
+  std::vector<int> ch_vec{ch1, ch2};
+  return ApplyCutOnBranches(br_vec, cuts_vec, ch_vec);
 }
 
-bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const {
-  std::vector<std::tuple<const Branch*, Cuts*, int>> vec = {{&br1, cuts1, ch1}, {&br2, cuts2, ch2}, {&br3, cuts3, ch3}};
-  return ApplyCutOnBranches(vec);
-}
+// bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const {
+//   std::vector<std::tuple<const Branch*, Cuts*, int>> vec = {{&br1, cuts1, ch1}, {&br2, cuts2, ch2}, {&br3, cuts3, ch3}};
+//   return ApplyCutOnBranches(vec);
+// }
 
-double AnalysisEntry::FillVariable(const Variable& var, std::vector<std::pair<const Branch*, int>>& b_id) {
-  std::vector<std::pair<const BranchChannel*, size_t>> vec;
-  for(auto& bi : b_id) {
-    BranchChannel bch = (*bi.first)[bi.second];
-    BranchChannel* bchptr = new BranchChannel(std::move(bch));
-    vec.emplace_back((std::pair<const BranchChannel*, size_t>){bchptr, bi.first->GetId()});
+double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id) {
+  if(br.size() != id.size()) {
+    throw std::runtime_error("AnalysisTree::AnalysisEntry::FillVariable() - Branch and Id vectors must have the same size");
   }
-  return var.GetValue(vec);
+  std::vector<const BranchChannel*> bch_vec;
+  std::vector<size_t> id_vec;
+  for(int i=0; i<br.size(); i++) {
+    BranchChannel bch = (*br.at(i))[id.at(i)];
+    BranchChannel* bchptr = new BranchChannel(std::move(bch));
+    bch_vec.emplace_back(bchptr);
+    id_vec.emplace_back(br.at(i)->GetId());
+  }
+
+  for(auto& b : br) {
+    delete b;
+  }
+  return var.GetValue(bch_vec, id_vec);
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
-  std::vector<std::pair<const Branch*, int>> vec = {{&br1, ch1}, {&br2, ch2}};
-  return FillVariable(var, vec);
+  Branch* br1_ptr = new Branch(std::move(br1));
+  Branch* br2_ptr = new Branch(std::move(br2));
+  std::vector<const Branch*> br_vec{br1_ptr, br2_ptr};
+  std::vector<int> ch_vec{ch1, ch2};
+  return FillVariable(var, br_vec, ch_vec);
 }
 
-double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3) {
-  std::vector<std::pair<const Branch*, int>> vec = {{&br1, ch1}, {&br2, ch2}, {&br3, ch3}};
-  return FillVariable(var, vec);
-}
+// double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3) {
+//   std::vector<std::pair<const Branch*, int>> vec = {{&br1, ch1}, {&br2, ch2}, {&br3, ch3}};
+//   return FillVariable(var, vec);
+// }
 
 ///**
 // * @brief takes BranchReader and evaluates all Variables associated with branch.
@@ -167,19 +192,22 @@ void AnalysisEntry::FillValues() {
 }
 
 void AnalysisEntry::FillFromEveHeaders() {
-  std::vector<std::tuple<const Branch*, Cuts*, int>> vec_tuples;
-  std::vector<std::pair<const Branch*, int>> vec_pairs;
+  std::vector<const Branch*> br_vec;
+  std::vector<Cuts*> cuts_vec;
+  std::vector<int> id_vec;
   for(const auto& br : branches_) {
-    vec_tuples.emplace_back((std::tuple<const Branch*, Cuts*, int>){&br.first, br.second, 0});
-    vec_pairs.emplace_back((std::pair<const Branch*, int>){&br.first, 0});
+    Branch* br_ptr = new Branch(std::move(br.first));
+    br_vec.emplace_back(br_ptr);
+    cuts_vec.emplace_back(br.second);
+    id_vec.emplace_back(0);
   }
 
   values_.reserve(1);
-  if (!ApplyCutOnBranches(vec_tuples)) return;
+  if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) return;
   std::vector<double> temp_vars(vars_.size());
   short i_var{0};
   for (const auto& var : vars_) {
-    temp_vars[i_var] = FillVariable(var, vec_pairs);
+    temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
@@ -190,8 +218,9 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
   values_.reserve(n_channels);
 
   for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
-    std::vector<std::tuple<const Branch*, Cuts*, int>> vec_tuples;
-    std::vector<std::pair<const Branch*, int>> vec_pairs;
+    std::vector<const Branch*> br_vec;
+    std::vector<Cuts*> cuts_vec;
+    std::vector<int> id_vec;
     int i{0};
     for(const auto& br : branches_) {
       int ch{-1};
@@ -200,16 +229,18 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
       } else {
         ch = 0;
       }
-      vec_tuples.emplace_back((std::tuple<const Branch*, Cuts*, int>){&br.first, br.second, ch});
-      vec_pairs.emplace_back((std::pair<const Branch*, int>){&br.first, ch});
+      Branch* br_ptr = new Branch(std::move(br.first));
+      br_vec.emplace_back(br_ptr);
+      cuts_vec.emplace_back(br.second);
+      id_vec.emplace_back(ch);
       i++;
     }
 
-    if (!ApplyCutOnBranches(vec_tuples)) continue;
+    if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
-      temp_vars[i_var] = FillVariable(var, vec_pairs);
+      temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
@@ -224,8 +255,9 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
   values_.reserve(matching_->GetMatches().size());
 
   for (auto match : matching_->GetMatches(is_inverted_matching_)) {
-    std::vector<std::tuple<const Branch*, Cuts*, int>> vec_tuples;
-    std::vector<std::pair<const Branch*, int>> vec_pairs;
+    std::vector<const Branch*> br_vec;
+    std::vector<Cuts*> cuts_vec;
+    std::vector<int> id_vec;
     int i{0};
     for(const auto& br : branches_) {
       int ch{-1};
@@ -236,16 +268,18 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
       } else {
         ch = 0;
       }
-      vec_tuples.emplace_back((std::tuple<const Branch*, Cuts*, int>){&br.first, br.second, ch});
-      vec_pairs.emplace_back((std::pair<const Branch*, int>){&br.first, ch});
+      Branch* br_ptr = new Branch(std::move(br.first));
+      br_vec.emplace_back(br_ptr);
+      cuts_vec.emplace_back(br.second);
+      id_vec.emplace_back(ch);
       i++;
     }
 
-    if (!ApplyCutOnBranches(vec_tuples)) continue;
+    if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
-      temp_vars[i_var] = FillVariable(var, vec_pairs);
+      temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
