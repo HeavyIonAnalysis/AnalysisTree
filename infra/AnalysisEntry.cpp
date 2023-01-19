@@ -26,11 +26,11 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
   }
-
-  for(auto& b : br) {
-    delete b;
+  bool result = !cuts_ || cuts_->Apply(bch_vec, id_vec);
+  for(auto& bv : bch_vec) {
+    delete bv;
   }
-  return !cuts_ || cuts_->Apply(bch_vec, id_vec);
+  return result;
 }
 
 bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const {
@@ -39,7 +39,10 @@ bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, 
   std::vector<const Branch*> br_vec{br1_ptr, br2_ptr};
   std::vector<Cuts*> cuts_vec{cuts1, cuts2};
   std::vector<int> ch_vec{ch1, ch2};
-  return ApplyCutOnBranches(br_vec, cuts_vec, ch_vec);
+  bool result = ApplyCutOnBranches(br_vec, cuts_vec, ch_vec);
+  delete br1_ptr;
+  delete br2_ptr;
+  return result;
 }
 
 // bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const {
@@ -59,11 +62,11 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
   }
-
-  for(auto& b : br) {
-    delete b;
+  double result = var.GetValue(bch_vec, id_vec);
+  for(auto& bv : bch_vec) {
+    delete bv;
   }
-  return var.GetValue(bch_vec, id_vec);
+  return result;
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
@@ -71,7 +74,10 @@ double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int c
   Branch* br2_ptr = new Branch(std::move(br2));
   std::vector<const Branch*> br_vec{br1_ptr, br2_ptr};
   std::vector<int> ch_vec{ch1, ch2};
-  return FillVariable(var, br_vec, ch_vec);
+  double result = FillVariable(var, br_vec, ch_vec);
+  delete br1_ptr;
+  delete br2_ptr;
+  return result;
 }
 
 // double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3) {
@@ -211,6 +217,9 @@ void AnalysisEntry::FillFromEveHeaders() {
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
+  for(auto& bv : br_vec) {
+    delete bv;
+  }
 }
 
 void AnalysisEntry::FillFromOneChannalizedBranch() {
@@ -244,6 +253,9 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
+    for(auto& bv : br_vec) {
+      delete bv;
+    }
   }// channels
 }
 
@@ -283,6 +295,9 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
+    for(auto& bv : br_vec) {
+      delete bv;
+    }
   }// channels
 }
 

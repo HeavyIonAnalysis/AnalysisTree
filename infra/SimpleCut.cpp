@@ -70,7 +70,10 @@ bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& 
   BranchChannel* b_ptr = new BranchChannel(std::move(b));
   std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
   std::vector<size_t> id_vec{a_id, b_id};
-  return Apply(brch_vec, id_vec);
+  bool result = Apply(brch_vec, id_vec);
+  delete a_ptr;
+  delete b_ptr;
+  return result;
 }
 
 // bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {

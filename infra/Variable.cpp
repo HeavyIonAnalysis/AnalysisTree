@@ -90,9 +90,6 @@ double Variable::GetValue(std::vector<const BranchChannel*>& bch, std::vector<si
       throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
     }
   }
-  for(auto& b : bch) {
-    delete b;
-  }
   return lambda_(vars_);
 }
 
@@ -101,7 +98,10 @@ double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChann
   BranchChannel* b_ptr = new BranchChannel(std::move(b));
   std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
   std::vector<size_t> id_vec{a_id, b_id};
-  return GetValue(brch_vec, id_vec);
+  double result = GetValue(brch_vec, id_vec);
+  delete a_ptr;
+  delete b_ptr;
+  return result;
 }
 
 // double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
