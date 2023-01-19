@@ -19,6 +19,8 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
   }
   std::vector<const BranchChannel*> bch_vec;
   std::vector<size_t> id_vec;
+  bch_vec.reserve(br.size());
+  id_vec.reserve(br.size());
   for(int i=0; i<br.size(); i++) {
     BranchChannel bch = (*br.at(i))[ch.at(i)];
     if(cuts.at(i) && !cuts.at(i)->Apply(bch)) { return false; }
@@ -56,6 +58,8 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch
   }
   std::vector<const BranchChannel*> bch_vec;
   std::vector<size_t> id_vec;
+  bch_vec.reserve(br.size());
+  id_vec.reserve(br.size());
   for(int i=0; i<br.size(); i++) {
     BranchChannel bch = (*br.at(i))[id.at(i)];
     BranchChannel* bchptr = new BranchChannel(std::move(bch));
@@ -201,6 +205,9 @@ void AnalysisEntry::FillFromEveHeaders() {
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
   std::vector<int> id_vec;
+  br_vec.reserve(branches_.size());
+  cuts_vec.reserve(branches_.size());
+  id_vec.reserve(branches_.size());
   for(const auto& br : branches_) {
     Branch* br_ptr = new Branch(std::move(br.first));
     br_vec.emplace_back(br_ptr);
@@ -230,6 +237,9 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
     std::vector<const Branch*> br_vec;
     std::vector<Cuts*> cuts_vec;
     std::vector<int> id_vec;
+    br_vec.reserve(branches_.size());
+    cuts_vec.reserve(branches_.size());
+    id_vec.reserve(branches_.size());
     int i{0};
     for(const auto& br : branches_) {
       int ch{-1};
@@ -270,6 +280,9 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
     std::vector<const Branch*> br_vec;
     std::vector<Cuts*> cuts_vec;
     std::vector<int> id_vec;
+    br_vec.reserve(branches_.size());
+    cuts_vec.reserve(branches_.size());
+    id_vec.reserve(branches_.size());
     int i{0};
     for(const auto& br : branches_) {
       int ch{-1};
