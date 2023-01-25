@@ -233,28 +233,23 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
   const auto n_channels = branches_.at(non_eve_header_indices_.at(0)).first.size();
   values_.reserve(n_channels);
 
-  for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
-    std::vector<const Branch*> br_vec;
-    std::vector<Cuts*> cuts_vec;
-    std::vector<int> id_vec;
-    br_vec.reserve(branches_.size());
-    cuts_vec.reserve(branches_.size());
-    id_vec.reserve(branches_.size());
-    int i{0};
-    for(const auto& br : branches_) {
-      int ch{-1};
-      if(non_eve_header_indices_.at(0) == i) {
-        ch = i_channel;
-      } else {
-        ch = 0;
-      }
-      Branch* br_ptr = new Branch(std::move(br.first));
-      br_vec.emplace_back(br_ptr);
-      cuts_vec.emplace_back(br.second);
-      id_vec.emplace_back(ch);
-      i++;
-    }
+  std::vector<const Branch*> br_vec;
+  std::vector<Cuts*> cuts_vec;
+  std::vector<int> id_vec;
+  br_vec.reserve(branches_.size());
+  cuts_vec.reserve(branches_.size());
+  id_vec.resize(branches_.size());
+  for(const auto& br : branches_) {
+    Branch* br_ptr = new Branch(std::move(br.first));
+    br_vec.emplace_back(br_ptr);
+    cuts_vec.emplace_back(br.second);
+  }
+  for(auto& ehi : eve_header_indices_) {
+    id_vec.at(ehi) = 0;
+  }
 
+  for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
+    id_vec.at(non_eve_header_indices_.at(0)) = i_channel;
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{0};
@@ -263,10 +258,10 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    for(auto& bv : br_vec) {
-      delete bv;
-    }
   }// channels
+  for(auto& bv : br_vec) {
+    delete bv;
+  }
 }
 
 void AnalysisEntry::FillFromTwoChannalizedBranches() {
@@ -276,29 +271,24 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
 
   values_.reserve(matching_->GetMatches().size());
 
+  std::vector<const Branch*> br_vec;
+  std::vector<Cuts*> cuts_vec;
+  std::vector<int> id_vec;
+  br_vec.reserve(branches_.size());
+  cuts_vec.reserve(branches_.size());
+  id_vec.resize(branches_.size());
+  for(const auto& br : branches_) {
+    Branch* br_ptr = new Branch(std::move(br.first));
+    br_vec.emplace_back(br_ptr);
+    cuts_vec.emplace_back(br.second);
+  }
+  for(auto& ehi : eve_header_indices_) {
+    id_vec.at(ehi) = 0;
+  }
+
   for (auto match : matching_->GetMatches(is_inverted_matching_)) {
-    std::vector<const Branch*> br_vec;
-    std::vector<Cuts*> cuts_vec;
-    std::vector<int> id_vec;
-    br_vec.reserve(branches_.size());
-    cuts_vec.reserve(branches_.size());
-    id_vec.reserve(branches_.size());
-    int i{0};
-    for(const auto& br : branches_) {
-      int ch{-1};
-      if (non_eve_header_indices_.at(0) == i) {
-        ch = match.first;
-      } else if (non_eve_header_indices_.at(1) == i) {
-        ch = match.second;
-      } else {
-        ch = 0;
-      }
-      Branch* br_ptr = new Branch(std::move(br.first));
-      br_vec.emplace_back(br_ptr);
-      cuts_vec.emplace_back(br.second);
-      id_vec.emplace_back(ch);
-      i++;
-    }
+    id_vec.at(non_eve_header_indices_.at(0)) = match.first;
+    id_vec.at(non_eve_header_indices_.at(1)) = match.second;
 
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
@@ -308,10 +298,10 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    for(auto& bv : br_vec) {
-      delete bv;
-    }
   }// channels
+  for(auto& bv : br_vec) {
+    delete bv;
+  }
 }
 
 void AnalysisEntry::FillBranchNames() {
