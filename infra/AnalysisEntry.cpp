@@ -8,6 +8,16 @@
 
 namespace AnalysisTree {
 
+AnalysisEntry::~AnalysisEntry() {
+  for(auto& br : branches_) {
+    delete br.first;
+  }
+}
+
+void AnalysisEntry::AddBranch(const Branch& branch, Cuts* cuts) {
+  branches_.emplace_back(std::make_pair(new Branch(branch), cuts));
+}
+
 bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel) const {
   if (cuts && !cuts->Apply(br[i_channel])) { return false; }
   return !cuts_ || cuts_->Apply(br[i_channel]);
@@ -22,9 +32,7 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
   for(int i=0; i<br.size(); i++) {
-    BranchChannel bch = (*br.at(i))[ch.at(i)];
-    if(cuts.at(i) && !cuts.at(i)->Apply(bch)) { return false; }
-    BranchChannel* bchptr = new BranchChannel(std::move(bch));
+    BranchChannel* bchptr = new BranchChannel(br.at(i), ch.at(i));
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
   }
@@ -61,8 +69,7 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
   for(int i=0; i<br.size(); i++) {
-    BranchChannel bch = (*br.at(i))[id.at(i)];
-    BranchChannel* bchptr = new BranchChannel(std::move(bch));
+    BranchChannel* bchptr = new BranchChannel(br.at(i), id.at(i));
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
   }
@@ -208,9 +215,8 @@ void AnalysisEntry::FillFromEveHeaders() {
   br_vec.reserve(branches_.size());
   cuts_vec.reserve(branches_.size());
   id_vec.reserve(branches_.size());
-  for(const auto& br : branches_) {
-    Branch* br_ptr = new Branch(std::move(br.first));
-    br_vec.emplace_back(br_ptr);
+  for(auto& br : branches_) {
+    br_vec.emplace_back(br.first);
     cuts_vec.emplace_back(br.second);
     id_vec.emplace_back(0);
   }
@@ -224,13 +230,10 @@ void AnalysisEntry::FillFromEveHeaders() {
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
-  for(auto& bv : br_vec) {
-    delete bv;
-  }
 }
 
 void AnalysisEntry::FillFromOneChannalizedBranch() {
-  const auto n_channels = branches_.at(non_eve_header_indices_.at(0)).first.size();
+  const auto n_channels = branches_.at(non_eve_header_indices_.at(0)).first->size();
   values_.reserve(n_channels);
 
   std::vector<const Branch*> br_vec;
@@ -240,8 +243,7 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
   cuts_vec.reserve(branches_.size());
   id_vec.resize(branches_.size());
   for(const auto& br : branches_) {
-    Branch* br_ptr = new Branch(std::move(br.first));
-    br_vec.emplace_back(br_ptr);
+    br_vec.emplace_back(br.first);
     cuts_vec.emplace_back(br.second);
   }
   for(auto& ehi : eve_header_indices_) {
@@ -259,9 +261,6 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
     }//variables
     values_.emplace_back(temp_vars);
   }// channels
-  for(auto& bv : br_vec) {
-    delete bv;
-  }
 }
 
 void AnalysisEntry::FillFromTwoChannalizedBranches() {
@@ -278,8 +277,7 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
   cuts_vec.reserve(branches_.size());
   id_vec.resize(branches_.size());
   for(const auto& br : branches_) {
-    Branch* br_ptr = new Branch(std::move(br.first));
-    br_vec.emplace_back(br_ptr);
+    br_vec.emplace_back(br.first);
     cuts_vec.emplace_back(br.second);
   }
   for(auto& ehi : eve_header_indices_) {
@@ -299,9 +297,6 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
     }//variables
     values_.emplace_back(temp_vars);
   }// channels
-  for(auto& bv : br_vec) {
-    delete bv;
-  }
 }
 
 void AnalysisEntry::FillBranchNames() {

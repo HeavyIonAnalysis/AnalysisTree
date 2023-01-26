@@ -12,6 +12,7 @@
 
 namespace AnalysisTree {
 
+class AnalysisEntry;
 class Branch;
 class Field;
 
@@ -49,6 +50,7 @@ class BranchChannel {
 
  private:
   friend Branch;
+  friend AnalysisEntry;
 
   BranchChannel(const Branch* branch, std::size_t i_channel);
   void UpdatePointer();

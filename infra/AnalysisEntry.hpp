@@ -23,7 +23,7 @@ class AnalysisEntry {
 
  public:
   AnalysisEntry() = default;
-  virtual ~AnalysisEntry() = default;
+  virtual ~AnalysisEntry();
 
   explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr) : vars_(std::move(vars)),
                                                                              cuts_(cuts) {
@@ -43,7 +43,7 @@ class AnalysisEntry {
   ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
   ANALYSISTREE_ATTR_NODISCARD std::vector<Variable>& Variables() { return vars_; }
 
-  void AddBranch(const Branch& branch, Cuts* cuts = nullptr) { branches_.emplace_back(branch, cuts); }
+  void AddBranch(const Branch& branch, Cuts* cuts = nullptr);
   void SetMatching(Matching* matching) { matching_ = matching; }
   void SetIsInvertedMatching(bool is_inverted_matching) { is_inverted_matching_ = is_inverted_matching; }
   void FillBranchNames();
@@ -68,7 +68,7 @@ class AnalysisEntry {
   Cuts* cuts_{nullptr};///< non-owning
 
   std::set<std::string> branch_names_{};
-  std::vector<std::pair<Branch, Cuts*>> branches_{};///< non-owning pointers
+  std::vector<std::pair<const Branch*, Cuts*>> branches_{};///< non-owning pointers
 
   std::vector<int> eve_header_indices_{};
   std::vector<int> non_eve_header_indices_{};
