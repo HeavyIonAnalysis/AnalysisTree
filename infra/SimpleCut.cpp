@@ -76,11 +76,6 @@ bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& 
   return result;
 }
 
-// bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-//   std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
-//   return Apply(vec);
-// }
-
 bool SimpleCut::Apply(const BranchChannel& object) const {
   std::vector<double> variables;
   variables.reserve(vars_.size());

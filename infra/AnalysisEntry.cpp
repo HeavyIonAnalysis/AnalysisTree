@@ -55,11 +55,6 @@ bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, 
   return result;
 }
 
-// bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2, const Branch& br3, Cuts* cuts3, int ch3) const {
-//   std::vector<std::tuple<const Branch*, Cuts*, int>> vec = {{&br1, cuts1, ch1}, {&br2, cuts2, ch2}, {&br3, cuts3, ch3}};
-//   return ApplyCutOnBranches(vec);
-// }
-
 double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id) {
   if(br.size() != id.size()) {
     throw std::runtime_error("AnalysisTree::AnalysisEntry::FillVariable() - Branch and Id vectors must have the same size");
@@ -91,102 +86,6 @@ double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int c
   return result;
 }
 
-// double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2, const Branch& br3, int ch3) {
-//   std::vector<std::pair<const Branch*, int>> vec = {{&br1, ch1}, {&br2, ch2}, {&br3, ch3}};
-//   return FillVariable(var, vec);
-// }
-
-///**
-// * @brief takes BranchReader and evaluates all Variables associated with branch.
-// * If a branch is a Channel or Tracking detector, evaluation is performed channel-by-channel.
-// * If channel or track fails to pass cuts it won't be written
-// */
-// void AnalysisEntry::FillFromOneBranch() {
-//   const auto& br = branches_.at(0).first;
-//
-//   const auto n_channels = br.size();
-//   values_.reserve(n_channels);
-//
-//   for (size_t i_channel = 0; i_channel < n_channels; ++i_channel) {
-//     if (!ApplyCutOnBranch(br, branches_.at(0).second, i_channel)) continue;
-//     std::vector<double> temp_vars(vars_.size());
-//     short i_var{0};
-//     for (const auto& var : vars_) {
-//       temp_vars[i_var] = var.GetValue(br[i_channel]);
-//       i_var++;
-//     }//variables
-//     values_.emplace_back(temp_vars);
-//   }//channels
-// }
-
-// void AnalysisEntry::FillMatchingForEventHeader(const Branch& br1, const Branch& br2) {
-//   matching_->Clear();
-//   for (size_t i = 0; i < br1.size(); ++i) {
-//     matching_->AddMatch(i, 0);
-//   }
-// }
-
-///**
-//* @brief FillFromTwoBranches populates Variables if matching between two branches is defined
-//* It iterates over registered matches and fills variables
-//*/
-// void AnalysisEntry::FillFromTwoBranches() {
-//   auto& br1 = branches_.at(0);
-//   auto& br2 = branches_.at(1);
-//   if (br1.first.GetBranchType() == DetType::kEventHeader) {//put EventHeader to second place, to be able to fill matching
-//     std::swap(br1, br2);
-//   }
-//   if (br2.first.GetBranchType() == DetType::kEventHeader) {
-//     FillMatchingForEventHeader(br1.first, br2.first);
-//   }
-//   values_.reserve(matching_->GetMatches().size());
-//
-//   for (auto match : matching_->GetMatches(is_inverted_matching_)) {
-//     const int ch1 = match.first;
-//     const int ch2 = match.second;
-//     if (!ApplyCutOnBranches(br1.first, br1.second, ch1, br2.first, br2.second, ch2)) continue;
-//     std::vector<double> temp_vars(vars_.size());
-//     short i_var{};
-//     for (const auto& var : vars_) {
-//       temp_vars[i_var] = FillVariable(var, br1.first, ch1, br2.first, ch2);
-//       i_var++;
-//     }//variables
-//     values_.emplace_back(temp_vars);
-//   }
-// }
-
-// void AnalysisEntry::FillFromThreeBranches() {
-//   auto& br1 = branches_.at(0);
-//   auto& br2 = branches_.at(1);
-//   auto& br3 = branches_.at(2);
-//   values_.reserve(matching_->GetMatches().size());
-//   int event_header_n  = -1;
-//   if(br1.first.GetBranchType() == DetType::kEventHeader) {
-//     event_header_n = 0;
-//   } else if(br2.first.GetBranchType() == DetType::kEventHeader) {
-//     event_header_n = 1;
-//   } else {
-//     event_header_n = 2;
-//   }
-//   const int non_event_header_1 = (2-event_header_n)/2;
-//   const int non_event_header_2 = (5-event_header_n)/2;
-//
-//   for (auto match : matching_->GetMatches(is_inverted_matching_)) {
-//     std::array<int, 3> ch;
-//     ch.at(non_event_header_1) = match.first;
-//     ch.at(non_event_header_2) = match.second;
-//     ch.at(event_header_n) = 0;
-//     if (!ApplyCutOnBranches(br1.first, br1.second, ch.at(0), br2.first, br2.second, ch.at(1), br3.first, br3.second, ch.at(2))) continue;
-//     std::vector<double> temp_vars(vars_.size());
-//     short i_var{};
-//     for (const auto& var : vars_) {
-//       temp_vars[i_var] = FillVariable(var, br1.first, ch.at(0), br2.first, ch.at(1), br3.first, ch.at(2));
-//       i_var++;
-//     }//variables
-//     values_.emplace_back(temp_vars);
-//   }
-// }
-
 void AnalysisEntry::FillValues() {
   values_.clear();
   if (non_eve_header_indices_.size() == 0) {
@@ -196,18 +95,11 @@ void AnalysisEntry::FillValues() {
   } else if (non_eve_header_indices_.size() == 2) {
     FillFromTwoChannalizedBranches();
   }
-//   values_.clear();
-//   if (branches_.size() == 1) {
-//     FillFromOneBranch();
-//   } else if (branches_.size() == 2) {
-//     FillFromTwoBranches();
-//   } else if (branches_.size() == 3) {
-//     FillFromThreeBranches();
-//   } else {
-//     throw std::runtime_error("AnalysisEntry::FillValues - branches_.size() is more than 3 or 0");
-//   }
 }
 
+/**
+* @brief FillFromEveHeaders populates Variables from event headers only
+*/
 void AnalysisEntry::FillFromEveHeaders() {
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
@@ -232,6 +124,10 @@ void AnalysisEntry::FillFromEveHeaders() {
   values_.emplace_back(temp_vars);
 }
 
+/**
+* @brief FillFromOneChannalizedBranch populates Variables from one channalized branch
+* and any number of event headers.
+*/
 void AnalysisEntry::FillFromOneChannalizedBranch() {
   const auto n_channels = branches_.at(non_eve_header_indices_.at(0)).first->size();
   values_.reserve(n_channels);
@@ -263,6 +159,11 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
   }// channels
 }
 
+/**
+* @brief FillFromTwoChannalizedBranches populates Variables from two channalized branches
+* and any number of event headers.
+* It iterates over registered matches and fills variables
+*/
 void AnalysisEntry::FillFromTwoChannalizedBranches() {
   if(matching_ == nullptr) {
     throw std::runtime_error("AnalysisEntry::FillFromTwoChannalizedBranches() - Matching between non-EventHeader branches must be set");

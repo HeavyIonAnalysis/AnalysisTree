@@ -104,11 +104,6 @@ double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChann
   return result;
 }
 
-// double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id, const BranchChannel& c, size_t c_id) const {
-//   std::vector<std::pair<const BranchChannel*, size_t>> vec = {{&a, a_id}, {&b, b_id}, {&c, c_id}};
-//   return GetValue(vec);
-// }
-
 std::string Variable::GetBranchName() const {
   if (n_branches_ != 1) {
     throw std::runtime_error("Number of branches is not 1!");
