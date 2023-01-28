@@ -71,20 +71,39 @@ double Variable::GetValue(const BranchChannel& object) const {
   return lambda_(vars_);
 }
 
-double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+double Variable::GetValue(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
   assert(is_init_);
+  if(bch.size() != id.size()) {
+    throw std::runtime_error("AnalysisTree::Variable::GetValue() - BranchChannel and Id vectors must have the same size");
+  }
   vars_.clear();
   for (const auto& field : fields_) {
-    if (field.GetBranchId() == a_id)
-      vars_.emplace_back(a[field]);
-    else if (field.GetBranchId() == b_id)
-      vars_.emplace_back(b[field]);
-    else {
+    bool success{false};
+    for(int i=0; i<bch.size(); i++) {
+      if(field.GetBranchId() == id.at(i)) {
+        vars_.emplace_back(bch.at(i)->Value(field));
+        success = true;
+        break;
+      }
+    }
+    if(!success) {
       throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
     }
   }
   return lambda_(vars_);
 }
+
+double Variable::GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+  BranchChannel* a_ptr = new BranchChannel(std::move(a));
+  BranchChannel* b_ptr = new BranchChannel(std::move(b));
+  std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
+  std::vector<size_t> id_vec{a_id, b_id};
+  double result = GetValue(brch_vec, id_vec);
+  delete a_ptr;
+  delete b_ptr;
+  return result;
+}
+
 std::string Variable::GetBranchName() const {
   if (n_branches_ != 1) {
     throw std::runtime_error("Number of branches is not 1!");

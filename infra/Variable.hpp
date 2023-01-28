@@ -63,7 +63,8 @@ class Variable {
   ANALYSISTREE_ATTR_NODISCARD std::set<std::string> GetBranches() const;
   ANALYSISTREE_ATTR_NODISCARD std::string GetBranchName() const;
 
-  double GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
+  double GetValue(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const;
+  [[deprecated]] double GetValue(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const;
 
   template<class T>
   double GetValue(const T& object) const {

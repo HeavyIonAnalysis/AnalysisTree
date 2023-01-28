@@ -40,16 +40,30 @@ bool Cuts::Equal(const Cuts* that, const Cuts* other) {
   return false;
 }
 
-bool Cuts::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+bool Cuts::Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
   if (!is_init_) {
     throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
   }
+  if(bch.size() != id.size()) {
+    throw std::runtime_error("AnalysisTree::Cuts::Apply() - BranchChannel and Id vectors must have the same size");
+  }
   //    std::all_of(cuts_.begin(), cuts_.end(), Apply(a, a_id, b, b_id)); //TODO
   for (const auto& cut : cuts_) {
-    if (!cut.Apply(a, a_id, b, b_id))
+    if (!cut.Apply(bch, id))
       return false;
   }
   return true;
+}
+
+bool Cuts::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
+  BranchChannel* a_ptr = new BranchChannel(std::move(a));
+  BranchChannel* b_ptr = new BranchChannel(std::move(b));
+  std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
+  std::vector<size_t> id_vec{a_id, b_id};
+  bool result = Apply(brch_vec, id_vec);
+  delete a_ptr;
+  delete b_ptr;
+  return result;
 }
 
 bool Cuts::Apply(const BranchChannel& ob) const {
