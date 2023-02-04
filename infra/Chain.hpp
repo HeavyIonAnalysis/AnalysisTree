@@ -93,6 +93,16 @@ class Chain : public TChain {
     return match->second;
   }
 
+  /**
+ * @brief Clones tree without friends
+ */
+  TTree* CloneChain(int nentries=0);
+
+  /**
+ * @brief Clones Configuration of input Chain without friends
+ */
+  Configuration* CloneConfiguration() const;
+
  protected:
   void InitChain();
   void InitConfiguration();
@@ -109,6 +119,12 @@ class Chain : public TChain {
  */
   template<class T>
   static T* GetObjectFromFileList(const std::string& filelist, const std::string& name);
+
+  /**
+ * @return Vector of pointers on all TChains in AT::Chain - main one and
+ * friended ones
+ */
+  std::vector<TChain*> GetTChains();
 
   std::string LookupAlias(const std::vector<std::string>& names, const std::string& name, size_t copy = 0);
 
