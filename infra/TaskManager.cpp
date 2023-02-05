@@ -122,9 +122,10 @@ void TaskManager::Finish() {
     std::cout << "Output file is " << out_file_name_ << std::endl;
     std::cout << "Output tree is " << out_tree_name_ << std::endl;
     out_file_->cd();
-    if(out_tree_->GetListOfFriends()->GetEntries() != 0) {
-      std::cout << "Warining: TaskManager::Finish() - out_tree_ has friends\
-      which can be wrongly read from the output file\n";
+    if(out_tree_->GetListOfFriends() != nullptr) {
+      if(out_tree_->GetListOfFriends()->GetEntries() != 0) {
+        std::cout << "Warining: TaskManager::Finish() - out_tree_ has friends which can be wrongly read from the output file\n";
+      }
     }
     out_tree_->Write();
     configuration_->Write("Configuration");
