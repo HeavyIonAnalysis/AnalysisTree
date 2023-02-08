@@ -27,16 +27,24 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
   if(br.size() != cuts.size() || cuts.size() != ch.size()) {
     throw std::runtime_error("AnalysisTree::AnalysisEntry::ApplyCutOnBranches() - Branch, Cuts and Ch vectors must have the same size");
   }
+  bool ok{true};
   std::vector<const BranchChannel*> bch_vec;
   std::vector<size_t> id_vec;
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
   for(int i=0; i<br.size(); i++) {
     BranchChannel* bchptr = new BranchChannel(br.at(i), ch.at(i));
+    if(cuts.at(i) != nullptr) {
+      if(!cuts.at(i)->Apply(*bchptr)) {
+        ok = false;
+        delete bchptr;
+        break;
+      }
+    }
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
   }
-  bool result = !cuts_ || cuts_->Apply(bch_vec, id_vec);
+  bool result = ok && (!cuts_ || cuts_->Apply(bch_vec, id_vec));
   for(auto& bv : bch_vec) {
     delete bv;
   }
