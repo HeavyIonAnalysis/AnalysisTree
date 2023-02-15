@@ -68,7 +68,7 @@ void TaskManager::InitOutChain() {
     out_tree_ = new TTree(out_tree_name_.c_str(), "AnalysisTree");
   } else if (write_mode_ == eBranchWriteMode::kCopyTree) {
     assert(configuration_ && data_header_ && chain_);// input should exist
-    *configuration_ = *(chain_->GetConfiguration());
+    configuration_ = chain_->CloneConfiguration();
     *(data_header_) = *(chain_->GetDataHeader());
     for (auto& brex : branches_exclude_) {
       if (chain_->CheckBranchExistence(brex) == 1) {
@@ -80,7 +80,7 @@ void TaskManager::InitOutChain() {
       }
       configuration_->RemoveBranchConfig(brex);
     }
-    out_tree_ = chain_->CloneTree(0);
+    out_tree_ = chain_->CloneChain(0);
     out_tree_->SetName(out_tree_name_.c_str());
     data_header_ = chain_->GetDataHeader();
     chain_->SetBranchStatus("*", true);
@@ -122,6 +122,11 @@ void TaskManager::Finish() {
     std::cout << "Output file is " << out_file_name_ << std::endl;
     std::cout << "Output tree is " << out_tree_name_ << std::endl;
     out_file_->cd();
+    if(out_tree_->GetListOfFriends() != nullptr) {
+      if(out_tree_->GetListOfFriends()->GetEntries() != 0) {
+        std::cout << "Warining: TaskManager::Finish() - out_tree_ has friends which can be wrongly read from the output file\n";
+      }
+    }
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");

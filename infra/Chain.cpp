@@ -200,7 +200,7 @@ Long64_t Chain::Scan(const char* varexp, const char* selection, Option_t* option
   return TChain::Scan(exp.c_str(), sel.c_str(), option, nentries, firstentry);
 }
 
-int Chain::CheckBranchExistence(const std::string& branchname) {
+std::vector<TChain*> Chain::GetTChains() {
   std::vector<TChain*> v_chains;
   v_chains.push_back(this);
 
@@ -213,6 +213,12 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
       v_chains.emplace_back((TChain*) fr);
     }
   }
+
+  return v_chains;
+}
+
+int Chain::CheckBranchExistence(const std::string& branchname) {
+  auto v_chains = this->GetTChains();
 
   for (auto& ch : v_chains) {
     auto* lob = ch->GetListOfBranches();
@@ -229,6 +235,40 @@ int Chain::CheckBranchExistence(const std::string& branchname) {
 
   throw std::runtime_error("AnalysisTree::Chain - Branch " + branchname + " does not exist");
   return 0;
+}
+
+TTree* Chain::CloneChain(int nentries) {
+  TTree* treeOut = this->CloneTree(nentries);
+
+  auto* lof = treeOut->GetListOfFriends();
+  if (lof != nullptr) {
+    lof->Clear();
+  }
+
+  return treeOut;
+}
+
+Configuration* Chain::CloneConfiguration() const {
+  Configuration* result = new Configuration(*configuration_);
+  auto* lof = this->GetListOfFriends();
+  if (lof != nullptr) {
+    const int Nfriends = lof->GetSize();
+    for (int i = 0; i < Nfriends; i++) {
+      std::string friend_name = lof->At(i)->GetName();
+      TTree* fr = this->GetFriend(friend_name.c_str());
+      auto* lob = fr->GetListOfBranches();
+      const int Nbranches = lob->GetEntries();
+      for (int i = 0; i < Nbranches; i++) {
+        std::string name_i = lob->At(i)->GetName();
+        if(name_i.back() == '.') {
+          name_i.pop_back();
+        }
+        result->RemoveBranchConfig(name_i);
+      }
+    }
+  }
+
+  return result;
 }
 
 }// namespace AnalysisTree
