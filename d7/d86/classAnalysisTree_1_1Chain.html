@@ -87,7 +87,7 @@ Inheritance diagram for AnalysisTree::Chain:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d0/d4c/classAnalysisTree_1_1Chain__inherit__graph.png" border="0" usemap="#aAnalysisTree_1_1Chain_inherit__map" alt="Inheritance graph"/></div>
 <map name="aAnalysisTree_1_1Chain_inherit__map" id="aAnalysisTree_1_1Chain_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,131,180,516"/>
+<area shape="rect" title=" " alt="" coords="5,131,180,531"/>
 <area shape="rect" title=" " alt="" coords="61,5,124,83"/>
 </map>
 </div>
@@ -96,7 +96,7 @@ Collaboration diagram for AnalysisTree::Chain:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d4/d7f/classAnalysisTree_1_1Chain__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1Chain_coll__map" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1Chain_coll__map" id="aAnalysisTree_1_1Chain_coll__map">
-<area shape="rect" title=" " alt="" coords="112,551,287,907"/>
+<area shape="rect" title=" " alt="" coords="112,551,287,921"/>
 <area shape="rect" title=" " alt="" coords="5,271,68,349"/>
 <area shape="rect" href="../../d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="93,154,306,466"/>
 <area shape="rect" title=" " alt="" coords="273,5,341,83"/>
@@ -157,6 +157,14 @@ class <a class="el" href="../../d2/d4d/classAnalysisTree_1_1Branch.html">Branch<
 <tr class="memitem:a6afd1533cca4692c19cd5ed91177d7cb"><td class="memItemLeft" align="right" valign="top"><a id="a6afd1533cca4692c19cd5ed91177d7cb" name="a6afd1533cca4692c19cd5ed91177d7cb"></a>
 <a class="el" href="../../d8/d42/classAnalysisTree_1_1Matching.html">Matching</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>GetMatching</b> (const std::string &amp;br1, const std::string &amp;br2) const</td></tr>
 <tr class="separator:a6afd1533cca4692c19cd5ed91177d7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88a7443ad2ea974748af961f1210c552"><td class="memItemLeft" align="right" valign="top"><a id="a88a7443ad2ea974748af961f1210c552" name="a88a7443ad2ea974748af961f1210c552"></a>
+TTree *&#160;</td><td class="memItemRight" valign="bottom"><b>CloneChain</b> (int nentries=0)</td></tr>
+<tr class="memdesc:a88a7443ad2ea974748af961f1210c552"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clones tree without friends. <br /></td></tr>
+<tr class="separator:a88a7443ad2ea974748af961f1210c552"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6363f94c41def0053013c2924678930"><td class="memItemLeft" align="right" valign="top"><a id="ab6363f94c41def0053013c2924678930" name="ab6363f94c41def0053013c2924678930"></a>
+<a class="el" href="../../d8/dee/classAnalysisTree_1_1Configuration.html">Configuration</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>CloneConfiguration</b> () const</td></tr>
+<tr class="memdesc:ab6363f94c41def0053013c2924678930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clones <a class="el" href="../../d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object.">Configuration</a> of input <a class="el" href="../../d7/d86/classAnalysisTree_1_1Chain.html">Chain</a> without friends. <br /></td></tr>
+<tr class="separator:ab6363f94c41def0053013c2924678930"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -169,6 +177,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>InitConfiguration</b>
 <tr class="memitem:a6da012b6f31fbc07719f7c1b1192b92a"><td class="memItemLeft" align="right" valign="top"><a id="a6da012b6f31fbc07719f7c1b1192b92a" name="a6da012b6f31fbc07719f7c1b1192b92a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>InitDataHeader</b> ()</td></tr>
 <tr class="separator:a6da012b6f31fbc07719f7c1b1192b92a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e1429b20bc5808e255f3f8196757fa3"><td class="memItemLeft" align="right" valign="top">std::vector&lt; TChain * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/d86/classAnalysisTree_1_1Chain.html#a7e1429b20bc5808e255f3f8196757fa3">GetTChains</a> ()</td></tr>
+<tr class="separator:a7e1429b20bc5808e255f3f8196757fa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a084299ddea02268b8168e8f5ae2c158c"><td class="memItemLeft" align="right" valign="top"><a id="a084299ddea02268b8168e8f5ae2c158c" name="a084299ddea02268b8168e8f5ae2c158c"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>LookupAlias</b> (const std::vector&lt; std::string &gt; &amp;names, const std::string &amp;name, size_t copy=0)</td></tr>
 <tr class="separator:a084299ddea02268b8168e8f5ae2c158c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,6 +266,32 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>pointer to the loaded object </dd></dl>
+
+</div>
+</div>
+<a id="a7e1429b20bc5808e255f3f8196757fa3" name="a7e1429b20bc5808e255f3f8196757fa3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e1429b20bc5808e255f3f8196757fa3">&#9670;&#160;</a></span>GetTChains()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; TChain * &gt; AnalysisTree::Chain::GetTChains </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>Vector of pointers on all TChains in AT::Chain - main one and friended ones </dd></dl>
 
 </div>
 </div>

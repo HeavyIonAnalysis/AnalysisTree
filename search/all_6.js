@@ -10,7 +10,8 @@ var searchData=
   ['getobjectfromfilelist_7',['GetObjectFromFileList',['../d7/d86/classAnalysisTree_1_1Chain.html#ade02f910f9ee7437311257b9cd8464be',1,'AnalysisTree::Chain']]],
   ['getrapidity_8',['GetRapidity',['../da/d0a/classAnalysisTree_1_1Track.html#a31a6b55b7b37a34eb7d72795f283905b',1,'AnalysisTree::Track']]],
   ['getrapiditybymass_9',['GetRapidityByMass',['../da/d0a/classAnalysisTree_1_1Track.html#aa0d584fb73914a8c2319fed685679f78',1,'AnalysisTree::Track']]],
-  ['getting_20started_20with_20analysistree_10',['Getting started with AnalysisTree',['../dc/d49/md_examples_README.html',1,'']]],
-  ['getvalue_11',['GetValue',['../db/dab/classAnalysisTree_1_1Field.html#a83cca73fe2ab77c84667ededf1e3cc0c',1,'AnalysisTree::Field']]],
-  ['getvertexposition3_12',['GetVertexPosition3',['../d8/dd1/classAnalysisTree_1_1EventHeader.html#ab10e2de0ea164023c707786aa8f5fc83',1,'AnalysisTree::EventHeader']]]
+  ['gettchains_10',['GetTChains',['../d7/d86/classAnalysisTree_1_1Chain.html#a7e1429b20bc5808e255f3f8196757fa3',1,'AnalysisTree::Chain']]],
+  ['getting_20started_20with_20analysistree_11',['Getting started with AnalysisTree',['../dc/d49/md_examples_README.html',1,'']]],
+  ['getvalue_12',['GetValue',['../db/dab/classAnalysisTree_1_1Field.html#a83cca73fe2ab77c84667ededf1e3cc0c',1,'AnalysisTree::Field']]],
+  ['getvertexposition3_13',['GetVertexPosition3',['../d8/dd1/classAnalysisTree_1_1EventHeader.html#ab10e2de0ea164023c707786aa8f5fc83',1,'AnalysisTree::EventHeader']]]
 ];
