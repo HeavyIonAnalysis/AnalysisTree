@@ -1,6 +1,6 @@
 <map id="AnalysisTree::BranchConfig" name="AnalysisTree::BranchConfig">
-<area shape="rect" id="node1" title="A class to store configuration of the Container." alt="" coords="205,365,385,648"/>
-<area shape="rect" id="node2" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,183,317"/>
-<area shape="rect" id="node3" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="207,5,384,317"/>
-<area shape="rect" id="node4" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="408,5,585,317"/>
+<area shape="rect" id="node1" title="A class to store configuration of the Container." alt="" coords="204,372,383,660"/>
+<area shape="rect" id="node2" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,182,324"/>
+<area shape="rect" id="node3" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="205,5,382,324"/>
+<area shape="rect" id="node4" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="405,5,582,324"/>
 </map>

@@ -1,8 +1,8 @@
 <map id="AnalysisTree::TaskManager" name="AnalysisTree::TaskManager">
-<area shape="rect" id="node1" title=" " alt="" coords="201,984,383,1443"/>
-<area shape="rect" id="node2" href="$d7/d86/classAnalysisTree_1_1Chain.html" title=" " alt="" coords="205,551,379,921"/>
-<area shape="rect" id="node3" title=" " alt="" coords="243,271,306,349"/>
-<area shape="rect" id="node4" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,154,219,466"/>
-<area shape="rect" id="node5" title=" " alt="" coords="229,5,297,83"/>
-<area shape="rect" id="node6" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="330,132,502,488"/>
+<area shape="rect" id="node1" title=" " alt="" coords="200,956,381,1424"/>
+<area shape="rect" id="node2" href="$d7/d86/classAnalysisTree_1_1Chain.html" title=" " alt="" coords="203,514,377,893"/>
+<area shape="rect" id="node3" title=" " alt="" coords="242,253,304,331"/>
+<area shape="rect" id="node4" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,133,218,451"/>
+<area shape="rect" id="node5" title=" " alt="" coords="229,5,296,84"/>
+<area shape="rect" id="node6" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="329,133,500,451"/>
 </map>
