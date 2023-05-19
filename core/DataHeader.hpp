@@ -33,10 +33,12 @@ class DataHeader : public TObject {
   void SetDetectorPosition(const TVector3& pos) {
     det_pos_.emplace_back(pos);
   }
+  void SetTimeSliceLength(float tslength) { ts_length_ = tslength; }
 
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetBeamRapidity() const { return beam_y_; }
   ANALYSISTREE_ATTR_NODISCARD std::string GetSystem() const { return system_; }
   ANALYSISTREE_ATTR_NODISCARD const TVector3& GetDetectorPosition(int i) const { return det_pos_.at(i); }
+  ANALYSISTREE_ATTR_NODISCARD Floating_t GetTimeSliceLength() const { return ts_length_; }
 
   ANALYSISTREE_ATTR_NODISCARD const ModulePositions& GetModulePositions(Integer_t idet) const {
     return modules_pos_.at(idet);
@@ -54,6 +56,7 @@ class DataHeader : public TObject {
   Floating_t beam_mom_{UndefValueFloat};
   Floating_t beam_y_{UndefValueFloat};
   Floating_t sqrtsNN_{UndefValueFloat};
+  Floating_t ts_length_{UndefValueFloat};
 
   ClassDef(DataHeader, 1)
 };

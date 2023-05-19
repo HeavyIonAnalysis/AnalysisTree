@@ -13,6 +13,7 @@ void DataHeader::Print(Option_t*) const {
   std::cout << " at beam momentum " << beam_mom_;
   std::cout << " (sqrt(s_NN) = " << sqrtsNN_ << ")" << std::endl;
   std::cout << " beam rapidity is " << beam_y_ << std::endl;
+  std::cout << "TimeSlice length : " << ts_length_ << std::endl;
 
   for (const auto& mod_pos : modules_pos_) {
     mod_pos.Print();
