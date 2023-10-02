@@ -119,15 +119,18 @@ Middle column contains string name of the field, and right column - a descriptio
     // to know to which type (Hit, Track, Module, Particle or EventHeader belongs SimParticles branch)
 
     rTree->Draw("SimParticles.channels_.GetPx()")
-    // draw distribution of the value contained in the default field (has its own getter, namely GetPx(), names of getters can be found in doxygen documentation)
+    // draw distribution of the value contained in the default field (has its own getter, namely
+    // GetPx(), names of getters can be found in doxygen documentation)
 
     rTree->Draw("SimParticles.channels_.GetField<int>(2)")
-    // draw distribution of the value contained in the user-defined field (specify int, float or bool in angular brackets and field's id as an argument in round brackets)
+    // draw distribution of the value contained in the user-defined field (specify int, float or bool
+    // in angular brackets and field's id as an argument in round brackets)
 
     // Note that access to default fields is also possible via id, not only via getters:
     rTree->Draw("SimParticles.channels_.GetField<float>(-7)")
 
-    // If the branch contains non-channelized objects, but is an EventHeader, the word "channels_" is not needed in the command:
+    // If the branch contains non-channelized objects, but is an EventHeader, the word "channels_"
+    // is not needed in the command:
     rTree->Draw("SimEventHeader.GetVertexY()")
     rTree->Draw("RecEventHeader.GetField<int>(0)")
 
@@ -148,47 +151,52 @@ Middle column contains string name of the field, and right column - a descriptio
     rTree->Draw("TMath::Log(TMath::Abs(SimParticles.channels_.GetPx()))")
     // drawing a distribution of derived quantites calculated by formula
 
+Moreover, for default fields which are explicitly present in Container (i.e. px is OK, but not pt, which is not stored but calculated on fly) there is a possibility to draw them using TTree::Draw syntax:
 
-     
-Print the information about AnalysisTree structure:
+    rTree->Draw("SimParticles.px_")
+    rTree->Draw("TMath::Log(TMath::Abs(SimParticles.px_))")
+    rTree->Draw("TMath::Log(TMath::Abs(SimParticles.px_)) * TMath::Cos(SimParticles.py_)")
 
-    t.Print()
+Also you can open a ROOT interactive session and create an AnalysisTree::Chain:
 
-You should see something like:
+    AnalysisTree::Chain t("1.analysistree.root", "rTree") // Chain constructor with a single file
+    // or
+    AnalysisTree::Chain t({"filelist.txt"}, {"rTree"})  // Chain constructor with a file list
 
-![Test Image 1](https://github.com/HeavyIonAnalysis/AnalysisTree/blob/master/docs/pics/Config.png)
+and then build any fields including user-defined and implicitly present fields (such as phi or pt):
 
+    t.Draw("SimParticles.px")
+    t.Draw("SimParticles.pid")
+    t.Draw("VtxTracks.chi2")
+    // 2D histograms, cuts, drawing options and math formulas mentioned above are also available
 
-Draw any field you like with all TTree::Draw operations:
+### Reading file with a macro
 
-    t.Draw("BranchName.FieldName")
-    t.Draw("log(BranchName.FieldName) * sin(BranchName.OtherFieldName)")
-    t.Draw("log(BranchName.FieldName) : sin(BranchName.OtherFieldName)")
-     ...
+Building of distributions in interactive mode is a good approach only if the commands are simple, and the number of events to be analized is not so big.
+However it is not common to do it interactively if formulae you want to use are complicated, and you can easely introduce a typo.
+Or if your logic includes a matching between branches - then interactive building distributions is totally impossible.
+For this case a good solution is usage of macros.
+A comprehensive example of reading the AnalysisTree ROOT file is shown in examples/ReadingMacro.C.
 
+### Creating your own AnalysisTree file
 
-### Reading file with ROOT macro/executable
+A comprehensive example of creating the AnalysisTree ROOT file is shown in examples/WritingMacro.C.
 
-Follow the instructions in class examples/UserTaskRead.{hpp,cpp}
+### Reading and writing with executable
 
-Simple example of macro to read file:
+Usage of compiled code instead of macros has some advantachges, in first turn computation speed, and also syntax check in compile time.
+Macros can be re-qritten into executables.
+For this purpose one needs:
 
-    auto* chain = new Chain("filename.root", "tree_name");
-    auto rec_particles = chain->GetBranch("RecParticles");
-    auto rec2sim_particles = chain->GetMatching("RecParticles", "SimParticles");
-    auto rec_pT = rec_particles.GetField("pT");
-    
-    for (long i_event = 0; i_event < 10; ++i_event) {
-        chain->GetEntry(i_event);
-        for(int i=0; i<rec_particles.size(); ++i){
-            auto pT = rec_particles[i][rec_pT];
-            std::cout << pT << std::endl;
-        }
-    }
+    1. Put necessary headers with #include command
+    2. Create an int main() function - an entry point of any C++ program
+    3. Add an executable into CMakeLists
 
-### Creating your own AnalysisTree
+An example how to do it is shown with examples/UserTaskRead.{hpp,cpp} and examples/UserTaskWrite.{hpp,cpp}.
 
-Follow the instructions in class examples/UserTaskWrite.{hpp,cpp}
+Note: these examples use a little bit different syntax from one shown in examples above.
+It is a so-called syntax sugar - attempt to make syntax more user-friendly.
+However it has its own price in terms of performance - it is slower by factor of few units than one shown above.
 
 ### QA of files
 For a QA of the file(s) please use the dedicated package AnalysisTreeQA:<br>
@@ -196,3 +204,6 @@ https://github.com/HeavyIonAnalysis/AnalysisTreeQA
 
 ## Known problems (features)
  - BranchConfig::GetFieldId() is slow -> should not be used for every event/track/hit/module
+ - In some systems (e.g.  at MacOS) there is a linking problem when using AnalysisTree::Infra
+ objects in interactive mode or in macros. However it is easely fixable by silent call an
+ AnalysisTree::Base object, e.g. AnalysisTree::Hit() - without doing nothing with it, just call.
