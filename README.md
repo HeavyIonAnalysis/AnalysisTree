@@ -176,11 +176,11 @@ Building of distributions in interactive mode is a good approach only if the com
 However it is not common to do it interactively if formulae you want to use are complicated, and you can easely introduce a typo.
 Or if your logic includes a matching between branches - then interactive building distributions is totally impossible.
 For this case a good solution is usage of macros.
-A comprehensive example of reading the AnalysisTree ROOT file is shown in examples/ReadingMacro.C.
+A comprehensive example of reading the AnalysisTree ROOT file is shown in [examples/ReadingMacro.C](https://github.com/HeavyIonAnalysis/AnalysisTree/blob/master/examples/ReadingMacro.C).
 
 ### Creating your own AnalysisTree file
 
-A comprehensive example of creating the AnalysisTree ROOT file is shown in examples/WritingMacro.C.
+A comprehensive example of creating the AnalysisTree ROOT file is shown in [examples/WritingMacro.C](https://github.com/HeavyIonAnalysis/AnalysisTree/blob/master/examples/WritingMacro.C).
 
 ### Reading and writing with executable
 
@@ -192,7 +192,7 @@ For this purpose one needs:
     2. Create an int main() function - an entry point of any C++ program
     3. Add an executable into CMakeLists
 
-An example how to do it is shown with examples/UserTaskRead.{hpp,cpp} and examples/UserTaskWrite.{hpp,cpp}.
+An example how to do it is shown with [examples/UserTaskRead.cpp](https://github.com/HeavyIonAnalysis/AnalysisTree/blob/master/examples/UserTaskRead.cpp) and [examples/UserTaskWrite.cpp](https://github.com/HeavyIonAnalysis/AnalysisTree/blob/master/examples/UserTaskWrite.cpp).
 
 Note: these examples use a little bit different syntax from one shown in examples above.
 It is a so-called syntax sugar - attempt to make syntax more user-friendly.
