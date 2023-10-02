@@ -1,4 +1,5 @@
 <map id="AnalysisTree::ModulePosition" name="AnalysisTree::ModulePosition">
-<area shape="rect" id="node1" title=" " alt="" coords="5,237,197,555"/>
-<area shape="rect" id="node2" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="8,5,194,189"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,259,188,644"/>
+<area shape="rect" id="Node000002" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="8,5,185,211"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,226,99,259,94,259,94,226"/>
 </map>

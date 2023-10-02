@@ -1,4 +1,5 @@
 <map id="AnalysisTree::copy_content_struct" name="AnalysisTree::copy_content_struct">
-<area shape="rect" id="node1" title=" " alt="" coords="5,147,135,270"/>
-<area shape="rect" id="node2" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="5,5,135,99"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,133,127,253"/>
+<area shape="rect" id="Node000002" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="5,5,127,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="69,100,69,134,63,134,63,100"/>
 </map>

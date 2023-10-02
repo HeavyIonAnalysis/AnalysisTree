@@ -1,5 +1,7 @@
 <map id="AnalysisTree::Detector&lt; T &gt;" name="AnalysisTree::Detector&lt; T &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="113,237,294,465"/>
-<area shape="rect" id="node2" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,191,189"/>
-<area shape="rect" id="node3" href="$d4/da2/classAnalysisTree_1_1IndexAccessor.html" title=" " alt="" coords="215,58,403,136"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="109,259,282,524"/>
+<area shape="rect" id="Node000002" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,183,211"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,224,151,258,146,260,133,226"/>
+<area shape="rect" id="Node000003" href="$d4/da2/classAnalysisTree_1_1IndexAccessor.html" title=" " alt="" coords="207,75,387,141"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="283,156,245,260,240,258,278,154"/>
 </map>

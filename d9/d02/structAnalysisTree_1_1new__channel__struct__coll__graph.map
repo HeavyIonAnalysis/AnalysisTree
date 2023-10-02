@@ -1,8 +1,13 @@
 <map id="AnalysisTree::new_channel_struct" name="AnalysisTree::new_channel_struct">
-<area shape="rect" id="node1" title=" " alt="" coords="47,724,225,848"/>
-<area shape="rect" id="node2" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="50,471,180,564"/>
-<area shape="rect" id="node3" href="$d8/d4c/classAnalysisTree_1_1BranchConfig.html" title="A class to store configuration of the Container." alt="" coords="204,373,383,661"/>
-<area shape="rect" id="node4" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,182,324"/>
-<area shape="rect" id="node5" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="205,5,382,324"/>
-<area shape="rect" id="node6" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="405,5,582,324"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="47,843,217,963"/>
+<area shape="rect" id="Node000002" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="50,567,171,647"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,662,130,843,125,843,112,662"/>
+<area shape="rect" id="Node000003" href="$d8/d4c/classAnalysisTree_1_1BranchConfig.html" title="A class to store configuration of the Container." alt="" coords="196,435,367,780"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,777,172,829,167,827,194,774"/>
+<area shape="rect" id="Node000004" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,173,385"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="182,388,204,434,199,436,177,390"/>
+<area shape="rect" id="Node000005" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="197,5,365,385"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="284,400,284,435,279,435,279,400"/>
+<area shape="rect" id="Node000006" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="389,5,557,385"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="385,390,364,436,359,434,381,388"/>
 </map>

@@ -1,5 +1,7 @@
 <map id="AnalysisTree::Branch" name="AnalysisTree::Branch">
-<area shape="rect" id="node1" title=" " alt="" coords="35,514,188,743"/>
-<area shape="rect" id="node2" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,133,218,451"/>
-<area shape="rect" id="node3" title=" " alt="" coords="78,5,145,84"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="35,568,179,834"/>
+<area shape="rect" id="Node000002" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,120,209,505"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,505,110,551,105,551,105,505"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="78,5,137,71"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,86,110,120,105,120,105,86"/>
 </map>

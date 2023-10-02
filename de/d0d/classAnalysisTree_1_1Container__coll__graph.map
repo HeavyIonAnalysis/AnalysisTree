@@ -1,4 +1,5 @@
 <map id="AnalysisTree::Container" name="AnalysisTree::Container">
-<area shape="rect" id="node1" title="A class to store any number of integers, floats and bools." alt="" coords="19,237,177,510"/>
-<area shape="rect" id="node2" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,191,189"/>
+<area shape="rect" id="Node000001" title="A class to store any number of integers, floats and bools." alt="" coords="19,259,169,584"/>
+<area shape="rect" id="Node000002" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,183,211"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,226,97,259,91,259,91,226"/>
 </map>
