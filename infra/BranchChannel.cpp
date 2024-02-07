@@ -57,13 +57,14 @@ double BranchChannel::Value(const Field& v) const {
   //  assert(v.GetBranchId() == branch_->GetId()); // TODO
   assert(v.IsInitialized());
 
+  if(v.GetName() == "ones") return 1;
+
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
     case Types::kFloat: return ANALYSISTREE_UTILS_VISIT(get_field_struct<float>(v.GetFieldId()), data_ptr_);
     case Types::kInteger: return ANALYSISTREE_UTILS_VISIT(get_field_struct<int>(v.GetFieldId()), data_ptr_);
-    case Types::kBool:
-      return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
-      //    default: throw std::runtime_error("Field type is not correct!"); //NOTE commented because of Ones field
+    case Types::kBool: return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
+    default: throw std::runtime_error("Field type is not correct!"); //NOTE commented because of Ones field NOTE now commented again
   }
 }
 
