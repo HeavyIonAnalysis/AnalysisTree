@@ -126,15 +126,13 @@ void AnalysisEntry::FillFromEveHeaders() {
   weights_.reserve(1);
   if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) return;
   std::vector<double> temp_vars(vars_.size());
-  std::vector<double> temp_weights(vars_.size());
   short i_var{0};
   for (const auto& var : vars_) {
     temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
-    temp_weights[i_var] = FillVariable(vars4weight_.at(i_var), br_vec, id_vec);
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
-  weights_.emplace_back(temp_weights);
+  weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
 }
 
 /**
@@ -164,15 +162,13 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
     id_vec.at(non_eve_header_indices_.at(0)) = i_channel;
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
-    std::vector<double> temp_weights(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
       temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
-      temp_weights[i_var] = FillVariable(vars4weight_.at(i_var), br_vec, id_vec);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    weights_.emplace_back(temp_weights);
+    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
   }// channels
 }
 
@@ -209,15 +205,13 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
 
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
-    std::vector<double> temp_weights(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
       temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
-      temp_weights[i_var] = FillVariable(vars4weight_.at(i_var), br_vec, id_vec);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    weights_.emplace_back(temp_weights);
+    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
   }// channels
 }
 
@@ -239,13 +233,7 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
   for (auto& var : vars_) {
     var.Init(conf);
   }
-  for (auto& v4w : vars4weight_) {
-    v4w.Init(conf);
-  }
-
-  if(vars_.size() != vars4weight_.size()) {
-    throw std::runtime_error("AnalysisEntry::Init(): vars_.size() != vars4weight_.size()");
-  }
+  var4weight_.Init(conf);
 
   int i{0};
   for(auto& bn : branch_names_) {

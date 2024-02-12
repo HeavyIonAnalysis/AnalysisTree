@@ -20,6 +20,7 @@ namespace AnalysisTree {
  */
 class AnalysisTask : public Task {
   typedef std::vector<std::vector<double>> array2D;
+  typedef std::vector<double> array1D;
 
  public:
   AnalysisTask() = default;
@@ -32,6 +33,7 @@ class AnalysisTask : public Task {
   void Finish() override{};
 
   ANALYSISTREE_ATTR_NODISCARD const array2D& GetValues(int i_var) const { return entries_.at(i_var).GetValues(); }
+  ANALYSISTREE_ATTR_NODISCARD const array1D& GetWeights(int i_var) const { return entries_.at(i_var).GetWeights(); }
   ANALYSISTREE_ATTR_NODISCARD const std::vector<AnalysisEntry>& GetVarEntries() const { return entries_; }
   ANALYSISTREE_ATTR_NODISCARD std::vector<AnalysisEntry>& VarEntries() { return entries_; }
 
