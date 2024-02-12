@@ -96,6 +96,7 @@ double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int c
 
 void AnalysisEntry::FillValues() {
   values_.clear();
+  weights_.clear();
   if (non_eve_header_indices_.size() == 0) {
     FillFromEveHeaders();
   } else if (non_eve_header_indices_.size() == 1) {
@@ -122,14 +123,18 @@ void AnalysisEntry::FillFromEveHeaders() {
   }
 
   values_.reserve(1);
+  weights_.reserve(1);
   if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) return;
   std::vector<double> temp_vars(vars_.size());
+  std::vector<double> temp_weights(vars_.size());
   short i_var{0};
   for (const auto& var : vars_) {
     temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
+    temp_weights[i_var] = FillVariable(vars4weight_.at(i_var), br_vec, id_vec);
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
+  weights_.emplace_back(temp_weights);
 }
 
 /**
@@ -139,6 +144,7 @@ void AnalysisEntry::FillFromEveHeaders() {
 void AnalysisEntry::FillFromOneChannalizedBranch() {
   const auto n_channels = branches_.at(non_eve_header_indices_.at(0)).first->size();
   values_.reserve(n_channels);
+  weights_.reserve(n_channels);
 
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
@@ -158,12 +164,15 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
     id_vec.at(non_eve_header_indices_.at(0)) = i_channel;
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
+    std::vector<double> temp_weights(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
       temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
+      temp_weights[i_var] = FillVariable(vars4weight_.at(i_var), br_vec, id_vec);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
+    weights_.emplace_back(temp_weights);
   }// channels
 }
 
@@ -178,6 +187,7 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
   }
 
   values_.reserve(matching_->GetMatches().size());
+  weights_.reserve(matching_->GetMatches().size());
 
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
@@ -199,12 +209,15 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
 
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
+    std::vector<double> temp_weights(vars_.size());
     short i_var{0};
     for (const auto& var : vars_) {
       temp_vars[i_var] = FillVariable(var, br_vec, id_vec);
+      temp_weights[i_var] = FillVariable(vars4weight_.at(i_var), br_vec, id_vec);
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
+    weights_.emplace_back(temp_weights);
   }// channels
 }
 
@@ -225,6 +238,13 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
   }
   for (auto& var : vars_) {
     var.Init(conf);
+  }
+  for (auto& v4w : vars4weight_) {
+    v4w.Init(conf);
+  }
+
+  if(vars_.size() != vars4weight_.size()) {
+    throw std::runtime_error("AnalysisEntry::Init(): vars_.size() != vars4weight_.size()");
   }
 
   int i{0};
