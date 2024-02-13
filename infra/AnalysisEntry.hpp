@@ -29,6 +29,9 @@ class AnalysisEntry {
   explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr, Variable vars4weight={}) : vars_(std::move(vars)),
                                                                                                       var4weight_(std::move(vars4weight)),
                                                                                                       cuts_(cuts) {
+    if(var4weight_.GetNumberOfBranches() == 0) {
+      var4weight_ = Variable::FromString(vars_.at(0).GetBranchName() + ".ones");
+    }
     FillBranchNames();
   };
 
