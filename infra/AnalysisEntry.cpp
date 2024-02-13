@@ -96,6 +96,7 @@ double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int c
 
 void AnalysisEntry::FillValues() {
   values_.clear();
+  weights_.clear();
   if (non_eve_header_indices_.size() == 0) {
     FillFromEveHeaders();
   } else if (non_eve_header_indices_.size() == 1) {
@@ -122,6 +123,7 @@ void AnalysisEntry::FillFromEveHeaders() {
   }
 
   values_.reserve(1);
+  weights_.reserve(1);
   if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) return;
   std::vector<double> temp_vars(vars_.size());
   short i_var{0};
@@ -130,6 +132,7 @@ void AnalysisEntry::FillFromEveHeaders() {
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
+  weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
 }
 
 /**
@@ -139,6 +142,7 @@ void AnalysisEntry::FillFromEveHeaders() {
 void AnalysisEntry::FillFromOneChannalizedBranch() {
   const auto n_channels = branches_.at(non_eve_header_indices_.at(0)).first->size();
   values_.reserve(n_channels);
+  weights_.reserve(n_channels);
 
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
@@ -164,6 +168,7 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
+    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
   }// channels
 }
 
@@ -178,6 +183,7 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
   }
 
   values_.reserve(matching_->GetMatches().size());
+  weights_.reserve(matching_->GetMatches().size());
 
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
@@ -205,6 +211,7 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
+    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
   }// channels
 }
 
@@ -226,6 +233,7 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
   for (auto& var : vars_) {
     var.Init(conf);
   }
+  var4weight_.Init(conf);
 
   int i{0};
   for(auto& bn : branch_names_) {
