@@ -118,5 +118,11 @@ std::set<std::string> Variable::GetBranches() const {
   }
   return branches;
 }
+void Variable::IfEmptyVariableConvertToOnes(const Variable& var) {
+  if (GetNumberOfBranches() == 0) {
+    const std::string name = *var.GetBranches().begin();
+    *this = Variable::FromString(name + ".ones");
+  }
+}
 
 }// namespace AnalysisTree
