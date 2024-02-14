@@ -82,6 +82,8 @@ class Variable {
 
   void Print() const;
 
+  void IfEmptyVariableConvertToOnes(const Variable& var);
+
  protected:
   std::string name_;
   std::vector<Field> fields_{};
