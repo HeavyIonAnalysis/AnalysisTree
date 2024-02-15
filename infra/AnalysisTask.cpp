@@ -33,7 +33,7 @@ std::pair<int, std::vector<int>> AnalysisTask::AddEntry(const AnalysisEntry& var
   std::vector<int> var_ids(vars.GetVariables().size());
 
   for (size_t ivar = 0; ivar < entries_.size(); ++ivar) {
-    if (vars.GetBranchNames() == entries_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), entries_[ivar].GetCuts())) {//branch exists
+    if (vars.GetBranchNames() == entries_[ivar].GetBranchNames() && Cuts::Equal(vars.GetCuts(), entries_[ivar].GetCuts()) && vars.GetVariableForWeight() == entries_[ivar].GetVariableForWeight()) {//branch exists
       for (size_t i = 0; i < vars.GetVariables().size(); ++i) {
         var_ids[i] = entries_[ivar].AddVariable(vars.GetVariables()[i]);
       }
