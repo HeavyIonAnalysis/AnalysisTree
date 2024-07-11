@@ -177,6 +177,7 @@ class TaskManager {
   void InitOutChain();
   void InitTasks();
   void WriteCommitInfo();
+  void PrintCommitInfo();
 
   // input data members
   Chain* chain_{nullptr};

@@ -37,6 +37,8 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
     InitOutChain();
   }
 
+  PrintCommitInfo();
+
   InitTasks();
 }
 
@@ -117,6 +119,12 @@ void TaskManager::WriteCommitInfo() {
   std::string is_original = std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") ? std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") : "unknown";
   TNamed("AnalysisTree_commit_hash", commit).Write();
   TNamed("AnalysisTree_commit_is_original", is_original).Write();
+}
+
+void TaskManager::PrintCommitInfo() {
+  std::string commit = std::getenv("ANALYSIS_TREE_COMMIT_HASH") ? std::getenv("ANALYSIS_TREE_COMMIT_HASH") : "unknown";
+  std::string is_original = std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") ? std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") : "unknown";
+  std::cout << "ANALYSIS_TREE_COMMIT_HASH = " << commit << "\n" << "ANALYSIS_TREE_COMMIT_ORIGINAL = " << is_original << "\n";
 }
 
 void TaskManager::Finish() {
