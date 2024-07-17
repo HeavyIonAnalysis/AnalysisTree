@@ -118,6 +118,17 @@ void Branch::CloneVariables(const AnalysisTree::BranchConfig& other) {
   import_fields_from_map(other.GetMap<bool>(), AnalysisTree::Types::kBool);
 }
 
+BranchChannel Branch::NewChannel() {
+  CheckMutable(true);
+  ANALYSISTREE_UTILS_VISIT(new_channel_struct(&(this->config_)), data_);
+  Freeze();
+  return BranchChannel(this, size() - 1);
+}
+
+BranchChannel NullChannel() {
+  return BranchChannel();
+}
+
 void Branch::CopyContentsRaw(Branch* other) {
   if (this == other) {
     throw std::runtime_error("Copying contents from the same branch makes no sense");
@@ -157,11 +168,13 @@ void Branch::CopyContentsRaw(Branch* other) {
   }
 }
 
-void Branch::CreateMapping(const Branch* other) const {
+void Branch::CreateMapping(const Branch* other, std::string branch_name_prefix) const {
   if (copy_fields_mapping.find(other) != copy_fields_mapping.end()) {
     // TODO Warning
     return;
   }
+
+  if (!branch_name_prefix.empty()) branch_name_prefix += "_";
 
   CheckFrozen();
   other->CheckFrozen();
@@ -174,26 +187,15 @@ void Branch::CreateMapping(const Branch* other) const {
   std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
   FieldsMapping fields_mapping;
   for (auto& field_name : other->GetFieldNames()) {
+    field_name = branch_name_prefix.append(field_name);
     if (!config_.HasField(field_name)) { continue; }
-    fields_mapping.field_pairs.emplace_back(std::make_pair(other->GetField(field_name), GetField(field_name)));
+    fields_mapping.field_pairs.emplace_back(other->GetField(field_name), GetField(field_name));
     std::cout << "\t" << field_name
               << "\t(" << types_map.at(other->GetField(field_name).GetFieldType()) << " ---> "
               << types_map.at(GetField(field_name).GetFieldType()) << ")" << std::endl;
   }
   copy_fields_mapping.emplace(other, std::move(fields_mapping));
 }
-
-//void Branch::UseFields(std::vector<std::pair<std::string, std::reference_wrapper<Field>>>&& vars,
-//                       bool ignore_missing) {
-//  for (auto& element : vars) {
-//    auto& field_name = element.first;
-//    if (!config_.HasField(field_name) && ignore_missing) {
-//      element.second.get() = Field();
-//      continue;
-//    }
-//    element.second.get() = GetField(field_name);
-//  }
-//}
 
 void Branch::UpdateConfigHash() {
   config_hash_ = Impl::BranchConfigHasher(config_);

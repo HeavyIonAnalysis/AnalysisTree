@@ -154,6 +154,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
  */
   ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const;
 
+  ANALYSISTREE_ATTR_NODISCARD BranchConfig CloneAndMerge(const BranchConfig& attached) const;
+
   bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
 
  protected:
@@ -165,6 +167,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   ClassDefOverride(BranchConfig, 3);
 };
+
+// BranchConfig Merge(const BranchConfig& primary, const BranchConfig& secondary);
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_BRANCHCONFIG_H

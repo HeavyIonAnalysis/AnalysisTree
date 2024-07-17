@@ -3,6 +3,8 @@
    Authors: Eugeny Kashirin, Viktor Klochkov, Ilya Selyuzhenkov */
 #include "BranchChannel.hpp"
 
+#include <utility>
+
 #include "Branch.hpp"
 #include "EventHeader.hpp"
 #include "Field.hpp"
@@ -15,18 +17,18 @@ void BranchChannel::UpdateChannel(size_t new_channel) {
 }
 
 void BranchChannel::UpdatePointer() {
-  if (i_channel_ < branch_->size()) {
+  if (i_channel_ >= 0 && i_channel_ < branch_->size()) {
     data_ptr_ = ANALYSISTREE_UTILS_VISIT(get_channel_struct(i_channel_), branch_->GetData());
   } else {
     throw std::out_of_range("");
   }
 }
 
-void BranchChannel::CopyContent(const BranchChannel& other) {
+void BranchChannel::CopyContent(const BranchChannel& other, std::string branch_name_prefix) {
   branch_->CheckMutable();
   auto mapping_it = branch_->copy_fields_mapping.find(other.branch_);
   if (mapping_it == branch_->copy_fields_mapping.end()) {
-    branch_->CreateMapping(other.branch_);
+    branch_->CreateMapping(other.branch_, std::move(branch_name_prefix));
     mapping_it = branch_->copy_fields_mapping.find(other.branch_);
   }
 
@@ -38,15 +40,25 @@ void BranchChannel::CopyContent(const BranchChannel& other) {
   }
 }
 
-BranchChannel::BranchChannel(const Branch* branch, std::size_t i_channel) : branch_(branch), i_channel_(i_channel) {
-  UpdatePointer();
+void BranchChannel::MergeContentFromTwoChannels(const BranchChannel& first, const BranchChannel& second) {
+  int matching_case{-1};
+  bool first_channel_active = !first.IsNullChannel();
+  bool second_channel_active = !second.IsNullChannel();
+  if(first_channel_active) {
+    if(second_channel_active) matching_case = 0;
+    else                      matching_case = 1;
+  } else {
+    if(second_channel_active) matching_case = 2;
+    else                      throw std::runtime_error("BranchChannel::MergeContentFromTwoChannels() : both channels are null");
+  }
+
+  if(first_channel_active) CopyContent(first);
+  if(second_channel_active) CopyContent(second, second.branch_->GetBranchName());
+  this->SetValue(branch_->GetField("matching_case"), matching_case);
 }
 
-BranchChannel Branch::NewChannel() {
-  CheckMutable(true);
-  ANALYSISTREE_UTILS_VISIT(new_channel_struct(&(this->config_)), data_);
-  Freeze();
-  return BranchChannel(this, size() - 1);
+BranchChannel::BranchChannel(const Branch* branch, std::size_t i_channel) : branch_(branch), i_channel_(i_channel) {
+  UpdatePointer();
 }
 
 void BranchChannel::Print(std::ostream& os) const {
