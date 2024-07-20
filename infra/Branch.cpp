@@ -125,7 +125,7 @@ BranchChannel Branch::NewChannel() {
   return BranchChannel(this, size() - 1);
 }
 
-BranchChannel NullChannel() {
+BranchChannel Branch::NullChannel() {
   return BranchChannel();
 }
 
@@ -186,13 +186,13 @@ void Branch::CreateMapping(const Branch* other, std::string branch_name_prefix) 
 
   std::cout << "New cached mapping " << other->config_.GetName() << " --> " << config_.GetName() << std::endl;
   FieldsMapping fields_mapping;
-  for (auto& field_name : other->GetFieldNames()) {
-    field_name = branch_name_prefix.append(field_name);
-    if (!config_.HasField(field_name)) { continue; }
-    fields_mapping.field_pairs.emplace_back(other->GetField(field_name), GetField(field_name));
-    std::cout << "\t" << field_name
-              << "\t(" << types_map.at(other->GetField(field_name).GetFieldType()) << " ---> "
-              << types_map.at(GetField(field_name).GetFieldType()) << ")" << std::endl;
+  for (auto& field_name_other : other->GetFieldNames()) {
+    std::string field_name_target = branch_name_prefix + field_name_other;
+    if (!config_.HasField(field_name_target)) { continue; }
+    fields_mapping.field_pairs.emplace_back(other->GetField(field_name_other), GetField(field_name_target));
+    std::cout << "\t" << field_name_other
+              << "\t(" << types_map.at(other->GetField(field_name_other).GetFieldType()) << " ---> "
+              << types_map.at(GetField(field_name_target).GetFieldType()) << ")" << std::endl;
   }
   copy_fields_mapping.emplace(other, std::move(fields_mapping));
 }
