@@ -93,12 +93,13 @@ set(ConfigPackageLocation lib/cmake/${PROJECT_NAME})
 
 set(${PROJECT_NAME}_INCLUDE_DIR "include")
 set(${PROJECT_NAME}_LIBRARY_DIR "lib")
+set(${PROJECT_NAME}_BINARY_DIR "bin")
 set(${AnalysisTree_BINARY_DIR} "${CMAKE_CURRENT_BINARY_DIR}")
 
 configure_package_config_file(
         cmake/${PROJECT_NAME}Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake
         INSTALL_DESTINATION ${ConfigPackageLocation}
-        PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR ${PROJECT_NAME}_LIBRARY_DIR
+        PATH_VARS ${PROJECT_NAME}_INCLUDE_DIR ${PROJECT_NAME}_LIBRARY_DIR ${PROJECT_NAME}_BINARY_DIR
 )
 
 add_custom_target(HashWriteTarget ALL) # Silent call of target. I don't know how to avoid it, sorry :)
