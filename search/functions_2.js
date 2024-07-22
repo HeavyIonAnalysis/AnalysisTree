@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['equalscut_0',['EqualsCut',['../d9/d26/namespaceAnalysisTree.html#a9c0d6f85c4d4903cf28702b392518b18',1,'AnalysisTree::EqualsCut(const std::string &amp;variable_name, int value, const std::string &amp;title)'],['../d9/d26/namespaceAnalysisTree.html#a5635e7ceb6bd2927c0cd261b0b56d3cb',1,'AnalysisTree::EqualsCut(const Variable &amp;var, int value, const std::string &amp;title)']]]
+  ['equalscut_0',['EqualsCut',['../d9/d26/namespaceAnalysisTree.html#a0ef84dc7b399bcd692992e6b6f495a93',1,'AnalysisTree::EqualsCut(const std::string &amp;variable_name, int value, const std::string &amp;title=&quot;&quot;)'],['../d9/d26/namespaceAnalysisTree.html#a43de2d08e1c168ca97cbeaa87800fbf8',1,'AnalysisTree::EqualsCut(const Variable &amp;var, int value, const std::string &amp;title=&quot;&quot;)']]]
 ];
