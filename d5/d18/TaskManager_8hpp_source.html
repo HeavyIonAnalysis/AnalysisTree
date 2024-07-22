@@ -241,45 +241,49 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  <span class="keywordtype">void</span> SetWriteMode(eBranchWriteMode mode) { write_mode_ = mode; }</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  <span class="keywordtype">void</span> SetBranchesExclude(std::vector&lt;std::string&gt; brex) { branches_exclude_ = std::move(brex); }</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>  <span class="keywordtype">void</span> SetVerbosityPeriod(<span class="keywordtype">int</span> value) { verbosity_period_ = value; }</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>  <span class="keywordtype">void</span> ClearTasks() { tasks_.clear(); }</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> <span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>  TaskManager() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>  <span class="keyword">static</span> TaskManager* manager_;</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  <span class="keywordtype">void</span> InitOutChain();</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  <span class="keywordtype">void</span> InitTasks();</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  <span class="comment">// input data members</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>  Chain* chain_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>  std::vector&lt;Task*&gt; tasks_{};</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  <span class="comment">// output data members</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  TFile* out_file_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>  TTree* out_tree_{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a8b1f2c56f901b28b1000ede1cd687cb6">  186</a></span>  <a class="code hl_class" href="../../d8/dee/classAnalysisTree_1_1Configuration.html">Configuration</a>* <a class="code hl_variable" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a8b1f2c56f901b28b1000ede1cd687cb6">configuration_</a>{<span class="keyword">nullptr</span>};</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno"><a class="line" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab7540a6d2044b9ed1a58ddce8c5387d5">  187</a></span>  <a class="code hl_class" href="../../d8/d77/classAnalysisTree_1_1DataHeader.html">DataHeader</a>* <a class="code hl_variable" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab7540a6d2044b9ed1a58ddce8c5387d5">data_header_</a>{<span class="keyword">nullptr</span>};     </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>  std::string out_tree_name_{<span class="stringliteral">&quot;aTree&quot;</span>};</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>  std::string out_file_name_{<span class="stringliteral">&quot;analysis_tree.root&quot;</span>};</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>  std::vector&lt;std::string&gt; branches_exclude_{};</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  <span class="keywordtype">int</span> verbosity_period_{-1};</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  <span class="comment">// configuration parameters</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>  <span class="keywordtype">bool</span> is_init_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>  <span class="keywordtype">bool</span> fill_out_tree_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  <span class="keywordtype">bool</span> read_in_tree_{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>  <span class="keywordtype">bool</span> is_owns_tasks_{<span class="keyword">true</span>};</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  ClassDef(TaskManager, 0);</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>};</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  <span class="keywordtype">void</span> SetIsWriteHashInfo(<span class="keywordtype">bool</span> is=<span class="keyword">true</span>) { is_write_hash_info_ = is; }</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="keywordtype">void</span> ClearTasks() { tasks_.clear(); }</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>  TaskManager() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  <span class="keyword">static</span> TaskManager* manager_;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  <span class="keywordtype">void</span> InitOutChain();</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  <span class="keywordtype">void</span> InitTasks();</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  <span class="keywordtype">void</span> WriteCommitInfo();</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>  <span class="keywordtype">void</span> PrintCommitInfo();</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>  <span class="comment">// input data members</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  Chain* chain_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  std::vector&lt;Task*&gt; tasks_{};</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  <span class="comment">// output data members</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>  TFile* out_file_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>  TTree* out_tree_{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a8b1f2c56f901b28b1000ede1cd687cb6">  189</a></span>  <a class="code hl_class" href="../../d8/dee/classAnalysisTree_1_1Configuration.html">Configuration</a>* <a class="code hl_variable" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a8b1f2c56f901b28b1000ede1cd687cb6">configuration_</a>{<span class="keyword">nullptr</span>};</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab7540a6d2044b9ed1a58ddce8c5387d5">  190</a></span>  <a class="code hl_class" href="../../d8/d77/classAnalysisTree_1_1DataHeader.html">DataHeader</a>* <a class="code hl_variable" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab7540a6d2044b9ed1a58ddce8c5387d5">data_header_</a>{<span class="keyword">nullptr</span>};     </div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>  std::string out_tree_name_{<span class="stringliteral">&quot;aTree&quot;</span>};</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  std::string out_file_name_{<span class="stringliteral">&quot;analysis_tree.root&quot;</span>};</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  std::vector&lt;std::string&gt; branches_exclude_{};</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>  <span class="keywordtype">int</span> verbosity_period_{-1};</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>  <span class="comment">// configuration parameters</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>  <span class="keywordtype">bool</span> is_init_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>  <span class="keywordtype">bool</span> fill_out_tree_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  <span class="keywordtype">bool</span> read_in_tree_{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>  <span class="keywordtype">bool</span> is_owns_tasks_{<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="keywordtype">bool</span> is_write_hash_info_{<span class="keyword">true</span>};</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  ClassDef(TaskManager, 0);</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>};</div>
 </div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>};<span class="comment">// namespace AnalysisTree</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="preprocessor">#endif</span><span class="comment">//ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>};<span class="comment">// namespace AnalysisTree</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span> </div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="preprocessor">#endif</span><span class="comment">//ANALYSISTREE_INFRA_TASKMANANGERNEW_HPP_</span></div>
 <div class="ttc" id="aclassAnalysisTree_1_1BranchConfig_html"><div class="ttname"><a href="../../d8/d4c/classAnalysisTree_1_1BranchConfig.html">AnalysisTree::BranchConfig</a></div><div class="ttdoc">A class to store configuration of the Container.</div><div class="ttdef"><b>Definition</b> BranchConfig.hpp:108</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Branch_html"><div class="ttname"><a href="../../d2/d4d/classAnalysisTree_1_1Branch.html">AnalysisTree::Branch</a></div><div class="ttdef"><b>Definition</b> Branch.hpp:23</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Configuration_html"><div class="ttname"><a href="../../d8/dee/classAnalysisTree_1_1Configuration.html">AnalysisTree::Configuration</a></div><div class="ttdoc">A class to store configuration of the whole AnalysisTree object.</div><div class="ttdef"><b>Definition</b> Configuration.hpp:58</div></div>
@@ -287,12 +291,12 @@ $(function(){ initResizable(false); });
 <div class="ttc" id="aclassAnalysisTree_1_1Detector_html"><div class="ttname"><a href="../../d4/da7/classAnalysisTree_1_1Detector.html">AnalysisTree::Detector</a></div><div class="ttdef"><b>Definition</b> Detector.hpp:21</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Matching_html"><div class="ttname"><a href="../../d8/d42/classAnalysisTree_1_1Matching.html">AnalysisTree::Matching</a></div><div class="ttdef"><b>Definition</b> Matching.hpp:17</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html">AnalysisTree::TaskManager</a></div><div class="ttdef"><b>Definition</b> TaskManager.hpp:32</div></div>
-<div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_a11a064f466596832a85d7a0fcf95417f"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a11a064f466596832a85d7a0fcf95417f">AnalysisTree::TaskManager::Init</a></div><div class="ttdeci">virtual void Init()</div><div class="ttdef"><b>Definition</b> TaskManager.cpp:50</div></div>
+<div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_a11a064f466596832a85d7a0fcf95417f"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a11a064f466596832a85d7a0fcf95417f">AnalysisTree::TaskManager::Init</a></div><div class="ttdeci">virtual void Init()</div><div class="ttdef"><b>Definition</b> TaskManager.cpp:52</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_a3884e7be7b33f2efe8403a55fd08e617"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a3884e7be7b33f2efe8403a55fd08e617">AnalysisTree::TaskManager::SetOwnsTasks</a></div><div class="ttdeci">void SetOwnsTasks(bool owns_flag=true)</div><div class="ttdoc">If TaskManager owns its tasks, they will be deleted on TaskManager' destruction.</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:45</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_a58dac689de25cdb7b5757ae629677507"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a58dac689de25cdb7b5757ae629677507">AnalysisTree::TaskManager::AddBranch</a></div><div class="ttdeci">void AddBranch(BranchPtr *&amp;ptr, const BranchConfig &amp;config)</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:69</div></div>
-<div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_a8b1f2c56f901b28b1000ede1cd687cb6"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a8b1f2c56f901b28b1000ede1cd687cb6">AnalysisTree::TaskManager::configuration_</a></div><div class="ttdeci">Configuration * configuration_</div><div class="ttdoc">output</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:186</div></div>
+<div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_a8b1f2c56f901b28b1000ede1cd687cb6"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#a8b1f2c56f901b28b1000ede1cd687cb6">AnalysisTree::TaskManager::configuration_</a></div><div class="ttdeci">Configuration * configuration_</div><div class="ttdoc">output</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:189</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_aa4ab4ad6b152b4d3c02337fe1b00801e"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#aa4ab4ad6b152b4d3c02337fe1b00801e">AnalysisTree::TaskManager::AddMatching</a></div><div class="ttdeci">void AddMatching(const std::string &amp;br1, const std::string &amp;br2, Matching *&amp;match)</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:119</div></div>
-<div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_ab7540a6d2044b9ed1a58ddce8c5387d5"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab7540a6d2044b9ed1a58ddce8c5387d5">AnalysisTree::TaskManager::data_header_</a></div><div class="ttdeci">DataHeader * data_header_</div><div class="ttdoc">output</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:187</div></div>
+<div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_ab7540a6d2044b9ed1a58ddce8c5387d5"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab7540a6d2044b9ed1a58ddce8c5387d5">AnalysisTree::TaskManager::data_header_</a></div><div class="ttdeci">DataHeader * data_header_</div><div class="ttdoc">output</div><div class="ttdef"><b>Definition</b> TaskManager.hpp:190</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1TaskManager_html_ab855b806c375c592324e23fe756957d1"><div class="ttname"><a href="../../d2/d83/classAnalysisTree_1_1TaskManager.html#ab855b806c375c592324e23fe756957d1">AnalysisTree::TaskManager::GetInstance</a></div><div class="ttdeci">static TaskManager * GetInstance()</div><div class="ttdef"><b>Definition</b> TaskManager.cpp:12</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Task_html"><div class="ttname"><a href="../../d8/dcf/classAnalysisTree_1_1Task.html">AnalysisTree::Task</a></div><div class="ttdef"><b>Definition</b> Task.hpp:25</div></div>
 <div class="ttc" id="anamespaceAnalysisTree_html"><div class="ttname"><a href="../../d9/d26/namespaceAnalysisTree.html">AnalysisTree</a></div><div class="ttdoc">Cuts keep list of SimpleCuts. Logical AND is applied for all SimpleCut in the Cuts object.</div><div class="ttdef"><b>Definition</b> BranchConfig.cpp:10</div></div>
