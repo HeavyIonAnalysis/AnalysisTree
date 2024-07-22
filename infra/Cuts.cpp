@@ -44,7 +44,7 @@ bool Cuts::Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id
   if (!is_init_) {
     throw std::runtime_error("Cuts::Apply - cut is not initialized!!");
   }
-  if(bch.size() != id.size()) {
+  if (bch.size() != id.size()) {
     throw std::runtime_error("AnalysisTree::Cuts::Apply() - BranchChannel and Id vectors must have the same size");
   }
   //    std::all_of(cuts_.begin(), cuts_.end(), Apply(a, a_id, b, b_id)); //TODO

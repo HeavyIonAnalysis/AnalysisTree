@@ -44,16 +44,18 @@ void BranchChannel::MergeContentFromTwoChannels(const BranchChannel& first, cons
   int matching_case{-1};
   bool first_channel_active = !first.IsNullChannel();
   bool second_channel_active = !second.IsNullChannel();
-  if(first_channel_active) {
-    if(second_channel_active) matching_case = 0;
-    else                      matching_case = 1;
+  if (first_channel_active) {
+    if (second_channel_active) matching_case = 0;
+    else
+      matching_case = 1;
   } else {
-    if(second_channel_active) matching_case = 2;
-    else                      throw std::runtime_error("BranchChannel::MergeContentFromTwoChannels() : both channels are null");
+    if (second_channel_active) matching_case = 2;
+    else
+      throw std::runtime_error("BranchChannel::MergeContentFromTwoChannels() : both channels are null");
   }
 
-  if(first_channel_active) CopyContent(first);
-  if(second_channel_active) CopyContent(second, second.branch_->GetBranchName());
+  if (first_channel_active) CopyContent(first);
+  if (second_channel_active) CopyContent(second, second.branch_->GetBranchName());
   this->SetValue(branch_->GetField("matching_case"), matching_case);
 }
 
@@ -69,14 +71,14 @@ double BranchChannel::Value(const Field& v) const {
   //  assert(v.GetBranchId() == branch_->GetId()); // TODO
   assert(v.IsInitialized());
 
-  if(v.GetName() == "ones") return 1;
+  if (v.GetName() == "ones") return 1;
 
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
     case Types::kFloat: return ANALYSISTREE_UTILS_VISIT(get_field_struct<float>(v.GetFieldId()), data_ptr_);
     case Types::kInteger: return ANALYSISTREE_UTILS_VISIT(get_field_struct<int>(v.GetFieldId()), data_ptr_);
     case Types::kBool: return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
-    default: throw std::runtime_error("Field type is not correct!"); //NOTE commented because of Ones field NOTE now commented again
+    default: throw std::runtime_error("Field type is not correct!");//NOTE commented because of Ones field NOTE now commented again
   }
 }
 

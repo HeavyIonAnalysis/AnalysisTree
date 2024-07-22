@@ -260,7 +260,7 @@ Configuration* Chain::CloneConfiguration() const {
       const int Nbranches = lob->GetEntries();
       for (int i = 0; i < Nbranches; i++) {
         std::string name_i = lob->At(i)->GetName();
-        if(name_i.back() == '.') {
+        if (name_i.back() == '.') {
           name_i.pop_back();
         }
         result->RemoveBranchConfig(name_i);

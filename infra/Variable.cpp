@@ -73,20 +73,20 @@ double Variable::GetValue(const BranchChannel& object) const {
 
 double Variable::GetValue(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
   assert(is_init_);
-  if(bch.size() != id.size()) {
+  if (bch.size() != id.size()) {
     throw std::runtime_error("AnalysisTree::Variable::GetValue() - BranchChannel and Id vectors must have the same size");
   }
   vars_.clear();
   for (const auto& field : fields_) {
     bool success{false};
-    for(int i=0; i<bch.size(); i++) {
-      if(field.GetBranchId() == id.at(i)) {
+    for (int i = 0; i < bch.size(); i++) {
+      if (field.GetBranchId() == id.at(i)) {
         vars_.emplace_back(bch.at(i)->Value(field));
         success = true;
         break;
       }
     }
-    if(!success) {
+    if (!success) {
       throw std::runtime_error("Variable::Fill - Cannot fill value from branch " + field.GetBranchName());
     }
   }

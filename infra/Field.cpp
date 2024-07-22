@@ -46,7 +46,7 @@ void Field::Init(const BranchConfig& branch_conf) {
   branch_type_ = branch_conf.GetType();
   field_id_ = branch_conf.GetFieldId(field_);
   field_type_ = branch_conf.GetFieldType(field_);
-  if (field_id_ == UndefValueInt && field_!="ones") {
+  if (field_id_ == UndefValueInt && field_ != "ones") {
     std::cout << "WARNING!! Field::Init - " << field_ << " is not found in branch " << branch_ << std::endl;
   }
   is_init_ = true;

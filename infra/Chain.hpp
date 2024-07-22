@@ -96,7 +96,7 @@ class Chain : public TChain {
   /**
  * @brief Clones tree without friends
  */
-  TTree* CloneChain(int nentries=0);
+  TTree* CloneChain(int nentries = 0);
 
   /**
  * @brief Clones Configuration of input Chain without friends

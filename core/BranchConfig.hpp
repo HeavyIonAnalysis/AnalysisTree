@@ -85,7 +85,7 @@ class VectorConfig {
 
     int name_strlen{0};
     for (const auto& entry : map_) {
-      name_strlen = std::max(name_strlen, (int)entry.first.length());
+      name_strlen = std::max(name_strlen, (int) entry.first.length());
     }
     name_strlen += 4;
 
