@@ -54,7 +54,7 @@ SimpleCut::SimpleCut(const Variable& var, double min, double max, std::string ti
 }
 
 bool SimpleCut::Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
-  if(bch.size() != id.size()) {
+  if (bch.size() != id.size()) {
     throw std::runtime_error("AnalysisTree::SimpleCut::Apply() - BranchChannel and Id vectors must have the same size");
   }
   std::vector<double> variables;

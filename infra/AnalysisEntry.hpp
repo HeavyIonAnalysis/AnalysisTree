@@ -26,9 +26,9 @@ class AnalysisEntry {
   AnalysisEntry() = default;
   virtual ~AnalysisEntry();
 
-  explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr, Variable vars4weight={}) : vars_(std::move(vars)),
-                                                                                                      var4weight_(std::move(vars4weight)),
-                                                                                                      cuts_(cuts) {
+  explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr, Variable vars4weight = {}) : vars_(std::move(vars)),
+                                                                                                        var4weight_(std::move(vars4weight)),
+                                                                                                        cuts_(cuts) {
     var4weight_.IfEmptyVariableConvertToOnes(vars_.at(0));
     FillBranchNames();
   };
@@ -77,7 +77,7 @@ class AnalysisEntry {
   Matching* matching_{nullptr};///< non-owning
   bool is_inverted_matching_{false};
 
-  array2D values_{};///< channels<variables>
+  array2D values_{}; ///< channels<variables>
   array1D weights_{};///< channels<weights>
 
   ClassDef(AnalysisEntry, 1);

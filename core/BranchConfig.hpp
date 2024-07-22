@@ -83,9 +83,15 @@ class VectorConfig {
       std::cout << std::endl;
     };
 
-    print_row({{"Id", 10}, {"Name", 20}, {"Info", 50}});
+    int name_strlen{0};
     for (const auto& entry : map_) {
-      print_row({{std::to_string(entry.second.id_), 10}, {entry.first, 20}, {entry.second.title_, 50}});
+      name_strlen = std::max(name_strlen, (int) entry.first.length());
+    }
+    name_strlen += 4;
+
+    print_row({{"Id", 10}, {"Name", name_strlen}, {"Info", 50}});
+    for (const auto& entry : map_) {
+      print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {entry.second.title_, 50}});
     }
   }
 
@@ -154,6 +160,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
  */
   ANALYSISTREE_ATTR_NODISCARD BranchConfig Clone(const std::string& name, DetType type) const;
 
+  ANALYSISTREE_ATTR_NODISCARD BranchConfig CloneAndMerge(const BranchConfig& attached) const;
+
   bool HasField(const std::string& field) const { return GetFieldId(field) != UndefValueShort; }
 
  protected:
@@ -165,6 +173,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
   ClassDefOverride(BranchConfig, 3);
 };
+
+// BranchConfig Merge(const BranchConfig& primary, const BranchConfig& secondary);
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_BRANCHCONFIG_H

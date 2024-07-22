@@ -109,6 +109,28 @@ BranchConfig BranchConfig::Clone(const std::string& name, DetType type) const {
   return result;
 }
 
+BranchConfig BranchConfig::CloneAndMerge(const BranchConfig& attached) const {
+  const std::string name1 = GetName();
+  const std::string name2 = attached.GetName();
+  const DetType type1 = GetType();
+
+  auto result = Clone(name1 + "_" + name2, type1);
+
+  for (const auto& field : attached.AnalysisTree::VectorConfig<float>::map_) {
+    result.AddField<float>(name2 + "_" + field.first, name2 + ": " + field.second.title_);
+  }
+  for (const auto& field : attached.AnalysisTree::VectorConfig<int>::map_) {
+    result.AddField<int>(name2 + "_" + field.first, name2 + ": " + field.second.title_);
+  }
+  for (const auto& field : attached.AnalysisTree::VectorConfig<bool>::map_) {
+    result.AddField<bool>(name2 + "_" + field.first, name2 + ": " + field.second.title_);
+  }
+
+  result.AddField<int>("matching_case", "0 - both present, 1 - only first present, 2 - only second present");
+
+  return result;
+}
+
 void BranchConfig::Print() const {
   std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;
   std::cout << "Floating fields:" << std::endl;

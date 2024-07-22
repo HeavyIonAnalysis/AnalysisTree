@@ -57,6 +57,7 @@ class Branch {
   void InitDataPtr();
 
   BranchChannel NewChannel();
+  BranchChannel NullChannel();
   void ClearChannels();
   Field NewVariable(const std::string& field_name, const std::string& title, AnalysisTree::Types type);
   void CloneVariables(const AnalysisTree::BranchConfig& other);
@@ -139,7 +140,7 @@ class Branch {
 
   void CopyContentsRaw(Branch* other);
 
-  void CreateMapping(const Branch* other) const;
+  void CreateMapping(const Branch* other, std::string branch_name_prefix = "") const;
 
   void UpdateConfigHash();
 

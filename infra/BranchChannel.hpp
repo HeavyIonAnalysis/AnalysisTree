@@ -42,11 +42,15 @@ class BranchChannel {
    * @param other
    * @return
    */
-  void CopyContent(const BranchChannel& other);
+  void CopyContent(const BranchChannel& other, std::string branch_name_prefix = "");
+
+  void MergeContentFromTwoChannels(const BranchChannel& first, const BranchChannel& second);
 
   void CopyContentRaw(const BranchChannel& other);
 
   void Print(std::ostream& os = std::cout) const;
+
+  [[nodiscard]] bool IsNullChannel() const { return branch_ == nullptr; }
 
  private:
   friend Branch;

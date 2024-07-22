@@ -9,7 +9,7 @@
 namespace AnalysisTree {
 
 AnalysisEntry::~AnalysisEntry() {
-  for(auto& br : branches_) {
+  for (auto& br : branches_) {
     delete br.first;
   }
 }
@@ -24,7 +24,7 @@ bool AnalysisEntry::ApplyCutOnBranch(const Branch& br, Cuts* cuts, int i_channel
 }
 
 bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vector<Cuts*>& cuts, std::vector<int>& ch) const {
-  if(br.size() != cuts.size() || cuts.size() != ch.size()) {
+  if (br.size() != cuts.size() || cuts.size() != ch.size()) {
     throw std::runtime_error("AnalysisTree::AnalysisEntry::ApplyCutOnBranches() - Branch, Cuts and Ch vectors must have the same size");
   }
   bool ok{true};
@@ -32,10 +32,10 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
   std::vector<size_t> id_vec;
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
-  for(int i=0; i<br.size(); i++) {
+  for (int i = 0; i < br.size(); i++) {
     BranchChannel* bchptr = new BranchChannel(br.at(i), ch.at(i));
-    if(cuts.at(i) != nullptr) {
-      if(!cuts.at(i)->Apply(*bchptr)) {
+    if (cuts.at(i) != nullptr) {
+      if (!cuts.at(i)->Apply(*bchptr)) {
         ok = false;
         delete bchptr;
         break;
@@ -45,7 +45,7 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
     id_vec.emplace_back(br.at(i)->GetId());
   }
   bool result = ok && (!cuts_ || cuts_->Apply(bch_vec, id_vec));
-  for(auto& bv : bch_vec) {
+  for (auto& bv : bch_vec) {
     delete bv;
   }
   return result;
@@ -64,20 +64,20 @@ bool AnalysisEntry::ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, 
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id) {
-  if(br.size() != id.size()) {
+  if (br.size() != id.size()) {
     throw std::runtime_error("AnalysisTree::AnalysisEntry::FillVariable() - Branch and Id vectors must have the same size");
   }
   std::vector<const BranchChannel*> bch_vec;
   std::vector<size_t> id_vec;
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
-  for(int i=0; i<br.size(); i++) {
+  for (int i = 0; i < br.size(); i++) {
     BranchChannel* bchptr = new BranchChannel(br.at(i), id.at(i));
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
   }
   double result = var.GetValue(bch_vec, id_vec);
-  for(auto& bv : bch_vec) {
+  for (auto& bv : bch_vec) {
     delete bv;
   }
   return result;
@@ -116,7 +116,7 @@ void AnalysisEntry::FillFromEveHeaders() {
   br_vec.reserve(branches_.size());
   cuts_vec.reserve(branches_.size());
   id_vec.reserve(branches_.size());
-  for(auto& br : branches_) {
+  for (auto& br : branches_) {
     br_vec.emplace_back(br.first);
     cuts_vec.emplace_back(br.second);
     id_vec.emplace_back(0);
@@ -150,11 +150,11 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
   br_vec.reserve(branches_.size());
   cuts_vec.reserve(branches_.size());
   id_vec.resize(branches_.size());
-  for(const auto& br : branches_) {
+  for (const auto& br : branches_) {
     br_vec.emplace_back(br.first);
     cuts_vec.emplace_back(br.second);
   }
-  for(auto& ehi : eve_header_indices_) {
+  for (auto& ehi : eve_header_indices_) {
     id_vec.at(ehi) = 0;
   }
 
@@ -178,7 +178,7 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
 * It iterates over registered matches and fills variables
 */
 void AnalysisEntry::FillFromTwoChannalizedBranches() {
-  if(matching_ == nullptr) {
+  if (matching_ == nullptr) {
     throw std::runtime_error("AnalysisEntry::FillFromTwoChannalizedBranches() - Matching between non-EventHeader branches must be set");
   }
 
@@ -191,11 +191,11 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
   br_vec.reserve(branches_.size());
   cuts_vec.reserve(branches_.size());
   id_vec.resize(branches_.size());
-  for(const auto& br : branches_) {
+  for (const auto& br : branches_) {
     br_vec.emplace_back(br.first);
     cuts_vec.emplace_back(br.second);
   }
-  for(auto& ehi : eve_header_indices_) {
+  for (auto& ehi : eve_header_indices_) {
     id_vec.at(ehi) = 0;
   }
 
@@ -236,22 +236,22 @@ void AnalysisEntry::Init(const Configuration& conf, const std::map<std::string, 
   var4weight_.Init(conf);
 
   int i{0};
-  for(auto& bn : branch_names_) {
-    if(conf.GetBranchConfig(bn).GetType() == DetType::kEventHeader) {
+  for (auto& bn : branch_names_) {
+    if (conf.GetBranchConfig(bn).GetType() == DetType::kEventHeader) {
       eve_header_indices_.push_back(i);
     } else {
       non_eve_header_indices_.push_back(i);
     }
     i++;
   }
-  if(branch_names_.size() == 0) {
+  if (branch_names_.size() == 0) {
     throw std::runtime_error("AnalysisEntry::Init() - at least 1 branch is needed");
   }
-  if(non_eve_header_indices_.size() > 2) {
+  if (non_eve_header_indices_.size() > 2) {
     throw std::runtime_error("AnalysisEntry::Init() - 2 non-EventHeader branches are allowed as maximum");
   }
 
-  if(non_eve_header_indices_.size() == 2) {
+  if (non_eve_header_indices_.size() == 2) {
     auto match_info = conf.GetMatchInfo(*std::next(branch_names_.begin(), non_eve_header_indices_.at(0)), *std::next(branch_names_.begin(), non_eve_header_indices_.at(1)));
     SetIsInvertedMatching(match_info.second);
     SetMatching((Matching*) matches.find(match_info.first)->second);

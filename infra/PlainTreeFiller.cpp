@@ -5,8 +5,8 @@
 
 #include "TTree.h"
 
-#include "TaskManager.hpp"
 #include "PlainTreeFiller.hpp"
+#include "TaskManager.hpp"
 
 namespace AnalysisTree {
 
@@ -57,8 +57,8 @@ void PlainTreeFiller::Init() {
     plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
   }
 
-  for(auto& cm : cuts_map_) {
-    if(cm.second != nullptr) {
+  for (auto& cm : cuts_map_) {
+    if (cm.second != nullptr) {
       cm.second->Init(*(TaskManager::GetInstance()->GetChain()->GetConfiguration()));
     }
   }
