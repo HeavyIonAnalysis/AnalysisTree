@@ -9,3 +9,6 @@ message ("AnalysisTree_INCLUDE_DIR = ${AnalysisTree_INCLUDE_DIR}")
 
 set(AnalysisTree_LIBRARY_DIR	"@PACKAGE_AnalysisTree_LIBRARY_DIR@")
 message ("AnalysisTree_LIBRARY_DIR = ${AnalysisTree_LIBRARY_DIR}")
+
+set(AnalysisTree_BINARY_DIR	"@PACKAGE_AnalysisTree_BINARY_DIR@")
+message ("AnalysisTree_BINARY_DIR = ${AnalysisTree_BINARY_DIR}")

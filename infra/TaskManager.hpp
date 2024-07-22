@@ -166,6 +166,7 @@ class TaskManager {
   void SetWriteMode(eBranchWriteMode mode) { write_mode_ = mode; }
   void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
   void SetVerbosityPeriod(int value) { verbosity_period_ = value; }
+  void SetIsWriteHashInfo(bool is=true) { is_write_hash_info_ = is; }
 
   void ClearTasks() { tasks_.clear(); }
 
@@ -175,6 +176,8 @@ class TaskManager {
 
   void InitOutChain();
   void InitTasks();
+  void WriteCommitInfo();
+  void PrintCommitInfo();
 
   // input data members
   Chain* chain_{nullptr};
@@ -197,6 +200,7 @@ class TaskManager {
   bool fill_out_tree_{false};
   bool read_in_tree_{false};
   bool is_owns_tasks_{true};
+  bool is_write_hash_info_{true};
 
   ClassDef(TaskManager, 0);
 };

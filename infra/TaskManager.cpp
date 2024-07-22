@@ -37,6 +37,8 @@ void TaskManager::Init(const std::vector<std::string>& filelists, const std::vec
     InitOutChain();
   }
 
+  PrintCommitInfo();
+
   InitTasks();
 }
 
@@ -112,6 +114,19 @@ void TaskManager::Run(long long nEvents) {
   std::cout << "elapsed time: " << elapsed_seconds.count() << ", per event: " << elapsed_seconds.count() / nEvents << "s\n";
 }
 
+void TaskManager::WriteCommitInfo() {
+  std::string commit = std::getenv("ANALYSIS_TREE_COMMIT_HASH") ? std::getenv("ANALYSIS_TREE_COMMIT_HASH") : "unknown";
+  std::string is_original = std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") ? std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") : "unknown";
+  TNamed("AnalysisTree_commit_hash", commit).Write();
+  TNamed("AnalysisTree_commit_is_original", is_original).Write();
+}
+
+void TaskManager::PrintCommitInfo() {
+  std::string commit = std::getenv("ANALYSIS_TREE_COMMIT_HASH") ? std::getenv("ANALYSIS_TREE_COMMIT_HASH") : "unknown";
+  std::string is_original = std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") ? std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") : "unknown";
+  std::cout << "ANALYSIS_TREE_COMMIT_HASH = " << commit << "\n" << "ANALYSIS_TREE_COMMIT_ORIGINAL = " << is_original << "\n";
+}
+
 void TaskManager::Finish() {
 
   for (auto* task : tasks_) {
@@ -130,6 +145,7 @@ void TaskManager::Finish() {
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
+    if(is_write_hash_info_) WriteCommitInfo();
     out_file_->Close();
     out_tree_ = nullptr;
     delete out_file_;
