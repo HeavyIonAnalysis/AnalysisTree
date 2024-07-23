@@ -140,3 +140,12 @@ install(FILES
         COMPONENT
         Devel
         )
+
+install(FILES
+        ${CMAKE_BINARY_DIR}/AnalysisTreeDiff.patch
+        DESTINATION
+        bin
+        COMPONENT
+        Devel
+        OPTIONAL
+        )
