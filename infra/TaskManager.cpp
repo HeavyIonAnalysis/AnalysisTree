@@ -169,4 +169,13 @@ TaskManager::~TaskManager() {
   }
   ClearTasks();
 }
+void TaskManager::Exec() {
+  for (auto* task : tasks_) {
+    if (!task->IsGoodEvent(*chain_)) continue;
+    task->Exec();
+  }
+  if (fill_out_tree_ && is_update_entry_in_exec_) {
+    FillOutput();
+  }
+}
 }// namespace AnalysisTree
