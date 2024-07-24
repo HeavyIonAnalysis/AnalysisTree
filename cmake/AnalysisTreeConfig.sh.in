@@ -2,6 +2,7 @@ source ${ROOT_BINDIR}/thisroot.sh
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${CMAKE_INSTALL_PREFIX}/lib
 export ROOT_INCLUDE_PATH=$ROOT_INCLUDE_PATH:${CMAKE_INSTALL_PREFIX}/include/AnalysisTree
 export PATH=$PATH:${CMAKE_INSTALL_PREFIX}/bin
+export AnalysisTree_DIR=${CMAKE_INSTALL_PREFIX}/lib/cmake/AnalysisTree
 if [ -f "${CMAKE_INSTALL_PREFIX}/bin/AnalysisTreeHash.sh" ]; then
 source ${CMAKE_INSTALL_PREFIX}/bin/AnalysisTreeHash.sh
 fi
