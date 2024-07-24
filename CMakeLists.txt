@@ -134,7 +134,7 @@ install(FILES
 
 install(FILES
         ${CMAKE_BINARY_DIR}/AnalysisTreeConfig.sh
-        ${CMAKE_BINARY_DIR}/AnalysisTreeHash.sh
+        ${CMAKE_CURRENT_BINARY_DIR}/AnalysisTreeHash.sh
         DESTINATION
         bin
         COMPONENT
@@ -142,7 +142,7 @@ install(FILES
         )
 
 install(FILES
-        ${CMAKE_BINARY_DIR}/AnalysisTreeDiff.patch
+        ${CMAKE_CURRENT_BINARY_DIR}/AnalysisTreeDiff.patch
         DESTINATION
         bin
         COMPONENT
