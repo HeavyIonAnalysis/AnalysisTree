@@ -105,7 +105,7 @@ configure_package_config_file(
 add_custom_target(HashWriteTarget ALL) # Silent call of target. I don't know how to avoid it, sorry :)
 add_custom_command(TARGET HashWriteTarget
                    POST_BUILD
-                   COMMAND /bin/sh ${CMAKE_SOURCE_DIR}/cmake/AnalysisTreeHashWriter.sh ${CMAKE_SOURCE_DIR}
+                   COMMAND /bin/sh ${CMAKE_CURRENT_SOURCE_DIR}/cmake/AnalysisTreeHashWriter.sh ${CMAKE_CURRENT_SOURCE_DIR}
                    )
 
 install(EXPORT ${PROJECT_NAME}Targets
