@@ -145,15 +145,7 @@ class TaskManager {
   }
   void FillOutput() { out_tree_->Fill(); }
 
-  void Exec() {
-    for (auto* task : tasks_) {
-      if (!task->IsGoodEvent(*chain_)) continue;
-      task->Exec();
-    }
-    if (fill_out_tree_) {
-      FillOutput();
-    }
-  }
+  void Exec();
 
   std::vector<Task*>& Tasks() { return tasks_; }
 
@@ -167,6 +159,7 @@ class TaskManager {
   void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
   void SetVerbosityPeriod(int value) { verbosity_period_ = value; }
   void SetIsWriteHashInfo(bool is=true) { is_write_hash_info_ = is; }
+  void SetIsUpdateEntryInExec(bool is = true) { is_update_entry_in_exec_ = is; }
 
   void ClearTasks() { tasks_.clear(); }
 
@@ -176,8 +169,8 @@ class TaskManager {
 
   void InitOutChain();
   void InitTasks();
-  void WriteCommitInfo();
-  void PrintCommitInfo();
+  static void WriteCommitInfo();
+  static void PrintCommitInfo();
 
   // input data members
   Chain* chain_{nullptr};
@@ -198,6 +191,7 @@ class TaskManager {
   eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
   bool is_init_{false};
   bool fill_out_tree_{false};
+  bool is_update_entry_in_exec_{true};
   bool read_in_tree_{false};
   bool is_owns_tasks_{true};
   bool is_write_hash_info_{true};

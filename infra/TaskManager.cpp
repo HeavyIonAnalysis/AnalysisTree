@@ -115,16 +115,21 @@ void TaskManager::Run(long long nEvents) {
 }
 
 void TaskManager::WriteCommitInfo() {
+  std::string tag = std::getenv("ANALYSIS_TREE_TAG") ? std::getenv("ANALYSIS_TREE_TAG") : "unknown";
   std::string commit = std::getenv("ANALYSIS_TREE_COMMIT_HASH") ? std::getenv("ANALYSIS_TREE_COMMIT_HASH") : "unknown";
   std::string is_original = std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") ? std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") : "unknown";
+  TNamed("AnalysisTree_tag", tag).Write();
   TNamed("AnalysisTree_commit_hash", commit).Write();
   TNamed("AnalysisTree_commit_is_original", is_original).Write();
 }
 
 void TaskManager::PrintCommitInfo() {
+  std::string tag = std::getenv("ANALYSIS_TREE_TAG") ? std::getenv("ANALYSIS_TREE_TAG") : "unknown";
   std::string commit = std::getenv("ANALYSIS_TREE_COMMIT_HASH") ? std::getenv("ANALYSIS_TREE_COMMIT_HASH") : "unknown";
   std::string is_original = std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") ? std::getenv("ANALYSIS_TREE_COMMIT_ORIGINAL") : "unknown";
-  std::cout << "ANALYSIS_TREE_COMMIT_HASH = " << commit << "\n" << "ANALYSIS_TREE_COMMIT_ORIGINAL = " << is_original << "\n";
+  std::cout << "ANALYSIS_TREE_TAG = " << tag << "\n"
+            << "ANALYSIS_TREE_COMMIT_HASH = " << commit << "\n"
+            << "ANALYSIS_TREE_COMMIT_ORIGINAL = " << is_original << "\n";
 }
 
 void TaskManager::Finish() {
@@ -168,5 +173,14 @@ TaskManager::~TaskManager() {
     }
   }
   ClearTasks();
+}
+void TaskManager::Exec() {
+  for (auto* task : tasks_) {
+    if (!task->IsGoodEvent(*chain_)) continue;
+    task->Exec();
+  }
+  if (fill_out_tree_ && is_update_entry_in_exec_) {
+    FillOutput();
+  }
 }
 }// namespace AnalysisTree
