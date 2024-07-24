@@ -1,17 +1,17 @@
 <map id="AnalysisTree::TaskManager" name="AnalysisTree::TaskManager">
-<area shape="rect" id="Node000001" title=" " alt="" coords="195,1097,369,1742"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="370,1356,380,1365,388,1378,394,1397,395,1419,392,1449,383,1470,378,1468,387,1448,390,1419,388,1398,383,1381,376,1368,367,1360"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="195,1097,369,1777"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="370,1370,380,1379,388,1394,394,1413,395,1437,392,1468,383,1490,378,1488,387,1467,390,1437,388,1414,383,1396,376,1383,366,1374"/>
 <area shape="rect" id="Node000002" href="$d7/d86/classAnalysisTree_1_1Chain.html" title=" " alt="" coords="199,568,365,1034"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="285,1033,285,1080,279,1080,279,1033"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="285,1034,285,1080,279,1080,279,1034"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="234,280,287,345"/>
 <area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="265,360,275,568,269,569,260,361"/>
 <area shape="rect" id="Node000004" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,120,209,505"/>
-<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="83,505,74,625,71,758,78,897,87,966,100,1033,117,1092,138,1151,190,1261,185,1263,133,1153,111,1094,95,1034,82,967,73,898,66,759,68,625,78,505"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="84,505,75,625,72,758,79,897,88,966,100,1033,117,1095,138,1156,190,1271,185,1273,133,1158,111,1096,95,1034,82,967,74,898,67,758,70,625,79,505"/>
 <area shape="poly" id="edge4_Node000002_Node000004" title=" " alt="" coords="164,504,177,543,196,593,191,595,172,545,159,506"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="219,5,278,71"/>
 <area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="228,85,209,122,204,119,223,83"/>
 <area shape="rect" id="Node000006" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="311,120,474,505"/>
 <area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="280,82,302,119,314,141,309,144,297,121,275,85"/>
-<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="397,505,397,544,398,790,394,897,379,1034,372,1080,367,1080,374,1033,389,897,392,790,391,544,392,505"/>
+<area shape="poly" id="edge9_Node000001_Node000006" title=" " alt="" coords="397,505,397,544,397,790,394,897,379,1034,372,1080,367,1080,374,1033,388,897,392,790,391,544,392,505"/>
 <area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="315,506,309,530,304,552,298,551,303,529,310,504"/>
 </map>

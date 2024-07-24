@@ -92,6 +92,7 @@ $(function(){ initResizable(false); });
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="../../dc/dd7/classAnalysisTree_1_1TaskManager-members.html">List of all members</a>  </div>
@@ -103,20 +104,20 @@ Collaboration diagram for AnalysisTree::TaskManager:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d7/d18/classAnalysisTree_1_1TaskManager__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1TaskManager_coll__map" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1TaskManager_coll__map" id="aAnalysisTree_1_1TaskManager_coll__map">
-<area shape="rect" title=" " alt="" coords="195,1097,369,1742"/>
-<area shape="poly" title=" " alt="" coords="370,1356,380,1365,388,1378,394,1397,395,1419,392,1449,383,1470,378,1468,387,1448,390,1419,388,1398,383,1381,376,1368,367,1360"/>
+<area shape="rect" title=" " alt="" coords="195,1097,369,1777"/>
+<area shape="poly" title=" " alt="" coords="370,1370,380,1379,388,1394,394,1413,395,1437,392,1468,383,1490,378,1488,387,1467,390,1437,388,1414,383,1396,376,1383,366,1374"/>
 <area shape="rect" href="../../d7/d86/classAnalysisTree_1_1Chain.html" title=" " alt="" coords="199,568,365,1034"/>
-<area shape="poly" title=" " alt="" coords="285,1033,285,1080,279,1080,279,1033"/>
+<area shape="poly" title=" " alt="" coords="285,1034,285,1080,279,1080,279,1034"/>
 <area shape="rect" title=" " alt="" coords="234,280,287,345"/>
 <area shape="poly" title=" " alt="" coords="265,360,275,568,269,569,260,361"/>
 <area shape="rect" href="../../d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,120,209,505"/>
-<area shape="poly" title=" " alt="" coords="83,505,74,625,71,758,78,897,87,966,100,1033,117,1092,138,1151,190,1261,185,1263,133,1153,111,1094,95,1034,82,967,73,898,66,759,68,625,78,505"/>
+<area shape="poly" title=" " alt="" coords="84,505,75,625,72,758,79,897,88,966,100,1033,117,1095,138,1156,190,1271,185,1273,133,1158,111,1096,95,1034,82,967,74,898,67,758,70,625,79,505"/>
 <area shape="poly" title=" " alt="" coords="164,504,177,543,196,593,191,595,172,545,159,506"/>
 <area shape="rect" title=" " alt="" coords="219,5,278,71"/>
 <area shape="poly" title=" " alt="" coords="228,85,209,122,204,119,223,83"/>
 <area shape="rect" href="../../d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="311,120,474,505"/>
 <area shape="poly" title=" " alt="" coords="280,82,302,119,314,141,309,144,297,121,275,85"/>
-<area shape="poly" title=" " alt="" coords="397,505,397,544,398,790,394,897,379,1034,372,1080,367,1080,374,1033,389,897,392,790,391,544,392,505"/>
+<area shape="poly" title=" " alt="" coords="397,505,397,544,397,790,394,897,379,1034,372,1080,367,1080,374,1033,388,897,392,790,391,544,392,505"/>
 <area shape="poly" title=" " alt="" coords="315,506,309,530,304,552,298,551,303,529,310,504"/>
 </map>
 </div>
@@ -195,6 +196,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetVerbosityPeriod</b
 <tr class="memitem:ad110998732642ab30873745205ff59f1" id="r_ad110998732642ab30873745205ff59f1"><td class="memItemLeft" align="right" valign="top"><a id="ad110998732642ab30873745205ff59f1" name="ad110998732642ab30873745205ff59f1"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetIsWriteHashInfo</b> (bool is=true)</td></tr>
 <tr class="separator:ad110998732642ab30873745205ff59f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad381b992ea6c22f83c59fae31b770385" id="r_ad381b992ea6c22f83c59fae31b770385"><td class="memItemLeft" align="right" valign="top"><a id="ad381b992ea6c22f83c59fae31b770385" name="ad381b992ea6c22f83c59fae31b770385"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetIsUpdateEntryInExec</b> (bool is=true)</td></tr>
+<tr class="separator:ad381b992ea6c22f83c59fae31b770385"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3b845766f0dfa3d59de8dc99d8876f08" id="r_a3b845766f0dfa3d59de8dc99d8876f08"><td class="memItemLeft" align="right" valign="top"><a id="a3b845766f0dfa3d59de8dc99d8876f08" name="a3b845766f0dfa3d59de8dc99d8876f08"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>ClearTasks</b> ()</td></tr>
 <tr class="separator:a3b845766f0dfa3d59de8dc99d8876f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,15 +216,18 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>InitOutChain</b> ()</
 <tr class="memitem:a975fef64ca7609183bc78a315d48e117" id="r_a975fef64ca7609183bc78a315d48e117"><td class="memItemLeft" align="right" valign="top"><a id="a975fef64ca7609183bc78a315d48e117" name="a975fef64ca7609183bc78a315d48e117"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>InitTasks</b> ()</td></tr>
 <tr class="separator:a975fef64ca7609183bc78a315d48e117"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc79ecbd91584ab3ba2f791897985d30" id="r_adc79ecbd91584ab3ba2f791897985d30"><td class="memItemLeft" align="right" valign="top"><a id="adc79ecbd91584ab3ba2f791897985d30" name="adc79ecbd91584ab3ba2f791897985d30"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCommitInfo</b> ()</td></tr>
-<tr class="separator:adc79ecbd91584ab3ba2f791897985d30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49cdcb94ced17d4f3d6c68cda7001daf" id="r_a49cdcb94ced17d4f3d6c68cda7001daf"><td class="memItemLeft" align="right" valign="top"><a id="a49cdcb94ced17d4f3d6c68cda7001daf" name="a49cdcb94ced17d4f3d6c68cda7001daf"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PrintCommitInfo</b> ()</td></tr>
-<tr class="separator:a49cdcb94ced17d4f3d6c68cda7001daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c827c2cc78b9d9e571136732c6d5186" id="r_a7c827c2cc78b9d9e571136732c6d5186"><td class="memItemLeft" align="right" valign="top"><a id="a7c827c2cc78b9d9e571136732c6d5186" name="a7c827c2cc78b9d9e571136732c6d5186"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ClassDef</b> (<a class="el" href="../../d2/d83/classAnalysisTree_1_1TaskManager.html">TaskManager</a>, 0)</td></tr>
 <tr class="separator:a7c827c2cc78b9d9e571136732c6d5186"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
+Static Protected Member Functions</h2></td></tr>
+<tr class="memitem:adc79ecbd91584ab3ba2f791897985d30" id="r_adc79ecbd91584ab3ba2f791897985d30"><td class="memItemLeft" align="right" valign="top"><a id="adc79ecbd91584ab3ba2f791897985d30" name="adc79ecbd91584ab3ba2f791897985d30"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>WriteCommitInfo</b> ()</td></tr>
+<tr class="separator:adc79ecbd91584ab3ba2f791897985d30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49cdcb94ced17d4f3d6c68cda7001daf" id="r_a49cdcb94ced17d4f3d6c68cda7001daf"><td class="memItemLeft" align="right" valign="top"><a id="a49cdcb94ced17d4f3d6c68cda7001daf" name="a49cdcb94ced17d4f3d6c68cda7001daf"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>PrintCommitInfo</b> ()</td></tr>
+<tr class="separator:a49cdcb94ced17d4f3d6c68cda7001daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -265,6 +272,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_init_</b> {false}<
 <tr class="memitem:aa43d7474a386c8f4b9d605df8b8a9d6b" id="r_aa43d7474a386c8f4b9d605df8b8a9d6b"><td class="memItemLeft" align="right" valign="top"><a id="aa43d7474a386c8f4b9d605df8b8a9d6b" name="aa43d7474a386c8f4b9d605df8b8a9d6b"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>fill_out_tree_</b> {false}</td></tr>
 <tr class="separator:aa43d7474a386c8f4b9d605df8b8a9d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3ba153c72d0e8f8c484e49bd6922909" id="r_aa3ba153c72d0e8f8c484e49bd6922909"><td class="memItemLeft" align="right" valign="top"><a id="aa3ba153c72d0e8f8c484e49bd6922909" name="aa3ba153c72d0e8f8c484e49bd6922909"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_update_entry_in_exec_</b> {true}</td></tr>
+<tr class="separator:aa3ba153c72d0e8f8c484e49bd6922909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b500a7ee0062bf78b966b4d628e8646" id="r_a0b500a7ee0062bf78b966b4d628e8646"><td class="memItemLeft" align="right" valign="top"><a id="a0b500a7ee0062bf78b966b4d628e8646" name="a0b500a7ee0062bf78b966b4d628e8646"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>read_in_tree_</b> {false}</td></tr>
 <tr class="separator:a0b500a7ee0062bf78b966b4d628e8646"><td class="memSeparator" colspan="2">&#160;</td></tr>
