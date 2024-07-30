@@ -91,12 +91,12 @@ class VectorConfig {
 
     print_row({{"Id", 10}, {"Name", name_strlen}, {"Info", 50}});
     for (const auto& entry : map_) {
-      if(entry.second.title_.find("\n") == std::string::npos) {
+      if (entry.second.title_.find("\n") == std::string::npos) {
         print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {entry.second.title_, 50}});
       } else {
         auto est = SplitString(entry.second.title_);
         print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {est.at(0), 50}});
-        for(int iest=1; iest<est.size(); ++iest) {
+        for (int iest = 1; iest < est.size(); ++iest) {
           print_row({{"", 10}, {"", name_strlen}, {est.at(iest), 50}});
         }
       }

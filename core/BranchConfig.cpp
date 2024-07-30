@@ -137,12 +137,12 @@ std::vector<std::string> VectorConfig<T>::SplitString(const std::string& input) 
   std::vector<int> newlinepositions{-1};
   int it{0};
   while (it < std::string::npos) {
-    it = input.find("\n", it+1);
+    it = input.find("\n", it + 1);
     newlinepositions.emplace_back(it);
   }
   newlinepositions.back() = input.size();
-  for(int ip=0; ip<newlinepositions.size()-1; ++ip) {
-    result.emplace_back(input.substr(newlinepositions.at(ip)+1, newlinepositions.at(ip+1) - newlinepositions.at(ip) - 1));
+  for (int ip = 0; ip < newlinepositions.size() - 1; ++ip) {
+    result.emplace_back(input.substr(newlinepositions.at(ip) + 1, newlinepositions.at(ip + 1) - newlinepositions.at(ip) - 1));
   }
 
   return result;
