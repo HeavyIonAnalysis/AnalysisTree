@@ -1,9 +1,9 @@
 <map id="AnalysisTree::BranchConfig" name="AnalysisTree::BranchConfig">
-<area shape="rect" id="Node000001" title="A class to store configuration of the Container." alt="" coords="196,433,367,779"/>
-<area shape="rect" id="Node000002" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,173,385"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,388,203,433,199,435,177,390"/>
-<area shape="rect" id="Node000003" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="197,5,365,385"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="284,400,284,433,279,433,279,400"/>
-<area shape="rect" id="Node000004" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="389,5,557,385"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="385,390,364,435,359,433,381,388"/>
+<area shape="rect" id="Node000001" title="A class to store configuration of the Container." alt="" coords="196,453,367,799"/>
+<area shape="rect" id="Node000002" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,173,405"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,402,205,452,200,455,177,404"/>
+<area shape="rect" id="Node000003" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="197,5,365,405"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="284,420,284,454,279,454,279,420"/>
+<area shape="rect" id="Node000004" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="389,5,557,405"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="386,404,362,455,358,452,381,402"/>
 </map>
