@@ -41,4 +41,21 @@ float Track::GetMassByPdgId(PdgCode_t pdg) {
   }
 }
 
+int Track::GetChargeByPdgId(PdgCode_t pdg) {
+
+  if (pdg > 1000000000) {//100ZZZAAA0
+    auto Z = (pdg % 10000000) / 10000;
+    return Z;
+  }
+  auto db = TDatabasePDG::Instance();
+  auto particle = db->GetParticle(pdg);
+
+  if (particle) {
+    return int(particle->Charge()/3);
+  } else {
+    throw std::runtime_error("Mass of " + std::to_string(pdg) + " is not known");
+  }
+}
+
+
 }// namespace AnalysisTree
