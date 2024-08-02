@@ -67,7 +67,8 @@ enum TrackFields : ShortInt_t {
   kPy = -5,
   kPz = -6,
   kP = -7,
-  kId = -8
+  kQ = -8,
+  kId = -9
 };
 }
 
@@ -85,7 +86,8 @@ enum ParticleFields : ShortInt_t {
   kP = -10,
   kEnergy = -11,
   kKineticEnergy = -12,
-  kId = -13
+  kQ = -13,
+  kId = -14
 };
 }
 

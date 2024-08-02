@@ -25,6 +25,7 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("phi", TrackFields::kPhi, "azimuthal angle");
     VectorConfig<float>::AddField("eta", TrackFields::kEta, "pseudorapidity");
     VectorConfig<float>::AddField("p", TrackFields::kP, "GeV/c");
+    VectorConfig<int>::AddField("q", TrackFields::kQ, "Charge of the track (or its sign when absolute value unknown)");
     VectorConfig<int>::AddField("id", TrackFields::kId, "unique id");
   } else if (type_ == DetType::kParticle) {
     VectorConfig<float>::AddField("px", ParticleFields::kPx, "GeV/c");
@@ -38,6 +39,7 @@ BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(nam
     VectorConfig<float>::AddField("E", ParticleFields::kEnergy, "full energy, GeV");
     VectorConfig<float>::AddField("T", ParticleFields::kKineticEnergy, "kinetic energy, GeV");
     VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity, "in Lab. frame");
+    VectorConfig<int>::AddField("q", ParticleFields::kQ, "Charge of the particle");
     VectorConfig<int>::AddField("pid", ParticleFields::kPid, "PDG code");
     VectorConfig<int>::AddField("id", ParticleFields::kId, "unique id");
   } else if (type_ == DetType::kHit) {
@@ -146,6 +148,12 @@ std::vector<std::string> VectorConfig<T>::SplitString(const std::string& input) 
   }
 
   return result;
+}
+
+void BranchConfig::GuaranteeFieldNameVacancy(const std::string& name) const {
+  if (HasField(name)) {
+    throw std::runtime_error("BranchConfig::GuaranteeFieldNameVacancy(): field " + name + " already exists");
+  }
 }
 
 void BranchConfig::Print() const {

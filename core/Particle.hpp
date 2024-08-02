@@ -55,6 +55,7 @@ class Particle : public Track {
         case ParticleFields::kPx: return GetPx();
         case ParticleFields::kPy: return GetPy();
         case ParticleFields::kPz: return GetPz();
+        case ParticleFields::kQ: return GetCharge();
         case ParticleFields::kId: return GetId();
         default: throw std::out_of_range("Particle::GetField - Index " + std::to_string(iField) + " is not found");
       }
@@ -71,6 +72,7 @@ class Particle : public Track {
         case ParticleFields::kPy: py_ = value; break;
         case ParticleFields::kPz: pz_ = value; break;
         case ParticleFields::kMass: mass_ = value; break;
+        case ParticleFields::kQ: charge_ = value; break;
         case ParticleFields::kPid: SetPid(value); break;
         case ParticleFields::kId: break;
         case ParticleFields::kP: /*throw std::runtime_error("Cannot set transient fields");*/ break;

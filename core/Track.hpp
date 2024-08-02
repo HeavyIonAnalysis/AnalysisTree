@@ -63,6 +63,8 @@ class Track : public Container {
     pz_ = momentum.Pz();
   }
 
+  void SetCharge(Int_t charge) noexcept { charge_ = charge; }
+
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPx() const noexcept { return px_; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPy() const noexcept { return py_; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPz() const noexcept { return pz_; }
@@ -70,6 +72,7 @@ class Track : public Container {
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPhi() const noexcept { return atan2(py_, px_); }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetEta() const noexcept { return 0.5f * log((GetP() + pz_) / (GetP() - pz_)); }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetP() const noexcept { return sqrt(px_ * px_ + py_ * py_ + pz_ * pz_); }
+  ANALYSISTREE_ATTR_NODISCARD inline Integer_t GetCharge() const noexcept { return charge_; }
 
   /**
   * @return 3d-momentum of a track
@@ -120,6 +123,7 @@ class Track : public Container {
         case TrackFields::kPx: return GetPx();
         case TrackFields::kPy: return GetPy();
         case TrackFields::kPz: return GetPz();
+        case TrackFields::kQ: return GetCharge();
         case TrackFields::kId: return GetId();
         default: throw std::out_of_range("Track::GetField - Index " + std::to_string(id) + " is not found");
       }
@@ -135,6 +139,7 @@ class Track : public Container {
         case TrackFields::kPx: px_ = value; break;
         case TrackFields::kPy: py_ = value; break;
         case TrackFields::kPz: pz_ = value; break;
+        case TrackFields::kQ: charge_ = value; break;
         case TrackFields::kId: break;
         case TrackFields::kP: /*throw std::runtime_error("Cannot set transient fields");*/ break;
         case TrackFields::kPt: /*throw std::runtime_error("Cannot set transient fields");*/ break;
@@ -152,10 +157,12 @@ class Track : public Container {
 
  protected:
   static float GetMassByPdgId(PdgCode_t pdg);
+  static int GetChargeByPdgId(PdgCode_t pdg);
 
   Floating_t px_{UndefValueFloat};///< x-component of track's momentum
   Floating_t py_{UndefValueFloat};///< y-component of track's momentum
   Floating_t pz_{UndefValueFloat};///< z-component of track's momentum
+  Integer_t charge_{-1000};
 
   ClassDefOverride(Track, 2);
 };

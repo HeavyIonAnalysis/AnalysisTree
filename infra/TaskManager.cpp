@@ -150,7 +150,7 @@ void TaskManager::Finish() {
     out_tree_->Write();
     configuration_->Write("Configuration");
     data_header_->Write("DataHeader");
-    if(is_write_hash_info_) WriteCommitInfo();
+    if (is_write_hash_info_) WriteCommitInfo();
     out_file_->Close();
     out_tree_ = nullptr;
     delete out_file_;
