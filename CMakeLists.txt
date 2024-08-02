@@ -147,5 +147,4 @@ install(FILES
         bin
         COMPONENT
         Devel
-        OPTIONAL
         )

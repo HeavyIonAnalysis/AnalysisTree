@@ -3,7 +3,7 @@
 FILE_HASH=AnalysisTreeHash.sh
 FILE_DIFF=AnalysisTreeDiff.patch
 if [ -f $FILE_HASH ]; then
-rm $FILE_HASH
+rm $FILE_HASH $FILE_DIFF
 fi
 
 SRC_DIR=${1}
@@ -20,8 +20,8 @@ if [ -z "${GITSTATUS}" ]; then
 echo "export ANALYSIS_TREE_COMMIT_ORIGINAL=TRUE" >> $FILE_HASH
 else
 echo "export ANALYSIS_TREE_COMMIT_ORIGINAL=FALSE" >> $FILE_HASH
-git diff >> $FILE_DIFF
 fi
+git diff >> $FILE_DIFF
 else
 cd -
 echo "export ANALYSIS_TREE_TAG=NOT_A_GIT_REPO" >> $FILE_HASH
