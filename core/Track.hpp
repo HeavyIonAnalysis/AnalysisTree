@@ -63,6 +63,8 @@ class Track : public Container {
     pz_ = momentum.Pz();
   }
 
+  void SetCharge(Int_t charge) noexcept { charge_ = charge; }
+
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPx() const noexcept { return px_; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPy() const noexcept { return py_; }
   ANALYSISTREE_ATTR_NODISCARD inline Floating_t GetPz() const noexcept { return pz_; }

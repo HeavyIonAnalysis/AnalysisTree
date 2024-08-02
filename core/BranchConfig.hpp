@@ -134,14 +134,19 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   // Setters
   template<typename T>
   void AddField(const std::string& name, const std::string& title = "") {
+    GuaranteeFieldNameVacancy(name);
     VectorConfig<T>::AddField(name, title);
   }
   template<typename T>
   void AddFields(const std::vector<std::string>& names, const std::string& title = "") {
+    for(auto& n : names) {
+      GuaranteeFieldNameVacancy(n);
+    }
     VectorConfig<T>::AddFields(names, title);
   }
   template<typename T>
   void AddField(const std::string& name, ShortInt_t id, const std::string& title = "") {
+    GuaranteeFieldNameVacancy(name);
     VectorConfig<T>::AddField(name, id, title);
   }
 
@@ -175,6 +180,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
 
  protected:
   void GenerateId();
+
+  void GuaranteeFieldNameVacancy(const std::string& name) const;
 
   std::string name_;
   size_t id_{0};

@@ -150,6 +150,12 @@ std::vector<std::string> VectorConfig<T>::SplitString(const std::string& input) 
   return result;
 }
 
+void BranchConfig::GuaranteeFieldNameVacancy(const std::string& name) const {
+  if(HasField(name)) {
+    throw std::runtime_error("BranchConfig::GuaranteeFieldNameVacancy(): field " + name + " already exists");
+  }
+}
+
 void BranchConfig::Print() const {
   std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;
   std::cout << "Floating fields:" << std::endl;
