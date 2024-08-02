@@ -125,9 +125,11 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   BranchConfig& operator=(const BranchConfig&) = default;
   ~BranchConfig() override = default;
 
-  BranchConfig(std::string name, DetType type);
+  BranchConfig(std::string name, DetType type, std::string title="");
 
   void Print() const override;
+
+  void PrintBranchId() const;
 
   ANALYSISTREE_ATTR_NODISCARD Types GetFieldType(const std::string& sField) const;
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetFieldId(const std::string& sField) const;
@@ -159,6 +161,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
     }
   }
 
+  void SetTitle(std::string title) { title_ = std::move(title); }
+
   // Getters
   template<typename T>
   ANALYSISTREE_ATTR_NODISCARD const MapType& GetMap() const { return VectorConfig<T>::GetMap(); }
@@ -166,6 +170,8 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   ANALYSISTREE_ATTR_NODISCARD ShortInt_t GetSize() const { return VectorConfig<T>::GetSize(); }
 
   ANALYSISTREE_ATTR_NODISCARD std::string GetName() const { return name_; }
+  ANALYSISTREE_ATTR_NODISCARD std::string GetTitle() const { return title_; }
+
   template<typename T>
   ANALYSISTREE_ATTR_NODISCARD std::vector<std::string> GetFieldsNamesT() const {
     std::vector<std::string> result;
@@ -193,10 +199,11 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   void GuaranteeFieldNameVacancy(const std::string& name) const;
 
   std::string name_;
+  std::string title_;
   size_t id_{0};
   DetType type_{DetType(UndefValueShort)};
 
-  ClassDefOverride(BranchConfig, 3);
+  ClassDefOverride(BranchConfig, 4);
 };
 
 // BranchConfig Merge(const BranchConfig& primary, const BranchConfig& secondary);

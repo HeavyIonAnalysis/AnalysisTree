@@ -14,7 +14,7 @@ void BranchConfig::GenerateId() {
   id_ = id_hasher(name_);
 }
 
-BranchConfig::BranchConfig(std::string name, DetType type) : name_(std::move(name)), type_(type) {
+BranchConfig::BranchConfig(std::string name, DetType type, std::string title) : name_(std::move(name)), type_(type), title_(std::move(title)) {
   GenerateId();
 
   if (type_ == DetType::kTrack) {
@@ -184,13 +184,18 @@ void BranchConfig::GuaranteeFieldNameVacancy(const std::string& name) const {
 }
 
 void BranchConfig::Print() const {
-  std::cout << "Branch " << name_ << " (id=" << id_ << ") consists of:" << std::endl;
-  std::cout << "Floating fields:" << std::endl;
+  std::cout << "Branch " << name_ << " (" << title_ << ") consists of:" << std::endl;
+  std::cout << "\nFloating fields:" << std::endl;
   VectorConfig<float>::Print();
-  std::cout << "Integer fields:" << std::endl;
+  std::cout << "\nInteger fields:" << std::endl;
   VectorConfig<int>::Print();
-  std::cout << "Boolean fields:" << std::endl;
+  std::cout << "\nBoolean fields:" << std::endl;
   VectorConfig<bool>::Print();
   //  std::cout << std::endl;
 }
+
+void BranchConfig::PrintBranchId() const {
+  std::cout << "Branch " << name_ << " (id=" << id_ << ")" << std::endl;
+}
+
 }// namespace AnalysisTree

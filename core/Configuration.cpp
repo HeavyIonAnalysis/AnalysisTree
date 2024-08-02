@@ -87,6 +87,13 @@ void Configuration::Print(Option_t*) const {
   }
 }
 
+void Configuration::PrintBranchIds() const {
+  for (const auto& branch : branches_) {
+    std::cout << std::endl;
+    branch.second.PrintBranchId();
+  }
+}
+
 const std::string& Configuration::GetMatchName(const std::string& br1, const std::string& br2) const {
   auto search = matches_index_.find({br1, br2});
   if (search != matches_index_.end()) {
