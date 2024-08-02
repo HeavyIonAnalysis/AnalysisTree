@@ -139,7 +139,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   }
   template<typename T>
   void AddFields(const std::vector<std::string>& names, const std::string& title = "") {
-    for(auto& n : names) {
+    for (auto& n : names) {
       GuaranteeFieldNameVacancy(n);
     }
     VectorConfig<T>::AddFields(names, title);

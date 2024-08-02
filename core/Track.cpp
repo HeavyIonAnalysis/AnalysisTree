@@ -51,11 +51,10 @@ int Track::GetChargeByPdgId(PdgCode_t pdg) {
   auto particle = db->GetParticle(pdg);
 
   if (particle) {
-    return int(particle->Charge()/3);
+    return int(particle->Charge() / 3);
   } else {
     throw std::runtime_error("Mass of " + std::to_string(pdg) + " is not known");
   }
 }
-
 
 }// namespace AnalysisTree

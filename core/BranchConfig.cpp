@@ -151,7 +151,7 @@ std::vector<std::string> VectorConfig<T>::SplitString(const std::string& input) 
 }
 
 void BranchConfig::GuaranteeFieldNameVacancy(const std::string& name) const {
-  if(HasField(name)) {
+  if (HasField(name)) {
     throw std::runtime_error("BranchConfig::GuaranteeFieldNameVacancy(): field " + name + " already exists");
   }
 }

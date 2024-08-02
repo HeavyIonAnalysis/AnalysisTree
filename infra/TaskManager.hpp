@@ -158,7 +158,7 @@ class TaskManager {
   void SetWriteMode(eBranchWriteMode mode) { write_mode_ = mode; }
   void SetBranchesExclude(std::vector<std::string> brex) { branches_exclude_ = std::move(brex); }
   void SetVerbosityPeriod(int value) { verbosity_period_ = value; }
-  void SetIsWriteHashInfo(bool is=true) { is_write_hash_info_ = is; }
+  void SetIsWriteHashInfo(bool is = true) { is_write_hash_info_ = is; }
   void SetIsUpdateEntryInExec(bool is = true) { is_update_entry_in_exec_ = is; }
 
   void ClearTasks() { tasks_.clear(); }
