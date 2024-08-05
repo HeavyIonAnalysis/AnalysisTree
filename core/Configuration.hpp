@@ -98,6 +98,8 @@ class Configuration : public TObject {
 
   void Print(Option_t* = "") const;
 
+  void PrintBranchIds() const;
+
   static MatchingIndex MakeMatchingIndex(const std::vector<MatchingConfig>& matches) {
     MatchingIndex result;
     for (auto& match : matches) {
