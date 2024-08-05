@@ -18,46 +18,46 @@ BranchConfig::BranchConfig(std::string name, DetType type, std::string title) : 
   GenerateId();
 
   if (type_ == DetType::kTrack) {
-    VectorConfig<float>::AddField("px", TrackFields::kPx, "GeV/c");
-    VectorConfig<float>::AddField("py", TrackFields::kPy, "GeV/c");
-    VectorConfig<float>::AddField("pz", TrackFields::kPz, "GeV/c");
-    VectorConfig<float>::AddField("pT", TrackFields::kPt, "GeV/c");
-    VectorConfig<float>::AddField("phi", TrackFields::kPhi, "azimuthal angle");
-    VectorConfig<float>::AddField("eta", TrackFields::kEta, "pseudorapidity");
-    VectorConfig<float>::AddField("p", TrackFields::kP, "GeV/c");
+    VectorConfig<float>::AddField("px", TrackFields::kPx, "X-projection of the momentum of the track, GeV/c");
+    VectorConfig<float>::AddField("py", TrackFields::kPy, "Y-projection of the momentum of the track, GeV/c");
+    VectorConfig<float>::AddField("pz", TrackFields::kPz, "Z-projection of the momentum of the track, GeV/c");
+    VectorConfig<float>::AddField("pT", TrackFields::kPt, "Transverse momentum of the track, GeV/c");
+    VectorConfig<float>::AddField("phi", TrackFields::kPhi, "Azimuthal angle of the track, rad");
+    VectorConfig<float>::AddField("eta", TrackFields::kEta, "Pseudorapidity of the track");
+    VectorConfig<float>::AddField("p", TrackFields::kP, "Full momentum of the track, GeV/c");
     VectorConfig<int>::AddField("q", TrackFields::kQ, "Charge of the track (or its sign when absolute value unknown)");
-    VectorConfig<int>::AddField("id", TrackFields::kId, "unique id");
+    VectorConfig<int>::AddField("id", TrackFields::kId, "Unique id of the track within current event; assigned automatically (not by user)");
   } else if (type_ == DetType::kParticle) {
-    VectorConfig<float>::AddField("px", ParticleFields::kPx, "GeV/c");
-    VectorConfig<float>::AddField("py", ParticleFields::kPy, "GeV/c");
-    VectorConfig<float>::AddField("pz", ParticleFields::kPz, "GeV/c");
-    VectorConfig<float>::AddField("pT", ParticleFields::kPt, "GeV/c");
-    VectorConfig<float>::AddField("phi", ParticleFields::kPhi, "azimuthal angle");
-    VectorConfig<float>::AddField("eta", ParticleFields::kEta, "pseudorapidity");
-    VectorConfig<float>::AddField("mass", ParticleFields::kMass, "GeV/c^2");
-    VectorConfig<float>::AddField("p", ParticleFields::kP, "GeV/c");
-    VectorConfig<float>::AddField("E", ParticleFields::kEnergy, "full energy, GeV");
-    VectorConfig<float>::AddField("T", ParticleFields::kKineticEnergy, "kinetic energy, GeV");
-    VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity, "in Lab. frame");
-    VectorConfig<int>::AddField("q", ParticleFields::kQ, "Charge of the particle");
-    VectorConfig<int>::AddField("pid", ParticleFields::kPid, "PDG code");
-    VectorConfig<int>::AddField("id", ParticleFields::kId, "unique id");
+    VectorConfig<float>::AddField("px", ParticleFields::kPx, "X-projection of the momentum of the particle, GeV/c");
+    VectorConfig<float>::AddField("py", ParticleFields::kPy, "Y-projection of the momentum of the particle, GeV/c");
+    VectorConfig<float>::AddField("pz", ParticleFields::kPz, "Z-projection of the momentum of the particle, GeV/c");
+    VectorConfig<float>::AddField("pT", ParticleFields::kPt, "Transverse momentum of the particle, GeV/c");
+    VectorConfig<float>::AddField("phi", ParticleFields::kPhi, "Azimuthal angle of the particle, rad");
+    VectorConfig<float>::AddField("eta", ParticleFields::kEta, "Pseudorapidity of the particle");
+    VectorConfig<float>::AddField("mass", ParticleFields::kMass, "Mass of the particle, GeV/c^2 (true mass of certain particle species; deprecated to use for invariant mass, mass from TOF etc.)");
+    VectorConfig<float>::AddField("p", ParticleFields::kP, "Full momentum of the particle, GeV/c");
+    VectorConfig<float>::AddField("E", ParticleFields::kEnergy, "Full energy of the particle, GeV");
+    VectorConfig<float>::AddField("T", ParticleFields::kKineticEnergy, "Kinetic energy of the particle, GeV");
+    VectorConfig<float>::AddField("rapidity", ParticleFields::kRapidity, "Rapidity of the particle");
+    VectorConfig<int>::AddField("q", ParticleFields::kQ, "Charge of the particle (true charge of certain particle species)");
+    VectorConfig<int>::AddField("pid", ParticleFields::kPid, "PDG code of the particle (e.g. by simulation for MC-particles or the most probable one for reconstructed particles with performed PID etc.)");
+    VectorConfig<int>::AddField("id", ParticleFields::kId, "Unique id of the particle within current event; assigned automatically (not by user)");
   } else if (type_ == DetType::kHit) {
-    VectorConfig<float>::AddField("x", HitFields::kX, "cm");
-    VectorConfig<float>::AddField("y", HitFields::kY, "cm");
-    VectorConfig<float>::AddField("z", HitFields::kZ, "cm");
-    VectorConfig<float>::AddField("phi", HitFields::kPhi, "azimuthal angle");
-    VectorConfig<float>::AddField("signal", HitFields::kSignal, "");
-    VectorConfig<int>::AddField("id", HitFields::kId, "unique id");
+    VectorConfig<float>::AddField("x", HitFields::kX, "X coordinate of the hit, cm");
+    VectorConfig<float>::AddField("y", HitFields::kY, "Y coordinate of the hit, cm");
+    VectorConfig<float>::AddField("z", HitFields::kZ, "Z coordinate of the hit, cm");
+    VectorConfig<float>::AddField("phi", HitFields::kPhi, "Azimuthal angle of the hit, rad");
+    VectorConfig<float>::AddField("signal", HitFields::kSignal, "Energy deposit collected in the hit");
+    VectorConfig<int>::AddField("id", HitFields::kId, "Unique id of the hit within current event; assigned automatically (not by user)");
   } else if (type_ == DetType::kModule) {
-    VectorConfig<int>::AddField("number", ModuleFields::kNumber, "module number");
-    VectorConfig<float>::AddField("signal", ModuleFields::kSignal, "");
-    VectorConfig<int>::AddField("id", ModuleFields::kId, "unique id");
+    VectorConfig<int>::AddField("number", ModuleFields::kNumber, "Module number");
+    VectorConfig<float>::AddField("signal", ModuleFields::kSignal, "Energy deposit collected in the module");
+    VectorConfig<int>::AddField("id", ModuleFields::kId, "Unique id of the hit within current event; assigned automatically (not by user)");
   } else if (type_ == DetType::kEventHeader) {
-    VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX, "cm");
-    VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY, "cm");
-    VectorConfig<float>::AddField("vtx_z", EventHeaderFields::kVertexZ, "cm");
-    VectorConfig<int>::AddField("id", EventHeaderFields::kId, "unique id");
+    VectorConfig<float>::AddField("vtx_x", EventHeaderFields::kVertexX, "X coordinate of the vertex, cm");
+    VectorConfig<float>::AddField("vtx_y", EventHeaderFields::kVertexY, "Y coordinate of the vertex, cm");
+    VectorConfig<float>::AddField("vtx_z", EventHeaderFields::kVertexZ, "Z coordinate of the vertex, cm");
+    VectorConfig<int>::AddField("id", EventHeaderFields::kId, "Always 0, this field is not used for EventHeader and is needed for compatibility with other Container types");
   }
 }
 
