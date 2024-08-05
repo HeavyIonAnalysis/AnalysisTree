@@ -29,10 +29,20 @@ class Particle : public Track {
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetMass() const { return mass_; }
 
   void SetMass(Floating_t mass) {
+    CheckIsAllowedSetMassAndChargeExplicitly();
     mass_ = mass;
   }
 
+  void SetCharge(Int_t charge) {
+    CheckIsAllowedSetMassAndChargeExplicitly();
+    Track::SetCharge(charge);
+  }
+
   void SetPid(PdgCode_t pid);
+
+  void SetIsAllowedSetMassAndChargeExplicitly(bool is=true) { is_allowed_set_charge_and_mass_explicitly_ = is; }
+
+  void CheckIsAllowedSetMassAndChargeExplicitly() const;
 
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetEnergy() const { return sqrt(mass_ * mass_ + GetP() * GetP()); }
   ANALYSISTREE_ATTR_NODISCARD Floating_t GetKineticEnergy() const { return GetEnergy() - mass_; }
@@ -90,6 +100,7 @@ class Particle : public Track {
  protected:
   Floating_t mass_{-1000.f};
   PdgCode_t pid_{0};
+  bool is_allowed_set_charge_and_mass_explicitly_{false};//!
 
   ClassDefOverride(Particle, 2);
 };
