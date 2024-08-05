@@ -1,7 +1,7 @@
 <map id="AnalysisTree::Track" name="AnalysisTree::Track">
 <area shape="rect" id="Node000001" title="A class for a generic track with determined momentum." alt="" coords="23,632,165,1017"/>
-<area shape="rect" id="Node000004" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="25,1065,163,1371"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="97,1033,97,1066,91,1066,91,1033"/>
+<area shape="rect" id="Node000004" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="16,1065,172,1405"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="97,1032,97,1066,91,1066,91,1032"/>
 <area shape="rect" id="Node000002" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="19,259,169,584"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,599,97,632,91,632,91,599"/>
 <area shape="rect" id="Node000003" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="5,5,183,211"/>
