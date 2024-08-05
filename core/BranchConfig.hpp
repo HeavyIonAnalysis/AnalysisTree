@@ -125,7 +125,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   BranchConfig& operator=(const BranchConfig&) = default;
   ~BranchConfig() override = default;
 
-  BranchConfig(std::string name, DetType type, std::string title="");
+  BranchConfig(std::string name, DetType type, std::string title = "");
 
   void Print() const override;
 
