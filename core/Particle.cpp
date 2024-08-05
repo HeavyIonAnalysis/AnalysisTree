@@ -16,7 +16,7 @@ void Particle::SetPid(PdgCode_t pid) {
 }
 
 void Particle::CheckIsAllowedSetMassAndChargeExplicitly() const {
-  if(!is_allowed_set_charge_and_mass_explicitly_) {
+  if (!is_allowed_set_charge_and_mass_explicitly_) {
     std::string message = "Particle::CheckIsAllowedSetMassAndChargeExplicitly(): ";
     message += "mass and charge of the particle are set automatically with SetPid() call ";
     message += "(unless they were already assigned with some values, incl. when copied content from Track to Particle). ";

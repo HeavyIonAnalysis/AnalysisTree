@@ -40,7 +40,7 @@ class Particle : public Track {
 
   void SetPid(PdgCode_t pid);
 
-  void SetIsAllowedSetMassAndChargeExplicitly(bool is=true) { is_allowed_set_charge_and_mass_explicitly_ = is; }
+  void SetIsAllowedSetMassAndChargeExplicitly(bool is = true) { is_allowed_set_charge_and_mass_explicitly_ = is; }
 
   void CheckIsAllowedSetMassAndChargeExplicitly() const;
 
