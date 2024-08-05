@@ -154,7 +154,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   void RemoveField(const std::string& name);
 
   void RemoveFields(const std::vector<std::string>& names) {
-    for(auto& n : names) {
+    for (auto& n : names) {
       RemoveField(n);
     }
   }
