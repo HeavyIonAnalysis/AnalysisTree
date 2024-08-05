@@ -105,6 +105,7 @@ class VectorConfig {
 
  protected:
   static std::vector<std::string> SplitString(const std::string& input);
+  void RemoveField(const std::string& name, int id);
   MapType map_{};
   ShortInt_t size_{0};
   ClassDef(VectorConfig, 2)
@@ -148,6 +149,14 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   void AddField(const std::string& name, ShortInt_t id, const std::string& title = "") {
     GuaranteeFieldNameVacancy(name);
     VectorConfig<T>::AddField(name, id, title);
+  }
+
+  void RemoveField(const std::string& name);
+
+  void RemoveFields(const std::vector<std::string>& names) {
+    for(auto& n : names) {
+      RemoveField(n);
+    }
   }
 
   // Getters

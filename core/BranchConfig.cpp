@@ -128,7 +128,9 @@ BranchConfig BranchConfig::CloneAndMerge(const BranchConfig& attached) const {
     result.AddField<bool>(name2 + "_" + field.first, name2 + ": " + field.second.title_);
   }
 
-  result.AddField<int>("matching_case", "0 - both present, 1 - only first present, 2 - only second present");
+  if(type1!=DetType::kEventHeader && attached.GetType()!=DetType::kEventHeader) {
+    result.AddField<int>("matching_case", "0 - both present, 1 - only first present, 2 - only second present");
+  }
 
   return result;
 }
@@ -148,6 +150,31 @@ std::vector<std::string> VectorConfig<T>::SplitString(const std::string& input) 
   }
 
   return result;
+}
+
+template<typename T>
+void VectorConfig<T>::RemoveField(const std::string& name, int id) {
+  auto iter = map_.find(name);
+  map_.erase(iter);
+  for(auto& m : map_) {
+    if(m.second.id_>id) {
+      m.second.id_ --;
+    }
+  }
+}
+
+void BranchConfig::RemoveField(const std::string& name) {
+  if(!HasField(name)) {
+    throw std::runtime_error("BranchConfig::RemoveField(): no field " + name + " to be removed");
+  }
+  auto field_type = GetFieldType(name);
+  auto field_id = GetFieldId(name);
+  if(field_id<0) {
+    throw std::runtime_error("BranchConfig::RemoveField(): default field " + name + " cannot be removed");
+  }
+  if(field_type == Types::kInteger) VectorConfig<int>::RemoveField(name, field_id);
+  if(field_type == Types::kFloat) VectorConfig<float>::RemoveField(name, field_id);
+  if(field_type == Types::kBool) VectorConfig<bool>::RemoveField(name, field_id);
 }
 
 void BranchConfig::GuaranteeFieldNameVacancy(const std::string& name) const {
