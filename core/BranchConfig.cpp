@@ -189,7 +189,8 @@ void BranchConfig::Print() const {
   VectorConfig<float>::Print();
   std::cout << "\nInteger fields:" << std::endl;
   VectorConfig<int>::Print();
-  std::cout << "\nBoolean fields:" << std::endl;
+  const std::string boolean_fields_empty_message = VectorConfig<bool>::map_.empty() ? " no boolean fields in this branch" : "";
+  std::cout << "\nBoolean fields:" << boolean_fields_empty_message << std::endl << std::endl;
   VectorConfig<bool>::Print();
   //  std::cout << std::endl;
 }
