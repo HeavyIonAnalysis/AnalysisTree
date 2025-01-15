@@ -94,6 +94,9 @@ class SimpleCut {
 
   void Print() const;
 
+  void SetTitle(const std::string& title) { title_ = title; }
+  const std::string& GetTitle() const { return title_; }
+
   std::vector<Variable>& Variables() { return vars_; }
   ANALYSISTREE_ATTR_NODISCARD const std::vector<Variable>& GetVariables() const { return vars_; }
   ANALYSISTREE_ATTR_NODISCARD const std::set<std::string>& GetBranches() const { return branch_names_; }
