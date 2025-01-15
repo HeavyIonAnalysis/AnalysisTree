@@ -4,6 +4,7 @@ install_c++17/*
 build_c++17/*
 .project
 .idea/*
+.vscode/*
 Doxygen/*
 
 
