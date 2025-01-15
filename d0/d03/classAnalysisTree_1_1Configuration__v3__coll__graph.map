@@ -1,5 +1,5 @@
 <map id="AnalysisTree::Configuration_v3" name="AnalysisTree::Configuration_v3">
-<area shape="rect" id="Node000001" title="Some ROOT magic, ask Eugeny." alt="" coords="5,119,195,224"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="71,5,129,71"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,85,103,119,97,119,97,85"/>
+<area shape="rect" id="Node000001" title="Some ROOT magic, ask Eugeny." alt="" coords="5,120,193,227"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="71,5,128,72"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,87,102,120,96,120,96,87"/>
 </map>

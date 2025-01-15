@@ -1,14 +1,14 @@
 <map id="UserTaskRead" name="UserTaskRead">
-<area shape="rect" id="Node000001" title=" " alt="" coords="253,983,378,1128"/>
-<area shape="rect" id="Node000002" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="233,568,397,934"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="318,948,318,983,313,983,313,948"/>
-<area shape="rect" id="Node000003" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,120,209,505"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="201,504,228,562,224,564,196,506"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="181,5,239,71"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,86,182,121,177,120,190,84"/>
-<area shape="rect" id="Node000005" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="234,120,397,505"/>
-<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="230,84,244,119,239,121,225,86"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="318,505,318,551,313,551,313,505"/>
-<area shape="rect" id="Node000006" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="421,120,543,505"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="426,506,411,545,406,558,401,556,406,543,421,504"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="251,996,377,1144"/>
+<area shape="rect" id="Node000002" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="232,576,396,947"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="317,962,317,996,311,996,311,962"/>
+<area shape="rect" id="Node000003" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,121,209,513"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="201,511,227,567,222,570,196,514"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="182,5,238,72"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,87,182,122,177,121,190,85"/>
+<area shape="rect" id="Node000005" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="234,121,394,513"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="230,85,243,121,238,122,225,87"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="317,513,317,559,311,559,311,513"/>
+<area shape="rect" id="Node000006" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="419,121,537,513"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="424,513,410,553,405,565,400,563,405,551,419,512"/>
 </map>

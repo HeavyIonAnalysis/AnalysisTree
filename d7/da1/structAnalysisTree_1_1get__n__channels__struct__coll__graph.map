@@ -1,5 +1,5 @@
 <map id="AnalysisTree::get_n_channels_struct" name="AnalysisTree::get_n_channels_struct">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,133,131,233"/>
-<area shape="rect" id="Node000002" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="7,5,129,85"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,100,71,134,65,134,65,100"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,135,129,236"/>
+<area shape="rect" id="Node000002" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="8,5,126,87"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,102,70,135,64,135,64,102"/>
 </map>

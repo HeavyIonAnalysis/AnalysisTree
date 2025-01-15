@@ -1,5 +1,5 @@
 <map id="AnalysisTree::Configuration" name="AnalysisTree::Configuration">
-<area shape="rect" id="Node000001" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,119,209,504"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="78,5,137,71"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,86,110,119,105,119,105,86"/>
+<area shape="rect" id="Node000001" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,120,209,511"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="79,5,136,72"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,87,110,120,105,120,105,87"/>
 </map>
