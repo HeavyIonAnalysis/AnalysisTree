@@ -15,7 +15,6 @@ if [ -d ".git" ]; then
   GITTAG=$(git describe --tags)
   GITCOMMIT=$(git rev-parse HEAD)
   GITSTATUS=$(git status --porcelain)
-  cd -
   echo "export ANALYSIS_TREE_TAG=\"${GITTAG}\"" >> $FILE_HASH
   echo "export ANALYSIS_TREE_COMMIT_HASH=${GITCOMMIT}" >> $FILE_HASH
   if [ -z "${GITSTATUS}" ]; then
@@ -25,8 +24,12 @@ if [ -d ".git" ]; then
     git diff >> $FILE_DIFF
   fi
 else
-  cd -
   echo "export ANALYSIS_TREE_TAG=NOT_A_GIT_REPO" >> $FILE_HASH
   echo "export ANALYSIS_TREE_COMMIT_HASH=NOT_A_GIT_REPO" >> $FILE_HASH
   echo "export ANALYSIS_TREE_COMMIT_ORIGINAL=NOT_A_GIT_REPO" >> $FILE_HASH
+fi
+cd -
+mv $SRC_DIR/$FILE_HASH .
+if [ -f $SRC_DIR/$FILE_DIFF ]; then
+mv $SRC_DIR/$FILE_DIFF .
 fi
