@@ -111,6 +111,7 @@ void WritingMacro(int nEvents = 1000,
       simtrack->Init(config_.GetBranchConfig(sim_tracks_->GetId()));
 
       // Set default fields of it
+      simtrack->SetIsAllowedSetMassAndChargeExplicitly();
       simtrack->SetMomentum(px_sim, py_sim, pz_sim);
       simtrack->SetPid(3122);
       simtrack->SetMass(1.115683);
