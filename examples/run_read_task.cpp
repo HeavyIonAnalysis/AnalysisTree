@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
   if (argc < 3) {
     std::cout << "Error! Please use " << std::endl;
-    std::cout << " ./example filelist treename" << std::endl;
+    std::cout << " ./run_read_task filelist treename" << std::endl;
     exit(EXIT_FAILURE);
   }
 

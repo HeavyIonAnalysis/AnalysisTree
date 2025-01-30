@@ -9,7 +9,7 @@ void UserTaskWrite::Init() {
   auto chain = man->GetChain();
 
   AddInputBranch("SimParticles");
-  particles_ = chain->GetBranch("SimParticles");
+  particles_ = chain->GetBranchObject("SimParticles");
 
   auto br_conf = chain->GetConfiguration()->GetBranchConfig("SimParticles");
   auto new_conf = br_conf.Clone("NewParticles", DetType::kParticle);
@@ -18,6 +18,7 @@ void UserTaskWrite::Init() {
 
   new_particles_ = Branch(new_conf);
   new_particles_.SetMutable();
+  particles_.Freeze();
   man->AddBranch(&new_particles_);
 }
 

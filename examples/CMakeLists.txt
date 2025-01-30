@@ -1,3 +1,9 @@
+set(EXECUTABLES
+        example
+        run_read_task
+        run_write_task
+)
+
 set(SOURCES
         UserTaskWrite.cpp
         UserTaskRead.cpp
@@ -28,47 +34,39 @@ target_link_libraries(AnalysisTreeUser
 include(${ROOT_USE_FILE})
 include_directories(${ROOT_INCLUDE_DIR} ${ROOT_INCLUDE_DIRS} ${AnalysisTree_INCLUDE_DIR})
 
-add_executable(example example.cpp)
-target_link_libraries(example AnalysisTreeBase AnalysisTreeInfra AnalysisTreeUser ${ROOT_LIBRARIES} EG)
+install(TARGETS AnalysisTreeUser EXPORT AnalysisTreeTargets
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+        RUNTIME DESTINATION bin
+        INCLUDES DESTINATION include/AnalysisTree
+)
 
-add_executable(run_read_task run_read_task.cpp)
-target_link_libraries(run_read_task AnalysisTreeBase AnalysisTreeInfra AnalysisTreeUser ${ROOT_LIBRARIES} EG)
+install(FILES
+        ${HEADERS}
+        DESTINATION
+        include/AnalysisTree
+        COMPONENT
+        Devel
+)
 
+set(PCM_FILE_NAME libAnalysisTreeUser)
 
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${PCM_FILE_NAME}_rdict.pcm"
+        DESTINATION
+        lib
+        OPTIONAL
+)
 
+install(FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/${PCM_FILE_NAME}.rootmap"
+        DESTINATION
+        lib
+        OPTIONAL
+)
 
-
-
-#cmake_minimum_required(VERSION 3.5)
-#project(AnalysisTreeTask CXX)
-#set(PROJECT_VERSION 1.0)
-#
-#if(NOT DEFINED CMAKE_BUILD_TYPE)
-#    set(CMAKE_BUILD_TYPE RELEASE)
-#endif()
-#
-#if(NOT DEFINED CMAKE_CXX_STANDARD)
-#    set(CMAKE_CXX_STANDARD 17)
-#endif()
-#
-## in DEBUG mode make verbose Makefile
-#if (CMAKE_BUILD_TYPE MATCHES DEBUG)
-#    set(CMAKE_VERBOSE_MAKEFILE ON)
-#endif ()
-#
-#if(CMAKE_CXX_STANDARD LESS 17)
-#    find_package(Boost)
-#endif()
-#
-#if(Boost_FOUND)
-#    message(STATUS "Boost version ${Boost_VERSION_STRING} is found!")
-#    message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
-#    add_definitions(-DUSEBOOST)
-#endif()
-#
-#find_package(ROOT REQUIRED)
-#list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
-#find_package(AnalysisTree REQUIRED)
-#
-#message(STATUS "${ROOT_INCLUDE_DIRS} ${AnalysisTree_INCLUDE_DIR}")
-#message(STATUS "${ROOT_LIBRARIES} ${AnalysisTree_INCLUDE_DIR}")
+foreach(EXE ${EXECUTABLES})
+        add_executable(${EXE} ${EXE}.cpp)
+        target_link_libraries(${EXE} AnalysisTreeBase AnalysisTreeInfra AnalysisTreeUser ${ROOT_LIBRARIES} EG)
+        install (TARGETS ${EXE} RUNTIME DESTINATION bin)
+endforeach()
