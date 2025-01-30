@@ -102,12 +102,18 @@ class Branch {
 
   /* Checks are used very often */
   inline void CheckFrozen(bool expected = true) const {
-    if (is_frozen_ != expected)
-      throw std::runtime_error("Branch is frozen");
+    if (is_frozen_ != expected) {
+      const std::string prefix = expected ? "un" : "";
+      const std::string message = "Branch " + config_.GetName() + " is " + prefix + "frozen while the opposite was expected";
+      throw std::runtime_error(message);
+    }
   }
   inline void CheckMutable(bool expected = true) const {
-    if (is_mutable_ != expected)
-      throw std::runtime_error("Branch is not mutable");
+    if (is_mutable_ != expected) {
+      const std::string prefix = expected ? "im" : "";
+      const std::string message = "Branch " + config_.GetName() + " is " + prefix + "mutable while the opposite was expected";
+      throw std::runtime_error(message);
+    }
   }
   /**
    * @brief Gets variables according to variable names specified in the arguments.

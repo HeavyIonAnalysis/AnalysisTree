@@ -11,8 +11,8 @@ void UserTaskRead::Init() {
   AddInputBranch("SimParticles");
   AddInputBranch("VtxTracks");
 
-  particles_ = chain->GetBranch("SimParticles");
-  tracks_ = chain->GetBranch("VtxTracks");
+  particles_ = chain->GetBranchObject("SimParticles");
+  tracks_ = chain->GetBranchObject("VtxTracks");
   match_ = chain->GetMatching("VtxTracks", "SimParticles");
 }
 
