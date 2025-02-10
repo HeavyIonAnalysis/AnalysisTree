@@ -77,4 +77,27 @@ bool Cuts::Apply(const BranchChannel& ob) const {
   return true;
 }
 
+void Cuts::AddCut(const SimpleCut& cut) {
+  cuts_.emplace_back(cut);
+  branch_names_.insert(cut.GetBranches().begin(), cut.GetBranches().end());
+}
+
+void Cuts::AddCuts(const std::vector<SimpleCut>& cuts) {
+  for(auto& cut : cuts) {
+    AddCut(cut);
+  }
+}
+
+template<typename... Args>
+Cuts::Cuts(std::string name, Args... args) : name_(std::move(name)) {
+//  AddCuts(std::forward<Args>(args)...);
+  AddCuts(args...);
+}
+
+template<typename T, typename... Args>
+void Cuts::AddCuts(const T& t, const Args&... args) {
+  AddCuts(t);
+  AddCuts(args...);
+}
+
 }// namespace AnalysisTree

@@ -48,6 +48,16 @@ class Cuts {
     }
   }
 
+  template<typename... Args>
+  explicit Cuts(std::string name, Args... args);
+
+  void AddCut(const SimpleCut& cut);
+
+  void AddCuts(const std::vector<SimpleCut>& cuts);
+
+  template<typename T, typename... Args>
+  void AddCuts(const T& t, const Args&... args);
+
   /**
    * @brief Evaluates all SimpleCuts
    * @tparam T type of data-object associated with TTree
