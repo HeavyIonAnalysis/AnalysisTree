@@ -22,6 +22,7 @@ TaskManager* TaskManager::GetInstance() {
 
 void TaskManager::Init(const std::vector<std::string>& filelists, const std::vector<std::string>& in_trees) {
   assert(!is_init_);
+  std::cout << "TaskManager::Init()\n";
   is_init_ = true;
   read_in_tree_ = true;
   chain_ = new Chain(filelists, in_trees);
@@ -51,6 +52,7 @@ void TaskManager::InitTasks() {
 
 void TaskManager::Init() {
   assert(!is_init_);
+  std::cout << "TaskManager::Init()\n";
   is_init_ = true;
   fill_out_tree_ = true;
 
