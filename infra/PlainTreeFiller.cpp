@@ -25,6 +25,18 @@ void PlainTreeFiller::SetFieldsToIgnore(const std::vector<std::string>&& fields_
 }
 
 void PlainTreeFiller::Init() {
+  if (is_ignore_defual_fields_) {
+    std::vector<std::string> defaultFieldsNames;
+    auto mapF = config_->GetBranchConfig(branch_name_).GetMap<float>();
+    auto mapI = config_->GetBranchConfig(branch_name_).GetMap<int>();
+    auto mapB = config_->GetBranchConfig(branch_name_).GetMap<bool>();
+    for (auto& m : {mapF, mapI, mapB}) {
+      for (auto& me : m) {
+        if (me.second.id_ < 0) defaultFieldsNames.emplace_back(me.first);
+      }
+    }
+    SetFieldsToIgnore(std::move(defaultFieldsNames));
+  }
 
   if (!branch_name_.empty()) {
     const auto& branch_config = config_->GetBranchConfig(branch_name_);

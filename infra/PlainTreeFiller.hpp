@@ -29,6 +29,8 @@ class PlainTreeFiller : public AnalysisTask {
 
   void SetFieldsToIgnore(const std::vector<std::string>&& fields_to_ignore);
 
+  void SetIsIgnoreDefaultFields(bool is = true) { is_ignore_defual_fields_ = is; }
+
  protected:
   TFile* file_{nullptr};
   TTree* plain_tree_{nullptr};
@@ -39,6 +41,8 @@ class PlainTreeFiller : public AnalysisTask {
 
   std::vector<float> vars_{};
   std::vector<std::string> fields_to_ignore_{};
+
+  bool is_ignore_defual_fields_{false};
 };
 
 }// namespace AnalysisTree
