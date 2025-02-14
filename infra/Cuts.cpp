@@ -77,4 +77,15 @@ bool Cuts::Apply(const BranchChannel& ob) const {
   return true;
 }
 
+void Cuts::AddCut(const SimpleCut& cut) {
+  cuts_.emplace_back(cut);
+  branch_names_.insert(cut.GetBranches().begin(), cut.GetBranches().end());
+}
+
+void Cuts::AddCuts(const std::vector<SimpleCut>& cuts) {
+  for (auto& cut : cuts) {
+    AddCut(cut);
+  }
+}
+
 }// namespace AnalysisTree

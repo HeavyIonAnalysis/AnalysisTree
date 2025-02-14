@@ -43,6 +43,14 @@ class SimpleCut {
     FillBranchNames();
   }
 
+  SimpleCut(const std::vector<Variable>& vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
+                                                                                                                           lambda_(std::move(lambda)) {
+    for (auto& var : vars) {
+      vars_.emplace_back(var);
+    }
+    FillBranchNames();
+  }
+
   /**
   * Constructor for range cut: min <= field <= max
   * @param variable_name name of the variable in format "branch.field"
