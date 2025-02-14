@@ -52,23 +52,23 @@ class Cuts {
 
   void AddCuts(const std::vector<SimpleCut>& cuts);
 
-  // Base case for variadic recursion (handles when there's just one argument left)
-  template<typename T>
-  void AddCuts(const T& t) {
-    AddCuts(t);  // Call the appropriate overload for a single argument (like std::vector<SimpleCut>)
-  }
-
-  // Recursive case for variadic template (multiple arguments)
-  template<typename T, typename... Args>
-  void AddCuts(const T& t, const Args&... args) {
-    AddCuts(t);
-    AddCuts(args...);
-  }
-
-  template<typename... Args>
-  Cuts(std::string name, Args... args) : name_(std::move(name)) {
-    AddCuts(args...);
-  }
+//  // Base case for variadic recursion (handles when there's just one argument left)
+//  template<typename T>
+//  void AddCuts(const T& t) {
+//    AddCuts(t);  // Call the appropriate overload for a single argument (like std::vector<SimpleCut>)
+//  }
+//
+//  // Recursive case for variadic template (multiple arguments)
+//  template<typename T, typename... Args>
+//  void AddCuts(const T& t, const Args&... args) {
+//    AddCuts(t);
+//    AddCuts(args...);
+//  }
+//
+//  template<typename... Args> // TODO this constructor hangs. Needs debugging
+//  Cuts(std::string name, Args... args) : name_(std::move(name)) {
+//    AddCuts(args...);
+//  }
 
   /**
    * @brief Evaluates all SimpleCuts
