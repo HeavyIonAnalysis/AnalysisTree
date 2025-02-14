@@ -45,7 +45,7 @@ class SimpleCut {
 
   SimpleCut(const std::vector<Variable>& vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
                                                                                                                            lambda_(std::move(lambda)) {
-    for(auto& var : vars) {
+    for (auto& var : vars) {
       vars_.emplace_back(var);
     }
     FillBranchNames();

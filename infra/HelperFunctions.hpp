@@ -18,13 +18,13 @@ inline std::string ToStringWithPrecision(const T a_value, const int n) {
 
 inline std::vector<AnalysisTree::SimpleCut> CreateSliceCuts(const std::vector<float>& ranges, const std::string& cutNamePrefix, const std::string& branchFieldName) {
   std::vector<AnalysisTree::SimpleCut> sliceCuts;
-  for(int iRange=0; iRange<ranges.size()-1; iRange++) {
-    const std::string cutName = cutNamePrefix + ToStringWithPrecision(ranges.at(iRange), 2) + "_" + ToStringWithPrecision(ranges.at(iRange+1), 2);
-    sliceCuts.emplace_back(AnalysisTree::RangeCut(branchFieldName, ranges.at(iRange), ranges.at(iRange+1), cutName));
+  for (int iRange = 0; iRange < ranges.size() - 1; iRange++) {
+    const std::string cutName = cutNamePrefix + ToStringWithPrecision(ranges.at(iRange), 2) + "_" + ToStringWithPrecision(ranges.at(iRange + 1), 2);
+    sliceCuts.emplace_back(AnalysisTree::RangeCut(branchFieldName, ranges.at(iRange), ranges.at(iRange + 1), cutName));
   }
 
   return sliceCuts;
 }
 
-}
-#endif // ANALYSISTREE_INFRA_HELPER_FUNCTIONS_HPP
+}// namespace HelperFunctions
+#endif// ANALYSISTREE_INFRA_HELPER_FUNCTIONS_HPP
