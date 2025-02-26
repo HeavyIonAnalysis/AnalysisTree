@@ -8,6 +8,8 @@
 
 #include "Particle.hpp"
 
+#include "TDatabasePDG.h"
+
 namespace {
 
 using namespace AnalysisTree;
@@ -28,7 +30,7 @@ TEST(Particle, Basics) {
   EXPECT_EQ(particle.GetSize<bool>(), 0);
 
   EXPECT_EQ(particle.GetPid(), 211);
-  EXPECT_FLOAT_EQ(particle.GetMass(), 0.13957);
+  EXPECT_FLOAT_EQ(particle.GetMass(), TDatabasePDG::Instance()->GetParticle(211)->Mass());
 }
 }// namespace
 
