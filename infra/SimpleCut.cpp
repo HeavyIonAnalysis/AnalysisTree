@@ -3,6 +3,8 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "SimpleCut.hpp"
 
+#include "HelperFunctions.hpp"
+
 #include <iostream>
 
 namespace AnalysisTree {
@@ -22,7 +24,9 @@ bool operator==(const SimpleCut& that, const SimpleCut& other) {
   if (&that == &other) {
     return true;
   }
-  return that.vars_ == other.vars_ && that.title_ == other.title_;
+  // if both SimpleCuts were defined via lambda, they're assumed not equal (unless they're in the same memory place)
+  if(that.hash_ == 1 && other.hash_ == 1) return false;
+  return that.vars_ == other.vars_ && that.title_ == other.title_ && that.hash_ == other.hash_;
 }
 
 SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const std::string& title) {
@@ -45,12 +49,18 @@ SimpleCut::SimpleCut(const Variable& var, int value, std::string title) : title_
   vars_.emplace_back(var);
   lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
   FillBranchNames();
+  const std::string stringForHash = var.GetName() + HelperFunctions::ToStringWithPrecision(value, 6) + title_;
+  std::hash<std::string> hasher;
+  hash_ = hasher(stringForHash);
 }
 
 SimpleCut::SimpleCut(const Variable& var, double min, double max, std::string title) : title_(std::move(title)) {
   vars_.emplace_back(var);
   lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
   FillBranchNames();
+  const std::string stringForHash = var.GetName() + HelperFunctions::ToStringWithPrecision(min, 6) + HelperFunctions::ToStringWithPrecision(max, 6) + title_;
+  std::hash<std::string> hasher;
+  hash_ = hasher(stringForHash);
 }
 
 bool SimpleCut::Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t>& id) const {
