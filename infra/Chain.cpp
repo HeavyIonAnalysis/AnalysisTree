@@ -37,6 +37,7 @@ void Chain::InitChain() {
 
   TFileCollection fc("fc", "", filelists_[0].c_str());
   this->AddFileInfoList(reinterpret_cast<TCollection*>(fc.GetList()));
+  this->ls();
 
   std::vector<std::string> aliases;
   aliases.reserve(treenames_.size());
