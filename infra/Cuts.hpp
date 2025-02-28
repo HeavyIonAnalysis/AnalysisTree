@@ -52,24 +52,6 @@ class Cuts {
 
   void AddCuts(const std::vector<SimpleCut>& cuts);
 
-  //  // Base case for variadic recursion (handles when there's just one argument left)
-  //  template<typename T>
-  //  void AddCuts(const T& t) {
-  //    AddCuts(t);  // Call the appropriate overload for a single argument (like std::vector<SimpleCut>)
-  //  }
-  //
-  //  // Recursive case for variadic template (multiple arguments)
-  //  template<typename T, typename... Args>
-  //  void AddCuts(const T& t, const Args&... args) {
-  //    AddCuts(t);
-  //    AddCuts(args...);
-  //  }
-  //
-  //  template<typename... Args> // TODO this constructor hangs. Needs debugging
-  //  Cuts(std::string name, Args... args) : name_(std::move(name)) {
-  //    AddCuts(args...);
-  //  }
-
   /**
    * @brief Evaluates all SimpleCuts
    * @tparam T type of data-object associated with TTree
@@ -106,6 +88,8 @@ class Cuts {
 
   ANALYSISTREE_ATTR_NODISCARD std::set<size_t> GetBranchIds() const { return branch_ids_; }
   ANALYSISTREE_ATTR_NODISCARD const std::string& GetName() const { return name_; }
+
+  void SetName(const std::string& name) { name_ = name; }
 
   std::vector<SimpleCut>& GetCuts() { return cuts_; }
 
