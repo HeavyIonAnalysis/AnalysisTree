@@ -3,6 +3,7 @@
 
 #include "SimpleCut.hpp"
 
+#include <sstream>
 #include <string>
 #include <vector>
 
