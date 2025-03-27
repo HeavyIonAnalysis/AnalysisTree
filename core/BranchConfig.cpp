@@ -136,20 +136,49 @@ BranchConfig BranchConfig::CloneAndMerge(const BranchConfig& attached) const {
 }
 
 template<typename T>
-std::vector<std::string> VectorConfig<T>::SplitString(const std::string& input) {
-  std::vector<std::string> result;
-  std::vector<int> newlinepositions{-1};
-  int it{0};
-  while (it < std::string::npos) {
-    it = input.find("\n", it + 1);
-    newlinepositions.emplace_back(it);
-  }
-  newlinepositions.back() = input.size();
-  for (int ip = 0; ip < newlinepositions.size() - 1; ++ip) {
-    result.emplace_back(input.substr(newlinepositions.at(ip) + 1, newlinepositions.at(ip + 1) - newlinepositions.at(ip) - 1));
-  }
+void VectorConfig<T>::Print() const {
+  if (map_.empty()) return;
 
-  return result;
+  auto print_row = [](const std::vector<std::pair<std::string, int>>& elements) {
+    for (const auto& el : elements) {
+      std::cout << std::left << std::setw(el.second) << std::setfill(' ') << el.first;
+    }
+    std::cout << std::endl;
+  };
+
+  int name_strlen{0};
+  for (const auto& entry : map_) {
+    name_strlen = std::max(name_strlen, (int) entry.first.length());
+  }
+  name_strlen += 4;
+
+  auto SplitString = [](const std::string& input) {
+    std::vector<std::string> result;
+    std::vector<int> newlinepositions{-1};
+    int it{0};
+    while (it < std::string::npos) {
+      it = input.find("\n", it + 1);
+      newlinepositions.emplace_back(it);
+    }
+    newlinepositions.back() = input.size();
+    for (int ip = 0; ip < newlinepositions.size() - 1; ++ip) {
+      result.emplace_back(input.substr(newlinepositions.at(ip) + 1, newlinepositions.at(ip + 1) - newlinepositions.at(ip) - 1));
+    }
+    return result;
+  };
+
+  print_row({{"Id", 10}, {"Name", name_strlen}, {"Info", 50}});
+  for (const auto& entry : map_) {
+    if (entry.second.title_.find("\n") == std::string::npos) {
+      print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {entry.second.title_, 50}});
+    } else {
+      auto est = SplitString(entry.second.title_);
+      print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {est.at(0), 50}});
+      for (int iest = 1; iest < est.size(); ++iest) {
+        print_row({{"", 10}, {"", name_strlen}, {est.at(iest), 50}});
+      }
+    }
+  }
 }
 
 template<typename T>

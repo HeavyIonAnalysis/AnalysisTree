@@ -73,38 +73,9 @@ class VectorConfig {
   ANALYSISTREE_ATTR_NODISCARD virtual const MapType& GetMap() const { return map_; }
   ANALYSISTREE_ATTR_NODISCARD virtual ShortInt_t GetSize() const { return size_; }
 
-  virtual void Print() const {
-    if (map_.empty()) return;
-
-    auto print_row = [](const std::vector<std::pair<std::string, int>>& elements) {
-      for (const auto& el : elements) {
-        std::cout << std::left << std::setw(el.second) << std::setfill(' ') << el.first;
-      }
-      std::cout << std::endl;
-    };
-
-    int name_strlen{0};
-    for (const auto& entry : map_) {
-      name_strlen = std::max(name_strlen, (int) entry.first.length());
-    }
-    name_strlen += 4;
-
-    print_row({{"Id", 10}, {"Name", name_strlen}, {"Info", 50}});
-    for (const auto& entry : map_) {
-      if (entry.second.title_.find("\n") == std::string::npos) {
-        print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {entry.second.title_, 50}});
-      } else {
-        auto est = SplitString(entry.second.title_);
-        print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {est.at(0), 50}});
-        for (int iest = 1; iest < est.size(); ++iest) {
-          print_row({{"", 10}, {"", name_strlen}, {est.at(iest), 50}});
-        }
-      }
-    }
-  }
+  virtual void Print() const;
 
  protected:
-  static std::vector<std::string> SplitString(const std::string& input);
   void RemoveField(const std::string& name, int id);
   MapType map_{};
   ShortInt_t size_{0};
