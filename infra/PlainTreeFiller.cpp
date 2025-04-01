@@ -15,12 +15,21 @@ void PlainTreeFiller::AddBranch(const std::string& branch_name) {
   in_branches_.emplace(branch_name);
 }
 
-void PlainTreeFiller::SetFieldsToIgnore(const std::vector<std::string>&& fields_to_ignore) {
+void PlainTreeFiller::SetFieldsToIgnore(const std::vector<std::string>& fields_to_ignore) {
   if (branch_name_ == "") {
     throw std::runtime_error("PlainTreeFiller::SetFieldsToIgnore() must be called after PlainTreeFiller::AddBranch()\n");
   }
   for (auto& fti : fields_to_ignore) {
     fields_to_ignore_.emplace_back((branch_name_ + "." + fti).c_str());
+  }
+}
+
+void PlainTreeFiller::SetFieldsToPreserve(const std::vector<std::string>& fields_to_preserve) {
+  if (branch_name_ == "") {
+    throw std::runtime_error("PlainTreeFiller::SetFieldsToPreserve() must be called after PlainTreeFiller::AddBranch()\n");
+  }
+  for (auto& fti : fields_to_preserve) {
+    fields_to_preserve_.emplace_back((branch_name_ + "." + fti).c_str());
   }
 }
 
@@ -36,6 +45,10 @@ void PlainTreeFiller::Init() {
       }
     }
     SetFieldsToIgnore(std::move(defaultFieldsNames));
+  }
+
+  if (!fields_to_ignore_.empty() && !fields_to_preserve_.empty()) {
+    throw std::runtime_error("PlainTreeFiller::Init() - only one of fields_to_ignore_ and fields_to_preserve_ can be set");
   }
 
   if (!branch_name_.empty()) {
@@ -64,7 +77,8 @@ void PlainTreeFiller::Init() {
   plain_tree_->SetAutoSave(0);
   for (size_t i = 0; i < vars.size(); ++i) {
     std::string leaf_name = vars[i].GetName();
-    if (std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), leaf_name) != fields_to_ignore_.end()) continue;
+    if (!fields_to_ignore_.empty() && std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), leaf_name) != fields_to_ignore_.end()) continue;
+    if (!fields_to_preserve_.empty() && std::find(fields_to_preserve_.begin(), fields_to_preserve_.end(), leaf_name) == fields_to_preserve_.end()) continue;
     if(!is_prepend_leaves_with_branchname_) leaf_name.erase(0, branch_name_.size()+1);
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
     plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
