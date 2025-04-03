@@ -79,7 +79,7 @@ void PlainTreeFiller::Init() {
     std::string leaf_name = vars[i].GetName();
     if (!fields_to_ignore_.empty() && std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), leaf_name) != fields_to_ignore_.end()) continue;
     if (!fields_to_preserve_.empty() && std::find(fields_to_preserve_.begin(), fields_to_preserve_.end(), leaf_name) == fields_to_preserve_.end()) continue;
-    if(!is_prepend_leaves_with_branchname_) leaf_name.erase(0, branch_name_.size()+1);
+    if (!is_prepend_leaves_with_branchname_) leaf_name.erase(0, branch_name_.size() + 1);
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
     plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
   }
