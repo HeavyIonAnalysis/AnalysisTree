@@ -27,9 +27,11 @@ class PlainTreeFiller : public AnalysisTask {
     tree_name_ = std::move(tree);
   }
 
-  void SetFieldsToIgnore(const std::vector<std::string>&& fields_to_ignore);
+  void SetFieldsToIgnore(const std::vector<std::string>& fields_to_ignore);
+  void SetFieldsToPreserve(const std::vector<std::string>& fields_to_preserve);
 
   void SetIsIgnoreDefaultFields(bool is = true) { is_ignore_defual_fields_ = is; }
+  void SetIsPrependLeavesWithBranchName(bool is = true) { is_prepend_leaves_with_branchname_ = is; }
 
  protected:
   TFile* file_{nullptr};
@@ -41,8 +43,10 @@ class PlainTreeFiller : public AnalysisTask {
 
   std::vector<float> vars_{};
   std::vector<std::string> fields_to_ignore_{};
+  std::vector<std::string> fields_to_preserve_{};
 
   bool is_ignore_defual_fields_{false};
+  bool is_prepend_leaves_with_branchname_{true};
 };
 
 }// namespace AnalysisTree

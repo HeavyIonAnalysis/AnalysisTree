@@ -25,7 +25,7 @@ bool operator==(const SimpleCut& that, const SimpleCut& other) {
     return true;
   }
   // if both SimpleCuts were defined via lambda, they're assumed not equal (unless they're in the same memory place)
-  if(that.hash_ == 1 && other.hash_ == 1) return false;
+  if (that.hash_ == 1 && other.hash_ == 1) return false;
   return that.vars_ == other.vars_ && that.title_ == other.title_ && that.hash_ == other.hash_;
 }
 

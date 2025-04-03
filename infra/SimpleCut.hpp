@@ -41,7 +41,7 @@ class SimpleCut {
                    [](const std::string& arg_name) { return Variable::FromString(arg_name); });
 
     FillBranchNames();
-    hash_ = 1; // Impossible to calculate for lambda_
+    hash_ = 1;// Impossible to calculate for lambda_
   }
 
   SimpleCut(const std::vector<Variable>& vars, std::function<bool(std::vector<double>&)> lambda, std::string title = "") : title_(std::move(title)),
@@ -50,7 +50,7 @@ class SimpleCut {
       vars_.emplace_back(var);
     }
     FillBranchNames();
-    hash_ = 1; // Impossible to calculate for lambda_
+    hash_ = 1;// Impossible to calculate for lambda_
   }
 
   /**

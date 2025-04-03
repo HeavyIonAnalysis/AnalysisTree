@@ -17,7 +17,6 @@
 #pragma link C++ class AnalysisTree::AnalysisTask;
 #pragma link C++ class AnalysisTree::Chain+;
 
-#pragma link C++ class AnalysisTree::BranchReader+;
 #pragma link C++ class AnalysisTree::AnalysisEntry+;
 
 #endif
