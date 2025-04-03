@@ -1,13 +1,13 @@
 <map id="AnalysisTree::new_channel_struct" name="AnalysisTree::new_channel_struct">
-<area shape="rect" id="Node000001" title=" " alt="" coords="66,936,233,1058"/>
-<area shape="rect" id="Node000002" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="33,637,152,718"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,732,141,936,136,937,99,733"/>
-<area shape="rect" id="Node000003" href="$d8/d4c/classAnalysisTree_1_1BranchConfig.html" title="A class to store configuration of the Container." alt="" coords="175,482,380,873"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,874,182,921,178,919,197,872"/>
-<area shape="rect" id="Node000004" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,171,432"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="179,433,199,481,194,483,174,435"/>
-<area shape="rect" id="Node000005" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="195,5,360,432"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="280,447,280,482,275,482,275,447"/>
-<area shape="rect" id="Node000006" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="384,5,550,432"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="381,435,361,483,356,481,376,433"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="66,916,233,1038"/>
+<area shape="rect" id="Node000002" href="$df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html" title=" " alt="" coords="33,616,152,698"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,712,141,916,136,917,99,713"/>
+<area shape="rect" id="Node000003" href="$d8/d4c/classAnalysisTree_1_1BranchConfig.html" title="A class to store configuration of the Container." alt="" coords="175,461,380,853"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="202,854,182,901,178,899,197,852"/>
+<area shape="rect" id="Node000004" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="5,5,171,412"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="179,418,197,460,192,462,174,420"/>
+<area shape="rect" id="Node000005" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="195,5,360,412"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="280,427,280,461,275,461,275,427"/>
+<area shape="rect" id="Node000006" href="$d3/df5/classAnalysisTree_1_1VectorConfig.html" title=" " alt="" coords="384,5,550,412"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="381,420,363,462,358,460,376,418"/>
 </map>
