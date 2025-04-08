@@ -49,7 +49,8 @@ enum class DetType : ShortInt_t {
   kModule,
   kTrack,
   kEventHeader,
-  kParticle
+  kParticle,
+  kGeneric
 };
 
 enum class Types : ShortInt_t {

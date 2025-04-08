@@ -41,6 +41,10 @@ void Branch::InitDataPtr() {
       data_ = temp;
       break;
     }
+    case DetType::kGeneric: {
+      data_ = new GenericDetector(config_.GetId());
+      break;
+    }
     default: throw std::runtime_error("Branch type is not known!");
   }
 }

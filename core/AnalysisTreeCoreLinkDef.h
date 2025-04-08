@@ -40,6 +40,7 @@
 #pragma link C++ typedef AnalysisTree::ModuleDetector;
 #pragma link C++ typedef AnalysisTree::HitDetector;
 #pragma link C++ typedef AnalysisTree::ModulePositions;
+#pragma link C++ typedef AnalysisTree::GenericDetector;
 
 #pragma link C++ defined_in "Constants.h";
 
