@@ -21,8 +21,8 @@ message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
 list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp" "BranchHashHelper.hpp" "HelperFunctions.hpp")
 
-include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
 add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
+target_include_directories(AnalysisTreeInfra PRIVATE ${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
 target_compile_definitions(AnalysisTreeInfra PUBLIC
         $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
 

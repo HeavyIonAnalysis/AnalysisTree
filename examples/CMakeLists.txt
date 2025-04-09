@@ -13,8 +13,8 @@ message(STATUS "CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME}")
 
 string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
 
-include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_SOURCE_DIR}/infra ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
 add_library(AnalysisTreeUser SHARED ${SOURCES} G__AnalysisTreeUser.cxx)
+target_include_directories(AnalysisTreeUser PRIVATE ${CMAKE_SOURCE_DIR}/core ${CMAKE_SOURCE_DIR}/infra ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
 target_compile_definitions(AnalysisTreeUser PUBLIC
         $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
 
