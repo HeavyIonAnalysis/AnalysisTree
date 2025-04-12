@@ -13,6 +13,7 @@ set(SOURCES
     Branch.cpp
     BranchChannel.cpp
     AnalysisEntry.cpp
+    GenericContainerFiller.cpp
     )
 
 
