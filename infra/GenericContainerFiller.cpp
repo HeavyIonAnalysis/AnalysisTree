@@ -4,30 +4,23 @@
 
 #include "GenericContainerFiller.hpp"
 
-#include <utility>
-
 using namespace AnalysisTree;
 
 GenericContainerFiller::GenericContainerFiller(std::string  fileInName, std::string  treeInName) : file_in_name_(std::move(fileInName)),
                                                                                                    tree_in_name_(std::move(treeInName)) {}
 
-void GenericContainerFiller::Run(size_t nEntries) const {
-  TFile* fileIn = TFile::Open(file_in_name_.c_str(), "read");
-  if(fileIn == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): fileIn == nullptr");
+void GenericContainerFiller::Init() {
+  file_in_ = TFile::Open(file_in_name_.c_str(), "read");
+  if(file_in_ == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): file_in_ == nullptr");
 
-  TTree* treeIn = fileIn->Get<TTree>(tree_in_name_.c_str());
-  if(treeIn == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): treeIn == nullptr");
+  tree_in_ = file_in_->Get<TTree>(tree_in_name_.c_str());
+  if(tree_in_ == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): tree_in_ == nullptr");
 
   if(!fields_to_ignore_.empty() && !fields_to_preserve_.empty()) throw std::runtime_error("GenericContainerFiller::Run(): !fields_to_ignore_.empty() && !fields_to_preserve_.empty()");
 
-  const size_t nTreeEntries = treeIn->GetEntries();
-  const size_t nRunEntries = (nEntries<0 || nEntries>nTreeEntries) ? nTreeEntries : nEntries;
-
   BranchConfig branchConfig(branch_out_name_, DetType::kGeneric);
-  std::vector<IndexMap> branchMap;
-  std::vector<FICS> branchValues;
 
-  auto lol = treeIn->GetListOfLeaves();
+  auto lol = tree_in_->GetListOfLeaves();
   const int nLeaves = lol->GetEntries();
   for(int iLeave=0; iLeave<nLeaves; iLeave++) {
     auto leave = lol->At(iLeave);
@@ -40,46 +33,65 @@ void GenericContainerFiller::Run(size_t nEntries) const {
     } else if (fieldType == "TLeafI" || fieldType == "TLeafB" || fieldType == "TLeafS") {
       branchConfig.AddField<int>(fieldName);
     }
-    branchMap.emplace_back((IndexMap){fieldName, fieldType, branchConfig.GetFieldId(fieldName)});
+    branch_map_.emplace_back((IndexMap){fieldName, fieldType, branchConfig.GetFieldId(fieldName)});
   }
-  branchValues.resize(branchMap.size());
+  branch_values_.resize(branch_map_.size());
 
-  Configuration config;
-  config.AddBranchConfig(branchConfig);
+  config_.AddBranchConfig(branchConfig);
 
-  for(int iV=0; iV<branchValues.size(); iV++) {
-    TBranch* branch = treeIn->GetBranch(branchMap.at(iV).name_.c_str());
-    SetAddressFICS(branch, branchMap.at(iV), branchValues.at(iV));
+  for(int iV=0; iV<branch_values_.size(); iV++) {
+    TBranch* branch = tree_in_->GetBranch(branch_map_.at(iV).name_.c_str());
+    SetAddressFICS(branch, branch_map_.at(iV), branch_values_.at(iV));
   }
 
-  GenericDetector* genericDetector = new GenericDetector(branchConfig.GetId());
+  generic_detector_ = new GenericDetector(branchConfig.GetId());
 
-  const int entrySwitchTriggerId = entry_switch_trigger_var_name_.empty() ? -999 : DetermineFieldIdByName(branchMap, entry_switch_trigger_var_name_);
+  file_out_ = TFile::Open(file_out_name_.c_str(), "recreate");
+  tree_out_ = new TTree(tree_out_name_.c_str(), "Analysis Tree");
+  tree_out_->SetAutoSave(0);
+  tree_out_->Branch((branchConfig.GetName() + ".").c_str(), "AnalysisTree::GenericDetector", &generic_detector_);
 
-  TFile* fileOut = TFile::Open(file_out_name_.c_str(), "recreate");
-  TTree* treeOut = new TTree(tree_out_name_.c_str(), "Analysis Tree");
-  treeOut->SetAutoSave(0);
-  treeOut->Branch((branchConfig.GetName() + ".").c_str(), "AnalysisTree::GenericDetector", &genericDetector);
+  entry_switch_trigger_id_ = entry_switch_trigger_var_name_.empty() ? -999 : DetermineFieldIdByName(branch_map_, entry_switch_trigger_var_name_);
+}
+
+int GenericContainerFiller::Exec(int iEntry, int previousTriggerVar) {
+  tree_in_->GetEntry(iEntry);
+  const int currentTriggerVar = entry_switch_trigger_id_ >= 0 ? branch_values_.at(entry_switch_trigger_id_).get() : previousTriggerVar;
+  auto isNewATEntry = [&]() {return iEntry == 0 ||
+                                  (currentTriggerVar != previousTriggerVar) ||
+                                  (n_channels_per_entry_ >= 0 && iEntry % n_channels_per_entry_ == 0); };
+
+  if(isNewATEntry()) {
+    if(iEntry != 0) tree_out_->Fill();
+    generic_detector_->ClearChannels();
+  }
+  auto& channel = generic_detector_->AddChannel(config_.GetBranchConfig(generic_detector_->GetId()));
+  SetFieldsFICS(branch_map_, channel, branch_values_);
+
+  return currentTriggerVar;
+}
+
+void GenericContainerFiller::Finish() {
+  file_out_->cd();
+  config_.Write("Configuration");
+  tree_out_->Write();
+  file_out_->Close();
+  file_in_->Close();
+}
+
+void GenericContainerFiller::Run(int nEntries) {
+  Init();
+
+  const size_t nTreeEntries = tree_in_->GetEntries();
+  const size_t nRunEntries = (nEntries<0 || nEntries>nTreeEntries) ? nTreeEntries : nEntries;
 
   int previousTriggerVar{-799};
   for(int iEntry=0; iEntry<nRunEntries; iEntry++) {
-    treeIn->GetEntry(iEntry);
-    const int currentTriggerVar = entrySwitchTriggerId >= 0 ? branchValues.at(entrySwitchTriggerId).int_ : previousTriggerVar;
-    auto isNewATEntry = [&]() {return iEntry == 0 ||
-                                   (currentTriggerVar != previousTriggerVar) ||
-                                   (n_channels_per_entry_ >= 0 && iEntry % n_channels_per_entry_ == 0); };
-
-    if(isNewATEntry()) genericDetector->ClearChannels();
-    auto& channel = genericDetector->AddChannel(config.GetBranchConfig(genericDetector->GetId()));
-    SetFieldsFICS(branchMap, channel, branchValues);
-    if(isNewATEntry()) treeOut->Fill();
+    previousTriggerVar = Exec(iEntry, previousTriggerVar);
   } // iEntry
+  tree_out_->Fill();
 
-  fileOut->cd();
-  config.Write("Configuration");
-  treeOut->Write();
-  fileOut->Close();
-  fileIn->Close();
+  Finish();
 }
 
 int GenericContainerFiller::DetermineFieldIdByName(const std::vector<IndexMap>& iMap, const std::string& name) {
