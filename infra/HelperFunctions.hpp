@@ -51,9 +51,11 @@ inline std::vector<AnalysisTree::SimpleCut> CreateEqualCuts(const std::vector<fl
 }
 
 inline bool StringToBool(const std::string& str) {
-  if(str == "true") return true;
-  else if(str == "false") return false;
-  else throw std::runtime_error("HelperFunctions::StringToBool(): argument must be either true or false");
+  if (str == "true") return true;
+  else if (str == "false")
+    return false;
+  else
+    throw std::runtime_error("HelperFunctions::StringToBool(): argument must be either true or false");
 }
 
 }// namespace HelperFunctions

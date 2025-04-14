@@ -21,17 +21,17 @@ struct IndexMap {
   short index_;
 };
 
-struct FICS { // FICS stands for float, int, char, short
+struct FICS {// FICS stands for float, int, char, short
   float float_{-199.f};
   int int_{-199};
   char char_{static_cast<char>(-199)};
   short short_{static_cast<short>(-199)};
 
   float get() {
-    if(std::fabs(float_ + 199.f) > 1e-4) return float_;
-    if(int_ != -199) return static_cast<float>(int_);
-    if(char_ != static_cast<char>(-199)) return static_cast<float>(char_);
-    if(short_ != static_cast<short>(-199)) return static_cast<float>(short_);
+    if (std::fabs(float_ + 199.f) > 1e-4) return float_;
+    if (int_ != -199) return static_cast<float>(int_);
+    if (char_ != static_cast<char>(-199)) return static_cast<float>(char_);
+    if (short_ != static_cast<short>(-199)) return static_cast<float>(short_);
     throw std::runtime_error("GenericContainerFiller, FICS::get(): none of values initialized");
   }
 };
@@ -41,7 +41,7 @@ namespace AnalysisTree {
 class GenericContainerFiller {
  public:
   GenericContainerFiller() = delete;
-  explicit GenericContainerFiller(std::string  fileInName, std::string  treeInName="pTree");
+  explicit GenericContainerFiller(std::string fileInName, std::string treeInName = "pTree");
   virtual ~GenericContainerFiller() = default;
 
   void SetOutputFileName(const std::string& name) { file_out_name_ = name; }
@@ -55,7 +55,7 @@ class GenericContainerFiller {
 
   void SetNChannelsPerEntry(int n) { n_channels_per_entry_ = n; }
 
-  void Run(int nEntries=-1);
+  void Run(int nEntries = -1);
 
  protected:
   void Init();
@@ -95,8 +95,6 @@ class GenericContainerFiller {
 
   std::vector<std::string> fields_to_ignore_{};
   std::vector<std::string> fields_to_preserve_{};
-
-
 };
-}
+}// namespace AnalysisTree
 #endif//ANALYSISTREE_GENERICCONTAINERFILLER_HPP
