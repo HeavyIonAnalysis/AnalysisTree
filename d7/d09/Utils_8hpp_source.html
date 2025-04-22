@@ -125,39 +125,41 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">class </span><a class="code hl_class" href="../../de/dd8/classAnalysisTree_1_1Module.html">Module</a>;</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">class </span><a class="code hl_class" href="../../de/dce/classAnalysisTree_1_1Hit.html">Hit</a>;</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">class </span><a class="code hl_class" href="../../d8/dd1/classAnalysisTree_1_1EventHeader.html">EventHeader</a>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">using </span>BranchPointer = ANALYSISTREE_UTILS_VARIANT&lt;HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*&gt;;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">using </span>ChannelPointer = ANALYSISTREE_UTILS_VARIANT&lt;Hit*, Module*, Track*, EventHeader*, Particle*&gt;;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">namespace </span>Utils {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> RetType&gt;</div>
-<div class="foldopen" id="foldopen00042" data-start="{" data-end="};">
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">   42</a></span><span class="keyword">struct </span><a class="code hl_struct" href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">Visitor</a></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>#if defined(ANALYSISTREE_BOOST_VARIANT)</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    : <span class="keyword">public</span> boost::static_visitor&lt;RetType&gt;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#endif</span><span class="comment">// USEBOOST</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>{</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#if defined(ANALYSISTREE_STD_VARIANT)</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="keyword">typedef</span> RetType result_type;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keyword">virtual</span> <a class="code hl_struct" href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">~Visitor</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>};</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">class </span><a class="code hl_class" href="../../d2/d0f/classAnalysisTree_1_1Container.html">Container</a>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">using </span>BranchPointer = ANALYSISTREE_UTILS_VARIANT&lt;HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*, GenericDetector*&gt;;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">using </span>ChannelPointer = ANALYSISTREE_UTILS_VARIANT&lt;Hit*, Module*, Track*, EventHeader*, Particle*, Container*&gt;;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">namespace </span>Utils {</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">template</span>&lt;<span class="keyword">typename</span> RetType&gt;</div>
+<div class="foldopen" id="foldopen00043" data-start="{" data-end="};">
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">   43</a></span><span class="keyword">struct </span><a class="code hl_struct" href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">Visitor</a></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>#if defined(ANALYSISTREE_BOOST_VARIANT)</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    : <span class="keyword">public</span> boost::static_visitor&lt;RetType&gt;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">#endif</span><span class="comment">// USEBOOST</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>{</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">#if defined(ANALYSISTREE_STD_VARIANT)</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="keyword">typedef</span> RetType result_type;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="keyword">virtual</span> <a class="code hl_struct" href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">~Visitor</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>};</div>
 </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>}<span class="comment">// namespace Utils</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}<span class="comment">// namespace AnalysisTree</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#endif</span><span class="comment">//ANALYSISTREE_INFRA_UTILS_HPP</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>}<span class="comment">// namespace Utils</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>}<span class="comment">// namespace AnalysisTree</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="preprocessor">#endif</span><span class="comment">//ANALYSISTREE_INFRA_UTILS_HPP</span></div>
+<div class="ttc" id="aclassAnalysisTree_1_1Container_html"><div class="ttname"><a href="../../d2/d0f/classAnalysisTree_1_1Container.html">AnalysisTree::Container</a></div><div class="ttdoc">A class to store any number of integers, floats and bools.</div><div class="ttdef"><b>Definition</b> Container.hpp:18</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1EventHeader_html"><div class="ttname"><a href="../../d8/dd1/classAnalysisTree_1_1EventHeader.html">AnalysisTree::EventHeader</a></div><div class="ttdef"><b>Definition</b> EventHeader.hpp:18</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Hit_html"><div class="ttname"><a href="../../de/dce/classAnalysisTree_1_1Hit.html">AnalysisTree::Hit</a></div><div class="ttdef"><b>Definition</b> Hit.hpp:16</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Module_html"><div class="ttname"><a href="../../de/dd8/classAnalysisTree_1_1Module.html">AnalysisTree::Module</a></div><div class="ttdef"><b>Definition</b> Module.hpp:15</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Particle_html"><div class="ttname"><a href="../../db/dd2/classAnalysisTree_1_1Particle.html">AnalysisTree::Particle</a></div><div class="ttdef"><b>Definition</b> Particle.hpp:11</div></div>
 <div class="ttc" id="aclassAnalysisTree_1_1Track_html"><div class="ttname"><a href="../../da/d0a/classAnalysisTree_1_1Track.html">AnalysisTree::Track</a></div><div class="ttdoc">A class for a generic track with determined momentum.</div><div class="ttdef"><b>Definition</b> Track.hpp:22</div></div>
 <div class="ttc" id="anamespaceAnalysisTree_html"><div class="ttname"><a href="../../d9/d26/namespaceAnalysisTree.html">AnalysisTree</a></div><div class="ttdoc">Cuts keep list of SimpleCuts. Logical AND is applied for all SimpleCut in the Cuts object.</div><div class="ttdef"><b>Definition</b> BranchConfig.cpp:10</div></div>
-<div class="ttc" id="astructAnalysisTree_1_1Utils_1_1Visitor_html"><div class="ttname"><a href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">AnalysisTree::Utils::Visitor</a></div><div class="ttdef"><b>Definition</b> Utils.hpp:46</div></div>
+<div class="ttc" id="astructAnalysisTree_1_1Utils_1_1Visitor_html"><div class="ttname"><a href="../../df/d32/structAnalysisTree_1_1Utils_1_1Visitor.html">AnalysisTree::Utils::Visitor</a></div><div class="ttdef"><b>Definition</b> Utils.hpp:47</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

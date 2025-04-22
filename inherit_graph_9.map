@@ -1,3 +1,39 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$d8/d42/classAnalysisTree_1_1Matching.html" title=" " alt="" coords="5,5,161,31"/>
+<area shape="rect" id="Node000000" href="$d4/da2/classAnalysisTree_1_1IndexAccessor.html" title=" " alt="" coords="5,209,194,234"/>
+<area shape="rect" id="Node000001" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="262,316,413,357"/>
+<area shape="poly" id="edge1_Node000000_Node000001" title=" " alt="" coords="169,238,195,251,210,265,220,277,229,290,243,302,264,313,261,318,240,307,225,294,215,281,207,268,192,256,167,243"/>
+<area shape="rect" id="Node000003" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="262,381,413,422"/>
+<area shape="poly" id="edge2_Node000000_Node000003" title=" " alt="" coords="179,239,195,252,208,266,215,281,220,310,225,339,232,353,243,366,263,380,260,384,240,370,227,356,220,341,215,311,210,283,203,269,192,256,175,244"/>
+<area shape="rect" id="Node000004" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="262,5,413,46"/>
+<area shape="poly" id="edge3_Node000000_Node000004" title=" " alt="" coords="115,194,166,126,201,89,240,57,263,44,265,49,243,61,204,93,170,130,119,197"/>
+<area shape="rect" id="Node000005" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="262,71,413,111"/>
+<area shape="poly" id="edge4_Node000000_Node000005" title=" " alt="" coords="127,197,178,160,240,122,269,110,271,114,243,127,181,164,130,201"/>
+<area shape="rect" id="Node000006" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="262,136,413,177"/>
+<area shape="poly" id="edge5_Node000000_Node000006" title=" " alt="" coords="163,202,260,175,262,180,164,207"/>
+<area shape="rect" id="Node000007" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="262,201,413,242"/>
+<area shape="poly" id="edge6_Node000000_Node000007" title=" " alt="" coords="209,219,261,219,261,224,209,224"/>
+<area shape="rect" id="Node000014" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="247,266,428,292"/>
+<area shape="poly" id="edge7_Node000000_Node000014" title=" " alt="" coords="171,236,281,263,280,268,170,241"/>
+<area shape="rect" id="Node000002" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="7,266,192,292"/>
+<area shape="poly" id="edge8_Node000002_Node000001" title=" " alt="" coords="171,293,262,316,261,321,170,299"/>
+<area shape="poly" id="edge9_Node000002_Node000003" title=" " alt="" coords="133,299,183,332,243,366,272,378,270,383,240,371,180,337,130,303"/>
+<area shape="poly" id="edge10_Node000002_Node000004" title=" " alt="" coords="178,256,192,245,208,222,215,199,215,153,215,106,223,82,240,57,259,42,263,46,244,61,228,84,220,107,220,153,220,200,213,225,196,249,182,260"/>
+<area shape="poly" id="edge11_Node000002_Node000005" title=" " alt="" coords="176,257,192,245,204,230,211,216,215,185,220,154,227,138,240,122,260,108,263,112,243,126,232,141,225,156,220,186,216,217,208,233,196,249,179,261"/>
+<area shape="poly" id="edge12_Node000002_Node000006" title=" " alt="" coords="169,258,192,245,207,231,215,217,224,202,240,188,263,175,265,180,243,192,229,206,220,220,211,234,195,249,171,262"/>
+<area shape="poly" id="edge13_Node000002_Node000007" title=" " alt="" coords="170,259,261,237,262,242,171,265"/>
+<area shape="poly" id="edge20_Node000002_Node000014" title=" " alt="" coords="208,276,246,276,246,282,208,282"/>
+<area shape="rect" id="Node000008" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="259,496,416,521"/>
+<area shape="poly" id="edge14_Node000002_Node000008" title=" " alt="" coords="114,305,133,344,161,393,198,441,243,482,263,493,260,497,240,487,194,445,157,396,128,347,109,307"/>
+<area shape="rect" id="Node000015" href="$df/d4d/classAnalysisTree_1_1ModulePosition.html" title=" " alt="" coords="242,446,433,472"/>
+<area shape="poly" id="edge21_Node000002_Node000015" title=" " alt="" coords="119,303,170,368,204,402,243,431,269,443,266,448,240,436,201,406,166,371,115,306"/>
+<area shape="rect" id="Node000009" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="481,421,658,446"/>
+<area shape="poly" id="edge15_Node000008_Node000009" title=" " alt="" coords="414,488,432,482,456,469,480,455,511,445,513,450,482,460,458,473,434,487,416,493"/>
+<area shape="rect" id="Node000010" href="$de/dce/classAnalysisTree_1_1Hit.html" title=" " alt="" coords="510,470,629,496"/>
+<area shape="poly" id="edge16_Node000008_Node000010" title=" " alt="" coords="431,495,509,487,510,492,432,501"/>
+<area shape="rect" id="Node000011" href="$de/dd8/classAnalysisTree_1_1Module.html" title=" " alt="" coords="498,520,642,545"/>
+<area shape="poly" id="edge17_Node000008_Node000011" title=" " alt="" coords="432,515,497,522,497,528,431,521"/>
+<area shape="rect" id="Node000012" href="$da/d0a/classAnalysisTree_1_1Track.html" title="A class for a generic track with determined momentum." alt="" coords="502,569,637,594"/>
+<area shape="poly" id="edge18_Node000008_Node000012" title=" " alt="" coords="390,524,482,555,518,566,517,571,480,560,389,529"/>
+<area shape="rect" id="Node000013" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="706,569,853,594"/>
+<area shape="poly" id="edge19_Node000012_Node000013" title=" " alt="" coords="653,579,706,579,706,584,653,584"/>
 </map>
