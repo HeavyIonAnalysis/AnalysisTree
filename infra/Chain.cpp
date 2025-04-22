@@ -88,6 +88,10 @@ void Chain::InitPointersToBranches(std::set<std::string> names) {
         branch_ptr = new ModuleDetector;
         break;
       }
+      case DetType::kGeneric: {
+        branch_ptr = new GenericDetector;
+        break;
+      }
     }
     branches_.emplace(branch, branch_ptr);
   }

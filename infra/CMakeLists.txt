@@ -13,6 +13,7 @@ set(SOURCES
     Branch.cpp
     BranchChannel.cpp
     AnalysisEntry.cpp
+    GenericContainerFiller.cpp
     )
 
 
@@ -22,7 +23,7 @@ string(REPLACE ".cpp" ".hpp" HEADERS "${SOURCES}")
 list(APPEND HEADERS "VariantMagic.hpp" "ToyMC.hpp" "Utils.hpp" "BranchHashHelper.hpp" "HelperFunctions.hpp")
 
 include_directories(${CMAKE_SOURCE_DIR}/core ${CMAKE_CURRENT_SOURCE_DIR} $<$<BOOL:${Boost_FOUND}>:${Boost_INCLUDE_DIRS}>)
-add_library(AnalysisTreeInfra SHARED ${SOURCES} G__AnalysisTreeInfra.cxx)
+add_library(AnalysisTreeInfra SHARED ${SOURCES})
 target_compile_definitions(AnalysisTreeInfra PUBLIC
         $<$<BOOL:${Boost_FOUND}>:ANALYSISTREE_BOOST_FOUND>)
 
@@ -31,6 +32,7 @@ ROOT_GENERATE_DICTIONARY(G__AnalysisTreeInfra ${HEADERS}
         OPTIONS
             -I${CMAKE_BINARY_DIR}/include
             $<$<BOOL:${Boost_FOUND}>:-DANALYSISTREE_BOOST_FOUND>
+        MODULE AnalysisTreeInfra
         )
 target_link_libraries(AnalysisTreeInfra
         PUBLIC

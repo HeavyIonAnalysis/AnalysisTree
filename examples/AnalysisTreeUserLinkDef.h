@@ -4,7 +4,7 @@
 #pragma link off all functions;
 #pragma link C++ nestedclasses;
 
-//#pragma link C++ class UserTaskRead++;
-#pragma link C++ class UserTaskWrite++;
+#pragma link C++ class UserTaskRead+;
+#pragma link C++ class UserTaskWrite+;
 
 #endif

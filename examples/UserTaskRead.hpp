@@ -1,7 +1,7 @@
 #ifndef ANALYSISTREE_EXAMPLES_USERTASKREAD_HPP_
 #define ANALYSISTREE_EXAMPLES_USERTASKREAD_HPP_
 
-#include <Task.hpp>
+#include <AnalysisTree/Task.hpp>
 
 class UserTaskRead : public AnalysisTree::Task {
 

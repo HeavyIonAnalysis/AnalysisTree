@@ -33,7 +33,7 @@ void example(const std::string& filename, const std::string& treename){
   data_header->Print();
   config->Print();
 
-  auto rec_particles = chain->GetBranch("VtxTracks");
+  auto rec_particles = chain->GetBranchObject("VtxTracks");
   auto rec2sim_particles = chain->GetMatching("VtxTracks", "SimParticles");
 
   auto rec_pT = rec_particles.GetField("pT");

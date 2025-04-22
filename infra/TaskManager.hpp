@@ -107,6 +107,10 @@ class TaskManager {
         AddBranch(branch->GetDataRaw<EventHeader*>(), branch->GetConfig());
         break;
       }
+      case DetType::kGeneric: {
+        AddBranch(branch->GetDataRaw<GenericDetector*>(), branch->GetConfig());
+        break;
+      }
     }
   }
 
@@ -126,9 +130,6 @@ class TaskManager {
                          configuration_->GetBranchConfig(br2).GetId());
 
     configuration_->AddMatch(match);
-    //    if (write_mode_ == eBranchWriteMode::kCreateNewTree) {
-    //      chain_->GetConfiguration()->AddMatch(match);
-    //    }
     out_tree_->Branch((configuration_->GetMatchName(br1, br2) + ".").c_str(), &match);
   }
 

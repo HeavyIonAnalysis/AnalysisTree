@@ -33,7 +33,7 @@ inline std::string ToStringWithSignificantFigures(const T a_value, const int n) 
 inline std::vector<AnalysisTree::SimpleCut> CreateRangeCuts(const std::vector<float>& ranges, const std::string& cutNamePrefix, const std::string& branchFieldName, int precision = 2) {
   std::vector<AnalysisTree::SimpleCut> sliceCuts;
   for (int iRange = 0; iRange < ranges.size() - 1; iRange++) {
-    const std::string cutName = cutNamePrefix + ToStringWithPrecision(ranges.at(iRange), 2) + "_" + ToStringWithPrecision(ranges.at(iRange + 1), precision);
+    const std::string cutName = cutNamePrefix + ToStringWithPrecision(ranges.at(iRange), precision) + "_" + ToStringWithPrecision(ranges.at(iRange + 1), precision);
     sliceCuts.emplace_back(AnalysisTree::RangeCut(branchFieldName, ranges.at(iRange), ranges.at(iRange + 1), cutName));
   }
 
@@ -48,6 +48,14 @@ inline std::vector<AnalysisTree::SimpleCut> CreateEqualCuts(const std::vector<fl
   }
 
   return sliceCuts;
+}
+
+inline bool StringToBool(const std::string& str) {
+  if (str == "true") return true;
+  else if (str == "false")
+    return false;
+  else
+    throw std::runtime_error("HelperFunctions::StringToBool(): argument must be either true or false");
 }
 
 }// namespace HelperFunctions

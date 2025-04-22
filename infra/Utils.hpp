@@ -32,9 +32,10 @@ class Particle;
 class Module;
 class Hit;
 class EventHeader;
+class Container;
 
-using BranchPointer = ANALYSISTREE_UTILS_VARIANT<HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*>;
-using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Hit*, Module*, Track*, EventHeader*, Particle*>;
+using BranchPointer = ANALYSISTREE_UTILS_VARIANT<HitDetector*, ModuleDetector*, TrackDetector*, EventHeader*, Particles*, GenericDetector*>;
+using ChannelPointer = ANALYSISTREE_UTILS_VARIANT<Hit*, Module*, Track*, EventHeader*, Particle*, Container*>;
 
 namespace Utils {
 
