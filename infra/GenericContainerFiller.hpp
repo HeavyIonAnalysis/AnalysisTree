@@ -27,7 +27,7 @@ struct FICS {// FICS stands for float, int, char, short
   char char_{static_cast<char>(-199)};
   short short_{static_cast<short>(-199)};
 
-  float get() {
+  float get() const {
     if (std::fabs(float_ + 199.f) > 1e-4) return float_;
     if (int_ != -199) return static_cast<float>(int_);
     if (char_ != static_cast<char>(-199)) return static_cast<float>(char_);
@@ -83,7 +83,7 @@ class GenericContainerFiller {
   std::vector<FICS> branch_values_;
 
   // variable, change of value of which triggers switch to a new AT event
-  std::string entry_switch_trigger_var_name_{""};
+  std::string entry_switch_trigger_var_name_;
 
   int entry_switch_trigger_id_{-1};
 

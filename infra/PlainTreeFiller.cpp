@@ -16,7 +16,7 @@ void PlainTreeFiller::AddBranch(const std::string& branch_name) {
 }
 
 void PlainTreeFiller::SetFieldsToIgnore(const std::vector<std::string>& fields_to_ignore) {
-  if (branch_name_ == "") {
+  if (branch_name_.empty()) {
     throw std::runtime_error("PlainTreeFiller::SetFieldsToIgnore() must be called after PlainTreeFiller::AddBranch()\n");
   }
   for (auto& fti : fields_to_ignore) {
@@ -25,7 +25,7 @@ void PlainTreeFiller::SetFieldsToIgnore(const std::vector<std::string>& fields_t
 }
 
 void PlainTreeFiller::SetFieldsToPreserve(const std::vector<std::string>& fields_to_preserve) {
-  if (branch_name_ == "") {
+  if (branch_name_.empty()) {
     throw std::runtime_error("PlainTreeFiller::SetFieldsToPreserve() must be called after PlainTreeFiller::AddBranch()\n");
   }
   for (auto& fti : fields_to_preserve) {
@@ -44,7 +44,7 @@ void PlainTreeFiller::Init() {
         if (me.second.id_ < 0) defaultFieldsNames.emplace_back(me.first);
       }
     }
-    SetFieldsToIgnore(std::move(defaultFieldsNames));
+    SetFieldsToIgnore(defaultFieldsNames);
   }
 
   if (!fields_to_ignore_.empty() && !fields_to_preserve_.empty()) {
@@ -55,17 +55,17 @@ void PlainTreeFiller::Init() {
     const auto& branch_config = config_->GetBranchConfig(branch_name_);
     for (const auto& field : branch_config.GetMap<float>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
-      vars_.emplace_back(FIB());
+      vars_.emplace_back();
       vars_.back().type_ = Types::kFloat;
     }
     for (const auto& field : branch_config.GetMap<int>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
-      vars_.emplace_back(FIB());
+      vars_.emplace_back();
       vars_.back().type_ = Types::kInteger;
     }
     for (const auto& field : branch_config.GetMap<bool>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
-      vars_.emplace_back(FIB());
+      vars_.emplace_back();
       vars_.back().type_ = Types::kBool;
     }
   }
