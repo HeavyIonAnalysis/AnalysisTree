@@ -4,17 +4,33 @@
 
 #include "GenericContainerFiller.hpp"
 
+#include <fstream>
+
 using namespace AnalysisTree;
 
 GenericContainerFiller::GenericContainerFiller(std::string fileInName, std::string treeInName) : file_in_name_(std::move(fileInName)),
                                                                                                  tree_in_name_(std::move(treeInName)) {}
 
 void GenericContainerFiller::Init() {
-  file_in_ = TFile::Open(file_in_name_.c_str(), "read");
-  if (file_in_ == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): file_in_ == nullptr");
+  tree_in_ = new TChain(tree_in_name_.c_str());
 
-  tree_in_ = file_in_->Get<TTree>(tree_in_name_.c_str());
-  if (tree_in_ == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): tree_in_ == nullptr");
+  auto ends_with = [](const std::string& str, const std::string& suffix) {
+    if (suffix.size() > str.size()) return false;
+    return std::equal(suffix.rbegin(), suffix.rend(), str.rbegin());
+  };
+
+  if(ends_with(file_in_name_, ".root")) {
+    tree_in_->Add(file_in_name_.c_str());
+  } else {
+    std::ifstream filelist(file_in_name_);
+    std::string line;
+
+    if (!filelist) throw std::runtime_error("GenericContainerFiller::Init(): filelist " + file_in_name_ + " is missing");
+
+    while (std::getline(filelist, line)) {
+      tree_in_->Add(line.c_str());
+    }
+  }
 
   if (!fields_to_ignore_.empty() && !fields_to_preserve_.empty()) throw std::runtime_error("GenericContainerFiller::Run(): !fields_to_ignore_.empty() && !fields_to_preserve_.empty()");
 
@@ -74,7 +90,7 @@ void GenericContainerFiller::Finish() {
   config_.Write("Configuration");
   tree_out_->Write();
   file_out_->Close();
-  file_in_->Close();
+  delete tree_in_;
 }
 
 void GenericContainerFiller::Run(int nEntries) {

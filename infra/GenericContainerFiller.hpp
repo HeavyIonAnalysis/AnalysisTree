@@ -9,8 +9,8 @@
 #include "Container.hpp"
 #include "Detector.hpp"
 
+#include <TChain.h>
 #include <TFile.h>
-#include <TTree.h>
 
 #include <string>
 #include <vector>
@@ -73,8 +73,7 @@ class GenericContainerFiller {
   std::string tree_out_name_{"aTree"};
   std::string branch_out_name_{"PlainBranch"};
 
-  TFile* file_in_{nullptr};
-  TTree* tree_in_{nullptr};
+  TChain* tree_in_{nullptr};
   TFile* file_out_{nullptr};
   TTree* tree_out_{nullptr};
 
