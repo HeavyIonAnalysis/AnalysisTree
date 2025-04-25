@@ -19,7 +19,7 @@ void GenericContainerFiller::Init() {
     return std::equal(suffix.rbegin(), suffix.rend(), str.rbegin());
   };
 
-  if(ends_with(file_in_name_, ".root")) {
+  if (ends_with(file_in_name_, ".root")) {
     tree_in_->Add(file_in_name_.c_str());
   } else {
     std::ifstream filelist(file_in_name_);
