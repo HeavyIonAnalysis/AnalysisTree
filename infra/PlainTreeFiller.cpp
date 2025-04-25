@@ -55,12 +55,18 @@ void PlainTreeFiller::Init() {
     const auto& branch_config = config_->GetBranchConfig(branch_name_);
     for (const auto& field : branch_config.GetMap<float>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
+      vars_.emplace_back(FIB());
+      vars_.back().type_ = Types::kFloat;
     }
     for (const auto& field : branch_config.GetMap<int>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
+      vars_.emplace_back(FIB());
+      vars_.back().type_ = Types::kInteger;
     }
     for (const auto& field : branch_config.GetMap<bool>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
+      vars_.emplace_back(FIB());
+      vars_.back().type_ = Types::kBool;
     }
   }
 
@@ -70,7 +76,8 @@ void PlainTreeFiller::Init() {
     throw std::runtime_error("Only 1 output branch");
   }
   const auto& vars = entries_[0].GetVariables();
-  vars_.resize(vars.size());
+
+  if(vars_.size() != vars.size()) throw std::runtime_error("PlainTreeFiller::Init(): vars_.size() != vars.size()");
 
   file_ = TFile::Open(file_name_.c_str(), "recreate");
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
@@ -81,7 +88,9 @@ void PlainTreeFiller::Init() {
     if (!fields_to_preserve_.empty() && std::find(fields_to_preserve_.begin(), fields_to_preserve_.end(), leaf_name) == fields_to_preserve_.end()) continue;
     if (!is_prepend_leaves_with_branchname_) leaf_name.erase(0, branch_name_.size() + 1);
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
-    plain_tree_->Branch(leaf_name.c_str(), &(vars_.at(i)), Form("%s/F", leaf_name.c_str()));
+    if(vars_.at(i).type_ == Types::kFloat) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).float_, Form("%s/F", leaf_name.c_str()));
+    if(vars_.at(i).type_ == Types::kInteger) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).int_, Form("%s/I", leaf_name.c_str()));
+    if(vars_.at(i).type_ == Types::kBool) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).bool_, Form("%s/O", leaf_name.c_str()));
   }
 
   for (auto& cm : cuts_map_) {
@@ -97,7 +106,9 @@ void PlainTreeFiller::Exec() {
   for (const auto& channel : values) {
     assert(channel.size() == vars_.size());
     for (size_t i = 0; i < channel.size(); ++i) {
-      vars_.at(i) = channel.at(i);
+      if(vars_.at(i).type_ == Types::kFloat) vars_.at(i).float_ = static_cast<float>(channel.at(i));
+      if(vars_.at(i).type_ == Types::kInteger) vars_.at(i).int_ = static_cast<int>(channel.at(i));
+      if(vars_.at(i).type_ == Types::kBool) vars_.at(i).bool_ = static_cast<bool>(channel.at(i));
     }
     plain_tree_->Fill();
   }
@@ -109,6 +120,5 @@ void PlainTreeFiller::Finish() {
   plain_tree_->Write();
   file_->Close();
   delete file_;
-  //  delete plain_tree_;
 }
 }// namespace AnalysisTree
