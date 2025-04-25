@@ -56,8 +56,7 @@ void GenericContainerFiller::Init() {
   config_.AddBranchConfig(branchConfig);
 
   for (int iV = 0; iV < branch_values_.size(); iV++) {
-    TBranch* branch = tree_in_->GetBranch(branch_map_.at(iV).name_.c_str());
-    SetAddressFICS(branch, branch_map_.at(iV), branch_values_.at(iV));
+    SetAddressFICS(branch_map_.at(iV).name_, branch_map_.at(iV), branch_values_.at(iV));
   }
 
   generic_detector_ = new GenericDetector(branchConfig.GetId());
@@ -114,14 +113,14 @@ int GenericContainerFiller::DetermineFieldIdByName(const std::vector<IndexMap>& 
   return distance;
 }
 
-void GenericContainerFiller::SetAddressFICS(TBranch* branch, const IndexMap& imap, FICS& ficc) {
-  if (imap.field_type_ == "TLeafF") branch->SetAddress(&ficc.float_);
+void GenericContainerFiller::SetAddressFICS(const std::string& branchName, const IndexMap& imap, FICS& ficc) {
+  if (imap.field_type_ == "TLeafF") tree_in_->SetBranchAddress(branchName.c_str(), &ficc.float_);
   else if (imap.field_type_ == "TLeafI")
-    branch->SetAddress(&ficc.int_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.int_);
   else if (imap.field_type_ == "TLeafB")
-    branch->SetAddress(&ficc.char_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.char_);
   else if (imap.field_type_ == "TLeafS")
-    branch->SetAddress(&ficc.short_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.short_);
   else
     throw std::runtime_error("GenericContainerFiller::SetAddressFICS(): unsupported filed type " + imap.field_type_);
 }

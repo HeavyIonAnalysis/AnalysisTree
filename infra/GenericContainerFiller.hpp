@@ -63,7 +63,7 @@ class GenericContainerFiller {
   void Finish();
 
   static int DetermineFieldIdByName(const std::vector<IndexMap>& iMap, const std::string& name);
-  static void SetAddressFICS(TBranch* branch, const IndexMap& imap, FICS& ficc);
+  void SetAddressFICS(const std::string& branchName, const IndexMap& imap, FICS& ficc);
   static void SetFieldsFICS(const std::vector<IndexMap>& imap, AnalysisTree::Container& container, const std::vector<FICS>& ficc);
 
   std::string file_in_name_;
