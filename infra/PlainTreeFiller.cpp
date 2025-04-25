@@ -77,7 +77,7 @@ void PlainTreeFiller::Init() {
   }
   const auto& vars = entries_[0].GetVariables();
 
-  if(vars_.size() != vars.size()) throw std::runtime_error("PlainTreeFiller::Init(): vars_.size() != vars.size()");
+  if (vars_.size() != vars.size()) throw std::runtime_error("PlainTreeFiller::Init(): vars_.size() != vars.size()");
 
   file_ = TFile::Open(file_name_.c_str(), "recreate");
   plain_tree_ = new TTree(tree_name_.c_str(), "Plain Tree");
@@ -88,9 +88,9 @@ void PlainTreeFiller::Init() {
     if (!fields_to_preserve_.empty() && std::find(fields_to_preserve_.begin(), fields_to_preserve_.end(), leaf_name) == fields_to_preserve_.end()) continue;
     if (!is_prepend_leaves_with_branchname_) leaf_name.erase(0, branch_name_.size() + 1);
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
-    if(vars_.at(i).type_ == Types::kFloat) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).float_, Form("%s/F", leaf_name.c_str()));
-    if(vars_.at(i).type_ == Types::kInteger) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).int_, Form("%s/I", leaf_name.c_str()));
-    if(vars_.at(i).type_ == Types::kBool) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).bool_, Form("%s/O", leaf_name.c_str()));
+    if (vars_.at(i).type_ == Types::kFloat) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).float_, Form("%s/F", leaf_name.c_str()));
+    if (vars_.at(i).type_ == Types::kInteger) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).int_, Form("%s/I", leaf_name.c_str()));
+    if (vars_.at(i).type_ == Types::kBool) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(i).bool_, Form("%s/O", leaf_name.c_str()));
   }
 
   for (auto& cm : cuts_map_) {
@@ -106,9 +106,9 @@ void PlainTreeFiller::Exec() {
   for (const auto& channel : values) {
     assert(channel.size() == vars_.size());
     for (size_t i = 0; i < channel.size(); ++i) {
-      if(vars_.at(i).type_ == Types::kFloat) vars_.at(i).float_ = static_cast<float>(channel.at(i));
-      if(vars_.at(i).type_ == Types::kInteger) vars_.at(i).int_ = static_cast<int>(channel.at(i));
-      if(vars_.at(i).type_ == Types::kBool) vars_.at(i).bool_ = static_cast<bool>(channel.at(i));
+      if (vars_.at(i).type_ == Types::kFloat) vars_.at(i).float_ = static_cast<float>(channel.at(i));
+      if (vars_.at(i).type_ == Types::kInteger) vars_.at(i).int_ = static_cast<int>(channel.at(i));
+      if (vars_.at(i).type_ == Types::kBool) vars_.at(i).bool_ = static_cast<bool>(channel.at(i));
     }
     plain_tree_->Fill();
   }
