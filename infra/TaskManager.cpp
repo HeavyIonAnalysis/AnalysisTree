@@ -101,6 +101,12 @@ void TaskManager::Run(long long nEvents) {
     nEvents = nEvents < 0 || nEvents > chain_->GetEntries() ? chain_->GetEntries() : nEvents;
   }
 
+  if (verbosity_frequency_ > 0) {
+    const int verbosityPeriod = nEvents / verbosity_frequency_;
+    const int vPlog = static_cast<int>(std::log10(verbosityPeriod));
+    verbosity_period_ = static_cast<int>(std::pow(10, vPlog));
+  }
+
   for (long long iEvent = 0; iEvent < nEvents; ++iEvent) {
     if (verbosity_period_ > 0 && iEvent % verbosity_period_ == 0) {
       std::cout << "Event no " << iEvent << "\n";
