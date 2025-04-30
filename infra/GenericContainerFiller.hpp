@@ -9,8 +9,8 @@
 #include "Container.hpp"
 #include "Detector.hpp"
 
+#include <TChain.h>
 #include <TFile.h>
-#include <TTree.h>
 
 #include <string>
 #include <vector>
@@ -27,7 +27,7 @@ struct FICS {// FICS stands for float, int, char, short
   char char_{static_cast<char>(-199)};
   short short_{static_cast<short>(-199)};
 
-  float get() {
+  float get() const {
     if (std::fabs(float_ + 199.f) > 1e-4) return float_;
     if (int_ != -199) return static_cast<float>(int_);
     if (char_ != static_cast<char>(-199)) return static_cast<float>(char_);
@@ -63,7 +63,7 @@ class GenericContainerFiller {
   void Finish();
 
   static int DetermineFieldIdByName(const std::vector<IndexMap>& iMap, const std::string& name);
-  static void SetAddressFICS(TBranch* branch, const IndexMap& imap, FICS& ficc);
+  void SetAddressFICS(const std::string& branchName, const IndexMap& imap, FICS& ficc);
   static void SetFieldsFICS(const std::vector<IndexMap>& imap, AnalysisTree::Container& container, const std::vector<FICS>& ficc);
 
   std::string file_in_name_;
@@ -73,8 +73,7 @@ class GenericContainerFiller {
   std::string tree_out_name_{"aTree"};
   std::string branch_out_name_{"PlainBranch"};
 
-  TFile* file_in_{nullptr};
-  TTree* tree_in_{nullptr};
+  TChain* tree_in_{nullptr};
   TFile* file_out_{nullptr};
   TTree* tree_out_{nullptr};
 
@@ -84,7 +83,7 @@ class GenericContainerFiller {
   std::vector<FICS> branch_values_;
 
   // variable, change of value of which triggers switch to a new AT event
-  std::string entry_switch_trigger_var_name_{""};
+  std::string entry_switch_trigger_var_name_;
 
   int entry_switch_trigger_id_{-1};
 

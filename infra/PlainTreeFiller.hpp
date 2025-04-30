@@ -12,6 +12,13 @@
 
 namespace AnalysisTree {
 
+struct FIB {
+  float float_{-299.f};
+  int int_{-299};
+  bool bool_{false};
+  Types type_{Types::kNumberOfTypes};
+};
+
 class PlainTreeFiller : public AnalysisTask {
  public:
   PlainTreeFiller() = default;
@@ -41,7 +48,7 @@ class PlainTreeFiller : public AnalysisTask {
   std::string tree_name_{"PlainTree"};
   std::string branch_name_;
 
-  std::vector<float> vars_{};
+  std::vector<FIB> vars_;
   std::vector<std::string> fields_to_ignore_{};
   std::vector<std::string> fields_to_preserve_{};
 

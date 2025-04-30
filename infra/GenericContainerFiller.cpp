@@ -4,17 +4,33 @@
 
 #include "GenericContainerFiller.hpp"
 
+#include <fstream>
+
 using namespace AnalysisTree;
 
 GenericContainerFiller::GenericContainerFiller(std::string fileInName, std::string treeInName) : file_in_name_(std::move(fileInName)),
                                                                                                  tree_in_name_(std::move(treeInName)) {}
 
 void GenericContainerFiller::Init() {
-  file_in_ = TFile::Open(file_in_name_.c_str(), "read");
-  if (file_in_ == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): file_in_ == nullptr");
+  tree_in_ = new TChain(tree_in_name_.c_str());
 
-  tree_in_ = file_in_->Get<TTree>(tree_in_name_.c_str());
-  if (tree_in_ == nullptr) throw std::runtime_error("GenericContainerFiller::Run(): tree_in_ == nullptr");
+  auto ends_with = [](const std::string& str, const std::string& suffix) {
+    if (suffix.size() > str.size()) return false;
+    return std::equal(suffix.rbegin(), suffix.rend(), str.rbegin());
+  };
+
+  if (ends_with(file_in_name_, ".root")) {
+    tree_in_->Add(file_in_name_.c_str());
+  } else {
+    std::ifstream filelist(file_in_name_);
+    std::string line;
+
+    if (!filelist) throw std::runtime_error("GenericContainerFiller::Init(): filelist " + file_in_name_ + " is missing");
+
+    while (std::getline(filelist, line)) {
+      tree_in_->Add(line.c_str());
+    }
+  }
 
   if (!fields_to_ignore_.empty() && !fields_to_preserve_.empty()) throw std::runtime_error("GenericContainerFiller::Run(): !fields_to_ignore_.empty() && !fields_to_preserve_.empty()");
 
@@ -40,8 +56,7 @@ void GenericContainerFiller::Init() {
   config_.AddBranchConfig(branchConfig);
 
   for (int iV = 0; iV < branch_values_.size(); iV++) {
-    TBranch* branch = tree_in_->GetBranch(branch_map_.at(iV).name_.c_str());
-    SetAddressFICS(branch, branch_map_.at(iV), branch_values_.at(iV));
+    SetAddressFICS(branch_map_.at(iV).name_, branch_map_.at(iV), branch_values_.at(iV));
   }
 
   generic_detector_ = new GenericDetector(branchConfig.GetId());
@@ -74,7 +89,7 @@ void GenericContainerFiller::Finish() {
   config_.Write("Configuration");
   tree_out_->Write();
   file_out_->Close();
-  file_in_->Close();
+  delete tree_in_;
 }
 
 void GenericContainerFiller::Run(int nEntries) {
@@ -98,14 +113,14 @@ int GenericContainerFiller::DetermineFieldIdByName(const std::vector<IndexMap>& 
   return distance;
 }
 
-void GenericContainerFiller::SetAddressFICS(TBranch* branch, const IndexMap& imap, FICS& ficc) {
-  if (imap.field_type_ == "TLeafF") branch->SetAddress(&ficc.float_);
+void GenericContainerFiller::SetAddressFICS(const std::string& branchName, const IndexMap& imap, FICS& ficc) {
+  if (imap.field_type_ == "TLeafF") tree_in_->SetBranchAddress(branchName.c_str(), &ficc.float_);
   else if (imap.field_type_ == "TLeafI")
-    branch->SetAddress(&ficc.int_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.int_);
   else if (imap.field_type_ == "TLeafB")
-    branch->SetAddress(&ficc.char_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.char_);
   else if (imap.field_type_ == "TLeafS")
-    branch->SetAddress(&ficc.short_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.short_);
   else
     throw std::runtime_error("GenericContainerFiller::SetAddressFICS(): unsupported filed type " + imap.field_type_);
 }
