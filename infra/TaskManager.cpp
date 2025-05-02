@@ -103,7 +103,7 @@ void TaskManager::Run(long long nEvents) {
 
   if (verbosity_frequency_ > 0) {
     const int verbosityPeriod = nEvents / verbosity_frequency_;
-    const int vPlog = static_cast<int>(std::log10(verbosityPeriod));
+    const int vPlog = static_cast<int>(std::round(std::log10(verbosityPeriod)));
     verbosity_period_ = static_cast<int>(std::pow(10, vPlog));
   }
 
