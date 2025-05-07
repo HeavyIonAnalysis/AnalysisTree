@@ -84,6 +84,14 @@ class SimpleCut {
   friend SimpleCut EqualsCut(const Variable& var, int value, const std::string& title);
 
   /**
+  * Constructor for a cut which is always passed
+  * (needed for keeping generality of the user's code, when a set of cuts
+  * is iterated and an iteration with no-cut is needed)
+  * @param branchName name of the branch, which is present in other cuts
+  */
+  friend SimpleCut OpenCut(const std::string& branchName, const std::string& title);
+
+  /**
    * @brief Evaluates cut
    * @tparam T type of data-object associated with TTree
    * @param object
@@ -131,6 +139,7 @@ SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const
 SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title = "");
 SimpleCut RangeCut(const Variable& var, double lo, double hi, const std::string& title = "");
 SimpleCut EqualsCut(const Variable& var, int value, const std::string& title = "");
+SimpleCut OpenCut(const std::string& branchName, const std::string& title = "alwaysTrue");
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_SIMPLECUT_H
