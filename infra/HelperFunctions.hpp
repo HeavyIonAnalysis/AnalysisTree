@@ -58,5 +58,20 @@ inline bool StringToBool(const std::string& str) {
     throw std::runtime_error("HelperFunctions::StringToBool(): argument must be either true or false");
 }
 
+template<typename T>
+inline std::vector<T> MergeVectors(const std::vector<T>& vec1, const std::vector<T>& vec2) {
+  std::vector<T> result;
+  result.reserve(vec1.size() + vec2.size());
+  result.insert(result.end(), vec1.begin(), vec1.end());
+  result.insert(result.end(), vec2.begin(), vec2.end());
+
+  return result;
+}
+
+template<typename T, typename... Args>
+inline std::vector<T> MergeVectors(const std::vector<T>& vec1, const std::vector<T>& vec2, Args... args) {
+  return MergeVectors(vec1, MergeVectors(vec2, args...));
+}
+
 }// namespace HelperFunctions
 #endif// ANALYSISTREE_INFRA_HELPER_FUNCTIONS_HPP
