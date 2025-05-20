@@ -30,21 +30,49 @@ inline std::string ToStringWithSignificantFigures(const T a_value, const int n) 
   return ToStringWithPrecision(reshifted_value, precision);
 }
 
-inline std::vector<AnalysisTree::SimpleCut> CreateRangeCuts(const std::vector<float>& ranges, const std::string& cutNamePrefix, const std::string& branchFieldName, int precision = 2) {
+inline std::vector<AnalysisTree::SimpleCut> CreateRangeCuts(const std::vector<float>& ranges, const std::string& cutNamePrefix, const std::string& branchFieldName, bool isAppendWithOpenCut = false, int precision = -1) {
+  auto checkHasFractionalPart = [](float value) {
+    float fracPart = std::round(value) - value;
+    return std::abs(fracPart) > 1e-4;
+  };
+
+  auto countDigisAfterComma = [&](float value) {
+    int nDigis{0};
+    while (checkHasFractionalPart(value)) {
+      value *= 10;
+      ++nDigis;
+    }
+
+    return nDigis;
+  };
+
+  auto evaluateMaxDigisAfterComma = [&](const std::vector<float>& vec) {
+    int result = 0;
+    for (const auto& v : vec) {
+      result = std::max(result, countDigisAfterComma(v));
+    }
+
+    return result;
+  };
+
+  if (precision < 0) precision = evaluateMaxDigisAfterComma(ranges);
+
   std::vector<AnalysisTree::SimpleCut> sliceCuts;
   for (int iRange = 0; iRange < ranges.size() - 1; iRange++) {
     const std::string cutName = cutNamePrefix + ToStringWithPrecision(ranges.at(iRange), precision) + "_" + ToStringWithPrecision(ranges.at(iRange + 1), precision);
     sliceCuts.emplace_back(AnalysisTree::RangeCut(branchFieldName, ranges.at(iRange), ranges.at(iRange + 1), cutName));
   }
 
+  if (isAppendWithOpenCut) sliceCuts.emplace_back(AnalysisTree::OpenCut(branchFieldName.substr(0, branchFieldName.find('.'))));
+
   return sliceCuts;
 }
 
-inline std::vector<AnalysisTree::SimpleCut> CreateEqualCuts(const std::vector<float>& values, const std::string& cutNamePrefix, const std::string& branchFieldName, int precision = 2) {
+inline std::vector<AnalysisTree::SimpleCut> CreateEqualCuts(const std::vector<int>& values, const std::string& cutNamePrefix, const std::string& branchFieldName) {
   std::vector<AnalysisTree::SimpleCut> sliceCuts;
-  for (int iValue = 0; iValue < values.size(); iValue++) {
-    const std::string cutName = cutNamePrefix + ToStringWithPrecision(values.at(iValue), precision);
-    sliceCuts.emplace_back(AnalysisTree::EqualsCut(branchFieldName, values.at(iValue), cutName));
+  for (const auto& value : values) {
+    const std::string cutName = cutNamePrefix + std::to_string(value);
+    sliceCuts.emplace_back(AnalysisTree::EqualsCut(branchFieldName, value, cutName));
   }
 
   return sliceCuts;
@@ -56,6 +84,21 @@ inline bool StringToBool(const std::string& str) {
     return false;
   else
     throw std::runtime_error("HelperFunctions::StringToBool(): argument must be either true or false");
+}
+
+template<typename T>
+inline std::vector<T> MergeVectors(const std::vector<T>& vec1, const std::vector<T>& vec2) {
+  std::vector<T> result;
+  result.reserve(vec1.size() + vec2.size());
+  result.insert(result.end(), vec1.begin(), vec1.end());
+  result.insert(result.end(), vec2.begin(), vec2.end());
+
+  return result;
+}
+
+template<typename T, typename... Args>
+inline std::vector<T> MergeVectors(const std::vector<T>& vec1, const std::vector<T>& vec2, const Args&... args) {
+  return MergeVectors(vec1, MergeVectors(vec2, args...));
 }
 
 }// namespace HelperFunctions
