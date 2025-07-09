@@ -61,8 +61,8 @@ class AnalysisTaskTest : public AnalysisTask {
   void Finish() override {
     AnalysisTask::Finish();
 
-    for (const auto& entry : entries_test_) {
-      for (const auto& var : entry) {
+    for (auto& entry : entries_test_) {
+      for (auto& var : entry) {
         var.mean_ /= var.n_entries_;
         var.sigma_ /= var.n_entries_;
       }

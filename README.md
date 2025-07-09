@@ -29,12 +29,12 @@ Basic objects are:<br>
  - Hit (position and signal)<br>
  - Module (id and signal)<br>
 Four mentioned objects are so-called channelized:
-they contain set of channels (namely tracks, prticles, hits or modules) in each event<br>
+they contain set of channels (namely tracks, particles, hits or modules) in each event<br>
  - EventHeader (vertex position) - contains information related to specific event<br>
  - DataHeader - contains common information for all events<br>
  - Matching - establishes a correspondence between channels in channelized objects (e.g. between simulated particle and reconstructed track).
 
-Additionaly to mandatory information specified in round brackets (a.k.a. "default fileds"), each object can contain any number of integer, floating or boolean fields (a.k.a. "user-defined fields").
+Additionally to mandatory information specified in round brackets (a.k.a. "default fields"), each object can contain any number of integer, floating or boolean fields (a.k.a. "user-defined fields").
 Information about all fields in all branches is stored in Configuration object.
 
 ## Installation
