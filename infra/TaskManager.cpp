@@ -103,7 +103,7 @@ void TaskManager::Run(long long nEventFrom, long long nEvents) {
   std::cout << "AnalysisTree::Manager::Run" << std::endl;
   auto start = std::chrono::system_clock::now();
 
-  if (nEventFrom + nEvents > chain_->GetEntries()) {
+  if (nEventFrom + nEvents > chain_->GetEntries() && chain_->GetEntries() > 0) {
     throw std::runtime_error("TaskManager::Run() - nEventFrom + nEvents > chain_->GetEntries()");
   }
 
