@@ -107,7 +107,7 @@ $(function(){ initResizable(false); });
 <li>Hit (position and signal)<br  />
 </li>
 <li>Module (id and signal)<br  />
- Four mentioned objects are so-called channelized: they contain set of channels (namely tracks, prticles, hits or modules) in each event<br  />
+ Four mentioned objects are so-called channelized: they contain set of channels (namely tracks, particles, hits or modules) in each event<br  />
 </li>
 <li>EventHeader (vertex position) - contains information related to specific event<br  />
 </li>
@@ -115,7 +115,7 @@ $(function(){ initResizable(false); });
 </li>
 <li>Matching - establishes a correspondence between channels in channelized objects (e.g. between simulated particle and reconstructed track).</li>
 </ul>
-<p>Additionaly to mandatory information specified in round brackets (a.k.a. "default fileds"), each object can contain any number of integer, floating or boolean fields (a.k.a. "user-defined fields"). Information about all fields in all branches is stored in Configuration object.</p>
+<p>Additionally to mandatory information specified in round brackets (a.k.a. "default fields"), each object can contain any number of integer, floating or boolean fields (a.k.a. "user-defined fields"). Information about all fields in all branches is stored in Configuration object.</p>
 <h1>Installation</h1>
 <p>ROOT6 is needed for installation. Follow CERN ROOT <a href="https://root.cern/install/">instructions</a> to install it. Version compiled with c++17 flag is preferred, otherwise CMAKE_CXX_STANDARD flag needs to be explicitly specified (see below). </p><pre class="fragment">git clone https://github.com/HeavyIonAnalysis/AnalysisTree.git
 cd AnalysisTree

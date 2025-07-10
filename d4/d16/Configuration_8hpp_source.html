@@ -193,7 +193,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  <span class="keyword">static</span> MatchingIndex MakeMatchingIndex(<span class="keyword">const</span> std::vector&lt;MatchingConfig&gt;&amp; matches) {</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    MatchingIndex result;</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; match : matches) {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; match : matches) {</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>      std::array&lt;std::string, 2&gt; map_key{match.GetFirstBranchName(), match.GetSecondBranchName()};</div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>      <span class="keyword">auto</span> emplace_result = result.emplace(map_key, match.GetDataBranchName());</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>      <span class="keywordflow">if</span> (!emplace_result.second) {</div>
@@ -205,7 +205,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  <span class="keyword">static</span> std::vector&lt;MatchingConfig&gt; MakeMatchConfigsFromIndex(<span class="keyword">const</span> MatchingIndex&amp; matching_index) {</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    std::vector&lt;MatchingConfig&gt; result;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; matching_index_element : matching_index) {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; matching_index_element : matching_index) {</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>      result.emplace_back(matching_index_element.first[0],</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>                          matching_index_element.first[1],</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>                          matching_index_element.second);</div>
@@ -217,10 +217,10 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span></div>
 <div class="foldopen" id="foldopen00132" data-start="{" data-end="}">
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="../../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89">  132</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="../../d8/dee/classAnalysisTree_1_1Configuration.html#a69acc381a5218615a03e4c6a99136c89">Merge</a>(<span class="keyword">const</span> Configuration&amp; other) {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; other_branch : other.branches_) {</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; other_branch : other.branches_) {</div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>      <span class="keyword">const</span> <span class="keyword">auto</span> other_id = other_branch.second.GetId();</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>      <span class="keyword">const</span> <span class="keyword">auto</span> other_name = other_branch.second.GetName();</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>      <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; local_branch : branches_) {</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>      <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; local_branch : branches_) {</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        <span class="keywordflow">if</span> (other_id == local_branch.second.GetId()) {</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>          <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Configurations contain branches with the same id-s&quot;</span>);</div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        }</div>

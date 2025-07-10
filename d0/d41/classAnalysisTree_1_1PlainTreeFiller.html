@@ -90,6 +90,7 @@ $(function(){ initResizable(false); });
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../da/d10/classAnalysisTree_1_1PlainTreeFiller-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">AnalysisTree::PlainTreeFiller Class Reference</div></div>
@@ -100,7 +101,7 @@ Inheritance diagram for AnalysisTree::PlainTreeFiller:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d0/d55/classAnalysisTree_1_1PlainTreeFiller__inherit__graph.png" border="0" usemap="#aAnalysisTree_1_1PlainTreeFiller_inherit__map" alt="Inheritance graph"/></div>
 <map name="aAnalysisTree_1_1PlainTreeFiller_inherit__map" id="aAnalysisTree_1_1PlainTreeFiller_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,844,218,1306"/>
+<area shape="rect" title=" " alt="" coords="5,844,218,1382"/>
 <area shape="rect" href="../../d0/d40/classAnalysisTree_1_1AnalysisTask.html" title="AnalysisTask is a Task which keeps list of AnalysisEntry&#45;s It evaluates Variables according to the ru..." alt="" coords="27,486,197,796"/>
 <area shape="poly" title=" " alt="" coords="114,811,114,844,109,844,109,811"/>
 <area shape="rect" href="../../d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="29,5,194,438"/>
@@ -112,9 +113,9 @@ Collaboration diagram for AnalysisTree::PlainTreeFiller:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d1/d7e/classAnalysisTree_1_1PlainTreeFiller__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1PlainTreeFiller_coll__map" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1PlainTreeFiller_coll__map" id="aAnalysisTree_1_1PlainTreeFiller_coll__map">
-<area shape="rect" title=" " alt="" coords="208,1356,420,1818"/>
+<area shape="rect" title=" " alt="" coords="208,1356,420,1894"/>
 <area shape="rect" href="../../d0/d40/classAnalysisTree_1_1AnalysisTask.html" title="AnalysisTask is a Task which keeps list of AnalysisEntry&#45;s It evaluates Variables according to the ru..." alt="" coords="229,996,399,1307"/>
-<area shape="poly" title=" " alt="" coords="317,1321,317,1356,311,1356,311,1321"/>
+<area shape="poly" title=" " alt="" coords="317,1322,317,1356,311,1356,311,1322"/>
 <area shape="rect" href="../../d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="232,576,396,947"/>
 <area shape="poly" title=" " alt="" coords="317,962,317,996,311,996,311,962"/>
 <area shape="rect" href="../../d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="5,121,209,513"/>
@@ -149,6 +150,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetFieldsToIgnore</b>
 <tr class="memitem:a61850ee777c542b3d1e20a71cb054c41" id="r_a61850ee777c542b3d1e20a71cb054c41"><td class="memItemLeft" align="right" valign="top"><a id="a61850ee777c542b3d1e20a71cb054c41" name="a61850ee777c542b3d1e20a71cb054c41"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetFieldsToPreserve</b> (const std::vector&lt; std::string &gt; &amp;fields_to_preserve)</td></tr>
 <tr class="separator:a61850ee777c542b3d1e20a71cb054c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50c6b18aa11f7e5bcc75a03c3025f9dc" id="r_a50c6b18aa11f7e5bcc75a03c3025f9dc"><td class="memItemLeft" align="right" valign="top"><a id="a50c6b18aa11f7e5bcc75a03c3025f9dc" name="a50c6b18aa11f7e5bcc75a03c3025f9dc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetFieldsToRename</b> (const std::vector&lt; std::pair&lt; std::string, std::string &gt; &gt; &amp;fields_to_rename)</td></tr>
+<tr class="separator:a50c6b18aa11f7e5bcc75a03c3025f9dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a008dc72ec1e02939436046346fa22d9e" id="r_a008dc72ec1e02939436046346fa22d9e"><td class="memItemLeft" align="right" valign="top"><a id="a008dc72ec1e02939436046346fa22d9e" name="a008dc72ec1e02939436046346fa22d9e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>SetIsIgnoreDefaultFields</b> (bool is=true)</td></tr>
 <tr class="separator:a008dc72ec1e02939436046346fa22d9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +207,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>SetEventCuts</b> (<a 
 void&#160;</td><td class="memItemRight" valign="bottom"><b>AddInputBranch</b> (const std::string &amp;name)</td></tr>
 <tr class="separator:ae98b8153db5ed852a071f8a9c1144706 inherit pub_methods_classAnalysisTree_1_1Task"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a868d75f4a3121523cdb93d00e5283120" id="r_a868d75f4a3121523cdb93d00e5283120"><td class="memItemLeft" align="right" valign="top"><a id="a868d75f4a3121523cdb93d00e5283120" name="a868d75f4a3121523cdb93d00e5283120"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>CheckIgnorePreserveRenameFields</b> (const std::vector&lt; std::string &gt; &amp;leafNames) const</td></tr>
+<tr class="separator:a868d75f4a3121523cdb93d00e5283120"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classAnalysisTree_1_1AnalysisTask"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classAnalysisTree_1_1AnalysisTask')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d0/d40/classAnalysisTree_1_1AnalysisTask.html">AnalysisTree::AnalysisTask</a></td></tr>
+<tr class="memitem:addf6bf120c37e729166bb77b43566260 inherit pro_methods_classAnalysisTree_1_1AnalysisTask" id="r_addf6bf120c37e729166bb77b43566260"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>ClassDefOverride</b> (<a class="el" href="../../d0/d40/classAnalysisTree_1_1AnalysisTask.html">AnalysisTask</a>, 0)</td></tr>
+<tr class="separator:addf6bf120c37e729166bb77b43566260 inherit pro_methods_classAnalysisTree_1_1AnalysisTask"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classAnalysisTree_1_1Task"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classAnalysisTree_1_1Task')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/dcf/classAnalysisTree_1_1Task.html">AnalysisTree::Task</a></td></tr>
+<tr class="memitem:acff2ce7dc1799f1fecb9b1b67028d122 inherit pro_methods_classAnalysisTree_1_1Task" id="r_acff2ce7dc1799f1fecb9b1b67028d122"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>ClassDef</b> (<a class="el" href="../../d8/dcf/classAnalysisTree_1_1Task.html">Task</a>, 0)</td></tr>
+<tr class="separator:acff2ce7dc1799f1fecb9b1b67028d122 inherit pro_methods_classAnalysisTree_1_1Task"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:ab7ebf586b3395ce6481e28b7e95f4eff" id="r_ab7ebf586b3395ce6481e28b7e95f4eff"><td class="memItemLeft" align="right" valign="top"><a id="ab7ebf586b3395ce6481e28b7e95f4eff" name="ab7ebf586b3395ce6481e28b7e95f4eff"></a>
@@ -229,6 +247,9 @@ std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="memitem:a27b6e909386fd0465a2eec5b8f295896" id="r_a27b6e909386fd0465a2eec5b8f295896"><td class="memItemLeft" align="right" valign="top"><a id="a27b6e909386fd0465a2eec5b8f295896" name="a27b6e909386fd0465a2eec5b8f295896"></a>
 std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fields_to_preserve_</b> {}</td></tr>
 <tr class="separator:a27b6e909386fd0465a2eec5b8f295896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d47e8da089d74ef45257a6d24d305b3" id="r_a1d47e8da089d74ef45257a6d24d305b3"><td class="memItemLeft" align="right" valign="top"><a id="a1d47e8da089d74ef45257a6d24d305b3" name="a1d47e8da089d74ef45257a6d24d305b3"></a>
+std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>fields_to_rename_</b> {}</td></tr>
+<tr class="separator:a1d47e8da089d74ef45257a6d24d305b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adeb04c4c3a57db86d1e144b54fec8155" id="r_adeb04c4c3a57db86d1e144b54fec8155"><td class="memItemLeft" align="right" valign="top"><a id="adeb04c4c3a57db86d1e144b54fec8155" name="adeb04c4c3a57db86d1e144b54fec8155"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ignore_defual_fields_</b> {false}</td></tr>
 <tr class="separator:adeb04c4c3a57db86d1e144b54fec8155"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,17 +279,6 @@ std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"
 <tr class="memitem:aeeb6bddb048547257fffc98b671093e8 inherit pro_attribs_classAnalysisTree_1_1Task" id="r_aeeb6bddb048547257fffc98b671093e8"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_init_</b> {false}</td></tr>
 <tr class="separator:aeeb6bddb048547257fffc98b671093e8 inherit pro_attribs_classAnalysisTree_1_1Task"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_classAnalysisTree_1_1AnalysisTask"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classAnalysisTree_1_1AnalysisTask')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d0/d40/classAnalysisTree_1_1AnalysisTask.html">AnalysisTree::AnalysisTask</a></td></tr>
-<tr class="memitem:addf6bf120c37e729166bb77b43566260 inherit pro_methods_classAnalysisTree_1_1AnalysisTask" id="r_addf6bf120c37e729166bb77b43566260"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClassDefOverride</b> (<a class="el" href="../../d0/d40/classAnalysisTree_1_1AnalysisTask.html">AnalysisTask</a>, 0)</td></tr>
-<tr class="separator:addf6bf120c37e729166bb77b43566260 inherit pro_methods_classAnalysisTree_1_1AnalysisTask"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classAnalysisTree_1_1Task"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_classAnalysisTree_1_1Task')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/dcf/classAnalysisTree_1_1Task.html">AnalysisTree::Task</a></td></tr>
-<tr class="memitem:acff2ce7dc1799f1fecb9b1b67028d122 inherit pro_methods_classAnalysisTree_1_1Task" id="r_acff2ce7dc1799f1fecb9b1b67028d122"><td class="memItemLeft" align="right" valign="top">
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClassDef</b> (<a class="el" href="../../d8/dcf/classAnalysisTree_1_1Task.html">Task</a>, 0)</td></tr>
-<tr class="separator:acff2ce7dc1799f1fecb9b1b67028d122 inherit pro_methods_classAnalysisTree_1_1Task"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0c6c94dfd92c6527b11b5100b2d8f2bc" name="a0c6c94dfd92c6527b11b5100b2d8f2bc"></a>

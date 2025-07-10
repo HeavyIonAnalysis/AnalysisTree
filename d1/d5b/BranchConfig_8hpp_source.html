@@ -206,7 +206,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  }</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  <span class="keywordtype">void</span> AddFields(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names, <span class="keyword">const</span> std::string&amp; title = <span class="stringliteral">&quot;&quot;</span>) {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; n : names) {</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; n : names) {</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>      GuaranteeFieldNameVacancy(n);</div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    }</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    VectorConfig&lt;T&gt;::AddFields(names, title);</div>
@@ -220,7 +220,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  <span class="keywordtype">void</span> RemoveField(<span class="keyword">const</span> std::string&amp; name);</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="keywordtype">void</span> RemoveFields(<span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; names) {</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; n : names) {</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; n : names) {</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>      RemoveField(n);</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    }</div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  }</div>
