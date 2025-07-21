@@ -103,6 +103,14 @@ inline std::vector<T> MergeVectors(const std::vector<T>& vec1, const std::vector
   return MergeVectors(vec1, MergeVectors(vec2, args...));
 }
 
+inline TFile* OpenFileWithNullptrCheck(const std::string& fileName, const std::string& option = "read") {
+  TFile* file = TFile::Open(fileName.c_str(), option.c_str());
+  if (file == nullptr) {
+    throw std::runtime_error("HelperFunctions::OpenFileWithNullptrCheck() - file " + fileName + " is missing");
+  }
+  return file;
+}
+
 template<typename T>
 inline T* GetObjectWithNullptrCheck(TFile* fileIn, const std::string& objectName) {
   T* ptr = fileIn->Get<T>(objectName.c_str());
