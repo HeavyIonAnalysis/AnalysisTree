@@ -4,6 +4,7 @@
 #include "SimpleCut.hpp"
 
 #include <TFile.h>
+#include <TH1.h>
 
 #include <sstream>
 #include <string>
@@ -118,6 +119,59 @@ inline T* GetObjectWithNullptrCheck(TFile* fileIn, const std::string& objectName
     throw std::runtime_error("HelperFunctions::GetObjectWithNullptrCheck() - object " + objectName + " in file " + fileIn->GetName() + " is missing");
   }
   return ptr;
+}
+
+inline void CheckHistogramsForXaxisIdentity(const TH1* h1, const TH1* h2) {
+  if(h1->GetNbinsX() != h2->GetNbinsX()) {
+    throw std::runtime_error("HelperFunctions::CheckHistogramsForXaxisIdentity(): nBinsX do not match for " + static_cast<std::string>(h1->GetName()) + " and " + h2->GetName());
+  }
+  const int nBins = h1->GetNbinsX();
+  for(int iBin=1; iBin<=nBins; iBin++) {
+    if(std::abs(h1->GetBinCenter(iBin) - h2->GetBinCenter(iBin)) > 1e-6) {
+      throw std::runtime_error("HelperFunctions::CheckHistogramsForXaxisIdentity(): bins do not coincide for " + static_cast<std::string>(h1->GetName()) + " and " + h2->GetName());
+    }
+  }
+}
+
+inline TH1* MergeHistograms(const std::vector<TH1*>& histos) {
+  for(const auto& h : histos) {
+    CheckHistogramsForXaxisIdentity(h, histos.at(0));
+  }
+
+  TH1* hResult = dynamic_cast<TH1*>(histos.at(0)->Clone("hMerged"));
+  hResult->Sumw2();
+  hResult->SetDirectory(nullptr);
+  for(size_t iH=1, nHs=histos.size(); iH<nHs; ++iH) {
+    hResult->Add(histos.at(iH));
+  }
+  hResult->Sumw2(false);
+
+  return hResult;
+}
+
+inline TH1* MergeHistograms(TFile* fileIn, const std::vector<std::string>& histoNames) {
+  std::vector<TH1*> histos;
+  for(const auto& hN : histoNames) {
+    histos.emplace_back(GetObjectWithNullptrCheck<TH1>(fileIn, hN));
+  }
+  TH1* hResult = MergeHistograms(histos);
+
+  return hResult;
+}
+
+template<typename T>
+inline TDirectory* MkDirIfNotExists(T* fileOrDirectory, const std::string& name) {
+  if (fileOrDirectory == nullptr) throw std::runtime_error("HelperFunctions::MkDirIfNotExists(): file or directory ptr is null");
+  TDirectory* result = fileOrDirectory->GetDirectory(name.c_str());
+  if (result == nullptr) fileOrDirectory->mkdir(name.c_str());
+  result = fileOrDirectory->GetDirectory(name.c_str());
+  return result;
+}
+
+template<typename T>
+inline void CD(T* fileOrDirectory, const std::string& name) {
+  auto destination = MkDirIfNotExists(fileOrDirectory, name);
+  destination->cd();
 }
 
 }// namespace HelperFunctions
