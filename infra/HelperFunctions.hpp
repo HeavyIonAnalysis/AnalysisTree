@@ -122,36 +122,43 @@ inline T* GetObjectWithNullptrCheck(TFile* fileIn, const std::string& objectName
 }
 
 inline void CheckHistogramsForXaxisIdentity(const TH1* h1, const TH1* h2) {
-  if(h1->GetNbinsX() != h2->GetNbinsX()) {
+  if (h1->GetNbinsX() != h2->GetNbinsX()) {
     throw std::runtime_error("HelperFunctions::CheckHistogramsForXaxisIdentity(): nBinsX do not match for " + static_cast<std::string>(h1->GetName()) + " and " + h2->GetName());
   }
   const int nBins = h1->GetNbinsX();
-  for(int iBin=1; iBin<=nBins; iBin++) {
-    if(std::abs(h1->GetBinCenter(iBin) - h2->GetBinCenter(iBin)) > 1e-6) {
+  for (int iBin = 1; iBin <= nBins; iBin++) {
+    if (std::abs(h1->GetBinCenter(iBin) - h2->GetBinCenter(iBin)) > 1e-6) {
       throw std::runtime_error("HelperFunctions::CheckHistogramsForXaxisIdentity(): bins do not coincide for " + static_cast<std::string>(h1->GetName()) + " and " + h2->GetName());
     }
   }
 }
 
+inline void Sumw2IfNotYet(TH1* histo, bool value = true) {
+  const bool isSumw2Already = histo->GetSumw2N() > 0;
+  if (isSumw2Already != value) histo->Sumw2(value);
+}
+
 inline TH1* MergeHistograms(const std::vector<TH1*>& histos) {
-  for(const auto& h : histos) {
+  for (const auto& h : histos) {
     CheckHistogramsForXaxisIdentity(h, histos.at(0));
   }
 
+  const bool isSumw2 = histos.at(0)->GetSumw2N() > 0;
+
   TH1* hResult = dynamic_cast<TH1*>(histos.at(0)->Clone("hMerged"));
-  hResult->Sumw2();
+  Sumw2IfNotYet(hResult);
   hResult->SetDirectory(nullptr);
-  for(size_t iH=1, nHs=histos.size(); iH<nHs; ++iH) {
+  for (size_t iH = 1, nHs = histos.size(); iH < nHs; ++iH) {
     hResult->Add(histos.at(iH));
   }
-  hResult->Sumw2(false);
+  Sumw2IfNotYet(hResult, isSumw2);
 
   return hResult;
 }
 
 inline TH1* MergeHistograms(TFile* fileIn, const std::vector<std::string>& histoNames) {
   std::vector<TH1*> histos;
-  for(const auto& hN : histoNames) {
+  for (const auto& hN : histoNames) {
     histos.emplace_back(GetObjectWithNullptrCheck<TH1>(fileIn, hN));
   }
   TH1* hResult = MergeHistograms(histos);
@@ -172,6 +179,14 @@ template<typename T>
 inline void CD(T* fileOrDirectory, const std::string& name) {
   auto destination = MkDirIfNotExists(fileOrDirectory, name);
   destination->cd();
+}
+
+inline double InterpolateTH1SuppressWarning(const TH1* h, double value) {
+  double result;
+  if (value <= h->GetBinLowEdge(1) || value >= h->GetBinLowEdge(h->GetNbinsX() + 1)) result = 0.;
+  else
+    result = h->Interpolate(value);
+  return result;
 }
 
 }// namespace HelperFunctions
