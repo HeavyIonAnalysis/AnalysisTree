@@ -31,8 +31,6 @@ TEST(Configuration, Basics) {
   EXPECT_EQ(config.GetNumberOfBranches(), 1);
   //  EXPECT_EQ(config.GetLastId(), 0);
 
-  const auto& br1 = config.GetBranchConfig("RecTrack");
-  //  EXPECT_EQ(br1.GetId(), 0);
 }
 
 TEST(Configuration, Match) {

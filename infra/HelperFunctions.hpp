@@ -61,7 +61,7 @@ inline std::vector<AnalysisTree::SimpleCut> CreateRangeCuts(const std::vector<fl
   if (precision < 0) precision = evaluateMaxDigisAfterComma(ranges);
 
   std::vector<AnalysisTree::SimpleCut> sliceCuts;
-  for (int iRange = 0; iRange < ranges.size() - 1; iRange++) {
+  for (int iRange = 0; iRange < static_cast<int>(ranges.size()) - 1; iRange++) {
     const std::string cutName = cutNamePrefix + ToStringWithPrecision(ranges.at(iRange), precision) + "_" + ToStringWithPrecision(ranges.at(iRange + 1), precision);
     sliceCuts.emplace_back(AnalysisTree::RangeCut(branchFieldName, ranges.at(iRange), ranges.at(iRange + 1), cutName));
   }

@@ -14,7 +14,7 @@ void BranchConfig::GenerateId() {
   id_ = id_hasher(name_);
 }
 
-BranchConfig::BranchConfig(std::string name, DetType type, std::string title) : name_(std::move(name)), type_(type), title_(std::move(title)) {
+BranchConfig::BranchConfig(std::string name, DetType type, std::string title) : name_(std::move(name)), title_(std::move(title)), type_(type) {
   GenerateId();
 
   if (type_ == DetType::kTrack) {
@@ -156,12 +156,12 @@ void VectorConfig<T>::Print() const {
     std::vector<std::string> result;
     std::vector<int> newlinepositions{-1};
     int it{0};
-    while (it < std::string::npos) {
+    while (it < static_cast<int>(std::string::npos)) {
       it = input.find("\n", it + 1);
       newlinepositions.emplace_back(it);
     }
     newlinepositions.back() = input.size();
-    for (int ip = 0; ip < newlinepositions.size() - 1; ++ip) {
+    for (int ip = 0; ip < static_cast<int>(newlinepositions.size()) - 1; ++ip) {
       result.emplace_back(input.substr(newlinepositions.at(ip) + 1, newlinepositions.at(ip + 1) - newlinepositions.at(ip) - 1));
     }
     return result;
@@ -174,7 +174,7 @@ void VectorConfig<T>::Print() const {
     } else {
       auto est = SplitString(entry.second.title_);
       print_row({{std::to_string(entry.second.id_), 10}, {entry.first, name_strlen}, {est.at(0), 50}});
-      for (int iest = 1; iest < est.size(); ++iest) {
+      for (int iest = 1; iest < static_cast<int>(est.size()); ++iest) {
         print_row({{"", 10}, {"", name_strlen}, {est.at(iest), 50}});
       }
     }

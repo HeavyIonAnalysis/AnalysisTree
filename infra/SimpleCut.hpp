@@ -89,7 +89,7 @@ class SimpleCut {
   * is iterated and an iteration with no-cut is needed)
   * @param branchName name of the branch, which is present in other cuts
   */
-  friend SimpleCut OpenCut(const std::string& branchName, const std::string& title);
+  friend SimpleCut OpenCut(const std::string& branchName);
 
   /**
    * @brief Evaluates cut
@@ -139,7 +139,7 @@ SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const
 SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title = "");
 SimpleCut RangeCut(const Variable& var, double lo, double hi, const std::string& title = "");
 SimpleCut EqualsCut(const Variable& var, int value, const std::string& title = "");
-SimpleCut OpenCut(const std::string& branchName, const std::string& title = "alwaysTrue");
+SimpleCut OpenCut(const std::string& branchName);
 
 }// namespace AnalysisTree
 #endif//ANALYSISTREE_SIMPLECUT_H

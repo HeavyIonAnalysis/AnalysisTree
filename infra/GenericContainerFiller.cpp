@@ -55,7 +55,7 @@ void GenericContainerFiller::Init() {
 
   config_.AddBranchConfig(branchConfig);
 
-  for (int iV = 0; iV < branch_values_.size(); iV++) {
+  for (int iV = 0; iV < static_cast<int>(branch_values_.size()); iV++) {
     SetAddressFICS(branch_map_.at(iV).name_, branch_map_.at(iV), branch_values_.at(iV));
   }
 
@@ -95,8 +95,8 @@ void GenericContainerFiller::Finish() {
 void GenericContainerFiller::Run(int nEntries) {
   Init();
 
-  const size_t nTreeEntries = tree_in_->GetEntries();
-  const size_t nRunEntries = (nEntries < 0 || nEntries > nTreeEntries) ? nTreeEntries : nEntries;
+  const int nTreeEntries = tree_in_->GetEntries();
+  const int nRunEntries = (nEntries < 0 || nEntries > nTreeEntries) ? nTreeEntries : nEntries;
 
   int previousTriggerVar{-799};
   for (int iEntry = 0; iEntry < nRunEntries; iEntry++) {
@@ -108,8 +108,8 @@ void GenericContainerFiller::Run(int nEntries) {
 }
 
 int GenericContainerFiller::DetermineFieldIdByName(const std::vector<IndexMap>& iMap, const std::string& name) {
-  auto distance = std::distance(iMap.begin(), std::find_if(iMap.begin(), iMap.end(), [&name](const IndexMap& p) { return p.name_ == name; }));
-  if (distance == iMap.size()) throw std::runtime_error("DetermineFieldIdByName(): name " + name + " is missing");
+  const auto distance = static_cast<int>(std::distance(iMap.begin(), std::find_if(iMap.begin(), iMap.end(), [&name](const IndexMap& p) { return p.name_ == name; })));
+  if (distance == static_cast<int>(iMap.size())) throw std::runtime_error("DetermineFieldIdByName(): name " + name + " is missing");
   return distance;
 }
 
@@ -126,7 +126,7 @@ void GenericContainerFiller::SetAddressFICS(const std::string& branchName, const
 }
 
 void GenericContainerFiller::SetFieldsFICS(const std::vector<IndexMap>& imap, Container& container, const std::vector<FICS>& ficc) {
-  for (int iV = 0; iV < ficc.size(); iV++) {
+  for (int iV = 0; iV < static_cast<int>(ficc.size()); iV++) {
     if (imap.at(iV).field_type_ == "TLeafF") container.SetField(ficc.at(iV).float_, imap.at(iV).index_);
     else if (imap.at(iV).field_type_ == "TLeafI")
       container.SetField(ficc.at(iV).int_, imap.at(iV).index_);

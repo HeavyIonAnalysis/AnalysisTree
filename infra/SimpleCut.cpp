@@ -43,8 +43,8 @@ SimpleCut EqualsCut(const Variable& var, int value, const std::string& title) {
   return {var, value, title};
 }
 
-SimpleCut OpenCut(const std::string& branchName, const std::string& title) {
-  return SimpleCut({branchName + ".ones"}, [](const std::vector<double>& par) { return true; });
+SimpleCut OpenCut(const std::string& branchName) {
+  return SimpleCut({branchName + ".ones"}, [](const std::vector<double>&) { return true; });
 }
 
 SimpleCut::SimpleCut(const Variable& var, int value, std::string title) : title_(std::move(title)) {

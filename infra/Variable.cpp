@@ -79,7 +79,7 @@ double Variable::GetValue(std::vector<const BranchChannel*>& bch, std::vector<si
   vars_.clear();
   for (const auto& field : fields_) {
     bool success{false};
-    for (int i = 0; i < bch.size(); i++) {
+    for (int i = 0; i < static_cast<int>(bch.size()); i++) {
       if (field.GetBranchId() == id.at(i)) {
         vars_.emplace_back(bch.at(i)->Value(field));
         success = true;

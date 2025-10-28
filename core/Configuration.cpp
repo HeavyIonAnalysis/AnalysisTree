@@ -19,14 +19,12 @@ namespace AnalysisTree {
 
 void Configuration::Streamer(TBuffer& rb) {
   if (rb.IsReading()) {
-    bool read_ok = false;
     UInt_t rs = 0, rc = 0;
     auto version_from_file = rb.ReadVersion(&rs, &rc, Configuration::Class());
     if (version_from_file == Class()->GetClassVersion()) {
       Configuration::Class()->ReadBuffer(rb, this, version_from_file, rs, rc);
       // populate the transient field
       this->matches_index_ = MakeMatchingIndex(matches_);
-      read_ok = true;
     } else if (version_from_file == 3) {
       //      below structure description for version 3 of this class
       Warning(__func__, "Reading AnalysisTree::Configuration of version %d in compatibility mode. "
@@ -40,14 +38,12 @@ void Configuration::Streamer(TBuffer& rb) {
       this->matches_ = MakeMatchConfigsFromIndex(conf_v3.matches_);
       // populate the transient field
       this->matches_index_ = conf_v3.matches_;
-      read_ok = true;
     } else {
       Warning(__func__, "Current version of AnalysisTree::Configuration (%d) "
                         "is different from the version from file (%d) and no rule to read this version was implemented. "
                         "Contact developers if dedicated Streamer implementation is needed for this version.",
               Configuration::Class()->GetClassVersion(),
               version_from_file);
-      read_ok = false;
     }
 
   } else {
