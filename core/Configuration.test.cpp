@@ -30,7 +30,6 @@ TEST(Configuration, Basics) {
 
   EXPECT_EQ(config.GetNumberOfBranches(), 1);
   //  EXPECT_EQ(config.GetLastId(), 0);
-
 }
 
 TEST(Configuration, Match) {
