@@ -1,8 +1,8 @@
 /* Copyright (C) 2019-2021 GSI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
-#include <iostream>
 #include <Chain.hpp>
+#include <iostream>
 
 using namespace AnalysisTree;
 
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-void example(const std::string& filename, const std::string& treename){
+void example(const std::string& filename, const std::string& treename) {
   auto* chain = new Chain(filename, treename);
   chain->InitPointersToBranches({"VtxTracks", "SimParticles"});
 
@@ -34,13 +34,12 @@ void example(const std::string& filename, const std::string& treename){
   config->Print();
 
   auto rec_particles = chain->GetBranchObject("VtxTracks");
-  auto rec2sim_particles = chain->GetMatching("VtxTracks", "SimParticles");
 
   auto rec_pT = rec_particles.GetField("pT");
 
   for (long i_event = 0; i_event < 10; ++i_event) {
     chain->GetEntry(i_event);
-    for(size_t i=0; i<rec_particles.size(); ++i){
+    for (size_t i = 0; i < rec_particles.size(); ++i) {
       auto pT = rec_particles[i][rec_pT];
       std::cout << " track #" << i << " pT = " << pT << std::endl;
     }

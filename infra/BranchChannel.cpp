@@ -17,7 +17,7 @@ void BranchChannel::UpdateChannel(size_t new_channel) {
 }
 
 void BranchChannel::UpdatePointer() {
-  if (i_channel_ >= 0 && i_channel_ < branch_->size()) {
+  if (i_channel_ < branch_->size()) {
     data_ptr_ = ANALYSISTREE_UTILS_VISIT(get_channel_struct(i_channel_), branch_->GetData());
   } else {
     throw std::out_of_range("");
