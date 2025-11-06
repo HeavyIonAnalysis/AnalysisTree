@@ -83,6 +83,10 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch
   return result;
 }
 
+double AnalysisEntry::FillWeight(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id) {
+  return var.GetNumberOfBranches() > 0 ? FillVariable(var, br, id) : 1.;
+}
+
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
   Branch* br1_ptr = new Branch(std::move(br1));
   Branch* br2_ptr = new Branch(std::move(br2));
@@ -132,7 +136,7 @@ void AnalysisEntry::FillFromEveHeaders() {
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
-  weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
+  weights_.emplace_back(FillWeight(var4weight_, br_vec, id_vec));
 }
 
 /**
@@ -168,7 +172,7 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
+    weights_.emplace_back(FillWeight(var4weight_, br_vec, id_vec));
   }// channels
 }
 
@@ -211,7 +215,7 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
+    weights_.emplace_back(FillWeight(var4weight_, br_vec, id_vec));
   }// channels
 }
 
