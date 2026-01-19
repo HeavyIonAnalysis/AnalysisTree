@@ -148,8 +148,8 @@ inline TH1* MergeHistograms(const std::vector<TH1*>& histos) {
   TH1* hResult = dynamic_cast<TH1*>(histos.at(0)->Clone("hMerged"));
   Sumw2IfNotYet(hResult);
   hResult->SetDirectory(nullptr);
-  for(const auto& h : histos) {
-    hResult->Add(h);
+  for(size_t iH = 1, nHs = histos.size(); iH < nHs; ++iH) {
+    hResult->Add(histos.at(iH));
   }
   Sumw2IfNotYet(hResult, isSumw2);
 
