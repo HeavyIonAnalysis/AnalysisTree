@@ -1,31 +1,31 @@
 <map id="AnalysisTree::ToyMC&lt; RandomEngine &gt;" name="AnalysisTree::ToyMC&lt; RandomEngine &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="747,1152,880,1559"/>
-<area shape="rect" id="Node000002" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="294,718,459,1089"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="471,1005,549,1087,750,1288,746,1292,545,1091,467,1008"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="747,1168,880,1575"/>
+<area shape="rect" id="Node000002" href="$d8/dcf/classAnalysisTree_1_1Task.html" title=" " alt="" coords="292,726,458,1097"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="470,1012,548,1095,749,1302,746,1306,544,1099,466,1016"/>
 <area shape="rect" id="Node000003" href="$d8/dee/classAnalysisTree_1_1Configuration.html" title="A class to store configuration of the whole AnalysisTree object." alt="" coords="190,263,394,655"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="332,654,341,701,336,702,327,655"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="331,654,341,709,335,710,325,655"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="161,76,218,143"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="206,156,237,263,232,264,201,158"/>
 <area shape="rect" id="Node000005" href="$d8/d77/classAnalysisTree_1_1DataHeader.html" title=" " alt="" coords="5,263,166,655"/>
 <area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="178,158,146,264,141,263,173,156"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="168,634,180,654,231,727,285,796,281,799,227,730,175,656,164,637"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="168,634,180,654,231,729,284,800,280,803,226,732,175,656,164,636"/>
 <area shape="rect" id="Node000006" href="$d5/dce/classAnalysisTree_1_1Cuts.html" title="Cuts holds list of SimpleCuts and provides Apply function which subsequently applies cuts." alt="" coords="418,263,537,655"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="436,656,425,702,420,701,430,654"/>
-<area shape="rect" id="Node000007" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="560,738,726,1069"/>
-<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="659,1068,675,1127,704,1192,740,1253,736,1255,699,1195,669,1129,653,1069"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="436,655,423,710,418,709,431,654"/>
+<area shape="rect" id="Node000007" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="558,746,725,1077"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="653,1076,670,1143,701,1211,740,1274,735,1277,696,1214,664,1145,647,1078"/>
 <area shape="rect" id="Node000008" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="562,294,708,624"/>
-<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="641,639,643,738,637,738,636,639"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="640,639,642,746,637,746,635,639"/>
 <area shape="rect" id="Node000009" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="720,5,894,214"/>
 <area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="742,228,723,265,708,295,703,293,718,262,737,226"/>
-<area shape="rect" id="Node000010" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="733,307,900,612"/>
-<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="813,229,815,307,810,307,808,229"/>
-<area shape="rect" id="Node000012" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="924,307,1090,612"/>
-<area shape="poly" id="edge14_Node000012_Node000009" title=" " alt="" coords="892,225,915,262,939,306,934,308,910,265,887,228"/>
-<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="819,612,817,1135,812,1135,813,612"/>
+<area shape="rect" id="Node000010" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="733,317,900,602"/>
+<area shape="poly" id="edge11_Node000010_Node000009" title=" " alt="" coords="813,229,815,317,810,317,808,229"/>
+<area shape="rect" id="Node000012" href="$d4/da7/classAnalysisTree_1_1Detector.html" title=" " alt="" coords="924,317,1090,602"/>
+<area shape="poly" id="edge14_Node000012_Node000009" title=" " alt="" coords="892,225,915,262,944,316,939,319,910,265,887,228"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="819,601,817,1151,812,1151,813,601"/>
 <area shape="rect" id="Node000011" href="$d4/da2/classAnalysisTree_1_1IndexAccessor.html" title=" " alt="" coords="918,76,1096,143"/>
-<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="980,156,913,265,890,308,885,305,909,262,975,154"/>
-<area shape="poly" id="edge15_Node000012_Node000011" title=" " alt="" coords="1010,158,1010,307,1004,307,1004,158"/>
-<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="968,612,943,719,926,822,917,904,908,986,890,1090,879,1137,874,1135,884,1089,902,985,912,903,920,822,938,717,962,611"/>
-<area shape="rect" id="Node000013" href="$d8/d42/classAnalysisTree_1_1Matching.html" title=" " alt="" coords="1052,718,1197,1089"/>
-<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1054,1060,1036,1091,965,1188,893,1274,889,1270,961,1184,1031,1088,1050,1058"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="980,156,913,265,885,318,880,316,909,262,975,154"/>
+<area shape="poly" id="edge15_Node000012_Node000011" title=" " alt="" coords="1010,158,1010,317,1004,317,1004,158"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="974,602,947,726,931,831,923,912,914,994,895,1098,882,1152,877,1151,890,1097,908,993,917,912,926,830,942,726,969,601"/>
+<area shape="rect" id="Node000013" href="$d8/d42/classAnalysisTree_1_1Matching.html" title=" " alt="" coords="1061,726,1206,1097"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="1064,1068,1045,1099,970,1201,893,1291,889,1288,966,1198,1041,1096,1059,1066"/>
 </map>
