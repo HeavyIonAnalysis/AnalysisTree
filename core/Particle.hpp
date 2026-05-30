@@ -102,7 +102,7 @@ class Particle : public Track {
   PdgCode_t pid_{0};
   bool is_allowed_set_charge_and_mass_explicitly_{false};//!
 
-  ClassDefOverride(Particle, 2);
+  ClassDefOverride(Particle, 3);
 };
 
 }// namespace AnalysisTree

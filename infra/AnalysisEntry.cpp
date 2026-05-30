@@ -32,7 +32,7 @@ bool AnalysisEntry::ApplyCutOnBranches(std::vector<const Branch*>& br, std::vect
   std::vector<size_t> id_vec;
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
-  for (int i = 0; i < br.size(); i++) {
+  for (int i = 0; i < static_cast<int>(br.size()); i++) {
     BranchChannel* bchptr = new BranchChannel(br.at(i), ch.at(i));
     if (cuts.at(i) != nullptr) {
       if (!cuts.at(i)->Apply(*bchptr)) {
@@ -71,7 +71,7 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch
   std::vector<size_t> id_vec;
   bch_vec.reserve(br.size());
   id_vec.reserve(br.size());
-  for (int i = 0; i < br.size(); i++) {
+  for (int i = 0; i < static_cast<int>(br.size()); i++) {
     BranchChannel* bchptr = new BranchChannel(br.at(i), id.at(i));
     bch_vec.emplace_back(bchptr);
     id_vec.emplace_back(br.at(i)->GetId());
@@ -81,6 +81,10 @@ double AnalysisEntry::FillVariable(const Variable& var, std::vector<const Branch
     delete bv;
   }
   return result;
+}
+
+double AnalysisEntry::FillWeight(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id) {
+  return var.GetNumberOfBranches() > 0 ? FillVariable(var, br, id) : 1.;
 }
 
 double AnalysisEntry::FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2) {
@@ -132,7 +136,7 @@ void AnalysisEntry::FillFromEveHeaders() {
     i_var++;
   }//variables
   values_.emplace_back(temp_vars);
-  weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
+  weights_.emplace_back(FillWeight(var4weight_, br_vec, id_vec));
 }
 
 /**
@@ -168,7 +172,7 @@ void AnalysisEntry::FillFromOneChannalizedBranch() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
+    weights_.emplace_back(FillWeight(var4weight_, br_vec, id_vec));
   }// channels
 }
 
@@ -211,7 +215,7 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
       i_var++;
     }//variables
     values_.emplace_back(temp_vars);
-    weights_.emplace_back(FillVariable(var4weight_, br_vec, id_vec));
+    weights_.emplace_back(FillWeight(var4weight_, br_vec, id_vec));
   }// channels
 }
 

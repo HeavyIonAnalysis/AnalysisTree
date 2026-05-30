@@ -82,7 +82,7 @@ class Variable {
 
   void Print() const;
 
-  void IfEmptyVariableConvertToOnes(const Variable& var);
+  ANALYSISTREE_ATTR_DEPRECATED() void IfEmptyVariableConvertToOnes(const Variable& var);
 
  protected:
   std::string name_;

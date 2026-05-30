@@ -29,7 +29,6 @@ class AnalysisEntry {
   explicit AnalysisEntry(std::vector<Variable> vars, Cuts* cuts = nullptr, Variable vars4weight = {}) : vars_(std::move(vars)),
                                                                                                         var4weight_(std::move(vars4weight)),
                                                                                                         cuts_(cuts) {
-    var4weight_.IfEmptyVariableConvertToOnes(vars_.at(0));
     FillBranchNames();
   };
 
@@ -62,6 +61,7 @@ class AnalysisEntry {
   ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(std::vector<const Branch*>& br, std::vector<Cuts*>& cuts, std::vector<int>& ch) const;
   [[deprecated]] ANALYSISTREE_ATTR_NODISCARD bool ApplyCutOnBranches(const Branch& br1, Cuts* cuts1, int ch1, const Branch& br2, Cuts* cuts2, int ch2) const;
   static double FillVariable(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id);
+  static double FillWeight(const Variable& var, std::vector<const Branch*>& br, std::vector<int>& id);
   [[deprecated]] static double FillVariable(const Variable& var, const Branch& br1, int ch1, const Branch& br2, int ch2);
 
   std::vector<Variable> vars_{};

@@ -42,7 +42,7 @@ Information about all fields in all branches is stored in Configuration object.
 ROOT6 is needed for installation.
 Follow CERN ROOT [instructions](https://root.cern/install/) to install it.
 Version compiled with c++17 flag is preferred, otherwise CMAKE_CXX_STANDARD flag needs to be explicitly specified (see below).
-
+```bash
     git clone https://github.com/HeavyIonAnalysis/AnalysisTree.git
     cd AnalysisTree
     mkdir build install
@@ -50,14 +50,14 @@ Version compiled with c++17 flag is preferred, otherwise CMAKE_CXX_STANDARD flag
     source path-to-root-installation/bin/thisroot.sh
     cmake -DCMAKE_INSTALL_PREFIX=../install ../
     make -j install
-
+```
 *path-to-root-installation* must be replaced with your actual location of Root install directory.
   
 ### List of CMake options:
 To apply the flag use -D{Name}={value}, for example, if you want to compile using c++11:
-    
+```bash    
     cmake -DCMAKE_CXX_STANDARD=11 ../
-
+```
 | Name  | Default value | Possible values |
 | ------------- | ------------- | ---------- |
 | CMAKE_BUILD_TYPE  | RELEASE  | RELEASE/DEBUG |
@@ -70,16 +70,16 @@ To apply the flag use -D{Name}={value}, for example, if you want to compile usin
 ### Setting AnalysisTree environment
 Whatever you are going to do with AnalysisTree - read the file, perform analysis based on information stored in it or create your own file, first of all you need to set up environment variables.
 It can be done in a single command:
-
+```bash
     source path-to-analysis_tree-installation/bin/AnalysisTreeConfig.sh
-
+```
 ### Reading files from ROOT session
 An example of AnalysisTree ROOT file can be downloaded by this [link](https://sf.gsi.de/f/3ba5a9e3ff5248edba2c/?dl=1)
 
 Open a ROOT-file
-
+```bash
     root -l 1.analysistree.root
-
+```
 Check its content
 
     .ls
@@ -98,9 +98,9 @@ and, finally, AnalysisTree::DataHeader object named *DataHeader* containing info
 
 #### Reading the configuration
 In order to know the structure of the tree, perform following command:
-
+```c++
     Configuration->Print()
-
+```
 An output will contain plenty of branches and matchings between them.
 Let us look at one of them:
 
@@ -114,7 +114,7 @@ Negative ids belong to default fields of branches while positive ids and 0 - to 
 Middle column contains string name of the field, and right column - a description of it.
 
 #### Digesting the tree content
-
+```c++
     Configuration->GetBranchConfig("SimParticles").GetType()
     // to know to which type (Hit, Track, Module, Particle or EventHeader belongs SimParticles branch)
 
@@ -149,27 +149,27 @@ Middle column contains string name of the field, and right column - a descriptio
     // drawing a histogram with user-defined binning and ranges.
 
     rTree->Draw("TMath::Log(TMath::Abs(SimParticles.channels_.GetPx()))")
-    // drawing a distribution of derived quantites calculated by formula
-
+    // drawing a distribution of derived quantities calculated by formula
+```
 Moreover, for default fields which are explicitly present in Container (i.e. px is OK, but not pt, which is not stored but calculated on fly) there is a possibility to draw them using TTree::Draw syntax:
-
+```c++
     rTree->Draw("SimParticles.px_")
     rTree->Draw("TMath::Log(TMath::Abs(SimParticles.px_))")
     rTree->Draw("TMath::Log(TMath::Abs(SimParticles.px_)) * TMath::Cos(SimParticles.py_)")
-
+```
 Also you can open a ROOT interactive session and create an AnalysisTree::Chain:
-
+```c++
     AnalysisTree::Chain t("1.analysistree.root", "rTree") // Chain constructor with a single file
     // or
     AnalysisTree::Chain t({"filelist.txt"}, {"rTree"})  // Chain constructor with a file list
-
+```
 and then build any fields including user-defined and implicitly present fields (such as phi or pt):
-
+```c++
     t.Draw("SimParticles.px")
     t.Draw("SimParticles.pid")
     t.Draw("VtxTracks.chi2")
     // 2D histograms, cuts, drawing options and math formulas mentioned above are also available
-
+```
 ### Reading file with a macro
 
 Building of distributions in interactive mode is a good approach only if the commands are simple, and the number of events to be analized is not so big.

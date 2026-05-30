@@ -169,6 +169,12 @@ void Branch::CopyContentsRaw(Branch* other) {
       *ANALYSISTREE_UTILS_GET<EventHeader*>(data_) = *ANALYSISTREE_UTILS_GET<EventHeader*>(other->data_);
       break;
     }
+    case DetType::kGeneric: {
+      *ANALYSISTREE_UTILS_GET<GenericDetector*>(data_) = *ANALYSISTREE_UTILS_GET<GenericDetector*>(other->data_);
+      break;
+    }
+    default:
+      throw std::runtime_error("Branch::CopyContentsRaw(): unexpected branch type of 'this'");
   }
 }
 

@@ -164,7 +164,7 @@ class Track : public Container {
   Floating_t pz_{UndefValueFloat};///< z-component of track's momentum
   Integer_t charge_{-1000};
 
-  ClassDefOverride(Track, 2);
+  ClassDefOverride(Track, 3);
 };
 
 }// namespace AnalysisTree

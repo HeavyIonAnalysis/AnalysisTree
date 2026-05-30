@@ -3,8 +3,6 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "SimpleCut.hpp"
 
-#include "HelperFunctions.hpp"
-
 #include <iostream>
 
 namespace AnalysisTree {
@@ -30,30 +28,30 @@ bool operator==(const SimpleCut& that, const SimpleCut& other) {
 }
 
 SimpleCut RangeCut(const std::string& variable_name, double lo, double hi, const std::string& title) {
-  return SimpleCut(Variable::FromString(variable_name), lo, hi, title);
+  return {Variable::FromString(variable_name), lo, hi, title};
 }
 
 SimpleCut EqualsCut(const std::string& variable_name, int value, const std::string& title) {
-  return SimpleCut(Variable::FromString(variable_name), value, title);
+  return {Variable::FromString(variable_name), value, title};
 }
 
 SimpleCut RangeCut(const Variable& var, double lo, double hi, const std::string& title) {
-  return SimpleCut(var, lo, hi, title);
+  return {var, lo, hi, title};
 }
 
 SimpleCut EqualsCut(const Variable& var, int value, const std::string& title) {
-  return SimpleCut(var, value, title);
+  return {var, value, title};
 }
 
-SimpleCut OpenCut(const std::string& branchName, const std::string& title) {
-  return SimpleCut({branchName + ".ones"}, [](const std::vector<double>& par) { return true; });
+SimpleCut OpenCut(const std::string& branchName) {
+  return SimpleCut({branchName + ".ones"}, [](const std::vector<double>&) { return true; });
 }
 
 SimpleCut::SimpleCut(const Variable& var, int value, std::string title) : title_(std::move(title)) {
   vars_.emplace_back(var);
   lambda_ = [value](std::vector<double>& vars) { return vars[0] <= value + SmallNumber && vars[0] >= value - SmallNumber; };
   FillBranchNames();
-  const std::string stringForHash = var.GetName() + HelperFunctions::ToStringWithPrecision(value, 6) + title_;
+  const std::string stringForHash = var.GetName() + std::to_string(value) + title_;
   std::hash<std::string> hasher;
   hash_ = hasher(stringForHash);
 }
@@ -62,7 +60,7 @@ SimpleCut::SimpleCut(const Variable& var, double min, double max, std::string ti
   vars_.emplace_back(var);
   lambda_ = [max, min](std::vector<double>& vars) { return vars[0] <= max && vars[0] >= min; };
   FillBranchNames();
-  const std::string stringForHash = var.GetName() + HelperFunctions::ToStringWithPrecision(min, 6) + HelperFunctions::ToStringWithPrecision(max, 6) + title_;
+  const std::string stringForHash = var.GetName() + std::to_string(min) + std::to_string(max) + title_;
   std::hash<std::string> hasher;
   hash_ = hasher(stringForHash);
 }
@@ -80,8 +78,8 @@ bool SimpleCut::Apply(std::vector<const BranchChannel*>& bch, std::vector<size_t
 }
 
 bool SimpleCut::Apply(const BranchChannel& a, size_t a_id, const BranchChannel& b, size_t b_id) const {
-  BranchChannel* a_ptr = new BranchChannel(std::move(a));
-  BranchChannel* b_ptr = new BranchChannel(std::move(b));
+  auto* a_ptr = new BranchChannel(a);
+  auto* b_ptr = new BranchChannel(b);
   std::vector<const BranchChannel*> brch_vec{a_ptr, b_ptr};
   std::vector<size_t> id_vec{a_id, b_id};
   bool result = Apply(brch_vec, id_vec);
