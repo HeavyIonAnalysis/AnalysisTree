@@ -71,7 +71,7 @@ class Variable {
     assert(is_init_ && n_branches_ == 1);
     vars_.clear();
     for (const auto& field : fields_) {
-      vars_.emplace_back(field.template GetValue(object));
+      vars_.emplace_back(field.GetValue(object));
     }
     return lambda_(vars_);
   }
