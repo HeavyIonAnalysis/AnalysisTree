@@ -115,7 +115,7 @@ void TaskManager::Run(long long nEventFrom, long long nEvents) {
 
   for (long long iEvent = nEventFrom; iEvent < nEventFrom + nEvents; ++iEvent) {
     if (verbosity_period_ > 0 && iEvent % verbosity_period_ == 0) {
-      std::cout << "Event no " << iEvent << "\n";
+      std::cout << "Event no " << iEvent << std::endl;
     }
     if (read_in_tree_) {
       chain_->GetEntry(iEvent);
