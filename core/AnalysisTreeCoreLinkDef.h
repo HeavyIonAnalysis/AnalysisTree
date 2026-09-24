@@ -18,6 +18,7 @@
 
 #pragma link C++ class AnalysisTree::VectorConfig<int>+;
 #pragma link C++ class AnalysisTree::VectorConfig<float>+;
+#pragma link C++ class AnalysisTree::VectorConfig<double>+;
 #pragma link C++ class AnalysisTree::VectorConfig<bool>+;
 #pragma link C++ class AnalysisTree::ConfigElement+;
 #pragma link C++ class AnalysisTree::Configuration_v3+;

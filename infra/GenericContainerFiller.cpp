@@ -44,7 +44,9 @@ void GenericContainerFiller::Init() {
     const std::string fieldType = leave->ClassName();
     if (!fields_to_ignore_.empty() && (std::find(fields_to_ignore_.begin(), fields_to_ignore_.end(), fieldName) != fields_to_ignore_.end())) continue;
     if (!fields_to_preserve_.empty() && (std::find(fields_to_preserve_.begin(), fields_to_preserve_.end(), fieldName) == fields_to_preserve_.end())) continue;
-    if (fieldType == "TLeafF") {
+    if (fieldType == "TLeafD") {
+      branchConfig.AddField<double>(fieldName);
+    } else if (fieldType == "TLeafF") {
       branchConfig.AddField<float>(fieldName);
     } else if (fieldType == "TLeafI" || fieldType == "TLeafB" || fieldType == "TLeafS") {
       branchConfig.AddField<int>(fieldName);
@@ -56,7 +58,7 @@ void GenericContainerFiller::Init() {
   config_.AddBranchConfig(branchConfig);
 
   for (int iV = 0; iV < static_cast<int>(branch_values_.size()); iV++) {
-    SetAddressFICS(branch_map_.at(iV).name_, branch_map_.at(iV), branch_values_.at(iV));
+    SetLeafAddress(branch_map_.at(iV).name_, branch_map_.at(iV), branch_values_.at(iV));
   }
 
   generic_detector_ = new GenericDetector(branchConfig.GetId());
@@ -79,7 +81,7 @@ int GenericContainerFiller::Exec(int iEntry, int previousTriggerVar) {
     generic_detector_->ClearChannels();
   }
   auto& channel = generic_detector_->AddChannel(config_.GetBranchConfig(generic_detector_->GetId()));
-  SetFieldsFICS(branch_map_, channel, branch_values_);
+  SetFieldsFromLeaves(branch_map_, channel, branch_values_);
 
   return currentTriggerVar;
 }
@@ -113,28 +115,32 @@ int GenericContainerFiller::DetermineFieldIdByName(const std::vector<IndexMap>& 
   return distance;
 }
 
-void GenericContainerFiller::SetAddressFICS(const std::string& branchName, const IndexMap& imap, FICS& ficc) {
-  if (imap.field_type_ == "TLeafF") tree_in_->SetBranchAddress(branchName.c_str(), &ficc.float_);
+void GenericContainerFiller::SetLeafAddress(const std::string& branchName, const IndexMap& imap, LeafBuffer& buffer) {
+  if (imap.field_type_ == "TLeafD") tree_in_->SetBranchAddress(branchName.c_str(), &buffer.double_);
+  else if (imap.field_type_ == "TLeafF")
+    tree_in_->SetBranchAddress(branchName.c_str(), &buffer.float_);
   else if (imap.field_type_ == "TLeafI")
-    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.int_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &buffer.int_);
   else if (imap.field_type_ == "TLeafB")
-    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.char_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &buffer.char_);
   else if (imap.field_type_ == "TLeafS")
-    tree_in_->SetBranchAddress(branchName.c_str(), &ficc.short_);
+    tree_in_->SetBranchAddress(branchName.c_str(), &buffer.short_);
   else
-    throw std::runtime_error("GenericContainerFiller::SetAddressFICS(): unsupported filed type " + imap.field_type_);
+    throw std::runtime_error("GenericContainerFiller::SetLeafAddress(): unsupported filed type " + imap.field_type_);
 }
 
-void GenericContainerFiller::SetFieldsFICS(const std::vector<IndexMap>& imap, Container& container, const std::vector<FICS>& ficc) {
-  for (int iV = 0; iV < static_cast<int>(ficc.size()); iV++) {
-    if (imap.at(iV).field_type_ == "TLeafF") container.SetField(ficc.at(iV).float_, imap.at(iV).index_);
+void GenericContainerFiller::SetFieldsFromLeaves(const std::vector<IndexMap>& imap, Container& container, const std::vector<LeafBuffer>& buffers) {
+  for (int iV = 0; iV < static_cast<int>(buffers.size()); iV++) {
+    if (imap.at(iV).field_type_ == "TLeafD") container.SetField(buffers.at(iV).double_, imap.at(iV).index_);
+    else if (imap.at(iV).field_type_ == "TLeafF")
+      container.SetField(buffers.at(iV).float_, imap.at(iV).index_);
     else if (imap.at(iV).field_type_ == "TLeafI")
-      container.SetField(ficc.at(iV).int_, imap.at(iV).index_);
+      container.SetField(buffers.at(iV).int_, imap.at(iV).index_);
     else if (imap.at(iV).field_type_ == "TLeafB")
-      container.SetField(static_cast<int>(ficc.at(iV).char_), imap.at(iV).index_);
+      container.SetField(static_cast<int>(buffers.at(iV).char_), imap.at(iV).index_);
     else if (imap.at(iV).field_type_ == "TLeafS")
-      container.SetField(static_cast<int>(ficc.at(iV).short_), imap.at(iV).index_);
+      container.SetField(static_cast<int>(buffers.at(iV).short_), imap.at(iV).index_);
     else
-      throw std::runtime_error("GenericContainerFiller::SetFieldsFICS(): unsupported filed type " + imap.at(iV).field_type_);
+      throw std::runtime_error("GenericContainerFiller::SetFieldsFromLeaves(): unsupported filed type " + imap.at(iV).field_type_);
   }
 }

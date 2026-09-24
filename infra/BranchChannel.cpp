@@ -75,6 +75,7 @@ double BranchChannel::Value(const Field& v) const {
 
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
+    case Types::kDouble: return ANALYSISTREE_UTILS_VISIT(get_field_struct<double>(v.GetFieldId()), data_ptr_);
     case Types::kFloat: return ANALYSISTREE_UTILS_VISIT(get_field_struct<float>(v.GetFieldId()), data_ptr_);
     case Types::kInteger: return ANALYSISTREE_UTILS_VISIT(get_field_struct<int>(v.GetFieldId()), data_ptr_);
     case Types::kBool: return ANALYSISTREE_UTILS_VISIT(get_field_struct<bool>(v.GetFieldId()), data_ptr_);
@@ -85,6 +86,7 @@ double BranchChannel::Value(const Field& v) const {
 void BranchChannel::SetValue(const Field& v, double value) {
   using AnalysisTree::Types;
   switch (v.GetFieldType()) {
+    case Types::kDouble: ANALYSISTREE_UTILS_VISIT(set_field_struct<double>(value, v.GetFieldId()), data_ptr_); break;
     case Types::kFloat: ANALYSISTREE_UTILS_VISIT(set_field_struct<float>(value, v.GetFieldId()), data_ptr_); break;
     case Types::kInteger: ANALYSISTREE_UTILS_VISIT(set_field_struct<int>(value, v.GetFieldId()), data_ptr_); break;
     case Types::kBool: ANALYSISTREE_UTILS_VISIT(set_field_struct<bool>(value, v.GetFieldId()), data_ptr_); break;

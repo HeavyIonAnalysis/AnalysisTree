@@ -65,10 +65,11 @@ void PlainTreeFiller::CheckIgnorePreserveRenameFields(const std::vector<std::str
 void PlainTreeFiller::Init() {
   if (is_ignore_defual_fields_) {
     std::vector<std::string> defaultFieldsNames;
+    auto mapD = config_->GetBranchConfig(branch_name_).GetMap<double>();
     auto mapF = config_->GetBranchConfig(branch_name_).GetMap<float>();
     auto mapI = config_->GetBranchConfig(branch_name_).GetMap<int>();
     auto mapB = config_->GetBranchConfig(branch_name_).GetMap<bool>();
-    for (const auto& m : {mapF, mapI, mapB}) {
+    for (const auto& m : {mapD, mapF, mapI, mapB}) {
       for (const auto& me : m) {
         if (me.second.id_ < 0) defaultFieldsNames.emplace_back(me.first);
       }
@@ -82,6 +83,11 @@ void PlainTreeFiller::Init() {
 
   if (!branch_name_.empty()) {
     const auto& branch_config = config_->GetBranchConfig(branch_name_);
+    for (const auto& field : branch_config.GetMap<double>()) {
+      AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
+      vars_.emplace_back();
+      vars_.back().type_ = Types::kDouble;
+    }
     for (const auto& field : branch_config.GetMap<float>()) {
       AnalysisTask::AddEntry(AnalysisEntry({Variable(branch_name_, field.first)}));
       vars_.emplace_back();
@@ -126,7 +132,9 @@ void PlainTreeFiller::Init() {
     }
     if (!is_prepend_leaves_with_branchname_) leaf_name.erase(0, branch_name_.size() + 1);
     std::replace(leaf_name.begin(), leaf_name.end(), '.', '_');
-    if (vars_.at(iLeaf).type_ == Types::kFloat) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(iLeaf).float_, Form("%s/F", leaf_name.c_str()));
+    if (vars_.at(iLeaf).type_ == Types::kDouble) plain_tree_->Branch(leaf_name.c_str(), &vars_.at(iLeaf).double_, Form("%s/D", leaf_name.c_str()));
+    else if (vars_.at(iLeaf).type_ == Types::kFloat)
+      plain_tree_->Branch(leaf_name.c_str(), &vars_.at(iLeaf).float_, Form("%s/F", leaf_name.c_str()));
     else if (vars_.at(iLeaf).type_ == Types::kInteger)
       plain_tree_->Branch(leaf_name.c_str(), &vars_.at(iLeaf).int_, Form("%s/I", leaf_name.c_str()));
     else if (vars_.at(iLeaf).type_ == Types::kBool)
@@ -146,7 +154,9 @@ void PlainTreeFiller::Exec() {
   for (const auto& channel : values) {
     assert(channel.size() == vars_.size());
     for (size_t i = 0; i < channel.size(); ++i) {
-      if (vars_.at(i).type_ == Types::kFloat) vars_.at(i).float_ = static_cast<float>(channel.at(i));
+      if (vars_.at(i).type_ == Types::kDouble) vars_.at(i).double_ = channel.at(i);
+      else if (vars_.at(i).type_ == Types::kFloat)
+        vars_.at(i).float_ = static_cast<float>(channel.at(i));
       else if (vars_.at(i).type_ == Types::kInteger)
         vars_.at(i).int_ = static_cast<int>(std::round(channel.at(i)));
       else if (vars_.at(i).type_ == Types::kBool)

@@ -41,6 +41,35 @@ TEST(Container, Basics) {
   EXPECT_EQ(container.GetField<bool>(0), true);
 }
 
+TEST(Container, Double) {
+  Container container;
+  EXPECT_EQ(container.GetSize<double>(), 0);
+
+  BranchConfig config("RecTrack", DetType::kTrack);
+  config.AddField<double>("test_d", "just a test field");
+  config.AddField<float>("test_f", "just a test field");
+
+  EXPECT_EQ(config.GetFieldType("test_d"), Types::kDouble);
+  EXPECT_EQ(config.GetFieldId("test_d"), 0);
+  EXPECT_EQ(config.GetFieldId("test_f"), 0);
+
+  container.Init(config);
+  EXPECT_EQ(container.GetSize<double>(), 1);
+
+  // value which cannot be represented exactly in float precision
+  const double value = 1. + 1e-12;
+  container.SetField(value, 0);
+  EXPECT_EQ(container.GetField<double>(0), value);
+  EXPECT_NE(static_cast<float>(value), value);
+
+  auto clone = config.Clone("RecTrackClone", DetType::kTrack);
+  EXPECT_EQ(clone.GetFieldType("test_d"), Types::kDouble);
+  EXPECT_EQ(clone.GetSize<double>(), 1);
+
+  config.RemoveField("test_d");
+  EXPECT_FALSE(config.HasField("test_d"));
+}
+
 }// namespace
 
 #endif//ANALYSISTREE_CORE_CONTAINER_TEST_HPP_

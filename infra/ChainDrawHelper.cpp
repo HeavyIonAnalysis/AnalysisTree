@@ -17,6 +17,10 @@ void ChainDrawHelper::DrawFieldTransform(std::string& expr) {
   std::string type_str{};
 
   switch (type) {
+    case (Types::kDouble): {
+      type_str = "double";
+      break;
+    }
     case (Types::kFloat): {
       type_str = "float";
       break;
