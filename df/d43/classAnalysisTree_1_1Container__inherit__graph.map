@@ -1,15 +1,15 @@
 <map id="AnalysisTree::Container" name="AnalysisTree::Container">
-<area shape="rect" id="Node000001" title="A class to store any number of integers, floats and bools." alt="" coords="249,262,396,593"/>
-<area shape="rect" id="Node000003" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="5,671,172,1002"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="243,549,186,642,169,673,164,670,181,639,238,546"/>
-<area shape="rect" id="Node000004" href="$de/dce/classAnalysisTree_1_1Hit.html" title=" " alt="" coords="196,671,304,1002"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="293,607,282,672,277,671,288,607"/>
-<area shape="rect" id="Node000005" href="$de/dd8/classAnalysisTree_1_1Module.html" title=" " alt="" coords="329,651,462,1022"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="357,607,365,650,360,651,352,608"/>
-<area shape="rect" id="Node000006" href="$da/d0a/classAnalysisTree_1_1Track.html" title="A class for a generic track with determined momentum." alt="" coords="487,641,630,1032"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="406,532,443,584,476,639,489,663,484,665,472,642,438,587,402,535"/>
+<area shape="rect" id="Node000001" title="A class to store any number of doubles, floats, integers and bools." alt="" coords="249,262,396,613"/>
+<area shape="rect" id="Node000003" href="$d8/dd1/classAnalysisTree_1_1EventHeader.html" title=" " alt="" coords="5,692,172,1022"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="243,565,186,662,169,693,165,691,181,660,239,562"/>
+<area shape="rect" id="Node000004" href="$de/dce/classAnalysisTree_1_1Hit.html" title=" " alt="" coords="196,692,304,1022"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="292,628,281,693,276,692,287,627"/>
+<area shape="rect" id="Node000005" href="$de/dd8/classAnalysisTree_1_1Module.html" title=" " alt="" coords="329,671,462,1042"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="358,627,366,671,360,672,353,628"/>
+<area shape="rect" id="Node000006" href="$da/d0a/classAnalysisTree_1_1Track.html" title="A class for a generic track with determined momentum." alt="" coords="487,661,630,1053"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="406,548,476,660,489,684,484,686,472,662,401,550"/>
 <area shape="rect" id="Node000002" href="$df/dee/classAnalysisTree_1_1IndexedObject.html" title=" " alt="" coords="235,5,410,214"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,229,325,262,320,262,320,229"/>
-<area shape="rect" id="Node000007" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="480,1080,636,1426"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="561,1047,561,1081,556,1081,556,1047"/>
+<area shape="rect" id="Node000007" href="$db/dd2/classAnalysisTree_1_1Particle.html" title=" " alt="" coords="480,1101,636,1446"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="561,1068,561,1101,556,1101,556,1068"/>
 </map>

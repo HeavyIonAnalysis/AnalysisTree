@@ -159,15 +159,15 @@ void&#160;</td><td class="memItemRight"><b>Init</b> ()</td></tr>
 int&#160;</td><td class="memItemRight"><b>Exec</b> (int iEntry, int previousTriggerVar)</td></tr>
 <tr class="memitem:afcf3c096c12aa8c267ee2328f5528d46" id="r_afcf3c096c12aa8c267ee2328f5528d46"><td class="memItemLeft"><a id="afcf3c096c12aa8c267ee2328f5528d46" name="afcf3c096c12aa8c267ee2328f5528d46"></a>
 void&#160;</td><td class="memItemRight"><b>Finish</b> ()</td></tr>
-<tr class="memitem:aae419778b7d41cb88a4a2a2ad53959aa" id="r_aae419778b7d41cb88a4a2a2ad53959aa"><td class="memItemLeft"><a id="aae419778b7d41cb88a4a2a2ad53959aa" name="aae419778b7d41cb88a4a2a2ad53959aa"></a>
-void&#160;</td><td class="memItemRight"><b>SetAddressFICS</b> (const std::string &amp;branchName, const <a class="el" href="../../d0/de2/structIndexMap.html">IndexMap</a> &amp;imap, <a class="el" href="../../d5/dfb/structFICS.html">FICS</a> &amp;ficc)</td></tr>
+<tr class="memitem:acd3df7b3f3b9d1481c673a4cf43de8ae" id="r_acd3df7b3f3b9d1481c673a4cf43de8ae"><td class="memItemLeft"><a id="acd3df7b3f3b9d1481c673a4cf43de8ae" name="acd3df7b3f3b9d1481c673a4cf43de8ae"></a>
+void&#160;</td><td class="memItemRight"><b>SetLeafAddress</b> (const std::string &amp;branchName, const <a class="el" href="../../d8/d2c/structAnalysisTree_1_1IndexMap.html">IndexMap</a> &amp;imap, <a class="el" href="../../dd/d88/structAnalysisTree_1_1LeafBuffer.html">LeafBuffer</a> &amp;buffer)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:afbf62c318886e7f62b7ec7b15e2506ef" id="r_afbf62c318886e7f62b7ec7b15e2506ef"><td class="memItemLeft"><a id="afbf62c318886e7f62b7ec7b15e2506ef" name="afbf62c318886e7f62b7ec7b15e2506ef"></a>
-static int&#160;</td><td class="memItemRight"><b>DetermineFieldIdByName</b> (const std::vector&lt; <a class="el" href="../../d0/de2/structIndexMap.html">IndexMap</a> &gt; &amp;iMap, const std::string &amp;name)</td></tr>
-<tr class="memitem:ab2620ef392e5058de263dfa5100fcfc7" id="r_ab2620ef392e5058de263dfa5100fcfc7"><td class="memItemLeft"><a id="ab2620ef392e5058de263dfa5100fcfc7" name="ab2620ef392e5058de263dfa5100fcfc7"></a>
-static void&#160;</td><td class="memItemRight"><b>SetFieldsFICS</b> (const std::vector&lt; <a class="el" href="../../d0/de2/structIndexMap.html">IndexMap</a> &gt; &amp;imap, <a class="el" href="../../d2/d0f/classAnalysisTree_1_1Container.html">AnalysisTree::Container</a> &amp;container, const std::vector&lt; <a class="el" href="../../d5/dfb/structFICS.html">FICS</a> &gt; &amp;ficc)</td></tr>
+static int&#160;</td><td class="memItemRight"><b>DetermineFieldIdByName</b> (const std::vector&lt; <a class="el" href="../../d8/d2c/structAnalysisTree_1_1IndexMap.html">IndexMap</a> &gt; &amp;iMap, const std::string &amp;name)</td></tr>
+<tr class="memitem:a7277f1dbfcae90c49f1c602f7e0267b2" id="r_a7277f1dbfcae90c49f1c602f7e0267b2"><td class="memItemLeft"><a id="a7277f1dbfcae90c49f1c602f7e0267b2" name="a7277f1dbfcae90c49f1c602f7e0267b2"></a>
+static void&#160;</td><td class="memItemRight"><b>SetFieldsFromLeaves</b> (const std::vector&lt; <a class="el" href="../../d8/d2c/structAnalysisTree_1_1IndexMap.html">IndexMap</a> &gt; &amp;imap, <a class="el" href="../../d2/d0f/classAnalysisTree_1_1Container.html">AnalysisTree::Container</a> &amp;container, const std::vector&lt; <a class="el" href="../../dd/d88/structAnalysisTree_1_1LeafBuffer.html">LeafBuffer</a> &gt; &amp;buffers)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -192,9 +192,9 @@ TTree *&#160;</td><td class="memItemRight"><b>tree_out_</b> {nullptr}</td></tr>
 <tr class="memitem:a0efbff394da4648d238772ee6c3f71e7" id="r_a0efbff394da4648d238772ee6c3f71e7"><td class="memItemLeft"><a id="a0efbff394da4648d238772ee6c3f71e7" name="a0efbff394da4648d238772ee6c3f71e7"></a>
 AnalysisTree::GenericDetector *&#160;</td><td class="memItemRight"><b>generic_detector_</b> {nullptr}</td></tr>
 <tr class="memitem:a0fecb5fa90e564dbdb87f26fb1f4073c" id="r_a0fecb5fa90e564dbdb87f26fb1f4073c"><td class="memItemLeft"><a id="a0fecb5fa90e564dbdb87f26fb1f4073c" name="a0fecb5fa90e564dbdb87f26fb1f4073c"></a>
-std::vector&lt; <a class="el" href="../../d0/de2/structIndexMap.html">IndexMap</a> &gt;&#160;</td><td class="memItemRight"><b>branch_map_</b></td></tr>
-<tr class="memitem:a1a8d44614228337658360633b1d2b416" id="r_a1a8d44614228337658360633b1d2b416"><td class="memItemLeft"><a id="a1a8d44614228337658360633b1d2b416" name="a1a8d44614228337658360633b1d2b416"></a>
-std::vector&lt; <a class="el" href="../../d5/dfb/structFICS.html">FICS</a> &gt;&#160;</td><td class="memItemRight"><b>branch_values_</b></td></tr>
+std::vector&lt; <a class="el" href="../../d8/d2c/structAnalysisTree_1_1IndexMap.html">IndexMap</a> &gt;&#160;</td><td class="memItemRight"><b>branch_map_</b></td></tr>
+<tr class="memitem:a9630f3f5e3aca9afec753e32a1047671" id="r_a9630f3f5e3aca9afec753e32a1047671"><td class="memItemLeft"><a id="a9630f3f5e3aca9afec753e32a1047671" name="a9630f3f5e3aca9afec753e32a1047671"></a>
+std::vector&lt; <a class="el" href="../../dd/d88/structAnalysisTree_1_1LeafBuffer.html">LeafBuffer</a> &gt;&#160;</td><td class="memItemRight"><b>branch_values_</b></td></tr>
 <tr class="memitem:a0993db0a903eabdaf5d21c181e18a76b" id="r_a0993db0a903eabdaf5d21c181e18a76b"><td class="memItemLeft"><a id="a0993db0a903eabdaf5d21c181e18a76b" name="a0993db0a903eabdaf5d21c181e18a76b"></a>
 std::string&#160;</td><td class="memItemRight"><b>entry_switch_trigger_var_name_</b></td></tr>
 <tr class="memitem:a9a8ebbcef9981234d638998a41f735d8" id="r_a9a8ebbcef9981234d638998a41f735d8"><td class="memItemLeft"><a id="a9a8ebbcef9981234d638998a41f735d8" name="a9a8ebbcef9981234d638998a41f735d8"></a>

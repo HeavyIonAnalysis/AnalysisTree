@@ -22,7 +22,7 @@
 <area shape="poly" id="edge12_Node000002_Node000006" title=" " alt="" coords="169,258,192,245,207,231,215,217,224,202,240,188,263,175,265,180,243,192,229,206,220,220,211,234,195,249,171,262"/>
 <area shape="poly" id="edge13_Node000002_Node000007" title=" " alt="" coords="170,259,261,237,262,242,171,265"/>
 <area shape="poly" id="edge20_Node000002_Node000014" title=" " alt="" coords="208,276,246,276,246,282,208,282"/>
-<area shape="rect" id="Node000008" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of integers, floats and bools." alt="" coords="259,496,416,521"/>
+<area shape="rect" id="Node000008" href="$d2/d0f/classAnalysisTree_1_1Container.html" title="A class to store any number of doubles, floats, integers and bools." alt="" coords="259,496,416,521"/>
 <area shape="poly" id="edge14_Node000002_Node000008" title=" " alt="" coords="114,305,133,344,161,393,198,441,243,482,263,493,260,497,240,487,194,445,157,396,128,347,109,307"/>
 <area shape="rect" id="Node000015" href="$df/d4d/classAnalysisTree_1_1ModulePosition.html" title=" " alt="" coords="242,446,433,472"/>
 <area shape="poly" id="edge21_Node000002_Node000015" title=" " alt="" coords="119,303,170,368,204,402,243,431,269,443,266,448,240,436,201,406,166,371,115,306"/>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['particle_0',['Particle',['../db/dd2/classAnalysisTree_1_1Particle.html',1,'AnalysisTree']]],
-  ['plaintreefiller_1',['PlainTreeFiller',['../d0/d41/classAnalysisTree_1_1PlainTreeFiller.html',1,'AnalysisTree']]]
+  ['new_5fchannel_5fstruct_0',['new_channel_struct',['../d0/d12/structAnalysisTree_1_1new__channel__struct.html',1,'AnalysisTree']]]
 ];
