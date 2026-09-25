@@ -205,8 +205,7 @@ void VectorConfig<T>::RemoveField(const std::string& name, int id) {
       m.second.id_--;
     }
   }
-  // default fields (negative id) do not occupy a slot in the data vector
-  if (id >= 0) size_--;
+  size_--;
 }
 
 void BranchConfig::RemoveField(const std::string& name) {
