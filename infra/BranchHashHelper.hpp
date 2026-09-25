@@ -24,6 +24,7 @@ inline std::size_t BranchConfigHasher(const AnalysisTree::BranchConfig& config) 
     }
   };
 
+  hash_fields(config.GetMap<double>(), Type::kDouble);
   hash_fields(config.GetMap<float>(), Type::kFloat);
   hash_fields(config.GetMap<int>(), Type::kInteger);
   hash_fields(config.GetMap<bool>(), Type::kBool);

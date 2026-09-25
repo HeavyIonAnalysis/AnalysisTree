@@ -69,6 +69,10 @@ Field Branch::NewVariable(const std::string& field_name, const std::string& titl
   using AnalysisTree::Types;
 
   switch (type) {
+    case Types::kDouble: {
+      config_.template AddField<double>(field_name, title);
+      break;
+    }
     case Types::kFloat: {
       config_.template AddField<float>(field_name, title);
       break;
@@ -117,6 +121,7 @@ void Branch::CloneVariables(const AnalysisTree::BranchConfig& other) {
     }// map elements
   };
 
+  import_fields_from_map(other.GetMap<double>(), AnalysisTree::Types::kDouble);
   import_fields_from_map(other.GetMap<float>(), AnalysisTree::Types::kFloat);
   import_fields_from_map(other.GetMap<int>(), AnalysisTree::Types::kInteger);
   import_fields_from_map(other.GetMap<bool>(), AnalysisTree::Types::kBool);
@@ -190,6 +195,7 @@ void Branch::CreateMapping(const Branch* other, std::string branch_name_prefix) 
   other->CheckFrozen();
 
   const std::map<AnalysisTree::Types, std::string> types_map = {
+      {AnalysisTree::Types::kDouble, "double"},
       {AnalysisTree::Types::kFloat, "float"},
       {AnalysisTree::Types::kInteger, "integer"},
       {AnalysisTree::Types::kBool, "bool"}};
@@ -218,6 +224,7 @@ std::vector<std::string> Branch::GetFieldNames() const {
       result.push_back(element.first);
     }
   };
+  fill_vector_from_map(config_.GetMap<double>());
   fill_vector_from_map(config_.GetMap<float>());
   fill_vector_from_map(config_.GetMap<int>());
   fill_vector_from_map(config_.GetMap<bool>());

@@ -9,9 +9,9 @@
 
 namespace AnalysisTree {
 
-/// A class to store any number of integers, floats and bools.
+/// A class to store any number of doubles, floats, integers and bools.
 /**
- * Consists of IndexedObject and separate std::vector<T>, for T={float, int, bool}.
+ * Consists of IndexedObject and separate std::vector<T>, for T={double, float, int, bool}.
  * Intended to be used as a base class for all AnalysysTree objects.
  */
 
@@ -22,6 +22,7 @@ class Container : public IndexedObject {
   explicit Container(size_t id) : IndexedObject(id) {}
   Container(size_t id, const BranchConfig& branch)
       : IndexedObject(id),
+        doubles_(branch.GetSize<double>()),
         floats_(branch.GetSize<float>()),
         ints_(branch.GetSize<int>()),
         bools_(branch.GetSize<bool>()) {}
@@ -57,11 +58,12 @@ class Container : public IndexedObject {
   virtual void Print() const noexcept;
 
  protected:
+  std::vector<double> doubles_{};
   std::vector<float> floats_{};
   std::vector<int> ints_{};
   std::vector<bool> bools_{};
 
-  ClassDefOverride(Container, 2);
+  ClassDefOverride(Container, 3);
 };
 
 }// namespace AnalysisTree

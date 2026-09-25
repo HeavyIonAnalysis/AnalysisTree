@@ -15,28 +15,33 @@
 #include <string>
 #include <vector>
 
+namespace AnalysisTree {
+
 struct IndexMap {
   std::string name_;
   std::string field_type_;
   short index_;
 };
 
-struct FICS {// FICS stands for float, int, char, short
+/// Buffer for the value of one leaf of the input tree.
+/// Only the member matching the leaf type is connected via SetBranchAddress,
+/// the others keep their placeholder value -199.
+struct LeafBuffer {
+  double double_{-199.};
   float float_{-199.f};
   int int_{-199};
   char char_{static_cast<char>(-199)};
   short short_{static_cast<short>(-199)};
 
-  float get() const {
+  double get() const {
+    if (std::fabs(double_ + 199.) > 1e-4) return double_;
     if (std::fabs(float_ + 199.f) > 1e-4) return float_;
-    if (int_ != -199) return static_cast<float>(int_);
-    if (char_ != static_cast<char>(-199)) return static_cast<float>(char_);
-    if (short_ != static_cast<short>(-199)) return static_cast<float>(short_);
-    throw std::runtime_error("GenericContainerFiller, FICS::get(): none of values initialized");
+    if (int_ != -199) return static_cast<double>(int_);
+    if (char_ != static_cast<char>(-199)) return static_cast<double>(char_);
+    if (short_ != static_cast<short>(-199)) return static_cast<double>(short_);
+    throw std::runtime_error("GenericContainerFiller, LeafBuffer::get(): none of values initialized");
   }
 };
-
-namespace AnalysisTree {
 
 class GenericContainerFiller {
  public:
@@ -63,8 +68,8 @@ class GenericContainerFiller {
   void Finish();
 
   static int DetermineFieldIdByName(const std::vector<IndexMap>& iMap, const std::string& name);
-  void SetAddressFICS(const std::string& branchName, const IndexMap& imap, FICS& ficc);
-  static void SetFieldsFICS(const std::vector<IndexMap>& imap, AnalysisTree::Container& container, const std::vector<FICS>& ficc);
+  void SetLeafAddress(const std::string& branchName, const IndexMap& imap, LeafBuffer& buffer);
+  static void SetFieldsFromLeaves(const std::vector<IndexMap>& imap, AnalysisTree::Container& container, const std::vector<LeafBuffer>& buffers);
 
   std::string file_in_name_;
   std::string tree_in_name_;
@@ -80,7 +85,7 @@ class GenericContainerFiller {
   AnalysisTree::Configuration config_;
   AnalysisTree::GenericDetector* generic_detector_{nullptr};
   std::vector<IndexMap> branch_map_;
-  std::vector<FICS> branch_values_;
+  std::vector<LeafBuffer> branch_values_;
 
   // variable, change of value of which triggers switch to a new AT event
   std::string entry_switch_trigger_var_name_;

@@ -41,6 +41,26 @@ TEST(BranchConfig, Basics) {
   EXPECT_EQ(branch_config.GetFieldId("pz"), TrackFields::kPz);
 }
 
+TEST(BranchConfig, RemoveField) {
+  BranchConfig branch_config("RecTrack", DetType::kTrack);
+  branch_config.AddFields<float>({"f0", "f1", "f2"}, "just a test field");
+  EXPECT_EQ(branch_config.GetSize<float>(), 3);
+
+  branch_config.RemoveField("f1");
+  EXPECT_FALSE(branch_config.HasField("f1"));
+  EXPECT_EQ(branch_config.GetSize<float>(), 2);
+  EXPECT_EQ(branch_config.GetFieldId("f0"), 0);
+  EXPECT_EQ(branch_config.GetFieldId("f2"), 1);
+
+  // a field added after removal must get the next free id, not collide with existing ones
+  branch_config.AddField<float>("f3", "just a test field");
+  EXPECT_EQ(branch_config.GetFieldId("f3"), 2);
+  EXPECT_EQ(branch_config.GetSize<float>(), 3);
+
+  EXPECT_THROW(branch_config.RemoveField("pT"), std::runtime_error);
+  EXPECT_EQ(branch_config.GetSize<float>(), 3);
+}
+
 }// namespace
 
 #endif//ANALYSISTREE_CORE_BRANCHCONFIG_TEST_H_

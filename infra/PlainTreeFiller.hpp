@@ -13,6 +13,7 @@
 namespace AnalysisTree {
 
 struct FIB {
+  double double_{-299.};
   float float_{-299.f};
   int int_{-299};
   bool bool_{false};

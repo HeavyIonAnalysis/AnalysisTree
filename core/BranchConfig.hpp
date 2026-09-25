@@ -86,7 +86,7 @@ class VectorConfig {
 /**
  * Maybe better design choise would be use composition over inheritance (?)
  */
-class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, public VectorConfig<bool> {
+class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, public VectorConfig<double>, public VectorConfig<bool> {
 
  public:
   BranchConfig() = default;
@@ -174,7 +174,7 @@ class BranchConfig : public VectorConfig<int>, public VectorConfig<float>, publi
   size_t id_{0};
   DetType type_{DetType(UndefValueShort)};
 
-  ClassDefOverride(BranchConfig, 4);
+  ClassDefOverride(BranchConfig, 5);
 };
 
 // BranchConfig Merge(const BranchConfig& primary, const BranchConfig& secondary);

@@ -57,6 +57,7 @@ enum class Types : ShortInt_t {
   kFloat = 0,
   kInteger,
   kBool,
+  kDouble,
   kNumberOfTypes
 };
 
