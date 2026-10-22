@@ -55,6 +55,12 @@ class Container : public IndexedObject {
   }
 
   void Init(const BranchConfig& branch);
+
+  /**
+   * @brief Sets all user-defined fields to undefined values (UndefValueDouble, UndefValueFloat, UndefValueInt, false)
+   */
+  virtual void Reset();
+
   virtual void Print() const noexcept;
 
  protected:

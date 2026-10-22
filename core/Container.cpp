@@ -5,6 +5,8 @@
 
 #include "BranchConfig.hpp"
 
+#include <algorithm>
+
 namespace AnalysisTree {
 
 template<>
@@ -30,6 +32,13 @@ void Container::Init(const AnalysisTree::BranchConfig& branch) {
   floats_.resize(branch.GetSize<float>());
   ints_.resize(branch.GetSize<int>());
   bools_.resize(branch.GetSize<bool>());
+}
+
+void Container::Reset() {
+  std::fill(doubles_.begin(), doubles_.end(), UndefValueDouble);
+  std::fill(floats_.begin(), floats_.end(), UndefValueFloat);
+  std::fill(ints_.begin(), ints_.end(), UndefValueInt);
+  std::fill(bools_.begin(), bools_.end(), false);
 }
 
 void Container::Print() const noexcept {

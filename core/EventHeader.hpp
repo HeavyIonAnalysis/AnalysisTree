@@ -34,6 +34,11 @@ class EventHeader : public Container {
 
   void SetVertexPosition3(const TVector3& pos);
 
+  /**
+   * @brief Sets vertex position and all user-defined fields to undefined values
+   */
+  void Reset() override;
+
   template<typename T>
   T GetField(Integer_t iField) const {
     if (iField >= 0)
