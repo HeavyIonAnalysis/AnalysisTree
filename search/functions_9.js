@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['rangecut_0',['RangeCut',['../d9/d26/namespaceAnalysisTree.html#a3713ce209ecadf3cc3f4236ab24fd836',1,'AnalysisTree::RangeCut(const std::string &amp;variable_name, double lo, double hi, const std::string &amp;title=&quot;&quot;)'],['../d9/d26/namespaceAnalysisTree.html#aefb74a2507f53552c535cb742fa6ebee',1,'AnalysisTree::RangeCut(const Variable &amp;var, double lo, double hi, const std::string &amp;title=&quot;&quot;)']]]
+  ['rangecut_0',['RangeCut',['../d9/d26/namespaceAnalysisTree.html#a3713ce209ecadf3cc3f4236ab24fd836',1,'AnalysisTree::RangeCut(const std::string &amp;variable_name, double lo, double hi, const std::string &amp;title=&quot;&quot;)'],['../d9/d26/namespaceAnalysisTree.html#aefb74a2507f53552c535cb742fa6ebee',1,'AnalysisTree::RangeCut(const Variable &amp;var, double lo, double hi, const std::string &amp;title=&quot;&quot;)']]],
+  ['reset_1',['Reset',['../d2/d0f/classAnalysisTree_1_1Container.html#ad5d9dcf5c236a995acd49974ba87bcd3',1,'AnalysisTree::Container::Reset()'],['../d8/dd1/classAnalysisTree_1_1EventHeader.html#ae3552ea4e009793aaf874b51ff387c33',1,'AnalysisTree::EventHeader::Reset()']]]
 ];
