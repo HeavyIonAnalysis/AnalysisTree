@@ -3,6 +3,9 @@
    Authors: Viktor Klochkov, Ilya Selyuzhenkov */
 #include "TaskManager.hpp"
 
+#include <TBranch.h>
+#include <TFile.h>
+
 #include <iostream>
 
 namespace AnalysisTree {
@@ -64,7 +67,7 @@ void TaskManager::Init() {
 
 void TaskManager::InitOutChain() {
   assert(fill_out_tree_);
-  out_file_ = TFile::Open(out_file_name_.c_str(), "recreate");
+  out_file_ = TFile::Open(out_file_name_.c_str(), "recreate", "", compression_settings_);
   configuration_ = new Configuration("Configuration");
   data_header_ = new DataHeader;
 
@@ -88,8 +91,15 @@ void TaskManager::InitOutChain() {
     out_tree_->SetName(out_tree_name_.c_str());
     data_header_ = chain_->GetDataHeader();
     chain_->SetBranchStatus("*", true);
+    // cloned branches keep the compression of the input
+    for (auto* br : *out_tree_->GetListOfBranches()) {
+      static_cast<TBranch*>(br)->SetCompressionSettings(out_file_->GetCompressionSettings());
+    }
   }
   out_tree_->SetAutoSave(0);
+  if (is_set_auto_flush_) {
+    out_tree_->SetAutoFlush(auto_flush_);
+  }
 }
 
 void TaskManager::Run(long long nEvents) {

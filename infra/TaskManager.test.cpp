@@ -79,6 +79,44 @@ TEST(TaskManager, RemoveBranch) {
   }
 }
 
+TEST(TaskManager, CompressionAndAutoFlush) {
+
+  const int n_events = 100;
+  const std::string filelist = "fl_test_task_manager_compression.txt";
+  const int compression = 505; // ZSTD, level 5
+  const Long64_t auto_flush = 10;
+
+  // TaskManager is a singleton: write mode of the previous test would also be used by RunToyMC
+  TaskManager* man = TaskManager::GetInstance();
+  man->ClearTasks();
+  man->SetWriteMode(eBranchWriteMode::kCreateNewTree);
+
+  RunToyMC(n_events, filelist);
+
+  man->SetWriteMode(eBranchWriteMode::kCopyTree);
+  man->SetBranchesExclude({});
+  man->SetOutputName("test_compression.root", "tTree");
+  man->SetCompressionSettings(compression);
+  man->SetAutoFlush(auto_flush);
+
+  man->Init({filelist}, {"tTree"});
+  man->Run(-1);
+  man->Finish();
+
+  // restore defaults for subsequent tests
+  man->SetWriteMode(eBranchWriteMode::kCreateNewTree);
+  man->SetCompressionSettings(ROOT::RCompressionSetting::EDefaults::kUseCompiledDefault);
+  man->SetAutoFlush(-30000000); // TTree default
+
+  Chain t("test_compression.root", "tTree");
+  ASSERT_EQ(t.GetEntries(), n_events);
+  ASSERT_EQ(t.GetFile()->GetCompressionSettings(), compression);
+  ASSERT_EQ(t.GetTree()->GetAutoFlush(), auto_flush);
+  for (auto* br : *t.GetTree()->GetListOfBranches()) {
+    ASSERT_EQ(static_cast<TBranch*>(br)->GetCompressionSettings(), compression);
+  }
+}
+
 }// namespace
 
 #endif//ANALYSISTREE_INFRA_TASKMANANGER_TEST_HPP_
