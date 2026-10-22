@@ -10,6 +10,8 @@
 #include <utility>
 #include <vector>
 
+#include <Compression.h>
+
 #include "Chain.hpp"
 #include "Cuts.hpp"
 #include "Matching.hpp"
@@ -164,6 +166,21 @@ class TaskManager {
   void SetIsWriteHashInfo(bool is = true) { is_write_hash_info_ = is; }
   void SetIsUpdateEntryInExec(bool is = true) { is_update_entry_in_exec_ = is; }
 
+  /**
+   * @brief Sets compression of the output file and all output branches
+   * @param settings ROOT compression settings: 100 * algorithm + level, e.g. 505 = ZSTD level 5, see ROOT::RCompressionSetting; default: ROOT compiled default
+   */
+  void SetCompressionSettings(int settings) { compression_settings_ = settings; }
+
+  /**
+   * @brief Sets TTree::SetAutoFlush() of the output tree
+   * @param value > 0: flush baskets every value entries; < 0: every -value bytes; 0: disable
+   */
+  void SetAutoFlush(Long64_t value) {
+    auto_flush_ = value;
+    is_set_auto_flush_ = true;
+  }
+
   void ClearTasks() { tasks_.clear(); }
 
  protected:
@@ -190,6 +207,10 @@ class TaskManager {
 
   int verbosity_period_{-1};
   int verbosity_frequency_{-1};
+
+  int compression_settings_{ROOT::RCompressionSetting::EDefaults::kUseCompiledDefault};
+  Long64_t auto_flush_{0};
+  bool is_set_auto_flush_{false};
 
   // configuration parameters
   eBranchWriteMode write_mode_{eBranchWriteMode::kCreateNewTree};
