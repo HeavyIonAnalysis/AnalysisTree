@@ -17,6 +17,11 @@ void EventHeader::SetVertexPosition3(const TVector3& pos) {
   vtx_pos_[Exyz::kZ] = pos.Pz();
 }
 
+void EventHeader::Reset() {
+  Container::Reset();
+  vtx_pos_.fill(UndefValueFloat);
+}
+
 const EventHeader& EventHeader::GetChannel(size_t i) const {
   if (i == 0) {
     return *this;

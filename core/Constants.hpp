@@ -30,6 +30,7 @@ typedef UInt_t UInteger_t;
 typedef Short_t ShortInt_t;
 typedef Long64_t PdgCode_t;
 
+constexpr double UndefValueDouble = -999.;
 constexpr Floating_t UndefValueFloat = -999.f;
 constexpr ShortInt_t UndefValueShort = -999;
 constexpr Integer_t UndefValueInt = -999;
