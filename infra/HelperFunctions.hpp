@@ -140,7 +140,7 @@ inline void Sumw2IfNotYet(TH1* histo, bool value = true) {
 
 inline TH1* MergeHistograms(const std::vector<TH1*>& histos) {
   bool isSumw2{false};
-  for(const auto& h : histos) {
+  for (const auto& h : histos) {
     CheckHistogramsForXaxisIdentity(h, histos.at(0));
     isSumw2 |= h->GetSumw2N() > 0;
   }
@@ -148,7 +148,7 @@ inline TH1* MergeHistograms(const std::vector<TH1*>& histos) {
   TH1* hResult = dynamic_cast<TH1*>(histos.at(0)->Clone("hMerged"));
   Sumw2IfNotYet(hResult);
   hResult->SetDirectory(nullptr);
-  for(size_t iH = 1, nHs = histos.size(); iH < nHs; ++iH) {
+  for (size_t iH = 1, nHs = histos.size(); iH < nHs; ++iH) {
     hResult->Add(histos.at(iH));
   }
   Sumw2IfNotYet(hResult, isSumw2);

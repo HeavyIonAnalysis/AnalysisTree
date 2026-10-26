@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-void run_read_task(const std::string& filelist, const std::string& treename){
+void run_read_task(const std::string& filelist, const std::string& treename) {
 
   auto* man = TaskManager::GetInstance();
   auto* task = new UserTaskRead();

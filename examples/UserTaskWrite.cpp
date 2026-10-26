@@ -27,7 +27,7 @@ void UserTaskWrite::Exec() {
   auto float_field = new_particles_.GetField("float_field");
   auto int_field = new_particles_.GetField("int_field1");
 
-  for(size_t i=0; i<particles_.size(); ++i){
+  for (size_t i = 0; i < particles_.size(); ++i) {
     auto particle = particles_[i];
     auto new_part = new_particles_.NewChannel();
     new_part.CopyContent(particle);
