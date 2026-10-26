@@ -83,7 +83,7 @@ TEST(TaskManager, CompressionAndAutoFlush) {
 
   const int n_events = 100;
   const std::string filelist = "fl_test_task_manager_compression.txt";
-  const int compression = 505; // ZSTD, level 5
+  const int compression = 505;// ZSTD, level 5
   const Long64_t auto_flush = 10;
 
   // TaskManager is a singleton: write mode of the previous test would also be used by RunToyMC
@@ -106,7 +106,7 @@ TEST(TaskManager, CompressionAndAutoFlush) {
   // restore defaults for subsequent tests
   man->SetWriteMode(eBranchWriteMode::kCreateNewTree);
   man->SetCompressionSettings(ROOT::RCompressionSetting::EDefaults::kUseCompiledDefault);
-  man->SetAutoFlush(-30000000); // TTree default
+  man->SetAutoFlush(-30000000);// TTree default
 
   Chain t("test_compression.root", "tTree");
   ASSERT_EQ(t.GetEntries(), n_events);

@@ -28,7 +28,7 @@ void UserTaskRead::Exec() {
     auto match_id = match_->GetMatch(track.GetId());
     std::cout << "rec track # " << i << " pT = " << track[rec_pT] << std::endl;
 
-    if(match_id >= 0){
+    if (match_id >= 0) {
       auto particle = particles_[match_id];
       std::cout << "matched sim track # " << match_id << " pT = " << particle[sim_pT] << std::endl;
     }
