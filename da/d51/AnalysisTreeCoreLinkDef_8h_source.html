@@ -148,7 +148,13 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#pragma read sourceClass=&quot;AnalysisTree::Configuration&quot; targetClass=&quot;AnalysisTree::Configuration_v3&quot;;</span></div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">// Matching v3+: the cached inverse index belongs to the previous entry, invalidate it after each read</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">#pragma read sourceClass=&quot;AnalysisTree::Matching&quot; targetClass=&quot;AnalysisTree::Matching&quot; version=&quot;[3-]&quot; source=&quot;std::vector&lt;int&gt; ids2_&quot; target=&quot;inverse_valid_&quot; code=&quot;{ inverse_valid_ = false; }&quot;</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">// Matching v1-2: only the legacy maps are on file; clear the CSR of the previous entry, conversion happens on first access</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="preprocessor">#pragma read sourceClass=&quot;AnalysisTree::Matching&quot; targetClass=&quot;AnalysisTree::Matching&quot; version=&quot;[-2]&quot; source=&quot;unsigned long branch1_id_&quot; target=&quot;offsets_, ids2_, inverse_valid_&quot; code=&quot;{ offsets_.clear(); ids2_.clear(); inverse_valid_ = false; }&quot;</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d6/daf/classAnalysisTree_1_1Matching-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">AnalysisTree::Matching Class Reference</div></div>
@@ -110,7 +111,7 @@ Collaboration diagram for AnalysisTree::Matching:</div>
 <div class="dyncontent">
 <div class="center"><img src="../../d9/d93/classAnalysisTree_1_1Matching__coll__graph.png" border="0" usemap="#aAnalysisTree_1_1Matching_coll__map" loading="lazy" alt="Collaboration graph"/></div>
 <map name="aAnalysisTree_1_1Matching_coll__map" id="aAnalysisTree_1_1Matching_coll__map">
-<area shape="rect" title=" " alt="" coords="5,5,150,377"/>
+<area shape="rect" title=" " alt="" coords="5,5,155,560"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -118,26 +119,32 @@ Collaboration diagram for AnalysisTree::Matching:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aaea9fa10a3a161bf95c13988f9657a77" id="r_aaea9fa10a3a161bf95c13988f9657a77"><td class="memItemLeft"><a id="aaea9fa10a3a161bf95c13988f9657a77" name="aaea9fa10a3a161bf95c13988f9657a77"></a>
 &#160;</td><td class="memItemRight"><b>Matching</b> (size_t id1, size_t id2)</td></tr>
-<tr class="memitem:a2165fd87e1c2ec316a7863d63458469a" id="r_a2165fd87e1c2ec316a7863d63458469a"><td class="memItemLeft"><a id="a2165fd87e1c2ec316a7863d63458469a" name="a2165fd87e1c2ec316a7863d63458469a"></a>
-&#160;</td><td class="memItemRight"><b>Matching</b> (size_t id1, size_t id2, MapType match, MapType match_inverted)</td></tr>
-<tr class="memitem:abd0eb72f59bbe5d0711c1dc0d0733acd" id="r_abd0eb72f59bbe5d0711c1dc0d0733acd"><td class="memItemLeft"><a id="abd0eb72f59bbe5d0711c1dc0d0733acd" name="abd0eb72f59bbe5d0711c1dc0d0733acd"></a>
-void&#160;</td><td class="memItemRight"><b>AddMatch</b> (Integer_t id1, Integer_t id2)</td></tr>
-<tr class="memitem:ae6498202240181c2775091b147c33064" id="r_ae6498202240181c2775091b147c33064"><td class="memItemLeft"><a id="ae6498202240181c2775091b147c33064" name="ae6498202240181c2775091b147c33064"></a>
-ANALYSISTREE_ATTR_NODISCARD Integer_t&#160;</td><td class="memItemRight"><b>GetMatchDirect</b> (Integer_t id) const</td></tr>
+<tr class="memitem:abd0eb72f59bbe5d0711c1dc0d0733acd" id="r_abd0eb72f59bbe5d0711c1dc0d0733acd"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#abd0eb72f59bbe5d0711c1dc0d0733acd">AddMatch</a> (Integer_t id1, Integer_t id2)</td></tr>
+<tr class="memitem:a42f9f4704560cbbad887ffbc174877fa" id="r_a42f9f4704560cbbad887ffbc174877fa"><td class="memItemLeft">ANALYSISTREE_ATTR_NODISCARD <a class="el" href="../../dd/d95/classAnalysisTree_1_1MatchRange.html">MatchRange</a>&#160;</td><td class="memItemRight"><a class="el" href="#a42f9f4704560cbbad887ffbc174877fa">GetMatchesDirect</a> (Integer_t id1) const</td></tr>
+<tr class="memitem:a7eb032ac2de8b607c070b1909d82bd47" id="r_a7eb032ac2de8b607c070b1909d82bd47"><td class="memItemLeft"><a id="a7eb032ac2de8b607c070b1909d82bd47" name="a7eb032ac2de8b607c070b1909d82bd47"></a>
+ANALYSISTREE_ATTR_NODISCARD <a class="el" href="../../dd/d95/classAnalysisTree_1_1MatchRange.html">MatchRange</a>&#160;</td><td class="memItemRight"><b>GetMatchesInverted</b> (Integer_t id2) const</td></tr>
+<tr class="memitem:a7ddc3145731be1b6047326dd5c8e08b3" id="r_a7ddc3145731be1b6047326dd5c8e08b3"><td class="memItemLeft"><a id="a7ddc3145731be1b6047326dd5c8e08b3" name="a7ddc3145731be1b6047326dd5c8e08b3"></a>
+ANALYSISTREE_ATTR_NODISCARD <a class="el" href="../../dd/d95/classAnalysisTree_1_1MatchRange.html">MatchRange</a>&#160;</td><td class="memItemRight"><b>GetMatches</b> (Integer_t id, bool is_inverted) const</td></tr>
+<tr class="memitem:ae6498202240181c2775091b147c33064" id="r_ae6498202240181c2775091b147c33064"><td class="memItemLeft">ANALYSISTREE_ATTR_NODISCARD Integer_t&#160;</td><td class="memItemRight"><a class="el" href="#ae6498202240181c2775091b147c33064">GetMatchDirect</a> (Integer_t id) const</td></tr>
 <tr class="memitem:ab19f2103d695547a56da348c057ef58b" id="r_ab19f2103d695547a56da348c057ef58b"><td class="memItemLeft"><a id="ab19f2103d695547a56da348c057ef58b" name="ab19f2103d695547a56da348c057ef58b"></a>
 ANALYSISTREE_ATTR_NODISCARD Integer_t&#160;</td><td class="memItemRight"><b>GetMatchInverted</b> (Integer_t id) const</td></tr>
 <tr class="memitem:aa7ad60c173c8d7f99cfde1fa872e5275" id="r_aa7ad60c173c8d7f99cfde1fa872e5275"><td class="memItemLeft"><a id="aa7ad60c173c8d7f99cfde1fa872e5275" name="aa7ad60c173c8d7f99cfde1fa872e5275"></a>
 ANALYSISTREE_ATTR_NODISCARD Integer_t&#160;</td><td class="memItemRight"><b>GetMatch</b> (Integer_t id, bool is_inverted=false) const</td></tr>
-<tr class="memitem:a04c278faa97822e2e27a5292d2b825e5" id="r_a04c278faa97822e2e27a5292d2b825e5"><td class="memItemLeft"><a id="a04c278faa97822e2e27a5292d2b825e5" name="a04c278faa97822e2e27a5292d2b825e5"></a>
-ANALYSISTREE_ATTR_NODISCARD const MapType &amp;&#160;</td><td class="memItemRight"><b>GetMatches</b> (bool is_inv=false) const</td></tr>
+<tr class="memitem:a008541884ed5a55a0a085ea5b57bf471" id="r_a008541884ed5a55a0a085ea5b57bf471"><td class="memItemLeft"><a id="a008541884ed5a55a0a085ea5b57bf471" name="a008541884ed5a55a0a085ea5b57bf471"></a>
+ANALYSISTREE_ATTR_NODISCARD size_t&#160;</td><td class="memItemRight"><b>GetNumberOfPairs</b> () const</td></tr>
+<tr class="memitem:a00404f7e5668df33dbc8d677817d006b" id="r_a00404f7e5668df33dbc8d677817d006b"><td class="memItemLeft">ANALYSISTREE_ATTR_NODISCARD size_t&#160;</td><td class="memItemRight"><a class="el" href="#a00404f7e5668df33dbc8d677817d006b">GetNumberOfIds</a> (bool is_inverted=false) const</td></tr>
 <tr class="memitem:a146827770af6feda4d6b4e48a3a4601e" id="r_a146827770af6feda4d6b4e48a3a4601e"><td class="memItemLeft"><a id="a146827770af6feda4d6b4e48a3a4601e" name="a146827770af6feda4d6b4e48a3a4601e"></a>
 void&#160;</td><td class="memItemRight"><b>Clear</b> ()</td></tr>
 <tr class="memitem:aca3be1e4dc3cfd9b74ae16006756e054" id="r_aca3be1e4dc3cfd9b74ae16006756e054"><td class="memItemLeft"><a id="aca3be1e4dc3cfd9b74ae16006756e054" name="aca3be1e4dc3cfd9b74ae16006756e054"></a>
 ANALYSISTREE_ATTR_NODISCARD size_t&#160;</td><td class="memItemRight"><b>GetBranch1Id</b> () const</td></tr>
 <tr class="memitem:a4365df5edb1a55abebbe79856f67612f" id="r_a4365df5edb1a55abebbe79856f67612f"><td class="memItemLeft"><a id="a4365df5edb1a55abebbe79856f67612f" name="a4365df5edb1a55abebbe79856f67612f"></a>
 ANALYSISTREE_ATTR_NODISCARD size_t&#160;</td><td class="memItemRight"><b>GetBranch2Id</b> () const</td></tr>
-<tr class="memitem:a162e0cf0dafab791d80c8ad4df1da126" id="r_a162e0cf0dafab791d80c8ad4df1da126"><td class="memItemLeft"><a id="a162e0cf0dafab791d80c8ad4df1da126" name="a162e0cf0dafab791d80c8ad4df1da126"></a>
-void&#160;</td><td class="memItemRight"><b>SetMatches</b> (MapType match, MapType match_inv)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:af28c806b79c33bb733354aab30e948f1" id="r_af28c806b79c33bb733354aab30e948f1"><td class="memItemLeft"><a id="af28c806b79c33bb733354aab30e948f1" name="af28c806b79c33bb733354aab30e948f1"></a>
+void&#160;</td><td class="memItemRight"><b>BuildInverse</b> () const</td></tr>
+<tr class="memitem:a3ed5e1c4b8be99282a7ebbf9b54bfec5" id="r_a3ed5e1c4b8be99282a7ebbf9b54bfec5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a3ed5e1c4b8be99282a7ebbf9b54bfec5">ConvertLegacy</a> () const</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -145,14 +152,133 @@ Protected Attributes</h2></td></tr>
 size_t&#160;</td><td class="memItemRight"><b>branch1_id_</b> {0}</td></tr>
 <tr class="memitem:ab102eadd9e3ffe70002a983351c2cd4c" id="r_ab102eadd9e3ffe70002a983351c2cd4c"><td class="memItemLeft"><a id="ab102eadd9e3ffe70002a983351c2cd4c" name="ab102eadd9e3ffe70002a983351c2cd4c"></a>
 size_t&#160;</td><td class="memItemRight"><b>branch2_id_</b> {0}</td></tr>
-<tr class="memitem:a2c5191f03d059560706bb22e13d9f8a3" id="r_a2c5191f03d059560706bb22e13d9f8a3"><td class="memItemLeft"><a id="a2c5191f03d059560706bb22e13d9f8a3" name="a2c5191f03d059560706bb22e13d9f8a3"></a>
-MapType&#160;</td><td class="memItemRight"><b>match_</b> {}</td></tr>
-<tr class="memitem:a62be87a74d56d0a8522e8e4c3db1dc2d" id="r_a62be87a74d56d0a8522e8e4c3db1dc2d"><td class="memItemLeft"><a id="a62be87a74d56d0a8522e8e4c3db1dc2d" name="a62be87a74d56d0a8522e8e4c3db1dc2d"></a>
-MapType&#160;</td><td class="memItemRight"><b>match_inverted_</b> {}</td></tr>
+<tr class="memitem:a2d0e504dd99fcf9d0f07dd4198a121c4" id="r_a2d0e504dd99fcf9d0f07dd4198a121c4"><td class="memItemLeft"><a id="a2d0e504dd99fcf9d0f07dd4198a121c4" name="a2d0e504dd99fcf9d0f07dd4198a121c4"></a>
+std::vector&lt; Integer_t &gt;&#160;</td><td class="memItemRight"><b>offsets_</b> {}</td></tr>
+<tr class="memdesc:a2d0e504dd99fcf9d0f07dd4198a121c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">partners of id1 are ids2_[offsets_[id1], offsets_[id1 + 1]) <br /></td></tr>
+<tr class="memitem:ae5caa756c9c1a741ed7bbad0ab206de1" id="r_ae5caa756c9c1a741ed7bbad0ab206de1"><td class="memItemLeft"><a id="ae5caa756c9c1a741ed7bbad0ab206de1" name="ae5caa756c9c1a741ed7bbad0ab206de1"></a>
+std::vector&lt; Integer_t &gt;&#160;</td><td class="memItemRight"><b>ids2_</b> {}</td></tr>
+<tr class="memdesc:ae5caa756c9c1a741ed7bbad0ab206de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">partner ids grouped by id1 <br /></td></tr>
+<tr class="memitem:ab294fb0404363c088004f72014f1043d" id="r_ab294fb0404363c088004f72014f1043d"><td class="memItemLeft"><a id="ab294fb0404363c088004f72014f1043d" name="ab294fb0404363c088004f72014f1043d"></a>
+std::map&lt; Integer_t, Integer_t &gt;&#160;</td><td class="memItemRight"><b>match_</b> {}</td></tr>
+<tr class="memdesc:ab294fb0404363c088004f72014f1043d"><td class="mdescLeft">&#160;</td><td class="mdescRight">legacy (version &lt;= 2): only filled when reading old files <br /></td></tr>
+<tr class="memitem:a067924b47c1dc82d13a7bf1c49f2870f" id="r_a067924b47c1dc82d13a7bf1c49f2870f"><td class="memItemLeft"><a id="a067924b47c1dc82d13a7bf1c49f2870f" name="a067924b47c1dc82d13a7bf1c49f2870f"></a>
+std::map&lt; Integer_t, Integer_t &gt;&#160;</td><td class="memItemRight"><b>match_inverted_</b> {}</td></tr>
+<tr class="memdesc:a067924b47c1dc82d13a7bf1c49f2870f"><td class="mdescLeft">&#160;</td><td class="mdescRight">legacy (version &lt;= 2): only filled when reading old files <br /></td></tr>
+<tr class="memitem:a7f2577c854a2b38803dde3add30c0dd6" id="r_a7f2577c854a2b38803dde3add30c0dd6"><td class="memItemLeft"><a id="a7f2577c854a2b38803dde3add30c0dd6" name="a7f2577c854a2b38803dde3add30c0dd6"></a>
+std::vector&lt; Integer_t &gt;&#160;</td><td class="memItemRight"><b>inv_offsets_</b> {}</td></tr>
+<tr class="memitem:a183e1491a7acfdff06aa86706074914a" id="r_a183e1491a7acfdff06aa86706074914a"><td class="memItemLeft"><a id="a183e1491a7acfdff06aa86706074914a" name="a183e1491a7acfdff06aa86706074914a"></a>
+std::vector&lt; Integer_t &gt;&#160;</td><td class="memItemRight"><b>inv_ids1_</b> {}</td></tr>
+<tr class="memdesc:a183e1491a7acfdff06aa86706074914a"><td class="mdescLeft">&#160;</td><td class="mdescRight">inverse CSR, built on first use <br /></td></tr>
+<tr class="memitem:a8d5bad041eb29284ddcd60296aefea30" id="r_a8d5bad041eb29284ddcd60296aefea30"><td class="memItemLeft"><a id="a8d5bad041eb29284ddcd60296aefea30" name="a8d5bad041eb29284ddcd60296aefea30"></a>
+bool&#160;</td><td class="memItemRight"><b>inverse_valid_</b> {false}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A class for a matching information </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<div class="textblock"><p>A class for a matching information between channels of two branches (id1 of branch1, id2 of branch2).</p>
+<p>All pairs are stored in CSR layout: the partners of id1 are ids2_[offsets_[id1], offsets_[id1 + 1]), in the order they were added. By convention the best partner is added first, GetMatch() returns it. The inverse direction (id2 -&gt; id1) is not persisted, it is built on first use and ordered by id1. Ids are channel ids, i.e. indices in the <a class="el" href="../../d4/da7/classAnalysisTree_1_1Detector.html">Detector</a>, and must be non-negative. </p>
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="abd0eb72f59bbe5d0711c1dc0d0733acd" name="abd0eb72f59bbe5d0711c1dc0d0733acd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd0eb72f59bbe5d0711c1dc0d0733acd">&#9670;&#160;</a></span>AddMatch()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AnalysisTree::Matching::AddMatch </td>
+          <td>(</td>
+          <td class="paramtype">Integer_t</td>          <td class="paramname"><span class="paramname"><em>id1</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Integer_t</td>          <td class="paramname"><span class="paramname"><em>id2</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Adds a pair. Adding in increasing order of id1 is O(1), otherwise the pair is inserted in place. </p>
+
+</div>
+</div>
+<a id="a3ed5e1c4b8be99282a7ebbf9b54bfec5" name="a3ed5e1c4b8be99282a7ebbf9b54bfec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ed5e1c4b8be99282a7ebbf9b54bfec5">&#9670;&#160;</a></span>ConvertLegacy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void AnalysisTree::Matching::ConvertLegacy </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel protected">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Moves the pairs of match_ and match_inverted_ (read from a file of version &lt;= 2) into the CSR layout </p>
+
+</div>
+</div>
+<a id="ae6498202240181c2775091b147c33064" name="ae6498202240181c2775091b147c33064"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6498202240181c2775091b147c33064">&#9670;&#160;</a></span>GetMatchDirect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Integer_t AnalysisTree::Matching::GetMatchDirect </td>
+          <td>(</td>
+          <td class="paramtype">Integer_t</td>          <td class="paramname"><span class="paramname"><em>id</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>First partner of an object (inverted: smallest id1); UndefValueInt if there is none </p>
+
+</div>
+</div>
+<a id="a42f9f4704560cbbad887ffbc174877fa" name="a42f9f4704560cbbad887ffbc174877fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42f9f4704560cbbad887ffbc174877fa">&#9670;&#160;</a></span>GetMatchesDirect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dd/d95/classAnalysisTree_1_1MatchRange.html">MatchRange</a> AnalysisTree::Matching::GetMatchesDirect </td>
+          <td>(</td>
+          <td class="paramtype">Integer_t</td>          <td class="paramname"><span class="paramname"><em>id1</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>All partners of an object; empty if there is none </p>
+
+</div>
+</div>
+<a id="a00404f7e5668df33dbc8d677817d006b" name="a00404f7e5668df33dbc8d677817d006b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00404f7e5668df33dbc8d677817d006b">&#9670;&#160;</a></span>GetNumberOfIds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t AnalysisTree::Matching::GetNumberOfIds </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>is_inverted</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Upper bound of the ids on the origin side: all ids with partners are smaller </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>core/<a class="el" href="../../df/d90/Matching_8hpp_source.html">Matching.hpp</a></li>
 <li>core/<b>Matching.cpp</b></li>
 </ul>

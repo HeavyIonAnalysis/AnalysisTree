@@ -1,7 +1,7 @@
 var searchData=
 [
   ['addbranch_0',['AddBranch',['../d2/d83/classAnalysisTree_1_1TaskManager.html#a58dac689de25cdb7b5757ae629677507',1,'AnalysisTree::TaskManager']]],
-  ['addmatch_1',['AddMatch',['../d8/dee/classAnalysisTree_1_1Configuration.html#a156c578df3c6f4de0f5f66bfde2111cd',1,'AnalysisTree::Configuration']]],
+  ['addmatch_1',['AddMatch',['../d8/dee/classAnalysisTree_1_1Configuration.html#a156c578df3c6f4de0f5f66bfde2111cd',1,'AnalysisTree::Configuration::AddMatch()'],['../d8/d42/classAnalysisTree_1_1Matching.html#abd0eb72f59bbe5d0711c1dc0d0733acd',1,'AnalysisTree::Matching::AddMatch()']]],
   ['addmatching_2',['AddMatching',['../d2/d83/classAnalysisTree_1_1TaskManager.html#aa4ab4ad6b152b4d3c02337fe1b00801e',1,'AnalysisTree::TaskManager']]],
   ['analysisentry_3',['AnalysisEntry',['../d4/d1b/classAnalysisTree_1_1AnalysisEntry.html',1,'AnalysisTree']]],
   ['analysistask_4',['AnalysisTask',['../d0/d40/classAnalysisTree_1_1AnalysisTask.html',1,'AnalysisTree']]],
