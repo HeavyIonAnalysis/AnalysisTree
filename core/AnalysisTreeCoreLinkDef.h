@@ -47,4 +47,10 @@
 
 #pragma read sourceClass="AnalysisTree::Configuration" targetClass="AnalysisTree::Configuration_v3";
 
+// Matching v3+: the cached inverse index belongs to the previous entry, invalidate it after each read
+#pragma read sourceClass="AnalysisTree::Matching" targetClass="AnalysisTree::Matching" version="[3-]" source="std::vector<int> ids2_" target="inverse_valid_" code="{ inverse_valid_ = false; }"
+
+// Matching v1-2: only the legacy maps are on file; clear the CSR of the previous entry, conversion happens on first access
+#pragma read sourceClass="AnalysisTree::Matching" targetClass="AnalysisTree::Matching" version="[-2]" source="unsigned long branch1_id_" target="offsets_, ids2_, inverse_valid_" code="{ offsets_.clear(); ids2_.clear(); inverse_valid_ = false; }"
+
 #endif

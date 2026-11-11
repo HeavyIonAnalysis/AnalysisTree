@@ -1,6 +1,6 @@
-/* Copyright (C) 2019-2021 GSI, Universität Tübingen
+/* Copyright (C) 2019-2026 GSI, Universität Tübingen
    SPDX-License-Identifier: GPL-3.0-only
-   Authors: Viktor Klochkov, Ilya Selyuzhenkov */
+   Authors: Viktor Klochkov, Ilya Selyuzhenkov, Frederic Linz */
 #include "AnalysisEntry.hpp"
 
 #include "Configuration.hpp"
@@ -186,8 +186,8 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
     throw std::runtime_error("AnalysisEntry::FillFromTwoChannalizedBranches() - Matching between non-EventHeader branches must be set");
   }
 
-  values_.reserve(matching_->GetMatches().size());
-  weights_.reserve(matching_->GetMatches().size());
+  values_.reserve(matching_->GetNumberOfPairs());
+  weights_.reserve(matching_->GetNumberOfPairs());
 
   std::vector<const Branch*> br_vec;
   std::vector<Cuts*> cuts_vec;
@@ -203,9 +203,13 @@ void AnalysisEntry::FillFromTwoChannalizedBranches() {
     id_vec.at(ehi) = 0;
   }
 
-  for (auto match : matching_->GetMatches(is_inverted_matching_)) {
-    id_vec.at(non_eve_header_indices_.at(0)) = match.first;
-    id_vec.at(non_eve_header_indices_.at(1)) = match.second;
+  // first (best) partner of each object, as with the former map-based matching
+  const auto n_ids = static_cast<Integer_t>(matching_->GetNumberOfIds(is_inverted_matching_));
+  for (Integer_t id = 0; id < n_ids; ++id) {
+    const auto match = matching_->GetMatch(id, is_inverted_matching_);
+    if (match == UndefValueInt) continue;
+    id_vec.at(non_eve_header_indices_.at(0)) = id;
+    id_vec.at(non_eve_header_indices_.at(1)) = match;
 
     if (!ApplyCutOnBranches(br_vec, cuts_vec, id_vec)) continue;
     std::vector<double> temp_vars(vars_.size());
