@@ -69,7 +69,10 @@ class Matching {
     return is_inverted ? GetMatchInverted(id) : GetMatchDirect(id);
   }
 
-  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfPairs() const { return ids2_.size(); }
+  ANALYSISTREE_ATTR_NODISCARD size_t GetNumberOfPairs() const {
+    ConvertLegacy();
+    return ids2_.size();
+  }
 
   /**
    * Upper bound of the ids on the origin side: all ids with partners are smaller
@@ -81,23 +84,22 @@ class Matching {
   ANALYSISTREE_ATTR_NODISCARD size_t GetBranch1Id() const { return branch1_id_; }
   ANALYSISTREE_ATTR_NODISCARD size_t GetBranch2Id() const { return branch2_id_; }
 
-  /**
-   * Converts the two maps of Matching version <= 2 into the CSR layout.
-   * Pairs of both maps are kept; the pair of the direct map comes first for each id1.
-   * Public only to be callable from the I/O read rule in AnalysisTreeCoreLinkDef.h.
-   */
-  static void FillFromLegacyMaps(const std::map<Integer_t, Integer_t>& match,
-                                 const std::map<Integer_t, Integer_t>& match_inverted,
-                                 std::vector<Integer_t>& offsets, std::vector<Integer_t>& ids2);
-
  protected:
   void BuildInverse() const;
+
+  /**
+   * Moves the pairs of match_ and match_inverted_ (read from a file of version <= 2) into the CSR layout
+   */
+  void ConvertLegacy() const;
 
   size_t branch1_id_{0};
   size_t branch2_id_{0};
 
   std::vector<Integer_t> offsets_{};///< partners of id1 are ids2_[offsets_[id1], offsets_[id1 + 1])
   std::vector<Integer_t> ids2_{};   ///< partner ids grouped by id1
+
+  std::map<Integer_t, Integer_t> match_{};         ///< legacy (version <= 2): only filled when reading old files
+  std::map<Integer_t, Integer_t> match_inverted_{};///< legacy (version <= 2): only filled when reading old files
 
   mutable std::vector<Integer_t> inv_offsets_{};//! inverse CSR, built on first use
   mutable std::vector<Integer_t> inv_ids1_{};   //!

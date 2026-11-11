@@ -9,6 +9,7 @@
 namespace AnalysisTree {
 
 void Matching::AddMatch(Integer_t id1, Integer_t id2) {
+  ConvertLegacy();
   if (id1 < 0 || id2 < 0) {
     throw std::invalid_argument("Matching::AddMatch() - ids must be non-negative");
   }
@@ -28,6 +29,7 @@ void Matching::AddMatch(Integer_t id1, Integer_t id2) {
 }
 
 MatchRange Matching::GetMatchesDirect(Integer_t id1) const {
+  ConvertLegacy();
   if (id1 < 0 || static_cast<size_t>(id1) + 1 >= offsets_.size()) {
     return {};
   }
@@ -35,6 +37,7 @@ MatchRange Matching::GetMatchesDirect(Integer_t id1) const {
 }
 
 MatchRange Matching::GetMatchesInverted(Integer_t id2) const {
+  ConvertLegacy();
   if (!inverse_valid_) {
     BuildInverse();
   }
@@ -55,6 +58,7 @@ Integer_t Matching::GetMatchInverted(Integer_t id) const {
 }
 
 size_t Matching::GetNumberOfIds(bool is_inverted) const {
+  ConvertLegacy();
   if (is_inverted && !inverse_valid_) {
     BuildInverse();
   }
@@ -65,6 +69,8 @@ size_t Matching::GetNumberOfIds(bool is_inverted) const {
 void Matching::Clear() {
   offsets_.clear();
   ids2_.clear();
+  match_.clear();
+  match_inverted_.clear();
   inverse_valid_ = false;
 }
 
@@ -92,13 +98,21 @@ void Matching::BuildInverse() const {
   inverse_valid_ = true;
 }
 
-void Matching::FillFromLegacyMaps(const std::map<Integer_t, Integer_t>& match,
-                                  const std::map<Integer_t, Integer_t>& match_inverted,
-                                  std::vector<Integer_t>& offsets, std::vector<Integer_t>& ids2) {
-  Matching converted;
+void Matching::ConvertLegacy() const {
+  if (match_.empty() && match_inverted_.empty()) {
+    return;
+  }
+  auto* self = const_cast<Matching*>(this);// conversion does not change the logical content
+  const auto match = std::move(self->match_);
+  const auto match_inverted = std::move(self->match_inverted_);
+  self->match_.clear();
+  self->match_inverted_.clear();
+  self->offsets_.clear();
+  self->ids2_.clear();
+  // direct pairs first, so GetMatch() returns the same partner as before
   for (const auto& m : match) {
     if (m.first >= 0 && m.second >= 0) {
-      converted.AddMatch(m.first, m.second);
+      self->AddMatch(m.first, m.second);
     }
   }
   // pairs lost in the direct map because of duplicate keys (1:n) survived in the inverted one
@@ -106,11 +120,9 @@ void Matching::FillFromLegacyMaps(const std::map<Integer_t, Integer_t>& match,
     const auto direct = match.find(m.second);
     const bool is_known = direct != match.end() && direct->second == m.first;
     if (!is_known && m.first >= 0 && m.second >= 0) {
-      converted.AddMatch(m.second, m.first);
+      self->AddMatch(m.second, m.first);
     }
   }
-  offsets = std::move(converted.offsets_);
-  ids2 = std::move(converted.ids2_);
 }
 
 }// namespace AnalysisTree

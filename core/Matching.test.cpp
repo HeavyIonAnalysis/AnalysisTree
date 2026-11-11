@@ -105,15 +105,31 @@ TEST(Matching, InverseFollowsModifications) {
   EXPECT_EQ(matching.GetMatch(6, true), 1);
 }
 
+// gives access to the legacy maps, as filled by ROOT when reading a file of version <= 2
+class LegacyMatching : public Matching {
+ public:
+  void SetLegacyMaps(std::map<Integer_t, Integer_t> match, std::map<Integer_t, Integer_t> match_inverted) {
+    match_ = std::move(match);
+    match_inverted_ = std::move(match_inverted);
+  }
+};
+
 TEST(Matching, LegacyMaps) {
   // v2 content of track 0 -> 5, track 1 -> 5, track 2 -> {7, 8}: each map lost one pair
-  const std::map<Integer_t, Integer_t> match{{0, 5}, {1, 5}, {2, 7}};
-  const std::map<Integer_t, Integer_t> match_inverted{{5, 0}, {7, 2}, {8, 2}};
-  std::vector<Integer_t> offsets, ids2;
-  Matching::FillFromLegacyMaps(match, match_inverted, offsets, ids2);
+  LegacyMatching matching;
+  matching.SetLegacyMaps({{0, 5}, {1, 5}, {2, 7}}, {{5, 0}, {7, 2}, {8, 2}});
 
-  EXPECT_EQ(offsets, (std::vector<Integer_t>{0, 1, 2, 4}));
-  EXPECT_EQ(ids2, (std::vector<Integer_t>{5, 5, 7, 8}));
+  EXPECT_EQ(matching.GetNumberOfPairs(), 4);
+  EXPECT_EQ(matching.GetMatch(0), 5);
+  EXPECT_EQ(ToVector(matching.GetMatchesDirect(2)), (std::vector<Integer_t>{7, 8}));// direct pair first
+  EXPECT_EQ(ToVector(matching.GetMatchesInverted(5)), (std::vector<Integer_t>{0, 1}));
+
+  // next "entry": the CSR content is replaced, nothing is left over
+  matching.SetLegacyMaps({{3, 1}}, {{1, 3}});
+  EXPECT_EQ(matching.GetNumberOfPairs(), 1);
+  EXPECT_EQ(matching.GetMatch(3), 1);
+  EXPECT_EQ(matching.GetMatch(0), UndefValueInt);
+  EXPECT_EQ(matching.GetMatch(1, true), 3);
 }
 
 TEST(Matching, WriteRead) {
