@@ -64,11 +64,13 @@ void VarManagerEntry::FillFromTwoBranches() {
   if (br2->GetType() == DetType::kEventHeader) {
     FillMatchingForEventHeader(br1, br2);
   }
-  values_.reserve(matching_->GetMatches().size());
+  values_.reserve(matching_->GetNumberOfPairs());
 
-  for (auto match : matching_->GetMatches(is_inverted_matching_)) {
-    const int ch1 = match.first;
-    const int ch2 = match.second;
+  // first (best) partner of each object, as with the former map-based matching
+  const auto n_ids = static_cast<int>(matching_->GetNumberOfIds(is_inverted_matching_));
+  for (int ch1 = 0; ch1 < n_ids; ++ch1) {
+    const int ch2 = matching_->GetMatch(ch1, is_inverted_matching_);
+    if (ch2 == UndefValueInt) continue;
     if (!ApplyCutOnBranches(br1, ch1, br2, ch2)) continue;
     std::vector<double> temp_vars(vars_.size());
     short i_var{};
